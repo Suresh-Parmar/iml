@@ -1,0 +1,4060 @@
+[{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a36f8"
+  },
+  "name": "Afghanistan",
+  "Capital": "Kabul",
+  "ISD Code": 93,
+  "ISO Alpha-3 Code": "AFG",
+  "ISO Alpha-2 Code": "AF",
+  "Currency Name": "Afghan Afghani",
+  "Currency Short Name": "AFN",
+  "Currency Symbol": "؋",
+  "unique_id": 1
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a36f9"
+  },
+  "name": "Albania",
+  "Capital": "Tirana",
+  "ISD Code": 355,
+  "ISO Alpha-3 Code": "ALB",
+  "ISO Alpha-2 Code": "AL",
+  "Currency Name": "Albanian Lek",
+  "Currency Short Name": "ALL",
+  "Currency Symbol": "L",
+  "unique_id": 2
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a36fa"
+  },
+  "name": "Algeria",
+  "Capital": "Algiers",
+  "ISD Code": 213,
+  "ISO Alpha-3 Code": "DZA",
+  "ISO Alpha-2 Code": "DZ",
+  "Currency Name": "Algerian Dinar",
+  "Currency Short Name": "DZD",
+  "Currency Symbol": "د.ج",
+  "unique_id": 3
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a36fb"
+  },
+  "name": "Andorra",
+  "Capital": "Andorra la Vella",
+  "ISD Code": 376,
+  "ISO Alpha-3 Code": "AND",
+  "ISO Alpha-2 Code": "AD",
+  "Currency Name": "Euro",
+  "Currency Short Name": "EUR",
+  "Currency Symbol": "€",
+  "unique_id": 4
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a36fc"
+  },
+  "name": "Angola",
+  "Capital": "Luanda",
+  "ISD Code": 244,
+  "ISO Alpha-3 Code": "AGO",
+  "ISO Alpha-2 Code": "AO",
+  "Currency Name": "Angolan Kwanza",
+  "Currency Short Name": "AOA",
+  "Currency Symbol": "Kz",
+  "unique_id": 5
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a36fd"
+  },
+  "name": "Antigua and Barbuda",
+  "Capital": "St. John's",
+  "ISD Code": -267,
+  "ISO Alpha-3 Code": "ATG",
+  "ISO Alpha-2 Code": "AG",
+  "Currency Name": "East Caribbean Dollar",
+  "Currency Short Name": "XCD",
+  "Currency Symbol": "$",
+  "unique_id": 6
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a36fe"
+  },
+  "name": "Argentina",
+  "Capital": "Buenos Aires",
+  "ISD Code": 54,
+  "ISO Alpha-3 Code": "ARG",
+  "ISO Alpha-2 Code": "AR",
+  "Currency Name": "Argentine Peso",
+  "Currency Short Name": "ARS",
+  "Currency Symbol": "$",
+  "unique_id": 7
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a36ff"
+  },
+  "name": "Armenia",
+  "Capital": "Yerevan",
+  "ISD Code": 374,
+  "ISO Alpha-3 Code": "ARM",
+  "ISO Alpha-2 Code": "AM",
+  "Currency Name": "Armenian Dram",
+  "Currency Short Name": "AMD",
+  "Currency Symbol": "֏",
+  "unique_id": 8
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3700"
+  },
+  "name": "Australia",
+  "Capital": "Canberra",
+  "ISD Code": 61,
+  "ISO Alpha-3 Code": "AUS",
+  "ISO Alpha-2 Code": "AU",
+  "Currency Name": "Australian Dollar",
+  "Currency Short Name": "AUD",
+  "Currency Symbol": "$",
+  "unique_id": 9
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3701"
+  },
+  "name": "Austria",
+  "Capital": "Vienna",
+  "ISD Code": 43,
+  "ISO Alpha-3 Code": "AUT",
+  "ISO Alpha-2 Code": "AT",
+  "Currency Name": "Euro",
+  "Currency Short Name": "EUR",
+  "Currency Symbol": "€",
+  "unique_id": 10
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3702"
+  },
+  "name": "Azerbaijan",
+  "Capital": "Baku",
+  "ISD Code": 994,
+  "ISO Alpha-3 Code": "AZE",
+  "ISO Alpha-2 Code": "AZ",
+  "Currency Name": "Azerbaijani Manat",
+  "Currency Short Name": "AZN",
+  "Currency Symbol": "₼",
+  "unique_id": 11
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3703"
+  },
+  "name": "Bahamas",
+  "Capital": "Nassau",
+  "ISD Code": -241,
+  "ISO Alpha-3 Code": "BHS",
+  "ISO Alpha-2 Code": "BS",
+  "Currency Name": "Bahamian Dollar",
+  "Currency Short Name": "BSD",
+  "Currency Symbol": "$",
+  "unique_id": 12
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3704"
+  },
+  "name": "Bahrain",
+  "Capital": "Manama",
+  "ISD Code": 973,
+  "ISO Alpha-3 Code": "BHR",
+  "ISO Alpha-2 Code": "BH",
+  "Currency Name": "Bahraini Dinar",
+  "Currency Short Name": "BHD",
+  "Currency Symbol": ".د.ب",
+  "unique_id": 13
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3705"
+  },
+  "name": "Bangladesh",
+  "Capital": "Dhaka",
+  "ISD Code": 880,
+  "ISO Alpha-3 Code": "BGD",
+  "ISO Alpha-2 Code": "BD",
+  "Currency Name": "Bangladeshi Taka",
+  "Currency Short Name": "BDT",
+  "Currency Symbol": "৳",
+  "unique_id": 14
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3706"
+  },
+  "name": "Barbados",
+  "Capital": "Bridgetown",
+  "ISD Code": -245,
+  "ISO Alpha-3 Code": "BRB",
+  "ISO Alpha-2 Code": "BB",
+  "Currency Name": "Barbadian Dollar",
+  "Currency Short Name": "BBD",
+  "Currency Symbol": "$",
+  "unique_id": 15
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3707"
+  },
+  "name": "Belarus",
+  "Capital": "Minsk",
+  "ISD Code": 375,
+  "ISO Alpha-3 Code": "BLR",
+  "ISO Alpha-2 Code": "BY",
+  "Currency Name": "Belarusian Ruble",
+  "Currency Short Name": "BYN",
+  "Currency Symbol": "Br",
+  "unique_id": 16
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3708"
+  },
+  "name": "Belgium",
+  "Capital": "Brussels",
+  "ISD Code": 32,
+  "ISO Alpha-3 Code": "BEL",
+  "ISO Alpha-2 Code": "BE",
+  "Currency Name": "Euro",
+  "Currency Short Name": "EUR",
+  "Currency Symbol": "€",
+  "unique_id": 17
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3709"
+  },
+  "name": "Belize",
+  "Capital": "Belmopan",
+  "ISD Code": 501,
+  "ISO Alpha-3 Code": "BLZ",
+  "ISO Alpha-2 Code": "BZ",
+  "Currency Name": "Belize Dollar",
+  "Currency Short Name": "BZD",
+  "Currency Symbol": "$",
+  "unique_id": 18
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a370a"
+  },
+  "name": "Benin",
+  "Capital": "Porto-Novo",
+  "ISD Code": 229,
+  "ISO Alpha-3 Code": "BEN",
+  "ISO Alpha-2 Code": "BJ",
+  "Currency Name": "West African CFA franc",
+  "Currency Short Name": "XOF",
+  "Currency Symbol": "Fr",
+  "unique_id": 19
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a370b"
+  },
+  "name": "Bhutan",
+  "Capital": "Thimphu",
+  "ISD Code": 975,
+  "ISO Alpha-3 Code": "BTN",
+  "ISO Alpha-2 Code": "BT",
+  "Currency Name": "Bhutanese Ngultrum",
+  "Currency Short Name": "BTN",
+  "Currency Symbol": "Nu",
+  "unique_id": 20
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a370c"
+  },
+  "name": "Bolivia",
+  "Capital": "La Paz (administrative), Sucre (constitutional)",
+  "ISD Code": 591,
+  "ISO Alpha-3 Code": "BOL",
+  "ISO Alpha-2 Code": "BO",
+  "Currency Name": "Bolivian Boliviano",
+  "Currency Short Name": "BOB",
+  "Currency Symbol": "Bs.",
+  "unique_id": 21
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a370d"
+  },
+  "name": "Bosnia and Herzegovina",
+  "Capital": "Sarajevo",
+  "ISD Code": 387,
+  "ISO Alpha-3 Code": "BIH",
+  "ISO Alpha-2 Code": "BA",
+  "Currency Name": "Bosnia and Herzegovina Convertible Mark",
+  "Currency Short Name": "BAM",
+  "Currency Symbol": "KM",
+  "unique_id": 22
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a370e"
+  },
+  "name": "Botswana",
+  "Capital": "Gaborone",
+  "ISD Code": 267,
+  "ISO Alpha-3 Code": "BWA",
+  "ISO Alpha-2 Code": "BW",
+  "Currency Name": "Botswana Pula",
+  "Currency Short Name": "BWP",
+  "Currency Symbol": "P",
+  "unique_id": 23
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a370f"
+  },
+  "name": "Brazil",
+  "Capital": "Brasília",
+  "ISD Code": 55,
+  "ISO Alpha-3 Code": "BRA",
+  "ISO Alpha-2 Code": "BR",
+  "Currency Name": "Brazilian Real",
+  "Currency Short Name": "BRL",
+  "Currency Symbol": "R$",
+  "unique_id": 24
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3710"
+  },
+  "name": "Brunei",
+  "Capital": "Bandar Seri Begawan",
+  "ISD Code": 673,
+  "ISO Alpha-3 Code": "BRN",
+  "ISO Alpha-2 Code": "BN",
+  "Currency Name": "Brunei Dollar",
+  "Currency Short Name": "BND",
+  "Currency Symbol": "$",
+  "unique_id": 25
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3711"
+  },
+  "name": "Bulgaria",
+  "Capital": "Sofia",
+  "ISD Code": 359,
+  "ISO Alpha-3 Code": "BGR",
+  "ISO Alpha-2 Code": "BG",
+  "Currency Name": "Bulgarian Lev",
+  "Currency Short Name": "BGN",
+  "Currency Symbol": "лв",
+  "unique_id": 26
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3712"
+  },
+  "name": "Burkina Faso",
+  "Capital": "Ouagadougou",
+  "ISD Code": 226,
+  "ISO Alpha-3 Code": "BFA",
+  "ISO Alpha-2 Code": "BF",
+  "Currency Name": "West African CFA franc",
+  "Currency Short Name": "XOF",
+  "Currency Symbol": "Fr",
+  "unique_id": 27
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3713"
+  },
+  "name": "Burundi",
+  "Capital": "Bujumbura",
+  "ISD Code": 257,
+  "ISO Alpha-3 Code": "BDI",
+  "ISO Alpha-2 Code": "BI",
+  "Currency Name": "Burundian Franc",
+  "Currency Short Name": "BIF",
+  "Currency Symbol": "Fr",
+  "unique_id": 28
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3714"
+  },
+  "name": "Cabo Verde",
+  "Capital": "Praia",
+  "ISD Code": 238,
+  "ISO Alpha-3 Code": "CPV",
+  "ISO Alpha-2 Code": "CV",
+  "Currency Name": "Cape Verdean Escudo",
+  "Currency Short Name": "CVE",
+  "Currency Symbol": "$",
+  "unique_id": 29
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3715"
+  },
+  "name": "Cambodia",
+  "Capital": "Phnom Penh",
+  "ISD Code": 855,
+  "ISO Alpha-3 Code": "KHM",
+  "ISO Alpha-2 Code": "KH",
+  "Currency Name": "Cambodian Riel",
+  "Currency Short Name": "KHR",
+  "Currency Symbol": "៛",
+  "unique_id": 30
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3716"
+  },
+  "name": "Cameroon",
+  "Capital": "Yaoundé",
+  "ISD Code": 237,
+  "ISO Alpha-3 Code": "CMR",
+  "ISO Alpha-2 Code": "CM",
+  "Currency Name": "Central African CFA franc",
+  "Currency Short Name": "XAF",
+  "Currency Symbol": "Fr",
+  "unique_id": 31
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3717"
+  },
+  "name": "Canada",
+  "Capital": "Ottawa",
+  "ISD Code": 1,
+  "ISO Alpha-3 Code": "CAN",
+  "ISO Alpha-2 Code": "CA",
+  "Currency Name": "Canadian Dollar",
+  "Currency Short Name": "CAD",
+  "Currency Symbol": "$",
+  "unique_id": 32
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3718"
+  },
+  "name": "Central African Republic",
+  "Capital": "Bangui",
+  "ISD Code": 236,
+  "ISO Alpha-3 Code": "CAF",
+  "ISO Alpha-2 Code": "CF",
+  "Currency Name": "Central African CFA franc",
+  "Currency Short Name": "XAF",
+  "Currency Symbol": "Fr",
+  "unique_id": 33
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3719"
+  },
+  "name": "Chad",
+  "Capital": "N'Djamena",
+  "ISD Code": 235,
+  "ISO Alpha-3 Code": "TCD",
+  "ISO Alpha-2 Code": "TD",
+  "Currency Name": "Central African CFA franc",
+  "Currency Short Name": "XAF",
+  "Currency Symbol": "Fr",
+  "unique_id": 34
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a371a"
+  },
+  "name": "Chile",
+  "Capital": "Santiago",
+  "ISD Code": 56,
+  "ISO Alpha-3 Code": "CHL",
+  "ISO Alpha-2 Code": "CL",
+  "Currency Name": "Chilean Peso",
+  "Currency Short Name": "CLP",
+  "Currency Symbol": "$",
+  "unique_id": 35
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a371b"
+  },
+  "name": "China",
+  "Capital": "Beijing",
+  "ISD Code": 86,
+  "ISO Alpha-3 Code": "CHN",
+  "ISO Alpha-2 Code": "CN",
+  "Currency Name": "Chinese Yuan",
+  "Currency Short Name": "CNY",
+  "Currency Symbol": "¥",
+  "unique_id": 36
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a371c"
+  },
+  "name": "Colombia",
+  "Capital": "Bogotá",
+  "ISD Code": 57,
+  "ISO Alpha-3 Code": "COL",
+  "ISO Alpha-2 Code": "CO",
+  "Currency Name": "Colombian Peso",
+  "Currency Short Name": "COP",
+  "Currency Symbol": "$",
+  "unique_id": 37
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a371d"
+  },
+  "name": "Comoros",
+  "Capital": "Moroni",
+  "ISD Code": 269,
+  "ISO Alpha-3 Code": "COM",
+  "ISO Alpha-2 Code": "KM",
+  "Currency Name": "Comorian Franc",
+  "Currency Short Name": "KMF",
+  "Currency Symbol": "Fr",
+  "unique_id": 38
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a371e"
+  },
+  "name": "Congo (Brazzaville)",
+  "Capital": "Brazzaville",
+  "ISD Code": 242,
+  "ISO Alpha-3 Code": "COG",
+  "ISO Alpha-2 Code": "CG",
+  "Currency Name": "Central African CFA franc",
+  "Currency Short Name": "XAF",
+  "Currency Symbol": "Fr",
+  "unique_id": 39
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a371f"
+  },
+  "name": "Congo (Kinshasa)",
+  "Capital": "Kinshasa",
+  "ISD Code": 243,
+  "ISO Alpha-3 Code": "COD",
+  "ISO Alpha-2 Code": "CD",
+  "Currency Name": "Congolese Franc",
+  "Currency Short Name": "CDF",
+  "Currency Symbol": "Fr",
+  "unique_id": 40
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3720"
+  },
+  "name": "Costa Rica",
+  "Capital": "San José",
+  "ISD Code": 506,
+  "ISO Alpha-3 Code": "CRI",
+  "ISO Alpha-2 Code": "CR",
+  "Currency Name": "Costa Rican Colón",
+  "Currency Short Name": "CRC",
+  "Currency Symbol": "₡",
+  "unique_id": 41
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3721"
+  },
+  "name": "Côte d'Ivoire",
+  "Capital": "Yamoussoukro",
+  "ISD Code": 225,
+  "ISO Alpha-3 Code": "CIV",
+  "ISO Alpha-2 Code": "CI",
+  "Currency Name": "West African CFA franc",
+  "Currency Short Name": "XOF",
+  "Currency Symbol": "Fr",
+  "unique_id": 42
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3722"
+  },
+  "name": "Croatia",
+  "Capital": "Zagreb",
+  "ISD Code": 385,
+  "ISO Alpha-3 Code": "HRV",
+  "ISO Alpha-2 Code": "HR",
+  "Currency Name": "Croatian Kuna",
+  "Currency Short Name": "HRK",
+  "Currency Symbol": "kn",
+  "unique_id": 43
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3723"
+  },
+  "name": "Cuba",
+  "Capital": "Havana",
+  "ISD Code": 53,
+  "ISO Alpha-3 Code": "CUB",
+  "ISO Alpha-2 Code": "CU",
+  "Currency Name": "Cuban Peso",
+  "Currency Short Name": "CUP",
+  "Currency Symbol": "$",
+  "unique_id": 44
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3724"
+  },
+  "name": "Cyprus",
+  "Capital": "Nicosia",
+  "ISD Code": 357,
+  "ISO Alpha-3 Code": "CYP",
+  "ISO Alpha-2 Code": "CY",
+  "Currency Name": "Euro",
+  "Currency Short Name": "EUR",
+  "Currency Symbol": "€",
+  "unique_id": 45
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3725"
+  },
+  "name": "Czech Republic",
+  "Capital": "Prague",
+  "ISD Code": 420,
+  "ISO Alpha-3 Code": "CZE",
+  "ISO Alpha-2 Code": "CZ",
+  "Currency Name": "Czech Koruna",
+  "Currency Short Name": "CZK",
+  "Currency Symbol": "Kč",
+  "unique_id": 46
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3726"
+  },
+  "name": "Denmark",
+  "Capital": "Copenhagen",
+  "ISD Code": 45,
+  "ISO Alpha-3 Code": "DNK",
+  "ISO Alpha-2 Code": "DK",
+  "Currency Name": "Danish Krone",
+  "Currency Short Name": "DKK",
+  "Currency Symbol": "kr",
+  "unique_id": 47
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3727"
+  },
+  "name": "Djibouti",
+  "Capital": "Djibouti",
+  "ISD Code": 253,
+  "ISO Alpha-3 Code": "DJI",
+  "ISO Alpha-2 Code": "DJ",
+  "Currency Name": "Djiboutian Franc",
+  "Currency Short Name": "DJF",
+  "Currency Symbol": "Fr",
+  "unique_id": 48
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3728"
+  },
+  "name": "Dominica",
+  "Capital": "Roseau",
+  "ISD Code": -766,
+  "ISO Alpha-3 Code": "DMA",
+  "ISO Alpha-2 Code": "DM",
+  "Currency Name": "East Caribbean Dollar",
+  "Currency Short Name": "XCD",
+  "Currency Symbol": "$",
+  "unique_id": 49
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3729"
+  },
+  "name": "Dominican Republic",
+  "Capital": "Santo Domingo",
+  "ISD Code": "+1-809, +1-829, +1-849",
+  "ISO Alpha-3 Code": "DOM",
+  "ISO Alpha-2 Code": "DO",
+  "Currency Name": "Dominican Peso",
+  "Currency Short Name": "DOP",
+  "Currency Symbol": "$",
+  "unique_id": 50
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a372a"
+  },
+  "name": "East Timor",
+  "Capital": "Dili",
+  "ISD Code": 670,
+  "ISO Alpha-3 Code": "TLS",
+  "ISO Alpha-2 Code": "TL",
+  "Currency Name": "United States Dollar",
+  "Currency Short Name": "USD",
+  "Currency Symbol": "$",
+  "unique_id": 51
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a372b"
+  },
+  "name": "Ecuador",
+  "Capital": "Quito",
+  "ISD Code": 593,
+  "ISO Alpha-3 Code": "ECU",
+  "ISO Alpha-2 Code": "EC",
+  "Currency Name": "United States Dollar",
+  "Currency Short Name": "USD",
+  "Currency Symbol": "$",
+  "unique_id": 52
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a372c"
+  },
+  "name": "Egypt",
+  "Capital": "Cairo",
+  "ISD Code": 20,
+  "ISO Alpha-3 Code": "EGY",
+  "ISO Alpha-2 Code": "EG",
+  "Currency Name": "Egyptian Pound",
+  "Currency Short Name": "EGP",
+  "Currency Symbol": "£",
+  "unique_id": 53
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a372d"
+  },
+  "name": "El Salvador",
+  "Capital": "San Salvador",
+  "ISD Code": 503,
+  "ISO Alpha-3 Code": "SLV",
+  "ISO Alpha-2 Code": "SV",
+  "Currency Name": "United States Dollar",
+  "Currency Short Name": "USD",
+  "Currency Symbol": "$",
+  "unique_id": 54
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a372e"
+  },
+  "name": "Equatorial Guinea",
+  "Capital": "Malabo",
+  "ISD Code": 240,
+  "ISO Alpha-3 Code": "GNQ",
+  "ISO Alpha-2 Code": "GQ",
+  "Currency Name": "Central African CFA franc",
+  "Currency Short Name": "XAF",
+  "Currency Symbol": "Fr",
+  "unique_id": 55
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a372f"
+  },
+  "name": "Eritrea",
+  "Capital": "Asmara",
+  "ISD Code": 291,
+  "ISO Alpha-3 Code": "ERI",
+  "ISO Alpha-2 Code": "ER",
+  "Currency Name": "Eritrean Nakfa",
+  "Currency Short Name": "ERN",
+  "Currency Symbol": "Nfk",
+  "unique_id": 56
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3730"
+  },
+  "name": "Estonia",
+  "Capital": "Tallinn",
+  "ISD Code": 372,
+  "ISO Alpha-3 Code": "EST",
+  "ISO Alpha-2 Code": "EE",
+  "Currency Name": "Euro",
+  "Currency Short Name": "EUR",
+  "Currency Symbol": "€",
+  "unique_id": 57
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3731"
+  },
+  "name": "Eswatini",
+  "Capital": "Mbabane, Lobamba",
+  "ISD Code": 268,
+  "ISO Alpha-3 Code": "SWZ",
+  "ISO Alpha-2 Code": "SZ",
+  "Currency Name": "Swazi Lilangeni",
+  "Currency Short Name": "SZL",
+  "Currency Symbol": "L, E",
+  "unique_id": 58
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3732"
+  },
+  "name": "Ethiopia",
+  "Capital": "Addis Ababa",
+  "ISD Code": 251,
+  "ISO Alpha-3 Code": "ETH",
+  "ISO Alpha-2 Code": "ET",
+  "Currency Name": "Ethiopian Birr",
+  "Currency Short Name": "ETB",
+  "Currency Symbol": "Br",
+  "unique_id": 59
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3733"
+  },
+  "name": "Fiji",
+  "Capital": "Suva",
+  "ISD Code": 679,
+  "ISO Alpha-3 Code": "FJI",
+  "ISO Alpha-2 Code": "FJ",
+  "Currency Name": "Fijian Dollar",
+  "Currency Short Name": "FJD",
+  "Currency Symbol": "$",
+  "unique_id": 60
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3734"
+  },
+  "name": "Finland",
+  "Capital": "Helsinki",
+  "ISD Code": 358,
+  "ISO Alpha-3 Code": "FIN",
+  "ISO Alpha-2 Code": "FI",
+  "Currency Name": "Euro",
+  "Currency Short Name": "EUR",
+  "Currency Symbol": "€",
+  "unique_id": 61
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3735"
+  },
+  "name": "France",
+  "Capital": "Paris",
+  "ISD Code": 33,
+  "ISO Alpha-3 Code": "FRA",
+  "ISO Alpha-2 Code": "FR",
+  "Currency Name": "Euro",
+  "Currency Short Name": "EUR",
+  "Currency Symbol": "€",
+  "unique_id": 62
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3736"
+  },
+  "name": "Gabon",
+  "Capital": "Libreville",
+  "ISD Code": 241,
+  "ISO Alpha-3 Code": "GAB",
+  "ISO Alpha-2 Code": "GA",
+  "Currency Name": "Central African CFA franc",
+  "Currency Short Name": "XAF",
+  "Currency Symbol": "Fr",
+  "unique_id": 63
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3737"
+  },
+  "name": "Gambia",
+  "Capital": "Banjul",
+  "ISD Code": 220,
+  "ISO Alpha-3 Code": "GMB",
+  "ISO Alpha-2 Code": "GM",
+  "Currency Name": "Gambian Dalasi",
+  "Currency Short Name": "GMD",
+  "Currency Symbol": "D",
+  "unique_id": 64
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3738"
+  },
+  "name": "Georgia",
+  "Capital": "Tbilisi",
+  "ISD Code": 995,
+  "ISO Alpha-3 Code": "GEO",
+  "ISO Alpha-2 Code": "GE",
+  "Currency Name": "Georgian Lari",
+  "Currency Short Name": "GEL",
+  "Currency Symbol": "ლ",
+  "unique_id": 65
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3739"
+  },
+  "name": "Germany",
+  "Capital": "Berlin",
+  "ISD Code": 49,
+  "ISO Alpha-3 Code": "DEU",
+  "ISO Alpha-2 Code": "DE",
+  "Currency Name": "Euro",
+  "Currency Short Name": "EUR",
+  "Currency Symbol": "€",
+  "unique_id": 66
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a373a"
+  },
+  "name": "Ghana",
+  "Capital": "Accra",
+  "ISD Code": 233,
+  "ISO Alpha-3 Code": "GHA",
+  "ISO Alpha-2 Code": "GH",
+  "Currency Name": "Ghanaian Cedi",
+  "Currency Short Name": "GHS",
+  "Currency Symbol": "₵",
+  "unique_id": 67
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a373b"
+  },
+  "name": "Greece",
+  "Capital": "Athens",
+  "ISD Code": 30,
+  "ISO Alpha-3 Code": "GRC",
+  "ISO Alpha-2 Code": "GR",
+  "Currency Name": "Euro",
+  "Currency Short Name": "EUR",
+  "Currency Symbol": "€",
+  "unique_id": 68
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a373c"
+  },
+  "name": "Grenada",
+  "Capital": "St. George's",
+  "ISD Code": -472,
+  "ISO Alpha-3 Code": "GRD",
+  "ISO Alpha-2 Code": "GD",
+  "Currency Name": "East Caribbean Dollar",
+  "Currency Short Name": "XCD",
+  "Currency Symbol": "$",
+  "unique_id": 69
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a373d"
+  },
+  "name": "Guatemala",
+  "Capital": "Guatemala City",
+  "ISD Code": 502,
+  "ISO Alpha-3 Code": "GTM",
+  "ISO Alpha-2 Code": "GT",
+  "Currency Name": "Guatemalan Quetzal",
+  "Currency Short Name": "GTQ",
+  "Currency Symbol": "Q",
+  "unique_id": 70
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a373e"
+  },
+  "name": "Guinea",
+  "Capital": "Conakry",
+  "ISD Code": 224,
+  "ISO Alpha-3 Code": "GIN",
+  "ISO Alpha-2 Code": "GN",
+  "Currency Name": "Guinean Franc",
+  "Currency Short Name": "GNF",
+  "Currency Symbol": "Fr",
+  "unique_id": 71
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a373f"
+  },
+  "name": "Guinea-Bissau",
+  "Capital": "Bissau",
+  "ISD Code": 245,
+  "ISO Alpha-3 Code": "GNB",
+  "ISO Alpha-2 Code": "GW",
+  "Currency Name": "West African CFA franc",
+  "Currency Short Name": "XOF",
+  "Currency Symbol": "Fr",
+  "unique_id": 72
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3740"
+  },
+  "name": "Guyana",
+  "Capital": "Georgetown",
+  "ISD Code": 592,
+  "ISO Alpha-3 Code": "GUY",
+  "ISO Alpha-2 Code": "GY",
+  "Currency Name": "Guyanese Dollar",
+  "Currency Short Name": "GYD",
+  "Currency Symbol": "$",
+  "unique_id": 73
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3741"
+  },
+  "name": "Haiti",
+  "Capital": "Port-au-Prince",
+  "ISD Code": 509,
+  "ISO Alpha-3 Code": "HTI",
+  "ISO Alpha-2 Code": "HT",
+  "Currency Name": "Haitian Gourde",
+  "Currency Short Name": "HTG",
+  "Currency Symbol": "G",
+  "unique_id": 74
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3742"
+  },
+  "name": "Honduras",
+  "Capital": "Tegucigalpa",
+  "ISD Code": 504,
+  "ISO Alpha-3 Code": "HND",
+  "ISO Alpha-2 Code": "HN",
+  "Currency Name": "Honduran Lempira",
+  "Currency Short Name": "HNL",
+  "Currency Symbol": "L",
+  "unique_id": 75
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3743"
+  },
+  "name": "Hungary",
+  "Capital": "Budapest",
+  "ISD Code": 36,
+  "ISO Alpha-3 Code": "HUN",
+  "ISO Alpha-2 Code": "HU",
+  "Currency Name": "Hungarian Forint",
+  "Currency Short Name": "HUF",
+  "Currency Symbol": "Ft",
+  "unique_id": 76
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3744"
+  },
+  "name": "Iceland",
+  "Capital": "Reykjavik",
+  "ISD Code": 354,
+  "ISO Alpha-3 Code": "ISL",
+  "ISO Alpha-2 Code": "IS",
+  "Currency Name": "Icelandic Króna",
+  "Currency Short Name": "ISK",
+  "Currency Symbol": "kr",
+  "unique_id": 77
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3745"
+  },
+  "name": "India",
+  "Capital": "New Delhi",
+  "ISD Code": 91,
+  "ISO Alpha-3 Code": "IND",
+  "ISO Alpha-2 Code": "IN",
+  "Currency Name": "Indian Rupee",
+  "Currency Short Name": "INR",
+  "Currency Symbol": "₹",
+  "unique_id": 78
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3746"
+  },
+  "name": "Indonesia",
+  "Capital": "Jakarta",
+  "ISD Code": 62,
+  "ISO Alpha-3 Code": "IDN",
+  "ISO Alpha-2 Code": "ID",
+  "Currency Name": "Indonesian Rupiah",
+  "Currency Short Name": "IDR",
+  "Currency Symbol": "Rp",
+  "unique_id": 79
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3747"
+  },
+  "name": "Iran",
+  "Capital": "Tehran",
+  "ISD Code": 98,
+  "ISO Alpha-3 Code": "IRN",
+  "ISO Alpha-2 Code": "IR",
+  "Currency Name": "Iranian Rial",
+  "Currency Short Name": "IRR",
+  "Currency Symbol": "﷼",
+  "unique_id": 80
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3748"
+  },
+  "name": "Iraq",
+  "Capital": "Baghdad",
+  "ISD Code": 964,
+  "ISO Alpha-3 Code": "IRQ",
+  "ISO Alpha-2 Code": "IQ",
+  "Currency Name": "Iraqi Dinar",
+  "Currency Short Name": "IQD",
+  "Currency Symbol": "ع.د",
+  "unique_id": 81
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3749"
+  },
+  "name": "Ireland",
+  "Capital": "Dublin",
+  "ISD Code": 353,
+  "ISO Alpha-3 Code": "IRL",
+  "ISO Alpha-2 Code": "IE",
+  "Currency Name": "Euro",
+  "Currency Short Name": "EUR",
+  "Currency Symbol": "€",
+  "unique_id": 82
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a374a"
+  },
+  "name": "Israel",
+  "Capital": "Jerusalem",
+  "ISD Code": 972,
+  "ISO Alpha-3 Code": "ISR",
+  "ISO Alpha-2 Code": "IL",
+  "Currency Name": "Israeli Shekel",
+  "Currency Short Name": "ILS",
+  "Currency Symbol": "₪",
+  "unique_id": 83
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a374b"
+  },
+  "name": "Italy",
+  "Capital": "Rome",
+  "ISD Code": 39,
+  "ISO Alpha-3 Code": "ITA",
+  "ISO Alpha-2 Code": "IT",
+  "Currency Name": "Euro",
+  "Currency Short Name": "EUR",
+  "Currency Symbol": "€",
+  "unique_id": 84
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a374c"
+  },
+  "name": "Jamaica",
+  "Capital": "Kingston",
+  "ISD Code": -875,
+  "ISO Alpha-3 Code": "JAM",
+  "ISO Alpha-2 Code": "JM",
+  "Currency Name": "Jamaican Dollar",
+  "Currency Short Name": "JMD",
+  "Currency Symbol": "$",
+  "unique_id": 85
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a374d"
+  },
+  "name": "Japan",
+  "Capital": "Tokyo",
+  "ISD Code": 81,
+  "ISO Alpha-3 Code": "JPN",
+  "ISO Alpha-2 Code": "JP",
+  "Currency Name": "Japanese Yen",
+  "Currency Short Name": "JPY",
+  "Currency Symbol": "¥",
+  "unique_id": 86
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a374e"
+  },
+  "name": "Jordan",
+  "Capital": "Amman",
+  "ISD Code": 962,
+  "ISO Alpha-3 Code": "JOR",
+  "ISO Alpha-2 Code": "JO",
+  "Currency Name": "Jordanian Dinar",
+  "Currency Short Name": "JOD",
+  "Currency Symbol": "د.ا",
+  "unique_id": 87
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a374f"
+  },
+  "name": "Kazakhstan",
+  "Capital": "Nur-Sultan",
+  "ISD Code": 7,
+  "ISO Alpha-3 Code": "KAZ",
+  "ISO Alpha-2 Code": "KZ",
+  "Currency Name": "Kazakhstani Tenge",
+  "Currency Short Name": "KZT",
+  "Currency Symbol": "₸",
+  "unique_id": 88
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3750"
+  },
+  "name": "Kenya",
+  "Capital": "Nairobi",
+  "ISD Code": 254,
+  "ISO Alpha-3 Code": "KEN",
+  "ISO Alpha-2 Code": "KE",
+  "Currency Name": "Kenyan Shilling",
+  "Currency Short Name": "KES",
+  "Currency Symbol": "KSh",
+  "unique_id": 89
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3751"
+  },
+  "name": "Kiribati",
+  "Capital": "Tarawa",
+  "ISD Code": 686,
+  "ISO Alpha-3 Code": "KIR",
+  "ISO Alpha-2 Code": "KI",
+  "Currency Name": "Australian Dollar",
+  "Currency Short Name": "AUD",
+  "Currency Symbol": "$",
+  "unique_id": 90
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3752"
+  },
+  "name": "Korea, North",
+  "Capital": "Pyongyang",
+  "ISD Code": 850,
+  "ISO Alpha-3 Code": "PRK",
+  "ISO Alpha-2 Code": "KP",
+  "Currency Name": "North Korean Won",
+  "Currency Short Name": "KPW",
+  "Currency Symbol": "₩",
+  "unique_id": 91
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3753"
+  },
+  "name": "Korea, South",
+  "Capital": "Seoul",
+  "ISD Code": 82,
+  "ISO Alpha-3 Code": "KOR",
+  "ISO Alpha-2 Code": "KR",
+  "Currency Name": "South Korean Won",
+  "Currency Short Name": "KRW",
+  "Currency Symbol": "₩",
+  "unique_id": 92
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3754"
+  },
+  "name": "Kosovo",
+  "Capital": "Pristina",
+  "ISD Code": "+383, +377, +386",
+  "ISO Alpha-3 Code": "XKX",
+  "ISO Alpha-2 Code": "XK",
+  "Currency Name": "Euro",
+  "Currency Short Name": "EUR",
+  "Currency Symbol": "€",
+  "unique_id": 93
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3755"
+  },
+  "name": "Kuwait",
+  "Capital": "Kuwait City",
+  "ISD Code": 965,
+  "ISO Alpha-3 Code": "KWT",
+  "ISO Alpha-2 Code": "KW",
+  "Currency Name": "Kuwaiti Dinar",
+  "Currency Short Name": "KWD",
+  "Currency Symbol": "د.ك",
+  "unique_id": 94
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3756"
+  },
+  "name": "Kyrgyzstan",
+  "Capital": "Bishkek",
+  "ISD Code": 996,
+  "ISO Alpha-3 Code": "KGZ",
+  "ISO Alpha-2 Code": "KG",
+  "Currency Name": "Kyrgyzstani Som",
+  "Currency Short Name": "KGS",
+  "Currency Symbol": "som",
+  "unique_id": 95
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3757"
+  },
+  "name": "Laos",
+  "Capital": "Vientiane",
+  "ISD Code": 856,
+  "ISO Alpha-3 Code": "LAO",
+  "ISO Alpha-2 Code": "LA",
+  "Currency Name": "Lao Kip",
+  "Currency Short Name": "LAK",
+  "Currency Symbol": "₭",
+  "unique_id": 96
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3758"
+  },
+  "name": "Latvia",
+  "Capital": "Riga",
+  "ISD Code": 371,
+  "ISO Alpha-3 Code": "LVA",
+  "ISO Alpha-2 Code": "LV",
+  "Currency Name": "Euro",
+  "Currency Short Name": "EUR",
+  "Currency Symbol": "€",
+  "unique_id": 97
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3759"
+  },
+  "name": "Lebanon",
+  "Capital": "Beirut",
+  "ISD Code": 961,
+  "ISO Alpha-3 Code": "LBN",
+  "ISO Alpha-2 Code": "LB",
+  "Currency Name": "Lebanese Pound",
+  "Currency Short Name": "LBP",
+  "Currency Symbol": "ل.ل",
+  "unique_id": 98
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a375a"
+  },
+  "name": "Lesotho",
+  "Capital": "Maseru",
+  "ISD Code": 266,
+  "ISO Alpha-3 Code": "LSO",
+  "ISO Alpha-2 Code": "LS",
+  "Currency Name": "Lesotho Loti",
+  "Currency Short Name": "LSL",
+  "Currency Symbol": "L, M",
+  "unique_id": 99
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a375b"
+  },
+  "name": "Liberia",
+  "Capital": "Monrovia",
+  "ISD Code": 231,
+  "ISO Alpha-3 Code": "LBR",
+  "ISO Alpha-2 Code": "LR",
+  "Currency Name": "Liberian Dollar",
+  "Currency Short Name": "LRD",
+  "Currency Symbol": "$",
+  "unique_id": 100
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a375c"
+  },
+  "name": "Libya",
+  "Capital": "Tripoli",
+  "ISD Code": 218,
+  "ISO Alpha-3 Code": "LBY",
+  "ISO Alpha-2 Code": "LY",
+  "Currency Name": "Libyan Dinar",
+  "Currency Short Name": "LYD",
+  "Currency Symbol": "ل.د",
+  "unique_id": 101
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a375d"
+  },
+  "name": "Liechtenstein",
+  "Capital": "Vaduz",
+  "ISD Code": 423,
+  "ISO Alpha-3 Code": "LIE",
+  "ISO Alpha-2 Code": "LI",
+  "Currency Name": "Swiss Franc",
+  "Currency Short Name": "CHF",
+  "Currency Symbol": "CHF",
+  "unique_id": 102
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a375e"
+  },
+  "name": "Lithuania",
+  "Capital": "Vilnius",
+  "ISD Code": 370,
+  "ISO Alpha-3 Code": "LTU",
+  "ISO Alpha-2 Code": "LT",
+  "Currency Name": "Euro",
+  "Currency Short Name": "EUR",
+  "Currency Symbol": "€",
+  "unique_id": 103
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a375f"
+  },
+  "name": "Luxembourg",
+  "Capital": "Luxembourg City",
+  "ISD Code": 352,
+  "ISO Alpha-3 Code": "LUX",
+  "ISO Alpha-2 Code": "LU",
+  "Currency Name": "Euro",
+  "Currency Short Name": "EUR",
+  "Currency Symbol": "€",
+  "unique_id": 104
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3760"
+  },
+  "name": "Madagascar",
+  "Capital": "Antananarivo",
+  "ISD Code": 261,
+  "ISO Alpha-3 Code": "MDG",
+  "ISO Alpha-2 Code": "MG",
+  "Currency Name": "Malagasy Ariary",
+  "Currency Short Name": "MGA",
+  "Currency Symbol": "Ar",
+  "unique_id": 105
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3761"
+  },
+  "name": "Malawi",
+  "Capital": "Lilongwe",
+  "ISD Code": 265,
+  "ISO Alpha-3 Code": "MWI",
+  "ISO Alpha-2 Code": "MW",
+  "Currency Name": "Malawian Kwacha",
+  "Currency Short Name": "MWK",
+  "Currency Symbol": "MK",
+  "unique_id": 106
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3762"
+  },
+  "name": "Malaysia",
+  "Capital": "Kuala Lumpur",
+  "ISD Code": 60,
+  "ISO Alpha-3 Code": "MYS",
+  "ISO Alpha-2 Code": "MY",
+  "Currency Name": "Malaysian Ringgit",
+  "Currency Short Name": "MYR",
+  "Currency Symbol": "RM",
+  "unique_id": 107
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3763"
+  },
+  "name": "Maldives",
+  "Capital": "Malé",
+  "ISD Code": 960,
+  "ISO Alpha-3 Code": "MDV",
+  "ISO Alpha-2 Code": "MV",
+  "Currency Name": "Maldivian Rufiyaa",
+  "Currency Short Name": "MVR",
+  "Currency Symbol": "ރ.ފ",
+  "unique_id": 108
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3764"
+  },
+  "name": "Mali",
+  "Capital": "Bamako",
+  "ISD Code": 223,
+  "ISO Alpha-3 Code": "MLI",
+  "ISO Alpha-2 Code": "ML",
+  "Currency Name": "West African CFA franc",
+  "Currency Short Name": "XOF",
+  "Currency Symbol": "Fr",
+  "unique_id": 109
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3765"
+  },
+  "name": "Malta",
+  "Capital": "Valletta",
+  "ISD Code": 356,
+  "ISO Alpha-3 Code": "MLT",
+  "ISO Alpha-2 Code": "MT",
+  "Currency Name": "Euro",
+  "Currency Short Name": "EUR",
+  "Currency Symbol": "€",
+  "unique_id": 110
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3766"
+  },
+  "name": "Marshall Islands",
+  "Capital": "Majuro",
+  "ISD Code": 692,
+  "ISO Alpha-3 Code": "MHL",
+  "ISO Alpha-2 Code": "MH",
+  "Currency Name": "United States Dollar",
+  "Currency Short Name": "USD",
+  "Currency Symbol": "$",
+  "unique_id": 111
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3767"
+  },
+  "name": "Mauritania",
+  "Capital": "Nouakchott",
+  "ISD Code": 222,
+  "ISO Alpha-3 Code": "MRT",
+  "ISO Alpha-2 Code": "MR",
+  "Currency Name": "Mauritanian Ouguiya",
+  "Currency Short Name": "MRU",
+  "Currency Symbol": "UM",
+  "unique_id": 112
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3768"
+  },
+  "name": "Mauritius",
+  "Capital": "Port Louis",
+  "ISD Code": 230,
+  "ISO Alpha-3 Code": "MUS",
+  "ISO Alpha-2 Code": "MU",
+  "Currency Name": "Mauritian Rupee",
+  "Currency Short Name": "MUR",
+  "Currency Symbol": "₨",
+  "unique_id": 113
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3769"
+  },
+  "name": "Mexico",
+  "Capital": "Mexico City",
+  "ISD Code": 52,
+  "ISO Alpha-3 Code": "MEX",
+  "ISO Alpha-2 Code": "MX",
+  "Currency Name": "Mexican Peso",
+  "Currency Short Name": "MXN",
+  "Currency Symbol": "$",
+  "unique_id": 114
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a376a"
+  },
+  "name": "Micronesia",
+  "Capital": "Palikir",
+  "ISD Code": 691,
+  "ISO Alpha-3 Code": "FSM",
+  "ISO Alpha-2 Code": "FM",
+  "Currency Name": "United States Dollar",
+  "Currency Short Name": "USD",
+  "Currency Symbol": "$",
+  "unique_id": 115
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a376b"
+  },
+  "name": "Moldova",
+  "Capital": "Chisinau",
+  "ISD Code": 373,
+  "ISO Alpha-3 Code": "MDA",
+  "ISO Alpha-2 Code": "MD",
+  "Currency Name": "Moldovan Leu",
+  "Currency Short Name": "MDL",
+  "Currency Symbol": "L",
+  "unique_id": 116
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a376c"
+  },
+  "name": "Monaco",
+  "Capital": "Monaco",
+  "ISD Code": 377,
+  "ISO Alpha-3 Code": "MCO",
+  "ISO Alpha-2 Code": "MC",
+  "Currency Name": "Euro",
+  "Currency Short Name": "EUR",
+  "Currency Symbol": "€",
+  "unique_id": 117
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a376d"
+  },
+  "name": "Mongolia",
+  "Capital": "Ulaanbaatar",
+  "ISD Code": 976,
+  "ISO Alpha-3 Code": "MNG",
+  "ISO Alpha-2 Code": "MN",
+  "Currency Name": "Mongolian Tögrög",
+  "Currency Short Name": "MNT",
+  "Currency Symbol": "₮",
+  "unique_id": 118
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a376e"
+  },
+  "name": "Montenegro",
+  "Capital": "Podgorica",
+  "ISD Code": 382,
+  "ISO Alpha-3 Code": "MNE",
+  "ISO Alpha-2 Code": "ME",
+  "Currency Name": "Euro",
+  "Currency Short Name": "EUR",
+  "Currency Symbol": "€",
+  "unique_id": 119
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a376f"
+  },
+  "name": "Morocco",
+  "Capital": "Rabat",
+  "ISD Code": 212,
+  "ISO Alpha-3 Code": "MAR",
+  "ISO Alpha-2 Code": "MA",
+  "Currency Name": "Moroccan Dirham",
+  "Currency Short Name": "MAD",
+  "Currency Symbol": "د.م.",
+  "unique_id": 120
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3770"
+  },
+  "name": "Mozambique",
+  "Capital": "Maputo",
+  "ISD Code": 258,
+  "ISO Alpha-3 Code": "MOZ",
+  "ISO Alpha-2 Code": "MZ",
+  "Currency Name": "Mozambican Metical",
+  "Currency Short Name": "MZN",
+  "Currency Symbol": "MT",
+  "unique_id": 121
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3771"
+  },
+  "name": "Myanmar",
+  "Capital": "Naypyidaw",
+  "ISD Code": 95,
+  "ISO Alpha-3 Code": "MMR",
+  "ISO Alpha-2 Code": "MM",
+  "Currency Name": "Myanmar Kyat",
+  "Currency Short Name": "MMK",
+  "Currency Symbol": "Ks",
+  "unique_id": 122
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3772"
+  },
+  "name": "Namibia",
+  "Capital": "Windhoek",
+  "ISD Code": 264,
+  "ISO Alpha-3 Code": "NAM",
+  "ISO Alpha-2 Code": {
+    "$numberDouble": "NaN"
+  },
+  "Currency Name": "Namibian Dollar",
+  "Currency Short Name": "NAD",
+  "Currency Symbol": "$",
+  "unique_id": 123
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3773"
+  },
+  "name": "Nauru",
+  "Capital": "Yaren",
+  "ISD Code": 674,
+  "ISO Alpha-3 Code": "NRU",
+  "ISO Alpha-2 Code": "NR",
+  "Currency Name": "Australian Dollar",
+  "Currency Short Name": "AUD",
+  "Currency Symbol": "$",
+  "unique_id": 124
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3774"
+  },
+  "name": "Nepal",
+  "Capital": "Kathmandu",
+  "ISD Code": 977,
+  "ISO Alpha-3 Code": "NPL",
+  "ISO Alpha-2 Code": "NP",
+  "Currency Name": "Nepalese Rupee",
+  "Currency Short Name": "NPR",
+  "Currency Symbol": "रू",
+  "unique_id": 125
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3775"
+  },
+  "name": "Netherlands",
+  "Capital": "Amsterdam",
+  "ISD Code": 31,
+  "ISO Alpha-3 Code": "NLD",
+  "ISO Alpha-2 Code": "NL",
+  "Currency Name": "Euro",
+  "Currency Short Name": "EUR",
+  "Currency Symbol": "€",
+  "unique_id": 126
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3776"
+  },
+  "name": "New Zealand",
+  "Capital": "Wellington",
+  "ISD Code": 64,
+  "ISO Alpha-3 Code": "NZL",
+  "ISO Alpha-2 Code": "NZ",
+  "Currency Name": "New Zealand Dollar",
+  "Currency Short Name": "NZD",
+  "Currency Symbol": "$",
+  "unique_id": 127
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3777"
+  },
+  "name": "Nicaragua",
+  "Capital": "Managua",
+  "ISD Code": 505,
+  "ISO Alpha-3 Code": "NIC",
+  "ISO Alpha-2 Code": "NI",
+  "Currency Name": "Nicaraguan Córdoba",
+  "Currency Short Name": "NIO",
+  "Currency Symbol": "C$",
+  "unique_id": 128
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3778"
+  },
+  "name": "Niger",
+  "Capital": "Niamey",
+  "ISD Code": 227,
+  "ISO Alpha-3 Code": "NER",
+  "ISO Alpha-2 Code": "NE",
+  "Currency Name": "West African CFA franc",
+  "Currency Short Name": "XOF",
+  "Currency Symbol": "Fr",
+  "unique_id": 129
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3779"
+  },
+  "name": "Nigeria",
+  "Capital": "Abuja",
+  "ISD Code": 234,
+  "ISO Alpha-3 Code": "NGA",
+  "ISO Alpha-2 Code": "NG",
+  "Currency Name": "Nigerian Naira",
+  "Currency Short Name": "NGN",
+  "Currency Symbol": "₦",
+  "unique_id": 130
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a377a"
+  },
+  "name": "North Macedonia",
+  "Capital": "Skopje",
+  "ISD Code": 389,
+  "ISO Alpha-3 Code": "MKD",
+  "ISO Alpha-2 Code": "MK",
+  "Currency Name": "Macedonian Denar",
+  "Currency Short Name": "MKD",
+  "Currency Symbol": "ден",
+  "unique_id": 131
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a377b"
+  },
+  "name": "Norway",
+  "Capital": "Oslo",
+  "ISD Code": 47,
+  "ISO Alpha-3 Code": "NOR",
+  "ISO Alpha-2 Code": "NO",
+  "Currency Name": "Norwegian Krone",
+  "Currency Short Name": "NOK",
+  "Currency Symbol": "kr",
+  "unique_id": 132
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a377c"
+  },
+  "name": "Oman",
+  "Capital": "Muscat",
+  "ISD Code": 968,
+  "ISO Alpha-3 Code": "OMN",
+  "ISO Alpha-2 Code": "OM",
+  "Currency Name": "Omani Rial",
+  "Currency Short Name": "OMR",
+  "Currency Symbol": "ر.ع.",
+  "unique_id": 133
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a377d"
+  },
+  "name": "Pakistan",
+  "Capital": "Islamabad",
+  "ISD Code": 92,
+  "ISO Alpha-3 Code": "PAK",
+  "ISO Alpha-2 Code": "PK",
+  "Currency Name": "Pakistani Rupee",
+  "Currency Short Name": "PKR",
+  "Currency Symbol": "Rs",
+  "unique_id": 134
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a377e"
+  },
+  "name": "Palau",
+  "Capital": "Ngerulmud",
+  "ISD Code": 680,
+  "ISO Alpha-3 Code": "PLW",
+  "ISO Alpha-2 Code": "PW",
+  "Currency Name": "United States Dollar",
+  "Currency Short Name": "USD",
+  "Currency Symbol": "$",
+  "unique_id": 135
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a377f"
+  },
+  "name": "Panama",
+  "Capital": "Panama City",
+  "ISD Code": 507,
+  "ISO Alpha-3 Code": "PAN",
+  "ISO Alpha-2 Code": "PA",
+  "Currency Name": "Panamanian Balboa",
+  "Currency Short Name": "PAB",
+  "Currency Symbol": "B/.",
+  "unique_id": 136
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3780"
+  },
+  "name": "Papua New Guinea",
+  "Capital": "Port Moresby",
+  "ISD Code": 675,
+  "ISO Alpha-3 Code": "PNG",
+  "ISO Alpha-2 Code": "PG",
+  "Currency Name": "Papua New Guinean Kina",
+  "Currency Short Name": "PGK",
+  "Currency Symbol": "K",
+  "unique_id": 137
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3781"
+  },
+  "name": "Paraguay",
+  "Capital": "Asunción",
+  "ISD Code": 595,
+  "ISO Alpha-3 Code": "PRY",
+  "ISO Alpha-2 Code": "PY",
+  "Currency Name": "Paraguayan Guarani",
+  "Currency Short Name": "PYG",
+  "Currency Symbol": "₲",
+  "unique_id": 138
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3782"
+  },
+  "name": "Peru",
+  "Capital": "Lima",
+  "ISD Code": 51,
+  "ISO Alpha-3 Code": "PER",
+  "ISO Alpha-2 Code": "PE",
+  "Currency Name": "Peruvian Sol",
+  "Currency Short Name": "PEN",
+  "Currency Symbol": "S/.",
+  "unique_id": 139
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3783"
+  },
+  "name": "Philippines",
+  "Capital": "Manila",
+  "ISD Code": 63,
+  "ISO Alpha-3 Code": "PHL",
+  "ISO Alpha-2 Code": "PH",
+  "Currency Name": "Philippine Peso",
+  "Currency Short Name": "PHP",
+  "Currency Symbol": "₱",
+  "unique_id": 140
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3784"
+  },
+  "name": "Poland",
+  "Capital": "Warsaw",
+  "ISD Code": 48,
+  "ISO Alpha-3 Code": "POL",
+  "ISO Alpha-2 Code": "PL",
+  "Currency Name": "Polish Złoty",
+  "Currency Short Name": "PLN",
+  "Currency Symbol": "zł",
+  "unique_id": 141
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3785"
+  },
+  "name": "Portugal",
+  "Capital": "Lisbon",
+  "ISD Code": 351,
+  "ISO Alpha-3 Code": "PRT",
+  "ISO Alpha-2 Code": "PT",
+  "Currency Name": "Euro",
+  "Currency Short Name": "EUR",
+  "Currency Symbol": "€",
+  "unique_id": 142
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3786"
+  },
+  "name": "Qatar",
+  "Capital": "Doha",
+  "ISD Code": 974,
+  "ISO Alpha-3 Code": "QAT",
+  "ISO Alpha-2 Code": "QA",
+  "Currency Name": "Qatari Riyal",
+  "Currency Short Name": "QAR",
+  "Currency Symbol": "ر.ق",
+  "unique_id": 143
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3787"
+  },
+  "name": "Romania",
+  "Capital": "Bucharest",
+  "ISD Code": 40,
+  "ISO Alpha-3 Code": "ROU",
+  "ISO Alpha-2 Code": "RO",
+  "Currency Name": "Romanian Leu",
+  "Currency Short Name": "RON",
+  "Currency Symbol": "lei",
+  "unique_id": 144
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3788"
+  },
+  "name": "Russia",
+  "Capital": "Moscow",
+  "ISD Code": 7,
+  "ISO Alpha-3 Code": "RUS",
+  "ISO Alpha-2 Code": "RU",
+  "Currency Name": "Russian Ruble",
+  "Currency Short Name": "RUB",
+  "Currency Symbol": "₽",
+  "unique_id": 145
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3789"
+  },
+  "name": "Rwanda",
+  "Capital": "Kigali",
+  "ISD Code": 250,
+  "ISO Alpha-3 Code": "RWA",
+  "ISO Alpha-2 Code": "RW",
+  "Currency Name": "Rwandan Franc",
+  "Currency Short Name": "RWF",
+  "Currency Symbol": "Fr",
+  "unique_id": 146
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a378a"
+  },
+  "name": "Saint Kitts and Nevis",
+  "Capital": "Basseterre",
+  "ISD Code": -868,
+  "ISO Alpha-3 Code": "KNA",
+  "ISO Alpha-2 Code": "KN",
+  "Currency Name": "East Caribbean Dollar",
+  "Currency Short Name": "XCD",
+  "Currency Symbol": "$",
+  "unique_id": 147
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a378b"
+  },
+  "name": "Saint Lucia",
+  "Capital": "Castries",
+  "ISD Code": -757,
+  "ISO Alpha-3 Code": "LCA",
+  "ISO Alpha-2 Code": "LC",
+  "Currency Name": "East Caribbean Dollar",
+  "Currency Short Name": "XCD",
+  "Currency Symbol": "$",
+  "unique_id": 148
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a378c"
+  },
+  "name": "Saint Vincent and the Grenadines",
+  "Capital": "Kingstown",
+  "ISD Code": -783,
+  "ISO Alpha-3 Code": "VCT",
+  "ISO Alpha-2 Code": "VC",
+  "Currency Name": "East Caribbean Dollar",
+  "Currency Short Name": "XCD",
+  "Currency Symbol": "$",
+  "unique_id": 149
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a378d"
+  },
+  "name": "Samoa",
+  "Capital": "Apia",
+  "ISD Code": 685,
+  "ISO Alpha-3 Code": "WSM",
+  "ISO Alpha-2 Code": "WS",
+  "Currency Name": "Samoan Tālā",
+  "Currency Short Name": "WST",
+  "Currency Symbol": "T",
+  "unique_id": 150
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a378e"
+  },
+  "name": "San Marino",
+  "Capital": "San Marino",
+  "ISD Code": "+378, +379",
+  "ISO Alpha-3 Code": "SMR",
+  "ISO Alpha-2 Code": "SM",
+  "Currency Name": "Euro",
+  "Currency Short Name": "EUR",
+  "Currency Symbol": "€",
+  "unique_id": 151
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a378f"
+  },
+  "name": "Sao Tome and Principe",
+  "Capital": "São Tomé",
+  "ISD Code": 239,
+  "ISO Alpha-3 Code": "STP",
+  "ISO Alpha-2 Code": "ST",
+  "Currency Name": "São Tomé and Príncipe Dobra",
+  "Currency Short Name": "STN",
+  "Currency Symbol": "Db",
+  "unique_id": 152
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3790"
+  },
+  "name": "Saudi Arabia",
+  "Capital": "Riyadh",
+  "ISD Code": 966,
+  "ISO Alpha-3 Code": "SAU",
+  "ISO Alpha-2 Code": "SA",
+  "Currency Name": "Saudi Riyal",
+  "Currency Short Name": "SAR",
+  "Currency Symbol": "ر.س",
+  "unique_id": 153
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3791"
+  },
+  "name": "Senegal",
+  "Capital": "Dakar",
+  "ISD Code": 221,
+  "ISO Alpha-3 Code": "SEN",
+  "ISO Alpha-2 Code": "SN",
+  "Currency Name": "West African CFA franc",
+  "Currency Short Name": "XOF",
+  "Currency Symbol": "Fr",
+  "unique_id": 154
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3792"
+  },
+  "name": "Serbia",
+  "Capital": "Belgrade",
+  "ISD Code": 381,
+  "ISO Alpha-3 Code": "SRB",
+  "ISO Alpha-2 Code": "RS",
+  "Currency Name": "Serbian Dinar",
+  "Currency Short Name": "RSD",
+  "Currency Symbol": "РСД",
+  "unique_id": 155
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3793"
+  },
+  "name": "Seychelles",
+  "Capital": "Victoria",
+  "ISD Code": 248,
+  "ISO Alpha-3 Code": "SYC",
+  "ISO Alpha-2 Code": "SC",
+  "Currency Name": "Seychellois Rupee",
+  "Currency Short Name": "SCR",
+  "Currency Symbol": "₨",
+  "unique_id": 156
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3794"
+  },
+  "name": "Sierra Leone",
+  "Capital": "Freetown",
+  "ISD Code": 232,
+  "ISO Alpha-3 Code": "SLE",
+  "ISO Alpha-2 Code": "SL",
+  "Currency Name": "Sierra Leonean Leone",
+  "Currency Short Name": "SLL",
+  "Currency Symbol": "Le",
+  "unique_id": 157
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3795"
+  },
+  "name": "Singapore",
+  "Capital": "Singapore",
+  "ISD Code": 65,
+  "ISO Alpha-3 Code": "SGP",
+  "ISO Alpha-2 Code": "SG",
+  "Currency Name": "Singapore Dollar",
+  "Currency Short Name": "SGD",
+  "Currency Symbol": "$",
+  "unique_id": 158
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3796"
+  },
+  "name": "Slovakia",
+  "Capital": "Bratislava",
+  "ISD Code": 421,
+  "ISO Alpha-3 Code": "SVK",
+  "ISO Alpha-2 Code": "SK",
+  "Currency Name": "Euro",
+  "Currency Short Name": "EUR",
+  "Currency Symbol": "€",
+  "unique_id": 159
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3797"
+  },
+  "name": "Slovenia",
+  "Capital": "Ljubljana",
+  "ISD Code": 386,
+  "ISO Alpha-3 Code": "SVN",
+  "ISO Alpha-2 Code": "SI",
+  "Currency Name": "Euro",
+  "Currency Short Name": "EUR",
+  "Currency Symbol": "€",
+  "unique_id": 160
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3798"
+  },
+  "name": "Solomon Islands",
+  "Capital": "Honiara",
+  "ISD Code": 677,
+  "ISO Alpha-3 Code": "SLB",
+  "ISO Alpha-2 Code": "SB",
+  "Currency Name": "Solomon Islands Dollar",
+  "Currency Short Name": "SBD",
+  "Currency Symbol": "$",
+  "unique_id": 161
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a3799"
+  },
+  "name": "Somalia",
+  "Capital": "Mogadishu",
+  "ISD Code": 252,
+  "ISO Alpha-3 Code": "SOM",
+  "ISO Alpha-2 Code": "SO",
+  "Currency Name": "Somali Shilling",
+  "Currency Short Name": "SOS",
+  "Currency Symbol": "Sh",
+  "unique_id": 162
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a379a"
+  },
+  "name": "South Africa",
+  "Capital": "Pretoria",
+  "ISD Code": 27,
+  "ISO Alpha-3 Code": "ZAF",
+  "ISO Alpha-2 Code": "ZA",
+  "Currency Name": "South African Rand",
+  "Currency Short Name": "ZAR",
+  "Currency Symbol": "R",
+  "unique_id": 163
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a379b"
+  },
+  "name": "South Sudan",
+  "Capital": "Juba",
+  "ISD Code": 211,
+  "ISO Alpha-3 Code": "SSD",
+  "ISO Alpha-2 Code": "SS",
+  "Currency Name": "South Sudanese Pound",
+  "Currency Short Name": "SSP",
+  "Currency Symbol": "£",
+  "unique_id": 164
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a379c"
+  },
+  "name": "Spain",
+  "Capital": "Madrid",
+  "ISD Code": 34,
+  "ISO Alpha-3 Code": "ESP",
+  "ISO Alpha-2 Code": "ES",
+  "Currency Name": "Euro",
+  "Currency Short Name": "EUR",
+  "Currency Symbol": "€",
+  "unique_id": 165
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a379d"
+  },
+  "name": "Sri Lanka",
+  "Capital": "Colombo",
+  "ISD Code": 94,
+  "ISO Alpha-3 Code": "LKA",
+  "ISO Alpha-2 Code": "LK",
+  "Currency Name": "Sri Lankan Rupee",
+  "Currency Short Name": "LKR",
+  "Currency Symbol": "Rs",
+  "unique_id": 166
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a379e"
+  },
+  "name": "Sudan",
+  "Capital": "Khartoum",
+  "ISD Code": 249,
+  "ISO Alpha-3 Code": "SDN",
+  "ISO Alpha-2 Code": "SD",
+  "Currency Name": "Sudanese Pound",
+  "Currency Short Name": "SDG",
+  "Currency Symbol": "ج.س",
+  "unique_id": 167
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a379f"
+  },
+  "name": "Suriname",
+  "Capital": "Paramaribo",
+  "ISD Code": 597,
+  "ISO Alpha-3 Code": "SUR",
+  "ISO Alpha-2 Code": "SR",
+  "Currency Name": "Surinamese Dollar",
+  "Currency Short Name": "SRD",
+  "Currency Symbol": "$",
+  "unique_id": 168
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a37a0"
+  },
+  "name": "Sweden",
+  "Capital": "Stockholm",
+  "ISD Code": 46,
+  "ISO Alpha-3 Code": "SWE",
+  "ISO Alpha-2 Code": "SE",
+  "Currency Name": "Swedish Krona",
+  "Currency Short Name": "SEK",
+  "Currency Symbol": "kr",
+  "unique_id": 169
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a37a1"
+  },
+  "name": "Switzerland",
+  "Capital": "Bern",
+  "ISD Code": 41,
+  "ISO Alpha-3 Code": "CHE",
+  "ISO Alpha-2 Code": "CH",
+  "Currency Name": "Swiss Franc",
+  "Currency Short Name": "CHF",
+  "Currency Symbol": "CHF",
+  "unique_id": 170
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a37a2"
+  },
+  "name": "Syria",
+  "Capital": "Damascus",
+  "ISD Code": 963,
+  "ISO Alpha-3 Code": "SYR",
+  "ISO Alpha-2 Code": "SY",
+  "Currency Name": "Syrian Pound",
+  "Currency Short Name": "SYP",
+  "Currency Symbol": "£",
+  "unique_id": 171
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a37a3"
+  },
+  "name": "Taiwan",
+  "Capital": "Taipei",
+  "ISD Code": 886,
+  "ISO Alpha-3 Code": "TWN",
+  "ISO Alpha-2 Code": "TW",
+  "Currency Name": "New Taiwan Dollar",
+  "Currency Short Name": "TWD",
+  "Currency Symbol": "NT$",
+  "unique_id": 172
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a37a4"
+  },
+  "name": "Tajikistan",
+  "Capital": "Dushanbe",
+  "ISD Code": 992,
+  "ISO Alpha-3 Code": "TJK",
+  "ISO Alpha-2 Code": "TJ",
+  "Currency Name": "Tajikistani Somoni",
+  "Currency Short Name": "TJS",
+  "Currency Symbol": "ЅМ",
+  "unique_id": 173
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a37a5"
+  },
+  "name": "Tanzania",
+  "Capital": "Dodoma",
+  "ISD Code": 255,
+  "ISO Alpha-3 Code": "TZA",
+  "ISO Alpha-2 Code": "TZ",
+  "Currency Name": "Tanzanian Shilling",
+  "Currency Short Name": "TZS",
+  "Currency Symbol": "Sh",
+  "unique_id": 174
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a37a6"
+  },
+  "name": "Thailand",
+  "Capital": "Bangkok",
+  "ISD Code": 66,
+  "ISO Alpha-3 Code": "THA",
+  "ISO Alpha-2 Code": "TH",
+  "Currency Name": "Thai Baht",
+  "Currency Short Name": "THB",
+  "Currency Symbol": "฿",
+  "unique_id": 175
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a37a7"
+  },
+  "name": "Timor-Leste",
+  "Capital": "Dili",
+  "ISD Code": 670,
+  "ISO Alpha-3 Code": "TLS",
+  "ISO Alpha-2 Code": "TL",
+  "Currency Name": "United States Dollar",
+  "Currency Short Name": "USD",
+  "Currency Symbol": "$",
+  "unique_id": 176
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a37a8"
+  },
+  "name": "Togo",
+  "Capital": "Lomé",
+  "ISD Code": 228,
+  "ISO Alpha-3 Code": "TGO",
+  "ISO Alpha-2 Code": "TG",
+  "Currency Name": "West African CFA franc",
+  "Currency Short Name": "XOF",
+  "Currency Symbol": "Fr",
+  "unique_id": 177
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a37a9"
+  },
+  "name": "Tonga",
+  "Capital": "Nuku'alofa",
+  "ISD Code": 676,
+  "ISO Alpha-3 Code": "TON",
+  "ISO Alpha-2 Code": "TO",
+  "Currency Name": "Tongan Paʻanga",
+  "Currency Short Name": "TOP",
+  "Currency Symbol": "T$",
+  "unique_id": 178
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a37aa"
+  },
+  "name": "Trinidad and Tobago",
+  "Capital": "Port of Spain",
+  "ISD Code": -867,
+  "ISO Alpha-3 Code": "TTO",
+  "ISO Alpha-2 Code": "TT",
+  "Currency Name": "Trinidad and Tobago Dollar",
+  "Currency Short Name": "TTD",
+  "Currency Symbol": "$",
+  "unique_id": 179
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a37ab"
+  },
+  "name": "Tunisia",
+  "Capital": "Tunis",
+  "ISD Code": 216,
+  "ISO Alpha-3 Code": "TUN",
+  "ISO Alpha-2 Code": "TN",
+  "Currency Name": "Tunisian Dinar",
+  "Currency Short Name": "TND",
+  "Currency Symbol": "د.ت",
+  "unique_id": 180
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a37ac"
+  },
+  "name": "Turkey",
+  "Capital": "Ankara",
+  "ISD Code": 90,
+  "ISO Alpha-3 Code": "TUR",
+  "ISO Alpha-2 Code": "TR",
+  "Currency Name": "Turkish Lira",
+  "Currency Short Name": "TRY",
+  "Currency Symbol": "₺",
+  "unique_id": 181
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a37ad"
+  },
+  "name": "Turkmenistan",
+  "Capital": "Ashgabat",
+  "ISD Code": 993,
+  "ISO Alpha-3 Code": "TKM",
+  "ISO Alpha-2 Code": "TM",
+  "Currency Name": "Turkmenistan Manat",
+  "Currency Short Name": "TMT",
+  "Currency Symbol": "m",
+  "unique_id": 182
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a37ae"
+  },
+  "name": "Tuvalu",
+  "Capital": "Funafuti",
+  "ISD Code": 688,
+  "ISO Alpha-3 Code": "TUV",
+  "ISO Alpha-2 Code": "TV",
+  "Currency Name": "Australian Dollar",
+  "Currency Short Name": "AUD",
+  "Currency Symbol": "$",
+  "unique_id": 183
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a37af"
+  },
+  "name": "Uganda",
+  "Capital": "Kampala",
+  "ISD Code": 256,
+  "ISO Alpha-3 Code": "UGA",
+  "ISO Alpha-2 Code": "UG",
+  "Currency Name": "Ugandan Shilling",
+  "Currency Short Name": "UGX",
+  "Currency Symbol": "Sh",
+  "unique_id": 184
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a37b0"
+  },
+  "name": "Ukraine",
+  "Capital": "Kiev",
+  "ISD Code": 380,
+  "ISO Alpha-3 Code": "UKR",
+  "ISO Alpha-2 Code": "UA",
+  "Currency Name": "Ukrainian Hryvnia",
+  "Currency Short Name": "UAH",
+  "Currency Symbol": "₴",
+  "unique_id": 185
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a37b1"
+  },
+  "name": "United Arab Emirates",
+  "Capital": "Abu Dhabi",
+  "ISD Code": 971,
+  "ISO Alpha-3 Code": "ARE",
+  "ISO Alpha-2 Code": "AE",
+  "Currency Name": "UAE Dirham",
+  "Currency Short Name": "AED",
+  "Currency Symbol": "د.إ",
+  "unique_id": 186
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a37b2"
+  },
+  "name": "United Kingdom",
+  "Capital": "London",
+  "ISD Code": 44,
+  "ISO Alpha-3 Code": "GBR",
+  "ISO Alpha-2 Code": "GB",
+  "Currency Name": "British Pound",
+  "Currency Short Name": "GBP",
+  "Currency Symbol": "£",
+  "unique_id": 187
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a37b3"
+  },
+  "name": "United States",
+  "Capital": "Washington, D.C.",
+  "ISD Code": 1,
+  "ISO Alpha-3 Code": "USA",
+  "ISO Alpha-2 Code": "US",
+  "Currency Name": "United States Dollar",
+  "Currency Short Name": "USD",
+  "Currency Symbol": "$",
+  "unique_id": 188
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a37b4"
+  },
+  "name": "Uruguay",
+  "Capital": "Montevideo",
+  "ISD Code": 598,
+  "ISO Alpha-3 Code": "URY",
+  "ISO Alpha-2 Code": "UY",
+  "Currency Name": "Uruguayan Peso",
+  "Currency Short Name": "UYU",
+  "Currency Symbol": "$",
+  "unique_id": 189
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a37b5"
+  },
+  "name": "Uzbekistan",
+  "Capital": "Tashkent",
+  "ISD Code": 998,
+  "ISO Alpha-3 Code": "UZB",
+  "ISO Alpha-2 Code": "UZ",
+  "Currency Name": "Uzbekistani Som",
+  "Currency Short Name": "UZS",
+  "Currency Symbol": "so'm",
+  "unique_id": 190
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a37b6"
+  },
+  "name": "Vanuatu",
+  "Capital": "Port Vila",
+  "ISD Code": 678,
+  "ISO Alpha-3 Code": "VUT",
+  "ISO Alpha-2 Code": "VU",
+  "Currency Name": "Vanuatu Vatu",
+  "Currency Short Name": "VUV",
+  "Currency Symbol": "Vt",
+  "unique_id": 191
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a37b7"
+  },
+  "name": "Vatican City",
+  "Capital": "Vatican City",
+  "ISD Code": 33,
+  "ISO Alpha-3 Code": "VAT",
+  "ISO Alpha-2 Code": "VA",
+  "Currency Name": "Euro",
+  "Currency Short Name": "EUR",
+  "Currency Symbol": "€",
+  "unique_id": 192
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a37b8"
+  },
+  "name": "Venezuela",
+  "Capital": "Caracas",
+  "ISD Code": 58,
+  "ISO Alpha-3 Code": "VEN",
+  "ISO Alpha-2 Code": "VE",
+  "Currency Name": "Venezuelan Bolívar",
+  "Currency Short Name": "VES",
+  "Currency Symbol": "Bs",
+  "unique_id": 193
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a37b9"
+  },
+  "name": "Vietnam",
+  "Capital": "Hanoi",
+  "ISD Code": 84,
+  "ISO Alpha-3 Code": "VNM",
+  "ISO Alpha-2 Code": "VN",
+  "Currency Name": "Vietnamese Đồng",
+  "Currency Short Name": "VND",
+  "Currency Symbol": "₫",
+  "unique_id": 194
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a37ba"
+  },
+  "name": "Yemen",
+  "Capital": "Sana'a",
+  "ISD Code": 967,
+  "ISO Alpha-3 Code": "YEM",
+  "ISO Alpha-2 Code": "YE",
+  "Currency Name": "Yemeni Rial",
+  "Currency Short Name": "YER",
+  "Currency Symbol": "﷼",
+  "unique_id": 195
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a37bb"
+  },
+  "name": "Zambia",
+  "Capital": "Lusaka",
+  "ISD Code": 260,
+  "ISO Alpha-3 Code": "ZMB",
+  "ISO Alpha-2 Code": "ZM",
+  "Currency Name": "Zambian Kwacha",
+  "Currency Short Name": "ZMW",
+  "Currency Symbol": "ZK",
+  "unique_id": 196
+},
+{
+  "_id": {
+    "$oid": "6495213832a290c8bc4a37bc"
+  },
+  "name": "Zimbabwe",
+  "Capital": "Harare",
+  "ISD Code": 263,
+  "ISO Alpha-3 Code": "ZWE",
+  "ISO Alpha-2 Code": "ZW",
+  "Currency Name": "Zimbabwean Dollar",
+  "Currency Short Name": "ZWL",
+  "Currency Symbol": "$",
+  "unique_id": 197
+},
+{
+  "_id": {
+    "$oid": "64952eff32a290c8bc4a37c4"
+  },
+  "name": "Bolivia Plurinational States of",
+  "iso3": "BOL",
+  "numeric_code": {
+    "$numberDouble": "NaN"
+  },
+  "iso2": "BY",
+  "phonecode": {
+    "$numberDouble": "NaN"
+  },
+  "capital": {
+    "$numberDouble": "NaN"
+  },
+  "currency": "BOB",
+  "currency_name": "Boliviano",
+  "currency_symbol": {
+    "$numberDouble": "NaN"
+  },
+  "tid": {
+    "$numberDouble": "NaN"
+  },
+  "native": {
+    "$numberDouble": "NaN"
+  },
+  "region": {
+    "$numberDouble": "NaN"
+  },
+  "subregion": {
+    "$numberDouble": "NaN"
+  },
+  "timezone": {
+    "$numberDouble": "NaN"
+  },
+  "translations": {
+    "$numberDouble": "NaN"
+  },
+  "latitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "longitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "emoji": {
+    "$numberDouble": "NaN"
+  },
+  "emojiU": {
+    "$numberDouble": "NaN"
+  },
+  "created_at": {
+    "$numberDouble": "NaN"
+  },
+  "updated_at": {
+    "$numberDouble": "NaN"
+  },
+  "flag": {
+    "$numberDouble": "NaN"
+  },
+  "wikiDataId": {
+    "$numberDouble": "NaN"
+  },
+  "unique_id": 21
+},
+{
+  "_id": {
+    "$oid": "64952eff32a290c8bc4a37c5"
+  },
+  "name": "Brunei Darussalam",
+  "iso3": "BRN",
+  "numeric_code": {
+    "$numberDouble": "NaN"
+  },
+  "iso2": "BM",
+  "phonecode": {
+    "$numberDouble": "NaN"
+  },
+  "capital": {
+    "$numberDouble": "NaN"
+  },
+  "currency": "BND",
+  "currency_name": "Brunei Dollar",
+  "currency_symbol": {
+    "$numberDouble": "NaN"
+  },
+  "tid": {
+    "$numberDouble": "NaN"
+  },
+  "native": {
+    "$numberDouble": "NaN"
+  },
+  "region": {
+    "$numberDouble": "NaN"
+  },
+  "subregion": {
+    "$numberDouble": "NaN"
+  },
+  "timezone": {
+    "$numberDouble": "NaN"
+  },
+  "translations": {
+    "$numberDouble": "NaN"
+  },
+  "latitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "longitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "emoji": {
+    "$numberDouble": "NaN"
+  },
+  "emojiU": {
+    "$numberDouble": "NaN"
+  },
+  "created_at": {
+    "$numberDouble": "NaN"
+  },
+  "updated_at": {
+    "$numberDouble": "NaN"
+  },
+  "flag": {
+    "$numberDouble": "NaN"
+  },
+  "wikiDataId": {
+    "$numberDouble": "NaN"
+  },
+  "unique_id": 25
+},
+{
+  "_id": {
+    "$oid": "64952eff32a290c8bc4a37c6"
+  },
+  "name": "Cabo Verde Republic of",
+  "iso3": "CPV",
+  "numeric_code": {
+    "$numberDouble": "NaN"
+  },
+  "iso2": "BW",
+  "phonecode": {
+    "$numberDouble": "NaN"
+  },
+  "capital": {
+    "$numberDouble": "NaN"
+  },
+  "currency": "CVE",
+  "currency_name": "Cape Verde Escudo",
+  "currency_symbol": {
+    "$numberDouble": "NaN"
+  },
+  "tid": {
+    "$numberDouble": "NaN"
+  },
+  "native": {
+    "$numberDouble": "NaN"
+  },
+  "region": {
+    "$numberDouble": "NaN"
+  },
+  "subregion": {
+    "$numberDouble": "NaN"
+  },
+  "timezone": {
+    "$numberDouble": "NaN"
+  },
+  "translations": {
+    "$numberDouble": "NaN"
+  },
+  "latitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "longitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "emoji": {
+    "$numberDouble": "NaN"
+  },
+  "emojiU": {
+    "$numberDouble": "NaN"
+  },
+  "created_at": {
+    "$numberDouble": "NaN"
+  },
+  "updated_at": {
+    "$numberDouble": "NaN"
+  },
+  "flag": {
+    "$numberDouble": "NaN"
+  },
+  "wikiDataId": {
+    "$numberDouble": "NaN"
+  },
+  "unique_id": 29
+},
+{
+  "_id": {
+    "$oid": "64952eff32a290c8bc4a37c7"
+  },
+  "name": "Congo",
+  "iso3": "COG",
+  "numeric_code": {
+    "$numberDouble": "NaN"
+  },
+  "iso2": "CA",
+  "phonecode": {
+    "$numberDouble": "NaN"
+  },
+  "capital": {
+    "$numberDouble": "NaN"
+  },
+  "currency": "XAF",
+  "currency_name": "CFA Franc",
+  "currency_symbol": {
+    "$numberDouble": "NaN"
+  },
+  "tid": {
+    "$numberDouble": "NaN"
+  },
+  "native": {
+    "$numberDouble": "NaN"
+  },
+  "region": {
+    "$numberDouble": "NaN"
+  },
+  "subregion": {
+    "$numberDouble": "NaN"
+  },
+  "timezone": {
+    "$numberDouble": "NaN"
+  },
+  "translations": {
+    "$numberDouble": "NaN"
+  },
+  "latitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "longitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "emoji": {
+    "$numberDouble": "NaN"
+  },
+  "emojiU": {
+    "$numberDouble": "NaN"
+  },
+  "created_at": {
+    "$numberDouble": "NaN"
+  },
+  "updated_at": {
+    "$numberDouble": "NaN"
+  },
+  "flag": {
+    "$numberDouble": "NaN"
+  },
+  "wikiDataId": {
+    "$numberDouble": "NaN"
+  },
+  "unique_id": 39
+},
+{
+  "_id": {
+    "$oid": "64952eff32a290c8bc4a37c8"
+  },
+  "name": "Cook Islands",
+  "iso3": "COK",
+  "numeric_code": {
+    "$numberDouble": "NaN"
+  },
+  "iso2": "CV",
+  "phonecode": {
+    "$numberDouble": "NaN"
+  },
+  "capital": {
+    "$numberDouble": "NaN"
+  },
+  "currency": "NZD",
+  "currency_name": "New Zealand Dollar",
+  "currency_symbol": {
+    "$numberDouble": "NaN"
+  },
+  "tid": {
+    "$numberDouble": "NaN"
+  },
+  "native": {
+    "$numberDouble": "NaN"
+  },
+  "region": {
+    "$numberDouble": "NaN"
+  },
+  "subregion": {
+    "$numberDouble": "NaN"
+  },
+  "timezone": {
+    "$numberDouble": "NaN"
+  },
+  "translations": {
+    "$numberDouble": "NaN"
+  },
+  "latitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "longitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "emoji": {
+    "$numberDouble": "NaN"
+  },
+  "emojiU": {
+    "$numberDouble": "NaN"
+  },
+  "created_at": {
+    "$numberDouble": "NaN"
+  },
+  "updated_at": {
+    "$numberDouble": "NaN"
+  },
+  "flag": {
+    "$numberDouble": "NaN"
+  },
+  "wikiDataId": {
+    "$numberDouble": "NaN"
+  },
+  "unique_id": 40
+},
+{
+  "_id": {
+    "$oid": "64952eff32a290c8bc4a37c9"
+  },
+  "name": "Democratic People's Republic of Korea",
+  "iso3": "PRK",
+  "numeric_code": {
+    "$numberDouble": "NaN"
+  },
+  "iso2": "CC",
+  "phonecode": {
+    "$numberDouble": "NaN"
+  },
+  "capital": {
+    "$numberDouble": "NaN"
+  },
+  "currency": "KPW",
+  "currency_name": "North Korean Won",
+  "currency_symbol": {
+    "$numberDouble": "NaN"
+  },
+  "tid": {
+    "$numberDouble": "NaN"
+  },
+  "native": {
+    "$numberDouble": "NaN"
+  },
+  "region": {
+    "$numberDouble": "NaN"
+  },
+  "subregion": {
+    "$numberDouble": "NaN"
+  },
+  "timezone": {
+    "$numberDouble": "NaN"
+  },
+  "translations": {
+    "$numberDouble": "NaN"
+  },
+  "latitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "longitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "emoji": {
+    "$numberDouble": "NaN"
+  },
+  "emojiU": {
+    "$numberDouble": "NaN"
+  },
+  "created_at": {
+    "$numberDouble": "NaN"
+  },
+  "updated_at": {
+    "$numberDouble": "NaN"
+  },
+  "flag": {
+    "$numberDouble": "NaN"
+  },
+  "wikiDataId": {
+    "$numberDouble": "NaN"
+  },
+  "unique_id": 47
+},
+{
+  "_id": {
+    "$oid": "64952eff32a290c8bc4a37ca"
+  },
+  "name": "Democratic Republic of the Congo",
+  "iso3": "COD",
+  "numeric_code": {
+    "$numberDouble": "NaN"
+  },
+  "iso2": "CO",
+  "phonecode": {
+    "$numberDouble": "NaN"
+  },
+  "capital": {
+    "$numberDouble": "NaN"
+  },
+  "currency": "CDF",
+  "currency_name": "Congolese Franc",
+  "currency_symbol": {
+    "$numberDouble": "NaN"
+  },
+  "tid": {
+    "$numberDouble": "NaN"
+  },
+  "native": {
+    "$numberDouble": "NaN"
+  },
+  "region": {
+    "$numberDouble": "NaN"
+  },
+  "subregion": {
+    "$numberDouble": "NaN"
+  },
+  "timezone": {
+    "$numberDouble": "NaN"
+  },
+  "translations": {
+    "$numberDouble": "NaN"
+  },
+  "latitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "longitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "emoji": {
+    "$numberDouble": "NaN"
+  },
+  "emojiU": {
+    "$numberDouble": "NaN"
+  },
+  "created_at": {
+    "$numberDouble": "NaN"
+  },
+  "updated_at": {
+    "$numberDouble": "NaN"
+  },
+  "flag": {
+    "$numberDouble": "NaN"
+  },
+  "wikiDataId": {
+    "$numberDouble": "NaN"
+  },
+  "unique_id": 48
+},
+{
+  "_id": {
+    "$oid": "64952eff32a290c8bc4a37cb"
+  },
+  "name": "Guinea‐Bissau",
+  "iso3": "GNB",
+  "numeric_code": {
+    "$numberDouble": "NaN"
+  },
+  "iso2": "FJ",
+  "phonecode": {
+    "$numberDouble": "NaN"
+  },
+  "capital": {
+    "$numberDouble": "NaN"
+  },
+  "currency": "XAF",
+  "currency_name": "CFA Franc",
+  "currency_symbol": {
+    "$numberDouble": "NaN"
+  },
+  "tid": {
+    "$numberDouble": "NaN"
+  },
+  "native": {
+    "$numberDouble": "NaN"
+  },
+  "region": {
+    "$numberDouble": "NaN"
+  },
+  "subregion": {
+    "$numberDouble": "NaN"
+  },
+  "timezone": {
+    "$numberDouble": "NaN"
+  },
+  "translations": {
+    "$numberDouble": "NaN"
+  },
+  "latitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "longitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "emoji": {
+    "$numberDouble": "NaN"
+  },
+  "emojiU": {
+    "$numberDouble": "NaN"
+  },
+  "created_at": {
+    "$numberDouble": "NaN"
+  },
+  "updated_at": {
+    "$numberDouble": "NaN"
+  },
+  "flag": {
+    "$numberDouble": "NaN"
+  },
+  "wikiDataId": {
+    "$numberDouble": "NaN"
+  },
+  "unique_id": 73
+},
+{
+  "_id": {
+    "$oid": "64952eff32a290c8bc4a37cc"
+  },
+  "name": "Lao People's Democratic Republic",
+  "iso3": "LAO",
+  "numeric_code": {
+    "$numberDouble": "NaN"
+  },
+  "iso2": "GY",
+  "phonecode": {
+    "$numberDouble": "NaN"
+  },
+  "capital": {
+    "$numberDouble": "NaN"
+  },
+  "currency": "LAK",
+  "currency_name": "Kip",
+  "currency_symbol": {
+    "$numberDouble": "NaN"
+  },
+  "tid": {
+    "$numberDouble": "NaN"
+  },
+  "native": {
+    "$numberDouble": "NaN"
+  },
+  "region": {
+    "$numberDouble": "NaN"
+  },
+  "subregion": {
+    "$numberDouble": "NaN"
+  },
+  "timezone": {
+    "$numberDouble": "NaN"
+  },
+  "translations": {
+    "$numberDouble": "NaN"
+  },
+  "latitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "longitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "emoji": {
+    "$numberDouble": "NaN"
+  },
+  "emojiU": {
+    "$numberDouble": "NaN"
+  },
+  "created_at": {
+    "$numberDouble": "NaN"
+  },
+  "updated_at": {
+    "$numberDouble": "NaN"
+  },
+  "flag": {
+    "$numberDouble": "NaN"
+  },
+  "wikiDataId": {
+    "$numberDouble": "NaN"
+  },
+  "unique_id": 94
+},
+{
+  "_id": {
+    "$oid": "64952eff32a290c8bc4a37cd"
+  },
+  "name": "Micronesia (Federated States of)",
+  "iso3": "FSM",
+  "numeric_code": {
+    "$numberDouble": "NaN"
+  },
+  "iso2": "JE",
+  "phonecode": {
+    "$numberDouble": "NaN"
+  },
+  "capital": {
+    "$numberDouble": "NaN"
+  },
+  "currency": "USD",
+  "currency_name": "US Dollar",
+  "currency_symbol": {
+    "$numberDouble": "NaN"
+  },
+  "tid": {
+    "$numberDouble": "NaN"
+  },
+  "native": {
+    "$numberDouble": "NaN"
+  },
+  "region": {
+    "$numberDouble": "NaN"
+  },
+  "subregion": {
+    "$numberDouble": "NaN"
+  },
+  "timezone": {
+    "$numberDouble": "NaN"
+  },
+  "translations": {
+    "$numberDouble": "NaN"
+  },
+  "latitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "longitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "emoji": {
+    "$numberDouble": "NaN"
+  },
+  "emojiU": {
+    "$numberDouble": "NaN"
+  },
+  "created_at": {
+    "$numberDouble": "NaN"
+  },
+  "updated_at": {
+    "$numberDouble": "NaN"
+  },
+  "flag": {
+    "$numberDouble": "NaN"
+  },
+  "wikiDataId": {
+    "$numberDouble": "NaN"
+  },
+  "unique_id": 112
+},
+{
+  "_id": {
+    "$oid": "64952eff32a290c8bc4a37ce"
+  },
+  "name": "Niue",
+  "iso3": "NIU",
+  "numeric_code": {
+    "$numberDouble": "NaN"
+  },
+  "iso2": "LY",
+  "phonecode": {
+    "$numberDouble": "NaN"
+  },
+  "capital": {
+    "$numberDouble": "NaN"
+  },
+  "currency": "NZD",
+  "currency_name": "New Zealand Dollar",
+  "currency_symbol": {
+    "$numberDouble": "NaN"
+  },
+  "tid": {
+    "$numberDouble": "NaN"
+  },
+  "native": {
+    "$numberDouble": "NaN"
+  },
+  "region": {
+    "$numberDouble": "NaN"
+  },
+  "subregion": {
+    "$numberDouble": "NaN"
+  },
+  "timezone": {
+    "$numberDouble": "NaN"
+  },
+  "translations": {
+    "$numberDouble": "NaN"
+  },
+  "latitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "longitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "emoji": {
+    "$numberDouble": "NaN"
+  },
+  "emojiU": {
+    "$numberDouble": "NaN"
+  },
+  "created_at": {
+    "$numberDouble": "NaN"
+  },
+  "updated_at": {
+    "$numberDouble": "NaN"
+  },
+  "flag": {
+    "$numberDouble": "NaN"
+  },
+  "wikiDataId": {
+    "$numberDouble": "NaN"
+  },
+  "unique_id": 127
+},
+{
+  "_id": {
+    "$oid": "64952eff32a290c8bc4a37cf"
+  },
+  "name": "Republic of Korea",
+  "iso3": "KOR",
+  "numeric_code": {
+    "$numberDouble": "NaN"
+  },
+  "iso2": "MH",
+  "phonecode": {
+    "$numberDouble": "NaN"
+  },
+  "capital": {
+    "$numberDouble": "NaN"
+  },
+  "currency": "KRW",
+  "currency_name": "Won",
+  "currency_symbol": {
+    "$numberDouble": "NaN"
+  },
+  "tid": {
+    "$numberDouble": "NaN"
+  },
+  "native": {
+    "$numberDouble": "NaN"
+  },
+  "region": {
+    "$numberDouble": "NaN"
+  },
+  "subregion": {
+    "$numberDouble": "NaN"
+  },
+  "timezone": {
+    "$numberDouble": "NaN"
+  },
+  "translations": {
+    "$numberDouble": "NaN"
+  },
+  "latitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "longitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "emoji": {
+    "$numberDouble": "NaN"
+  },
+  "emojiU": {
+    "$numberDouble": "NaN"
+  },
+  "created_at": {
+    "$numberDouble": "NaN"
+  },
+  "updated_at": {
+    "$numberDouble": "NaN"
+  },
+  "flag": {
+    "$numberDouble": "NaN"
+  },
+  "wikiDataId": {
+    "$numberDouble": "NaN"
+  },
+  "unique_id": 140
+},
+{
+  "_id": {
+    "$oid": "64952eff32a290c8bc4a37d0"
+  },
+  "name": "Republic of Moldova",
+  "iso3": "MDA",
+  "numeric_code": {
+    "$numberDouble": "NaN"
+  },
+  "iso2": "MQ",
+  "phonecode": {
+    "$numberDouble": "NaN"
+  },
+  "capital": {
+    "$numberDouble": "NaN"
+  },
+  "currency": "MDL",
+  "currency_name": "Moldova Leu",
+  "currency_symbol": {
+    "$numberDouble": "NaN"
+  },
+  "tid": {
+    "$numberDouble": "NaN"
+  },
+  "native": {
+    "$numberDouble": "NaN"
+  },
+  "region": {
+    "$numberDouble": "NaN"
+  },
+  "subregion": {
+    "$numberDouble": "NaN"
+  },
+  "timezone": {
+    "$numberDouble": "NaN"
+  },
+  "translations": {
+    "$numberDouble": "NaN"
+  },
+  "latitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "longitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "emoji": {
+    "$numberDouble": "NaN"
+  },
+  "emojiU": {
+    "$numberDouble": "NaN"
+  },
+  "created_at": {
+    "$numberDouble": "NaN"
+  },
+  "updated_at": {
+    "$numberDouble": "NaN"
+  },
+  "flag": {
+    "$numberDouble": "NaN"
+  },
+  "wikiDataId": {
+    "$numberDouble": "NaN"
+  },
+  "unique_id": 141
+},
+{
+  "_id": {
+    "$oid": "64952eff32a290c8bc4a37d1"
+  },
+  "name": "Russian Federation",
+  "iso3": "RUS",
+  "numeric_code": {
+    "$numberDouble": "NaN"
+  },
+  "iso2": "MU",
+  "phonecode": {
+    "$numberDouble": "NaN"
+  },
+  "capital": {
+    "$numberDouble": "NaN"
+  },
+  "currency": "RUB",
+  "currency_name": "Rouble",
+  "currency_symbol": {
+    "$numberDouble": "NaN"
+  },
+  "tid": {
+    "$numberDouble": "NaN"
+  },
+  "native": {
+    "$numberDouble": "NaN"
+  },
+  "region": {
+    "$numberDouble": "NaN"
+  },
+  "subregion": {
+    "$numberDouble": "NaN"
+  },
+  "timezone": {
+    "$numberDouble": "NaN"
+  },
+  "translations": {
+    "$numberDouble": "NaN"
+  },
+  "latitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "longitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "emoji": {
+    "$numberDouble": "NaN"
+  },
+  "emojiU": {
+    "$numberDouble": "NaN"
+  },
+  "created_at": {
+    "$numberDouble": "NaN"
+  },
+  "updated_at": {
+    "$numberDouble": "NaN"
+  },
+  "flag": {
+    "$numberDouble": "NaN"
+  },
+  "wikiDataId": {
+    "$numberDouble": "NaN"
+  },
+  "unique_id": 143
+},
+{
+  "_id": {
+    "$oid": "64952eff32a290c8bc4a37d2"
+  },
+  "name": "The Republic of North Macedonia",
+  "iso3": "MKD",
+  "numeric_code": {
+    "$numberDouble": "NaN"
+  },
+  "iso2": "PS",
+  "phonecode": {
+    "$numberDouble": "NaN"
+  },
+  "capital": {
+    "$numberDouble": "NaN"
+  },
+  "currency": "MKD",
+  "currency_name": "Denar",
+  "currency_symbol": {
+    "$numberDouble": "NaN"
+  },
+  "tid": {
+    "$numberDouble": "NaN"
+  },
+  "native": {
+    "$numberDouble": "NaN"
+  },
+  "region": {
+    "$numberDouble": "NaN"
+  },
+  "subregion": {
+    "$numberDouble": "NaN"
+  },
+  "timezone": {
+    "$numberDouble": "NaN"
+  },
+  "translations": {
+    "$numberDouble": "NaN"
+  },
+  "latitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "longitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "emoji": {
+    "$numberDouble": "NaN"
+  },
+  "emojiU": {
+    "$numberDouble": "NaN"
+  },
+  "created_at": {
+    "$numberDouble": "NaN"
+  },
+  "updated_at": {
+    "$numberDouble": "NaN"
+  },
+  "flag": {
+    "$numberDouble": "NaN"
+  },
+  "wikiDataId": {
+    "$numberDouble": "NaN"
+  },
+  "unique_id": 172
+},
+{
+  "_id": {
+    "$oid": "64952eff32a290c8bc4a37d3"
+  },
+  "name": "Timor‐Leste",
+  "iso3": "TLS",
+  "numeric_code": {
+    "$numberDouble": "NaN"
+  },
+  "iso2": "PA",
+  "phonecode": {
+    "$numberDouble": "NaN"
+  },
+  "capital": {
+    "$numberDouble": "NaN"
+  },
+  "currency": "USD",
+  "currency_name": "US Dollar",
+  "currency_symbol": {
+    "$numberDouble": "NaN"
+  },
+  "tid": {
+    "$numberDouble": "NaN"
+  },
+  "native": {
+    "$numberDouble": "NaN"
+  },
+  "region": {
+    "$numberDouble": "NaN"
+  },
+  "subregion": {
+    "$numberDouble": "NaN"
+  },
+  "timezone": {
+    "$numberDouble": "NaN"
+  },
+  "translations": {
+    "$numberDouble": "NaN"
+  },
+  "latitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "longitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "emoji": {
+    "$numberDouble": "NaN"
+  },
+  "emojiU": {
+    "$numberDouble": "NaN"
+  },
+  "created_at": {
+    "$numberDouble": "NaN"
+  },
+  "updated_at": {
+    "$numberDouble": "NaN"
+  },
+  "flag": {
+    "$numberDouble": "NaN"
+  },
+  "wikiDataId": {
+    "$numberDouble": "NaN"
+  },
+  "unique_id": 173
+},
+{
+  "_id": {
+    "$oid": "64952eff32a290c8bc4a37d4"
+  },
+  "name": "United Republic of Tanzania",
+  "iso3": "TZA",
+  "numeric_code": {
+    "$numberDouble": "NaN"
+  },
+  "iso2": "RU",
+  "phonecode": {
+    "$numberDouble": "NaN"
+  },
+  "capital": {
+    "$numberDouble": "NaN"
+  },
+  "currency": "TZS",
+  "currency_name": "Tanzanian Shilling",
+  "currency_symbol": {
+    "$numberDouble": "NaN"
+  },
+  "tid": {
+    "$numberDouble": "NaN"
+  },
+  "native": {
+    "$numberDouble": "NaN"
+  },
+  "region": {
+    "$numberDouble": "NaN"
+  },
+  "subregion": {
+    "$numberDouble": "NaN"
+  },
+  "timezone": {
+    "$numberDouble": "NaN"
+  },
+  "translations": {
+    "$numberDouble": "NaN"
+  },
+  "latitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "longitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "emoji": {
+    "$numberDouble": "NaN"
+  },
+  "emojiU": {
+    "$numberDouble": "NaN"
+  },
+  "created_at": {
+    "$numberDouble": "NaN"
+  },
+  "updated_at": {
+    "$numberDouble": "NaN"
+  },
+  "flag": {
+    "$numberDouble": "NaN"
+  },
+  "wikiDataId": {
+    "$numberDouble": "NaN"
+  },
+  "unique_id": 185
+},
+{
+  "_id": {
+    "$oid": "64952eff32a290c8bc4a37d5"
+  },
+  "name": "United States of America",
+  "iso3": "USA",
+  "numeric_code": {
+    "$numberDouble": "NaN"
+  },
+  "iso2": "RW",
+  "phonecode": {
+    "$numberDouble": "NaN"
+  },
+  "capital": {
+    "$numberDouble": "NaN"
+  },
+  "currency": "USD",
+  "currency_name": "US Dollar",
+  "currency_symbol": {
+    "$numberDouble": "NaN"
+  },
+  "tid": {
+    "$numberDouble": "NaN"
+  },
+  "native": {
+    "$numberDouble": "NaN"
+  },
+  "region": {
+    "$numberDouble": "NaN"
+  },
+  "subregion": {
+    "$numberDouble": "NaN"
+  },
+  "timezone": {
+    "$numberDouble": "NaN"
+  },
+  "translations": {
+    "$numberDouble": "NaN"
+  },
+  "latitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "longitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "emoji": {
+    "$numberDouble": "NaN"
+  },
+  "emojiU": {
+    "$numberDouble": "NaN"
+  },
+  "created_at": {
+    "$numberDouble": "NaN"
+  },
+  "updated_at": {
+    "$numberDouble": "NaN"
+  },
+  "flag": {
+    "$numberDouble": "NaN"
+  },
+  "wikiDataId": {
+    "$numberDouble": "NaN"
+  },
+  "unique_id": 186
+},
+{
+  "_id": {
+    "$oid": "64952eff32a290c8bc4a37d6"
+  },
+  "name": "Venezuela (Bolivarian Republic of)",
+  "iso3": "VEN",
+  "numeric_code": {
+    "$numberDouble": "NaN"
+  },
+  "iso2": "LC",
+  "phonecode": {
+    "$numberDouble": "NaN"
+  },
+  "capital": {
+    "$numberDouble": "NaN"
+  },
+  "currency": "VEF",
+  "currency_name": "Bolivar Fuerte",
+  "currency_symbol": {
+    "$numberDouble": "NaN"
+  },
+  "tid": {
+    "$numberDouble": "NaN"
+  },
+  "native": {
+    "$numberDouble": "NaN"
+  },
+  "region": {
+    "$numberDouble": "NaN"
+  },
+  "subregion": {
+    "$numberDouble": "NaN"
+  },
+  "timezone": {
+    "$numberDouble": "NaN"
+  },
+  "translations": {
+    "$numberDouble": "NaN"
+  },
+  "latitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "longitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "emoji": {
+    "$numberDouble": "NaN"
+  },
+  "emojiU": {
+    "$numberDouble": "NaN"
+  },
+  "created_at": {
+    "$numberDouble": "NaN"
+  },
+  "updated_at": {
+    "$numberDouble": "NaN"
+  },
+  "flag": {
+    "$numberDouble": "NaN"
+  },
+  "wikiDataId": {
+    "$numberDouble": "NaN"
+  },
+  "unique_id": 190
+},
+{
+  "_id": {
+    "$oid": "64952eff32a290c8bc4a37d7"
+  },
+  "name": "Viet Nam",
+  "iso3": "VNM",
+  "numeric_code": {
+    "$numberDouble": "NaN"
+  },
+  "iso2": "MF",
+  "phonecode": {
+    "$numberDouble": "NaN"
+  },
+  "capital": {
+    "$numberDouble": "NaN"
+  },
+  "currency": "VND",
+  "currency_name": "Dong",
+  "currency_symbol": {
+    "$numberDouble": "NaN"
+  },
+  "tid": {
+    "$numberDouble": "NaN"
+  },
+  "native": {
+    "$numberDouble": "NaN"
+  },
+  "region": {
+    "$numberDouble": "NaN"
+  },
+  "subregion": {
+    "$numberDouble": "NaN"
+  },
+  "timezone": {
+    "$numberDouble": "NaN"
+  },
+  "translations": {
+    "$numberDouble": "NaN"
+  },
+  "latitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "longitude_decimal": {
+    "$numberDouble": "NaN"
+  },
+  "emoji": {
+    "$numberDouble": "NaN"
+  },
+  "emojiU": {
+    "$numberDouble": "NaN"
+  },
+  "created_at": {
+    "$numberDouble": "NaN"
+  },
+  "updated_at": {
+    "$numberDouble": "NaN"
+  },
+  "flag": {
+    "$numberDouble": "NaN"
+  },
+  "wikiDataId": {
+    "$numberDouble": "NaN"
+  },
+  "unique_id": 191
+}]

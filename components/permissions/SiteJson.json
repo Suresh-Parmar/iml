@@ -1,0 +1,447 @@
+[
+  {
+    "title": "Locations",
+    "link": "locations",
+    "icon": "location_on",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  },
+  {
+    "title": "Countries",
+    "link": "countries",
+    "icon": "flag",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  },
+  {
+    "title": "States",
+    "link": "states",
+    "icon": "apartment",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  },
+  {
+    "title": "Cities",
+    "link": "cities",
+    "icon": "location_city",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  },
+  {
+    "title": "Others",
+    "link": "others",
+    "icon": "supervisor_account",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  },
+  {
+    "title": "Boards",
+    "link": "boards",
+    "icon": "supervisor_account",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  },
+  {
+    "title": "Classes",
+    "link": "classes",
+    "icon": "hotel_class",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  },
+  {
+    "title": "Subjects",
+    "link": "subjects",
+    "icon": "subject",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  },
+  {
+    "title": "Groups",
+    "link": "groups",
+    "icon": "groups_2",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  },
+  {
+    "title": "Cohorts",
+    "link": "cohorts",
+    "icon": "supervisor_account",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": false,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  },
+  {
+    "title": "Products",
+    "link": "products",
+    "icon": "book_5",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  },
+  {
+    "title": "Product Category",
+    "link": "productTypes",
+    "icon": "supervisor_account",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  },
+  {
+    "title": "Payments",
+    "link": "payments",
+    "icon": "payments",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  },
+  {
+    "title": "School",
+    "link": "schools",
+    "icon": "school",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  },
+  {
+    "title": "Students",
+    "link": "students",
+    "icon": "child_care",
+    "permissions": {
+      "create": true,
+      "update": true,
+      "delete": true,
+      "view": true,
+      "uploadFile": true,
+      "updateFile": true,
+      "export": true
+    }
+  },
+  {
+    "title": "Competitions",
+    "link": "competitions",
+    "icon": "supervisor_account",
+    "permissions": {
+      "create": false,
+      "update": true,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  },
+  {
+    "title": "Exam Centers",
+    "link": "examcenters",
+    "icon": "supervisor_account",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  },
+  {
+    "title": "Center Mappings",
+    "link": "examcentermappings",
+    "icon": "supervisor_account",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  },
+  {
+    "title": "Users",
+    "link": "users",
+    "icon": "supervisor_account",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  },
+  {
+    "title": "Teachers",
+    "link": "teachers",
+    "icon": "supervisor_account",
+    "permissions": {
+      "create": true,
+      "update": true,
+      "delete": true,
+      "view": true,
+      "uploadFile": true,
+      "updateFile": true,
+      "export": false
+    }
+  },
+  {
+    "title": "superadmins",
+    "link": "superadmins",
+    "icon": "supervisor_account",
+    "permissions": {
+      "create": true,
+      "update": true,
+      "delete": true,
+      "view": true,
+      "uploadFile": true,
+      "updateFile": true,
+      "export": false
+    }
+  },
+  {
+    "title": "Relationship Managers",
+    "link": "relationshipmanagers",
+    "icon": "supervisor_account",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": false,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  },
+  {
+    "title": "Admins",
+    "link": "admins",
+    "icon": "admin_panel_settings",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": false,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  },
+  {
+    "title": "CMS",
+    "link": "cms",
+    "icon": "supervisor_account",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": false,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  },
+  {
+    "title": "Announcements",
+    "link": "announcements",
+    "icon": "supervisor_account",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  },
+  {
+    "title": "Testimonials",
+    "link": "testimonials",
+    "icon": "campaign",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": false,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  },
+  {
+    "title": "Settings",
+    "link": "settings",
+    "icon": "settings",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  },
+  {
+    "title": "SMTP Config",
+    "link": "smtp",
+    "icon": "alternate_email",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  },
+  {
+    "title": "SMS Config",
+    "link": "sms",
+    "icon": "sms",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  },
+  {
+    "title": "Templates",
+    "link": "templates",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  },
+  {
+    "title": "Order Config",
+    "link": "orderconfig",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  },
+  {
+    "title": "Site Config",
+    "link": "siteconfig",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  }
+]

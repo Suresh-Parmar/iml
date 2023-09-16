@@ -1,0 +1,63 @@
+{
+    "data": [
+      {
+        "title": "About",
+        "links": [
+          {
+            "label": "Overview",
+            "link": "/"
+          },
+          {
+            "label": "About us",
+            "link": "/#Aboutus"
+          },
+          {
+            "label": "Courses",
+            "link": "/#Courses"
+          },
+          {
+            "label": "Result",
+            "link": "#"
+          }
+        ]
+      },
+      {
+        "title": "Community",
+        "links": [
+          {
+            "label": "Join as a Coordinator",
+            "link": "/authentication/joinascordinator"
+          },
+          {
+            "label": "Refer your school",
+            "link": "/authentication/referyourschool"
+          },
+          {
+            "label": "Math Competitions",
+            "link": "#"
+          }
+        ]
+      },
+      {
+        "title": "Legal",
+        "links": [
+          {
+            "label": "Terms and Conditions",
+            "link": "#"
+          },
+          {
+            "label": "Privacy Policy",
+            "link": "#"
+          },
+          {
+            "label": "Settings",
+            "link": "#"
+          },
+          {
+            "label": "Contact",
+            "link": "#"
+          }
+        ]
+      }
+    ]
+  }
