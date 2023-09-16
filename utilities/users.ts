@@ -1,0 +1,28 @@
+import { FormType } from "@/components/Matrix/types";
+
+export const UserRoleFormMapping: Record<FormType, string> | any = {
+  Students: "student",
+  Teachers: "teacher",
+  "Relationship Managers": "rm",
+  "Super Admins": "super_admin",
+  Admins: "admin",
+  Country: "country",
+  State: "state",
+  City: "city",
+  Competition: "competition",
+  // Annoucements: "annoucements",
+  Board: "board",
+  Class: "class",
+  School: "school",
+  "Exam Center": "exam_center",
+  "Exam Center Mappings": "exam_center_mapping",
+  Subjects: "subject",
+  SMTPConfigs: "smtpConfigs",
+  SMSConfigs: "smsConfigs",
+  OrderConfigs: "orderConfigs",
+  SiteConfigs: "siteConfigs",
+  Templates: "templates",
+  Products: "products",
+  Payments: "payments",
+  ProductCategory: "product_types",
+};

@@ -1,0 +1,111 @@
+.mainCont{
+    height: 100%;
+    margin: 0;
+    font: 400 15px/1.8 "Lato", sans-serif;
+    color: #777;
+  }
+  .relative{
+    position: relative;
+  }
+
+  .textCenter{
+    text-align: center;
+  }
+  
+  .bgimg1, .bgimg2, .bgimg3 {
+    position: relative;
+    opacity: 0.85;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  
+  }
+  .bgimg1 {
+    background-image: url("./assets/coursesBg.jpg");
+    min-height: max-content;
+    height: max-content;
+  }
+  
+  .bgimg2 {
+    background-image: url("https://www.w3schools.com/howto/img_parallax2.jpg");
+    min-height: 400px;
+    height: 400px;
+  }
+  
+  .bgimg3 {
+    background-image: url("https://www.w3schools.com/howto/img_parallax3.jpg");
+    min-height: 400px;
+  }
+  
+  .caption {
+    position: relative;
+    /* left: 0;
+    top: 50%; */
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    /* text-align: center; */
+    color: #fff;
+  }
+  
+  .caption .border {
+    background: rgba(0,0,0,0.5);
+    /* background-color: #111; */
+    color: #fff;
+    padding: 18px;
+    font-size: 25px;
+    letter-spacing: 10px;
+    min-height: max-content;
+    
+  }
+
+  .container {
+    background-color:transparent;
+    font-size:25px;
+    color: #f7f7f7;
+  }
+  
+  .h3 {
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    font: 20px "Lato", sans-serif;
+    color: #111;
+  }
+  .wrapCont{
+    color:#ddd;
+    background-color:#282E34;
+    text-align: justify;
+  }
+
+  .transparentBg{
+    display: block;
+    background: rgba(0,0,0,0.6);
+    background-image: url("https://www.w3schools.com/howto/img_parallax.jpg");
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    border-style: none;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0px;
+    border-radius: 0px;
+    width: 100%;
+    height: 996px;
+    position: relative;
+  }
+
+  .overlay{
+    position: absolute;
+    background: rgba(0,0,0,0.5);
+    height: max-content;
+    width: 100%;
+  }
+  
+  /* Turn off parallax scrolling for tablets and phones */
+ @media only screen and (max-device-width: 1024px) {
+   .bgimg-1, .bgimg-2, .bgimg-3 {
+     background-attachment: scroll;
+   }
+ }
