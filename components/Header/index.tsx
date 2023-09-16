@@ -24,24 +24,14 @@ import {
   Avatar,
 } from "@mantine/core";
 import { HeaderPropsType } from "./types";
-import {
-  IconChevronDown,
-  IconHome,
-  IconLogout,
-  IconMoonStars,
-  IconSun,
-} from "@tabler/icons-react";
+import { IconChevronDown, IconHome, IconLogout, IconMoonStars, IconSun } from "@tabler/icons-react";
 import { Logo } from "./_logo";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuthentication } from "@/app/authentication/state";
 import { forwardRef, useEffect, useState } from "react";
 import { clientStateSelector } from "@/app/state/clientSelector";
-import {
-  getGeographicalInformation,
-  readCountriesLandingWithFlags,
-  readCountriesWithFlags,
-} from "@/utilities/API";
+import { getGeographicalInformation, readCountriesLandingWithFlags, readCountriesWithFlags } from "@/utilities/API";
 import ReactCountryFlag from "react-country-flag";
 import { useDisclosure } from "@mantine/hooks";
 
@@ -60,27 +50,76 @@ interface ItemProps extends React.ComponentPropsWithoutRef<"div"> {
   label: string;
 }
 
-const CountryComponent = forwardRef<HTMLDivElement, ItemProps>(
-  ({ value, label, ...others }: ItemProps, ref) => {
-    return (
-      <div ref={ref} {...others}>
-        <Group noWrap>
-          <ReactCountryFlag countryCode={value} svg />
-          <div>
-            <Text size="sm">{label}</Text>
-          </div>
-        </Group>
-      </div>
-    );
-  }
-);
+const CountryComponent = forwardRef<HTMLDivElement, ItemProps>(({ value, label, ...others }: ItemProps, ref) => {
+  return (
+    <div ref={ref} {...others}>
+      <Group noWrap>
+        <ReactCountryFlag countryCode={value} svg />
+        <div>
+          <Text size="sm">{label}</Text>
+        </div>
+      </Group>
+    </div>
+  );
+});
 
 CountryComponent.displayName = "CountryComponent";
 let interval: any = undefined;
 
+const RenderProgress = () => {
+  let [progress, setProgress] = useState<number>(0);
+  const [adverIndex, setAdverIndex] = useState(0);
+
+  let arr = ["Example 1", "Example 2", "Example 3", "Example 4"];
+
+  useEffect(() => {
+    if (progress == 100) {
+      if (adverIndex >= arr.length - 1) {
+        setAdverIndex(0);
+      } else {
+        setAdverIndex(adverIndex + 1);
+      }
+    }
+
+    let interval = setTimeout(() => {
+      setProgress(progress == 100 ? 0 : (progress += 1));
+    }, 100);
+
+    return () => {
+      clearTimeout(interval);
+    };
+  }, [progress]);
+
+  return (
+    <Box
+      style={{
+        letterSpacing: "0.5px",
+        height: "30px",
+        background: "rgb(17 24 29 / 44%)",
+        position: "relative",
+        color: "#fff",
+        fontWeight: 700,
+      }}
+    >
+      <Box
+        pl={"40px"}
+        style={{
+          position: "relative",
+          height: "30px",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        {arr[adverIndex]}
+      </Box>
+
+      <ProgressBar progress={progress} value={"arr[adverIndex% arr.length]"} />
+    </Box>
+  );
+};
+
 function Header() {
-  const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
-    useDisclosure(false);
+  const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
   const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
   const { classes, theme, cx } = useStyles();
   const [geoData, setGeoData] = useState<GeographicalInformationType>();
@@ -117,9 +156,7 @@ function Header() {
     </UnstyledButton>
   ));
 
-  const [selectedCountry, setSelectedCountry] = useState<string | null>(
-    previousCountry.countryCode
-  );
+  const [selectedCountry, setSelectedCountry] = useState<string | null>(previousCountry.countryCode);
   const [userMenuOpened, setUserMenuOpened] = useState(false);
 
   const router = useRouter();
@@ -151,41 +188,11 @@ function Header() {
     }
   }, []);
 
-  const [running, setRunning] = useState(false);
   const [progress, setProgress] = useState(0);
   const [adverIndex, setAdverIndex] = useState(0);
 
-  let arr = ["Example 1", "Example 2", "Example 3", "Example 4"];
   useEffect(() => {
-    if (running) {
-      interval = setInterval(() => {
-        // tick();
-        setProgress((prev) => prev + 1);
-      }, 100);
-    } else {
-      clearInterval(interval);
-    }
-  }, [running]);
-
-  useEffect(() => {
-    const tick = () => setAdverIndex((i) => i + 1);
-    if (progress === 100) {
-      tick();
-      setRunning(false);
-      setProgress(0);
-      clearInterval(interval);
-    } else if (progress === 0) {
-      setRunning(true);
-    }
-    if (adverIndex === arr.length) {
-      setAdverIndex(0);
-    }
-  }, [progress]);
-
-  useEffect(() => {
-    const countryName = countriesData.find(
-      (country) => country.value === selectedCountry
-    )?.label;
+    const countryName = countriesData.find((country) => country.value === selectedCountry)?.label;
     if (countryName) {
       dispatch({
         type: "Client/UpdateCountry",
@@ -199,47 +206,22 @@ function Header() {
 
   return (
     <>
-      
       <MantineHeader height={96}>
-      {!isloggedIn && (
-        <Box
-          style={{
-            letterSpacing: '0.5px',
-            height: '30px',
-            background: 'rgb(17 24 29 / 44%)',
-            position: 'relative',
-            color: '#fff',
-            fontWeight: 700,
-          }}
-        >
-          <Box
-            pl={"40px"}
-            style={{
-              position: "relative",
-              height: "30px",
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            {arr[adverIndex]}
-          </Box>
-          <ProgressBar
-            progress={progress}
-            value={"arr[adverIndex% arr.length]"}
-          />
-        </Box>
-      )}
-        <Group position="apart"  px="md" sx={{ height: 'calc(100% - 34px)' }}>
+        {!isloggedIn && <RenderProgress />}
+        <Group position="apart" px="md" sx={{ height: "calc(100% - 34px)" }}>
           <Logo colorScheme={colorScheme} />
           <Box className={classes.flex}>
             {!isloggedIn ? (
-              <Group
-                sx={{ height: "100%" }}
-                spacing={0}
-                className={classes.hiddenMobile}
-              >
+              <Group sx={{ height: "100%" }} spacing={0} className={classes.hiddenMobile}>
                 {/* <Button onClick={()=> {router.push('/')}} className={classes.link}> */}
-                  <IconHome size={25} onClick={()=> {router.push('/')}} strokeWidth={1.5} color={"black"} />
+                <IconHome
+                  size={25}
+                  onClick={() => {
+                    router.replace("/");
+                  }}
+                  strokeWidth={1.5}
+                  color={"black"}
+                />
                 {/* </Button> */}
                 <Link href="#Aboutus" target="_self" className={classes.link}>
                   About Us
@@ -304,12 +286,7 @@ function Header() {
                   <Select
                     itemComponent={CountryComponent}
                     style={{ width: "140px" }}
-                    icon={
-                      <ReactCountryFlag
-                        countryCode={selectedCountry || ""}
-                        svg
-                      />
-                    }
+                    icon={<ReactCountryFlag countryCode={selectedCountry || ""} svg />}
                     value={selectedCountry}
                     onChange={(e) => {
                       setSelectedCountry(e);
@@ -323,16 +300,8 @@ function Header() {
                   <Link href={"/authentication/signup"}>
                     <Button>Buy Online</Button>
                   </Link>
-                  <ActionIcon
-                    variant="default"
-                    onClick={() => toggleColorScheme()}
-                    size={36}
-                  >
-                    {colorScheme === "dark" ? (
-                      <IconSun size="1rem" />
-                    ) : (
-                      <IconMoonStars size="1rem" />
-                    )}
+                  <ActionIcon variant="default" onClick={() => toggleColorScheme()} size={36}>
+                    {colorScheme === "dark" ? <IconSun size="1rem" /> : <IconMoonStars size="1rem" />}
                   </ActionIcon>
                 </Group>
               </Group>
@@ -346,9 +315,7 @@ function Header() {
                 <Select
                   itemComponent={CountryComponent}
                   style={{ width: "140px" }}
-                  icon={
-                    <ReactCountryFlag countryCode={selectedCountry || ""} svg />
-                  }
+                  icon={<ReactCountryFlag countryCode={selectedCountry || ""} svg />}
                   value={selectedCountry}
                   // onChange={setSelectedCountry}
                   data={countriesData}
@@ -357,16 +324,8 @@ function Header() {
                     setSelectedCountry(e);
                   }}
                 />
-                <ActionIcon
-                  variant="default"
-                  onClick={() => toggleColorScheme()}
-                  size={36}
-                >
-                  {colorScheme === "dark" ? (
-                    <IconSun size="1rem" />
-                  ) : (
-                    <IconMoonStars size="1rem" />
-                  )}
+                <ActionIcon variant="default" onClick={() => toggleColorScheme()} size={36}>
+                  {colorScheme === "dark" ? <IconSun size="1rem" /> : <IconMoonStars size="1rem" />}
                 </ActionIcon>
                 <Menu
                   width={260}
@@ -384,17 +343,8 @@ function Header() {
                       })}
                     >
                       <Group spacing={7}>
-                        <Avatar
-                          alt={authentication.user?.name}
-                          radius="xl"
-                          size={28}
-                        />
-                        <Text
-                          weight={500}
-                          size="sm"
-                          sx={{ lineHeight: 1 }}
-                          mr={3}
-                        >
+                        <Avatar alt={authentication.user?.name} radius="xl" size={28} />
+                        <Text weight={500} size="sm" sx={{ lineHeight: 1 }} mr={3}>
                           {authentication.user?.name}
                         </Text>
                         <IconChevronDown size={rem(12)} stroke={1.5} />
@@ -403,19 +353,11 @@ function Header() {
                   </Menu.Target>
                   <Menu.Dropdown>
                     {pathname === "/" ? (
-                      <Menu.Item
-                        icon={<IconDatabaseCog size="0.9rem" stroke={1.5} />}
-                      >
+                      <Menu.Item icon={<IconDatabaseCog size="0.9rem" stroke={1.5} />}>
                         <Link
-                          href={
-                            authentication.metadata.role === "super_admin"
-                              ? "/console"
-                              : "/authentication/signup"
-                          }
+                          href={authentication.metadata.role === "super_admin" ? "/console" : "/authentication/signup"}
                         >
-                          {authentication.metadata.role === "super_admin"
-                            ? "Admin Dashboard"
-                            : "Learning Portal"}
+                          {authentication.metadata.role === "super_admin" ? "Admin Dashboard" : "Learning Portal"}
                         </Link>
                       </Menu.Item>
                     ) : (
@@ -425,9 +367,10 @@ function Header() {
                     )}
                     {isloggedIn && (
                       <Menu.Item
-                        onClick={async () => {
-                          await dispatch(signOutThunk()).unwrap();
-                          router.push("/");
+                        onClick={() => {
+                          router.replace("/");
+                          localStorage.clear();
+                          dispatch(signOutThunk()).unwrap();
                         }}
                         icon={<IconLogout size="0.9rem" stroke={1.5} />}
                       >
@@ -452,11 +395,7 @@ function Header() {
               </Group>
             )}
           </Box>
-          <Burger
-            opened={drawerOpened}
-            onClick={toggleDrawer}
-            className={classes.hiddenDesktop}
-          />
+          <Burger opened={drawerOpened} onClick={toggleDrawer} className={classes.hiddenDesktop} />
         </Group>
       </MantineHeader>
 
@@ -470,10 +409,7 @@ function Header() {
         zIndex={1000000}
       >
         <ScrollArea h={`calc(100vh - ${rem(60)})`} mx="-md">
-          <Divider
-            my="sm"
-            color={theme.colorScheme === "dark" ? "dark.5" : "gray.1"}
-          />
+          <Divider my="sm" color={theme.colorScheme === "dark" ? "dark.5" : "gray.1"} />
 
           <a href="#" className={classes.link}>
             Home
@@ -494,10 +430,7 @@ function Header() {
             Academy
           </a>
 
-          <Divider
-            my="sm"
-            color={theme.colorScheme === "dark" ? "dark.5" : "gray.1"}
-          />
+          <Divider my="sm" color={theme.colorScheme === "dark" ? "dark.5" : "gray.1"} />
 
           <Group position="center" grow pb="xl" px="md">
             <Button

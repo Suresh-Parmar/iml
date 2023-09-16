@@ -238,7 +238,7 @@ export default function SignUp() {
           message: `Redirecting ...`,
           color: "green",
         });
-        router.push("/authentication/signin");
+        router.replace("/authentication/signin");
       })
       .catch(() => {});
   };
@@ -343,7 +343,7 @@ export default function SignUp() {
                       </Alert>
                       <Button
                         onClick={() => {
-                          router.push("/");
+                          router.replace("/");
                         }}
                       >
                         <IconHome size={"1.5rem"} />

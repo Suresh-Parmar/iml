@@ -15,22 +15,25 @@ import siteJsonData from "../../../permissions/SiteJson.json";
 import { findFromJson } from "@/helpers/filterFromJson";
 import { useSelector } from "react-redux";
 import { updateDataRes } from "@/utilities/API";
+import Loader from "@/components/common/Loader";
 
 function NavigationBarMain({ opened }: { opened: boolean }) {
   const consoleBaseURL = "/console";
   const router = useRouter();
   const pathname = usePathname();
   const [siteJson, setSiteJson] = useState<any>(siteJsonData);
+  const [show, setShow] = useState<any>(false);
 
   const reduxData: any = useSelector((state) => state);
   let activeUserID = reduxData?.authentication?.user?._id;
   let defaultShow = reduxData?.authentication?.user?.role == "super_admin";
 
-  let fetchData = () => {
+  const fetchData = () => {
     updateDataRes("rolemappings", "", "name", activeUserID, "find_many")
       .then((res) => {
         let data = res?.data?.response[0];
         if (data && data?.data) {
+          localStorage.setItem("rolemappings", JSON.stringify(data.data));
           setSiteJson([...data.data]);
         }
       })
@@ -38,6 +41,14 @@ function NavigationBarMain({ opened }: { opened: boolean }) {
         console.log(error);
       });
   };
+
+  useEffect(() => {
+    if (show) {
+      setTimeout(() => {
+        setShow(false);
+      }, 2000);
+    }
+  }, [pathname]);
 
   useEffect(() => {
     activeUserID && fetchData();
@@ -59,7 +70,8 @@ function NavigationBarMain({ opened }: { opened: boolean }) {
     let data = findFromJson(siteJson, pathname, "link");
 
     if (!data?.permissions?.view && reduxData?.authentication?.user?.role != "super_admin") {
-      router.push(consoleBaseURL);
+      router.replace(consoleBaseURL);
+      setShow(true);
     }
   };
 
@@ -402,7 +414,10 @@ function NavigationBarMain({ opened }: { opened: boolean }) {
               if (navigationBarLink.navlinks?.length) {
                 return;
               } else {
-                router.push(navigationBarLink.href);
+                if (pathname != navigationBarLink.href) {
+                  router.replace(navigationBarLink.href);
+                  setShow(true);
+                }
               }
             }}
             childrenOffset={28}
@@ -419,13 +434,19 @@ function NavigationBarMain({ opened }: { opened: boolean }) {
                   active={window.location.pathname === navLink.href}
                   label={opened ? "" : navLink.label}
                   icon={NavLinkIcon(navLink)}
-                  onClick={() => router.push(navLink.href)}
+                  onClick={() => {
+                    if (pathname != navLink.href) {
+                      router.replace(navLink.href);
+                      setShow(true);
+                    }
+                  }}
                 />
               );
             })}
           </NavLink>
         );
       })}
+      <Loader show={show} />
     </Navbar.Section>
   );
 }

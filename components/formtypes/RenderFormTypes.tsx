@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { fuzzySort } from "../Matrix/utilities";
 import { IconTableOptions } from "@tabler/icons-react";
 import { RowActions } from "../Matrix/components/RowActions";
 import { allTypes } from "./renderTypesJson";
+import { useSelector } from "react-redux";
+import { updateDataRes } from "@/utilities/API";
+import { siteJson as siteJsonData } from "@/components/permissions";
 
 function RenderFormTypes(
   formType: any,
@@ -16,6 +19,43 @@ function RenderFormTypes(
   setOLoader: any,
   extra?: any
 ) {
+  const [siteJson, setSiteJson] = useState<any>(siteJsonData);
+
+  const reduxData: any = useSelector((state) => state);
+  let activeUserID = reduxData?.authentication?.user?._id;
+
+  const getServerRoleMatrix = () => {
+    updateDataRes("rolemappings", "", "name", activeUserID, "find_many")
+      .then((res) => {
+        let data = res?.data?.response[0];
+        if (data && data?.data) {
+          localStorage.setItem("rolemappings", JSON.stringify(data.data));
+          setSiteJson([...data.data]);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  let fetchData = () => {
+    let getLocalStorageData = localStorage.getItem("rolemappings");
+    if (!getLocalStorageData) {
+      getServerRoleMatrix();
+    } else {
+      try {
+        let localJson = JSON.parse(getLocalStorageData);
+        setSiteJson(localJson);
+      } catch (e) {
+        getServerRoleMatrix();
+      }
+    }
+  };
+
+  useEffect(() => {
+    activeUserID && fetchData();
+  }, [activeUserID]);
+
   const renderTypes = () => {
     let data = [];
 
@@ -43,6 +83,7 @@ function RenderFormTypes(
           id={props.row.original._id}
           label={props.row.original.name}
           extra={extra}
+          siteJson={siteJson}
         />
       ),
       header: () => (

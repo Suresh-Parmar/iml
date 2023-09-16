@@ -34,7 +34,6 @@ import {
 import { notifications } from "@mantine/notifications";
 import { useDisclosure } from "@mantine/hooks";
 import { usePathname } from "next/navigation";
-import { siteJson as siteJsonData } from "@/components/permissions";
 import { findFromJson } from "@/helpers/filterFromJson";
 import { useSelector } from "react-redux";
 
@@ -115,6 +114,7 @@ const RowActions = ({
   extra,
   showStatus = true,
   showEdit = true,
+  siteJson,
 }: {
   extra?: any;
   open: () => void;
@@ -132,12 +132,12 @@ const RowActions = ({
   status: boolean;
   showStatus?: boolean;
   showEdit?: boolean;
+  siteJson?: any;
 }) => {
   const [permissionsData, setPermissionsData] = useState<any>({});
   const pathname = usePathname();
 
-  const isUserForm = formTypeToTableMapper(formType) == "users";
-  const [siteJson, setSiteJson] = useState<any>(siteJsonData);
+  const isUserForm = formTypeToTableMapper(formType) == "users" && formType != "Students";
 
   const handleisValid = (pathname: string) => {
     if (pathname.includes("/")) {
@@ -149,29 +149,11 @@ const RowActions = ({
   };
 
   const reduxData: any = useSelector((state) => state);
-  let activeUserID = reduxData?.authentication?.user?._id;
   let defaultShow = reduxData?.authentication?.user?.role == "super_admin";
-
-  let fetchData = () => {
-    updateDataRes("rolemappings", "", "name", activeUserID, "find_many")
-      .then((res) => {
-        let data = res?.data?.response[0];
-        if (data && data?.data) {
-          setSiteJson([...data.data]);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  useEffect(() => {
-    activeUserID && fetchData();
-  }, [activeUserID]);
 
   useEffect(() => {
     handleisValid(pathname);
-  }, [pathname,  siteJson]);
+  }, [pathname, siteJson]);
 
   const [dialogOpened, { toggle: dialogToggle, close: dialogClose }] = useDisclosure(false);
   return (
@@ -246,7 +228,7 @@ const RowActions = ({
           <IconEdit size={"1.5rem"} />
         </ActionIcon>
       ) : null}
-      {(permissionsData?.permissions?.update && showEdit && isUserForm) || defaultShow ? (
+      {(permissionsData?.permissions?.update || defaultShow) && showEdit && isUserForm ? (
         <ActionIcon
           onClick={(event) => {
             setReadOnly(false);
