@@ -13,7 +13,7 @@ export default function Console() {
   const authentication = useAuthentication();
   useEffect(() => {
     if (authentication.metadata.status === "unauthenticated") {
-      router.push("/authentication/signin");
+      router.replace("/authentication/signin");
     } else {
       dispatch({
         type: "Client/UpdateApplicationShellPadding",

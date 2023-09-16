@@ -78,9 +78,11 @@ export default function SignIn() {
   const authentication = useAuthentication();
   useEffect(() => {
     if (authentication.metadata.status === "authenticated") {
-      if (authentication.metadata.role === "super_admin" || authentication.metadata.role === "admin")
-        router.push("/console");
-      else router.push("/");
+      if (authentication.metadata.role != "student") {
+        router.replace("/console");
+      } else {
+        router.replace("/");
+      }
     } else {
       dispatch({
         type: "Client/UpdateApplicationShellPadding",
@@ -108,7 +110,7 @@ export default function SignIn() {
   const [error, setError] = useState("");
   const [visible, setVisible] = useState(false);
   const [value, setValue] = useState<"super_admin" | "users">("users");
-  const [recaptcha, setRecaptcha] = useState("d");
+  const [recaptcha, setRecaptcha] = useState("");
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [registrationNo, setRegistrationNo] = useState<string>("");
 
@@ -259,7 +261,13 @@ export default function SignIn() {
               </Button>
               <Text ta="end" mt="md">
                 Don&apos;t have an account?
-                <Anchor<"a"> href="/authentication/signup" weight={700}>
+                <Anchor<"a">
+                  href="#"
+                  onClick={() => {
+                    router.replace("/authentication/signup");
+                  }}
+                  weight={700}
+                >
                   Sign-Up
                 </Anchor>
               </Text>

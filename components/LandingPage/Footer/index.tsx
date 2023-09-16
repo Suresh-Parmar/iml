@@ -1,19 +1,6 @@
 import { Logo } from "@/components/Header/_logo";
-import {
-  createStyles,
-  Text,
-  Container,
-  ActionIcon,
-  Group,
-  rem,
-  useMantineColorScheme,
-  Button,
-} from "@mantine/core";
-import {
-  IconBrandTwitter,
-  IconBrandYoutube,
-  IconBrandInstagram,
-} from "@tabler/icons-react";
+import { createStyles, Text, Container, ActionIcon, Group, rem, useMantineColorScheme, Button } from "@mantine/core";
+import { IconBrandTwitter, IconBrandYoutube, IconBrandInstagram } from "@tabler/icons-react";
 import { useStyles } from "./styles";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -30,9 +17,9 @@ export function Footer({ data }: FooterLinksProps) {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const router = useRouter();
 
-  const handleNavigate = (nav:string) =>{
-    router.push(nav);
-  }
+  const handleNavigate = (nav: string) => {
+    router.replace(nav);
+  };
 
   const groups = data.map((group) => {
     const links = group.links.map((link, index) => (
@@ -60,17 +47,14 @@ export function Footer({ data }: FooterLinksProps) {
       <Container className={classes.inner}>
         <div className={classes.logo}>
           <Logo colorScheme={colorScheme} />
-          <Text size="xs"  className={classes.description}>
-            Math develops your ability to see the world in a different way.
-            Teaches you how to think outside the box.
+          <Text size="xs" className={classes.description}>
+            Math develops your ability to see the world in a different way. Teaches you how to think outside the box.
           </Text>
         </div>
         <div className={classes.groups}>{groups}</div>
       </Container>
       <Container className={classes.afterFooter}>
-        <Text size="sm">
-          © 2020 ignitedmathlab.com. All rights reserved.
-        </Text>
+        <Text size="sm">© 2020 ignitedmathlab.com. All rights reserved.</Text>
 
         <Group spacing={0} className={classes.social} position="right" noWrap>
           <ActionIcon size="lg">
