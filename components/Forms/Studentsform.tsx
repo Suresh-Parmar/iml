@@ -35,6 +35,7 @@ import { RoleMatrix } from "../permissions";
 import { maxLength, selectMinDate } from "@/helpers/validations";
 import { useSelector } from "react-redux";
 import { formTypeToFetcherMapper } from "@/helpers/dataFetcher";
+import { findFromJson } from "@/helpers/filterFromJson";
 
 function Studentsform({
   readonly,
@@ -216,7 +217,9 @@ function Studentsform({
   const form = useForm({
     initialValues: {
       competition_code: rowData?.competition_code,
+      competition: rowData?.competition,
       class_code: rowData?.class_code,
+      class_id: rowData?.class_id,
       section: rowData?.section ?? "",
       name: rowData?.name ?? "",
       mobile_1: rowData?.mobile_1?.replace(getMobileCode(), "").trim() ?? "",
@@ -346,10 +349,14 @@ function Studentsform({
   };
 
   const onChangeClass = async (event: string) => {
+    let filterdData = findFromJson(classesData, event, "code");
+    form.setFieldValue("class_id", filterdData.name);
     form.setFieldValue("class_code", event);
   };
 
   const onChangeCompetition = async (event: string) => {
+    let filterdData = findFromJson(comeptitionsData, event, "code");
+    form.setFieldValue("competition", filterdData.name);
     form.setFieldValue("competition_code", event);
   };
 
