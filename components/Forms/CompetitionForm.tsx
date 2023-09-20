@@ -121,7 +121,13 @@ function CompetitionForm({
     close();
   };
 
-  const subjectNames = subjects?.map((subject) => subject.name) ?? [];
+  let subjectNames: any = [];
+
+  subjects?.map((subject) => {
+    if (subject.name && subject.status) {
+      subjectNames.push(subject.name);
+    }
+  });
 
   return (
     <Box maw={"100%"} mx="auto">
