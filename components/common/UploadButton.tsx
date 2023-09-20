@@ -204,8 +204,16 @@ function UploadButton(props: any) {
             color: "green",
             autoClose: 8000,
           });
+          setOpenModal(false);
 
-          let data = res.response["data with not correct parameters"];
+          let data;
+
+          if (res.response && res.response["data with not correct parameters"]) {
+            data = res.response["data with not correct parameters"];
+          } else if (res["list of users not updated"]) {
+            data = res["list of users not updated"];
+          }
+
           saveExcel(data, "", "", formType, true);
 
           form.setValues({
@@ -214,6 +222,7 @@ function UploadButton(props: any) {
           });
         })
         .catch((err) => {
+          setOpenModal(false);
           notifications.show({
             title: `Failed to upload !`,
             message: `For some reasons file uploading failed, please contact administrator.`,
