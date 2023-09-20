@@ -435,7 +435,7 @@ const readRelationshipManagers = async () => {
   return students;
 };
 
-const readTeachers = async (data: any) => {
+const readTeachers = async (data?: any) => {
   const students = await readData("users", "find_many", "role", "teacher", data);
   return students;
 };
