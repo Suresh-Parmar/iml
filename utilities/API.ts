@@ -92,7 +92,8 @@ export const readData = async (
   tableName: string,
   operationType: "find" | "find_many",
   filterBy?: "name" | "country_id" | "state" | "city" | "status" | "role" | "country" | "subject_id" | "class",
-  filterQuery?: string | number | boolean
+  filterQuery?: string | number | boolean,
+  data?: any
 ) => {
   let requestBody: RequestBodyType = {
     collection_name: `${tableName}`,
@@ -112,6 +113,10 @@ export const readData = async (
       ...existingFilters,
       country: getSelectedCountry(),
     };
+  }
+
+  if (data) {
+    requestBody = data;
   }
   try {
     const response = await axios.post(`${NEXT_API}`, requestBody, {
@@ -430,8 +435,8 @@ const readRelationshipManagers = async () => {
   return students;
 };
 
-const readTeachers = async () => {
-  const students = await readData("users", "find_many", "role", "teacher");
+const readTeachers = async (data: any) => {
+  const students = await readData("users", "find_many", "role", "teacher", data);
   return students;
 };
 

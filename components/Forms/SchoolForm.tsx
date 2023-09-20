@@ -3,11 +3,21 @@ import { isEmail, useForm } from "@mantine/form";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import { MatrixDataType, MatrixRowType } from "../Matrix";
-import { createSchool, readBoards, readCities, readSchools, readStates, updateSchool } from "@/utilities/API";
+import {
+  createSchool,
+  readApiData,
+  readBoards,
+  readCities,
+  readSchools,
+  readStates,
+  readTeachers,
+  updateSchool,
+} from "@/utilities/API";
 import { notifications } from "@mantine/notifications";
 import { getReduxState } from "@/redux/hooks";
 import { getInternationalDailingCode } from "@/utilities/countriesUtils";
 import { maxLength } from "@/helpers/validations";
+import { filterDrodownData } from "@/helpers/filterFromJson";
 
 function SchoolForm({
   open,
@@ -29,6 +39,10 @@ function SchoolForm({
   const [citiesData, setCitiesData] = useState<MatrixDataType>([]);
   const [statesData, setStatesData] = useState<MatrixDataType>([]);
   const [boardsData, setBoardsData] = useState<MatrixDataType>([]);
+  const [groupData, setgroupData] = useState<any>([]);
+  const [teacher, setTeacher] = useState<any>([]);
+  const [principal, setPrincipal] = useState<any>([]);
+  const [relationshipManager, setrelationshipManager] = useState<any>([]);
 
   const getSelectedCountry = () => {
     const state = getReduxState();
@@ -70,6 +84,32 @@ function SchoolForm({
     setBoardsData(boards);
   }
 
+  async function readDataGroups() {
+    const newData = await readApiData("groups");
+    let newDataFilter = filterDrodownData(newData, "name", "name");
+    setgroupData(newDataFilter);
+  }
+
+  async function readData(designation: any, setData: any, role: any = "teacher") {
+    let filterData: any = {
+      collection_name: "users",
+      op_name: "find_many",
+      filter_var: {
+        role: role,
+        country: getSelectedCountry(),
+      },
+    };
+
+    if (designation) {
+      filterData.filter_var.designation = designation;
+    }
+
+    const teachers = await readTeachers(filterData);
+    let newData = filterDrodownData(teachers, "name", "name");
+    console.log(newData);
+    setData && setData(newData);
+  }
+
   async function readStatesData(filterBy?: "country", filterQuery?: string | number) {
     let states: MatrixDataType;
     if (filterBy && filterQuery) {
@@ -83,6 +123,10 @@ function SchoolForm({
   useEffect(() => {
     readStatesData();
     readBoardsData();
+    readDataGroups();
+    readData("teacher", setTeacher);
+    readData("principal", setPrincipal);
+    readData("", setrelationshipManager, "rm");
   }, []);
 
   const getMobileCode = () => {
@@ -291,14 +335,19 @@ function SchoolForm({
               mt={"md"}
               size="md"
             />
-            <TextInput
+
+            <Select
               disabled={readonly}
-              label="Group"
+              searchable
               placeholder="Group XYZ"
-              {...form.getInputProps("group")}
-              w={"100%"}
+              nothingFound="No options"
+              data={groupData}
+              label={"Group"}
               mt={"md"}
               size="md"
+              withAsterisk
+              {...form.getInputProps("group")}
+              w={"100%"}
             />
             <TextInput
               disabled={readonly}
@@ -403,35 +452,44 @@ function SchoolForm({
               mt={"md"}
               size="md"
             />
-            <TextInput
+            <Select
               disabled={readonly}
-              withAsterisk
-              label="Relationship Manager"
+              searchable
               placeholder="Relationship Manager"
+              nothingFound="No options"
+              data={relationshipManager}
+              label={"Relationship Manager"}
+              mt={"md"}
+              size="md"
+              withAsterisk
               {...form.getInputProps("relationship_manager")}
               w={"100%"}
+            />
+            <Select
+              disabled={readonly}
+              searchable
+              nothingFound="No options"
+              data={principal}
+              label={"Principal"}
+              placeholder="Principal"
               mt={"md"}
               size="md"
-            />
-            <TextInput
-              disabled={readonly}
               withAsterisk
-              label="Principal"
-              placeholder="Principal"
               {...form.getInputProps("principal")}
               w={"100%"}
-              mt={"md"}
-              size="md"
             />
-            <TextInput
+            <Select
               disabled={readonly}
-              label="Teacher Incharge"
-              withAsterisk
+              searchable
+              nothingFound="No options"
+              data={teacher}
+              label={"Teacher Incharge"}
+              mt={"md"}
               placeholder="Teacher Incharge"
+              size="md"
+              withAsterisk
               {...form.getInputProps("teacher_incharge")}
               w={"100%"}
-              mt={"md"}
-              size="md"
             />
             <TextInput
               disabled={readonly}

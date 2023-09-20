@@ -210,9 +210,9 @@ function UserForm({
 
   const form = useForm({
     initialValues: {
-      // competition_code: rowData?.competition_code,
-      // class_code: rowData?.class_code,
-      // section: rowData?.section ?? "",
+      competition_code: rowData?.competition_code || "",
+      class_code: rowData?.class_code || "",
+      section: rowData?.section || "",
       name: rowData?.name ?? "",
       mobile_1: rowData?.mobile_1?.replace(getMobileCode(), "").trim() ?? "",
       mobile_2: rowData?.mobile_2?.replace(getMobileCode(), "").trim() ?? "",
@@ -220,10 +220,10 @@ function UserForm({
       email_2: rowData?.email_2 ?? "",
       dob: rowData?.dob ? new Date(rowData?.dob) : null,
       gender: rowData?.gender ?? "",
-      // school_name: rowData?.school_name ?? "",
-      // exam_center_id: rowData?.exam_center_id ?? "",
+      school_name: rowData?.school_name ?? "",
+      exam_center_id: rowData?.exam_center_id || "",
       address: rowData?.address ?? "",
-      country: rowData?.country,
+      country: rowData?.country || getSelectedCountry() || "",
       state: rowData?.state ?? "",
       city: rowData?.city ?? "",
       pincode: rowData?.pincode ?? "",
@@ -294,9 +294,9 @@ function UserForm({
     } else {
       createStudent(values as MatrixRowType)
         .then(async (res) => {
+          setOLoader(false);
           setshowRoles(res.data.registration_number);
           if (res.data.response.toUpperCase() == "DOCUMENT CREATED") {
-            setOLoader(false);
             const users = await formTypeToFetcherMapper(formType)();
             setData(users);
             notifications.show({
@@ -657,27 +657,10 @@ function UserForm({
                 // withAsterisk
                 name="Address"
                 autosize
-                minRows={4}
+                minRows={1}
                 w={"100%"}
                 mt={"md"}
                 size="md"
-              />
-              <Select
-                disabled={readonly}
-                searchable
-                nothingFound="No options"
-                data={countryNames}
-                label={"Country"}
-                name="Country"
-                mt={"md"}
-                size="md"
-                withAsterisk
-                {...form.getInputProps("country")}
-                onChange={async (event) => {
-                  form.setFieldValue("country", event ?? "");
-                  await readStatesData("country", event ?? "");
-                }}
-                w={"100%"}
               />
               <Select
                 disabled={readonly || form.values.country === ""}
