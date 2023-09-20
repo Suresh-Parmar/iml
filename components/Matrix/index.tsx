@@ -65,6 +65,7 @@ import { FormType, MatrixDataType, MatrixRowType, UsersTypes } from "./types";
 import { fuzzyFilter, fuzzySort } from "./utilities";
 import ColumnHeader from "./components/ColumnHeader";
 import { UserForm } from "../Forms/UserForm";
+import { Studentsform } from "../Forms/Studentsform";
 import { SchoolForm } from "../Forms/SchoolForm";
 import { readExamCenters, updateDataRes } from "@/utilities/API";
 import { CompetitionForm } from "../Forms/CompetitionForm";
@@ -323,7 +324,7 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {} }: 
     Country: CountryForm,
     State: StateForm,
     City: CityForm,
-    Students: UserForm,
+    Students: Studentsform,
     Teachers: UserForm,
     "Relationship Managers": UserForm,
     "Super Admins": UserForm,
@@ -396,6 +397,7 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {} }: 
           setIsExtra(false);
           close();
         }}
+        closeOnClickOutside={false}
         title={`${formTitle}`}
         centered
         size={isExtra ? "100%" : "70%"}
@@ -528,12 +530,11 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {} }: 
             </Menu.Dropdown>
           </Menu>
           <Flex direction={"row"} justify={"center"} align={"center"}>
-            {permissionsData?.permissions?.export ||
-              (defaultShow && (
-                <div className="me-3">
-                  <DownloadFile formType={formType} data={data} filterString={globalFilter} />
-                </div>
-              ))}
+            {(permissionsData?.permissions?.export || defaultShow) && (
+              <div className="me-3">
+                <DownloadFile formType={formType} data={data} filterString={globalFilter} />
+              </div>
+            )}
 
             {renderUploadButton(formType, data)}
             <DebouncedInput

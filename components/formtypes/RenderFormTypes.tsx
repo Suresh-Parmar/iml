@@ -6,6 +6,9 @@ import { allTypes } from "./renderTypesJson";
 import { useSelector } from "react-redux";
 import { updateDataRes } from "@/utilities/API";
 import { siteJson as siteJsonData } from "@/components/permissions";
+import { usePathname } from "next/navigation";
+import { findFromJson } from "@/helpers/filterFromJson";
+import { formTypeToTableMapper } from "@/helpers/formTypeMapper";
 
 function RenderFormTypes(
   formType: any,
@@ -20,6 +23,8 @@ function RenderFormTypes(
   extra?: any
 ) {
   const [siteJson, setSiteJson] = useState<any>(siteJsonData);
+  const [permissionsData, setPermissionsData] = useState<any>({});
+  const pathname: any = usePathname();
 
   const reduxData: any = useSelector((state) => state);
   let activeUserID = reduxData?.authentication?.user?._id;
@@ -52,6 +57,23 @@ function RenderFormTypes(
     }
   };
 
+  const handleisValid = (pathname: string) => {
+    if (pathname.includes("/")) {
+      let arrKey = pathname.split("/");
+      pathname = pathname.split("/")[arrKey.length - 1];
+    }
+    let data = findFromJson(siteJson, pathname, "link");
+    setPermissionsData({ ...data });
+  };
+
+  let isSuperAdmin = reduxData?.authentication?.user?.role == "super_admin";
+  let isUserForm = formTypeToTableMapper(formType) == "users";
+  let showResetPassword = isSuperAdmin && isUserForm;
+
+  useEffect(() => {
+    handleisValid(pathname);
+  }, [pathname, siteJson]);
+
   useEffect(() => {
     activeUserID && fetchData();
   }, [activeUserID]);
@@ -83,7 +105,9 @@ function RenderFormTypes(
           id={props.row.original._id}
           label={props.row.original.name}
           extra={extra}
-          siteJson={siteJson}
+          defaultShow={isSuperAdmin}
+          permissionsData={permissionsData}
+          showResetPassword={showResetPassword}
         />
       ),
       header: () => (

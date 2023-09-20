@@ -60,16 +60,18 @@ const filterDataByString = (data: any, filterString: any) => {
   return newData;
 };
 
-export const saveExcel = async (fetchData: any, data: any, filterString: any, fileName: any) => {
+export const saveExcel = async (fetchData: any, data: any, filterString: any, fileName: any, hideMsg: any = false) => {
   const workbook = new Excel.Workbook();
   const workSheetName = "Worksheet-1";
 
   let dataTOexport = fetchData || data;
 
   if (!dataTOexport.length) {
-    notifications.show({
-      message: "No Data to Export",
-    });
+    if (!hideMsg) {
+      notifications.show({
+        message: "No Data to Export",
+      });
+    }
     return;
   }
 
@@ -121,4 +123,19 @@ export const saveExcel = async (fetchData: any, data: any, filterString: any, fi
   } finally {
     workbook.removeWorksheet(workSheetName);
   }
+};
+
+export const maxLength = (text: string, len: number) => {
+  if (text.length > len) {
+    text = text.substring(0, len);
+  }
+  return text;
+};
+
+export let selectMinDate = (minDate: number = 2) => {
+  if (minDate == 0) {
+    return new Date();
+  }
+
+  return new Date(new Date().setFullYear(new Date().getFullYear() - minDate));
 };

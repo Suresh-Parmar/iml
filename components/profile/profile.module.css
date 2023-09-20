@@ -1,0 +1,43 @@
+.userImage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+}
+
+.userImage img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+}
+
+.imageView {
+  margin: auto;
+  position: relative;
+}
+
+.imageView span {
+  position: absolute;
+  background: aliceblue;
+  border-radius: 100px;
+  padding: 7px;
+  bottom: 10px;
+  right: 0px;
+  cursor: pointer;
+  box-shadow: inset 0px 0px 2px 0px #556080;
+}
+
+.userText {
+  margin: 20px 0;
+  text-transform: capitalize;
+}
+
+.userText {
+  font-size: 14px;
+  color: #556080;
+  font-weight: bold;
+}
+
+.userName {
+  font-size: 18px;
+}

@@ -49,6 +49,7 @@ export type BoardType = {
   _id: string;
   name: string;
   code: string;
+  board_type: string;
 };
 
 export type SchoolType = {
@@ -66,6 +67,17 @@ export type SchoolType = {
   geo_address: string;
   contact_number: string;
   contact_email: string;
+  school_address: string;
+  name_address: string;
+  principal: string;
+  name_certificate: string;
+  relationship_manager: string;
+  teacher_incharge: string;
+  paid: string;
+  sections: string;
+  affiliation: string;
+  language: string;
+  comments: string;
 };
 
 export type ClassType = {
@@ -156,6 +168,9 @@ export type ExamCenterType = {
   paper_code: string;
   mode: string;
   competition: string;
+  max_number: string;
+  instructions: string;
+  imladdress: string;
 };
 
 export type ExamCenterMappingType = {
@@ -201,6 +216,7 @@ export type UserType = {
   country_code: string;
   cohort_code?: any;
   group_code?: any;
+  designation?: any;
 };
 
 export type PaymentResponseType = {

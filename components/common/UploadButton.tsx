@@ -12,7 +12,6 @@ import {
   uploadSpreadsheet,
   uploadSpreadsheetStudent,
 } from "@/utilities/API";
-import { formTypeToFetcherMapper, formTypeToTableMapper } from "../Matrix/components/RowActions";
 import { UseFormReturnType, useForm } from "@mantine/form";
 
 import ModalBox from "./Modal";
@@ -22,6 +21,8 @@ import { usePathname } from "next/navigation";
 import { findFromJson } from "@/helpers/filterFromJson";
 import { siteJson as siteJsonData } from "../permissions";
 import { useSelector } from "react-redux";
+import { formTypeToTableMapper } from "@/helpers/formTypeMapper";
+import { formTypeToFetcherMapper } from "@/helpers/dataFetcher";
 
 interface SpreadSheetFormValues {
   spreadSheetFile: File | undefined;
@@ -59,7 +60,7 @@ function UploadButton(props: any) {
   const [permissionsData, setPermissionsData] = useState<any>({});
   const [siteJson, setSiteJson] = useState<any>(siteJsonData);
 
-  const pathname = usePathname();
+  const pathname: any = usePathname();
 
   const reduxData: any = useSelector((state) => state);
   let activeUserID = reduxData?.authentication?.user?._id;
@@ -80,7 +81,7 @@ function UploadButton(props: any) {
 
   useEffect(() => {
     activeUserID && !defaultShow && fetchData();
-  }, [activeUserID, siteJson]);
+  }, [activeUserID]);
 
   const handleisValid = (pathname: string) => {
     if (pathname.includes("/")) {
@@ -201,10 +202,11 @@ function UploadButton(props: any) {
             title: `File processed successfully!`,
             message: `The data in the spreadsheet has been processed and the table has been refreshed.`,
             color: "green",
+            autoClose: 8000,
           });
 
           let data = res.response["data with not correct parameters"];
-          saveExcel(data, "", "", formType);
+          saveExcel(data, "", "", formType, true);
 
           form.setValues({
             spreadSheetFile: undefined,
@@ -276,6 +278,7 @@ function UploadButton(props: any) {
             filterString=""
             ShowIcon={IconDownload}
             title={`${formType} Template`}
+            hideMsg={true}
           />
         </Box>
         <Box p={20}>

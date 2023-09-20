@@ -10,6 +10,7 @@ import {
   IconUser,
   IconBuilding,
   IconAffiliate,
+  IconDownload,
 } from "@tabler/icons-react";
 import siteJsonData from "../../../permissions/SiteJson.json";
 import { findFromJson } from "@/helpers/filterFromJson";
@@ -46,7 +47,7 @@ function NavigationBarMain({ opened }: { opened: boolean }) {
     if (show) {
       setTimeout(() => {
         setShow(false);
-      }, 2000);
+      }, 1000);
     }
   }, [pathname]);
 
@@ -71,7 +72,6 @@ function NavigationBarMain({ opened }: { opened: boolean }) {
 
     if (!data?.permissions?.view && reduxData?.authentication?.user?.role != "super_admin") {
       router.replace(consoleBaseURL);
-      setShow(true);
     }
   };
 
@@ -336,11 +336,42 @@ function NavigationBarMain({ opened }: { opened: boolean }) {
           label: "Announcements",
           description: "All users of the system",
         },
+      ],
+    },
+    {
+      linkHref: "download",
+      href: "",
+      icon: <IconDownload size="2rem" />,
+      color: "gray",
+      label: "Download",
+      description: "All users of the system",
+      navlinks: [
         {
-          href: `${consoleBaseURL}/roles`,
+          href: `${consoleBaseURL}/admitcard`,
           icon: <IconUser size="2rem" />,
           color: "gray",
-          label: "Roles",
+          label: "Admit Card",
+          description: "All users of the system",
+        },
+        {
+          href: `${consoleBaseURL}/markssheet`,
+          icon: <IconUser size="2rem" />,
+          color: "gray",
+          label: "Marks Sheet",
+          description: "All users of the system",
+        },
+        {
+          href: `${consoleBaseURL}/certificate`,
+          icon: <IconUser size="2rem" />,
+          color: "gray",
+          label: "Certificate",
+          description: "All users of the system",
+        },
+        {
+          href: `${consoleBaseURL}/omrsheet`,
+          icon: <IconUser size="2rem" />,
+          color: "gray",
+          label: "OMR Sheet",
           description: "All users of the system",
         },
       ],

@@ -113,3 +113,14 @@ a {
 .capitalize {
   text-transform: capitalize;
 }
+
+.mantine-Modal-header .mantine-Modal-title {
+  font-weight: bold;
+}
+
+.mantine-Modal-header svg {
+  color: red;
+  font-weight: 900;
+  height: 2rem !important;
+  width: 2rem !important;
+}

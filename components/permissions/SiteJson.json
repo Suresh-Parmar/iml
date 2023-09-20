@@ -262,7 +262,7 @@
       "view": true,
       "uploadFile": false,
       "updateFile": false,
-      "export": false
+      "export": true
     }
   },
   {
@@ -276,7 +276,7 @@
       "view": true,
       "uploadFile": true,
       "updateFile": true,
-      "export": false
+      "export": true
     }
   },
   {
@@ -290,7 +290,7 @@
       "view": true,
       "uploadFile": true,
       "updateFile": true,
-      "export": false
+      "export": true
     }
   },
   {
@@ -304,7 +304,7 @@
       "view": false,
       "uploadFile": false,
       "updateFile": false,
-      "export": false
+      "export": true
     }
   },
   {
@@ -318,7 +318,7 @@
       "view": false,
       "uploadFile": false,
       "updateFile": false,
-      "export": false
+      "export": true
     }
   },
   {
@@ -330,6 +330,76 @@
       "update": false,
       "delete": false,
       "view": false,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": true
+    }
+  },
+  {
+    "title": "Download",
+    "link": "download",
+    "icon": "supervisor_account",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": true
+    }
+  },
+  {
+    "title": "admitcard",
+    "link": "Admit Card",
+    "icon": "supervisor_account",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": true
+    }
+  },
+  {
+    "title": "Markssheet",
+    "link": "markssheet",
+    "icon": "supervisor_account",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": true
+    }
+  },
+  {
+    "title": "Certificate",
+    "link": "certificate",
+    "icon": "supervisor_account",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  },
+  {
+    "title": "OMR Sheet",
+    "link": "omrsheet",
+    "icon": "supervisor_account",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
       "uploadFile": false,
       "updateFile": false,
       "export": false

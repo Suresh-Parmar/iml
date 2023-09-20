@@ -14,6 +14,7 @@ type DownloadFileProps = {
   fetchData?: any;
   title?: any;
   ShowIcon?: any;
+  hideMsg?: any;
   headers?: {
     key: string;
     header: string;
@@ -28,6 +29,7 @@ export default function DownloadFile({
   fetchData,
   ShowIcon,
   title = "",
+  hideMsg,
 }: DownloadFileProps) {
   const prepareData = () => {
     if (fetchData) {
@@ -37,7 +39,7 @@ export default function DownloadFile({
             message: data.response,
           });
         } else if (data) {
-          saveExcel([data], "", filterString, formType);
+          saveExcel([data], "", filterString, formType, hideMsg);
         }
       });
     }
@@ -56,7 +58,7 @@ export default function DownloadFile({
           mx={0}
           sx={(theme) => ({ padding: theme.spacing.xs, cursor: "pointer" })}
           size={36}
-          onClick={() => saveExcel("", data, filterString, formType)}
+          onClick={() => saveExcel("", data, filterString, formType, hideMsg)}
         >
           <Tooltip label="Export to XLSX File" position="left" offset={10}>
             <IconTableExport />

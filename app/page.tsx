@@ -35,6 +35,7 @@ export default function Home() {
       });
     }
   }, [dispatch]);
+
   return (
     <Container
       fluid

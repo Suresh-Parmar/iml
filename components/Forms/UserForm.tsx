@@ -29,10 +29,10 @@ import { DateInput } from "@mantine/dates";
 import { notifications } from "@mantine/notifications";
 import { FormType } from "../Matrix/types";
 import { UserRoleFormMapping } from "@/utilities/users";
-import { formTypeToFetcherMapper } from "../Matrix/components/RowActions";
 import { getReduxState } from "@/redux/hooks";
 import { getInternationalDailingCode } from "@/utilities/countriesUtils";
 import { RoleMatrix } from "../permissions";
+import { formTypeToFetcherMapper } from "@/helpers/dataFetcher";
 
 function UserForm({
   readonly,
@@ -57,25 +57,25 @@ function UserForm({
   const [citiesData, setCitiesData] = useState<MatrixDataType>([]);
   const [statesData, setStatesData] = useState<MatrixDataType>([]);
   const [countriesData, setCountriesData] = useState<MatrixDataType>([]);
-  const [schoolsData, setSchoolsData] = useState<MatrixDataType>([]);
+  // const [schoolsData, setSchoolsData] = useState<MatrixDataType>([]);
   const [examCentersData, setExamCentersData] = useState<MatrixDataType>([]);
-  const [comeptitionsData, setCompetitionsData] = useState<MatrixDataType>([]);
-  const [classesData, setClassesData] = useState<MatrixDataType>([]);
+  // const [comeptitionsData, setCompetitionsData] = useState<MatrixDataType>([]);
+  // const [classesData, setClassesData] = useState<MatrixDataType>([]);
   const [groupsData, setGroupData] = useState<any>([]);
   const [cohortsData, setCohortsData] = useState<any>([]);
   const [showRoles, setshowRoles] = useState<any>(isExtra ? rowData?._id : false);
   const [isUpdate, setisUpdate] = useState<any>(rowData?._id);
 
-  async function readSchoolsData(filterBy?: "name" | "city", filterQuery?: string | number) {
-    let schools: MatrixDataType;
-    if (filterBy && filterQuery) {
-      schools = await readSchools(filterBy, filterQuery);
-    } else {
-      schools = await readSchools();
-    }
+  // async function readSchoolsData(filterBy?: "name" | "city", filterQuery?: string | number) {
+  //   let schools: MatrixDataType;
+  //   if (filterBy && filterQuery) {
+  //     schools = await readSchools(filterBy, filterQuery);
+  //   } else {
+  //     schools = await readSchools();
+  //   }
 
-    setSchoolsData(schools);
-  }
+  //   setSchoolsData(schools);
+  // }
 
   const getSelectedCountry = () => {
     const state = getReduxState();
@@ -153,15 +153,15 @@ function UserForm({
     setExamCentersData(examCenters);
   }
 
-  async function readCompetitionsData(filterBy?: "name" | "status", filterQuery?: string | number) {
-    const competitions = await readCompetitions();
-    setCompetitionsData(competitions);
-  }
+  // async function readCompetitionsData(filterBy?: "name" | "status", filterQuery?: string | number) {
+  //   const competitions = await readCompetitions();
+  //   setCompetitionsData(competitions);
+  // }
 
-  async function readClassesData(filterBy?: "name" | "status", filterQuery?: string | number) {
-    const classes = await readClasses();
-    setClassesData(classes);
-  }
+  // async function readClassesData(filterBy?: "name" | "status", filterQuery?: string | number) {
+  //   const classes = await readClasses();
+  //   setClassesData(classes);
+  // }
 
   useEffect(() => {
     if (rowData) {
@@ -193,16 +193,16 @@ function UserForm({
     }
   }, [rowData?.state]);
 
-  useEffect(() => {
-    if (!showRoles) {
-      readSchoolsData();
-    }
-  }, [rowData?.city]);
+  // useEffect(() => {
+  //   if (!showRoles) {
+  //     readSchoolsData();
+  //   }
+  // }, [rowData?.city]);
 
   useEffect(() => {
     if (!showRoles) {
-      readClassesData();
-      readCompetitionsData();
+      // readClassesData();
+      // readCompetitionsData();
       readCountriesData();
       readExamCentersData();
     }
@@ -210,9 +210,9 @@ function UserForm({
 
   const form = useForm({
     initialValues: {
-      competition_code: rowData?.competition_code,
-      class_code: rowData?.class_code,
-      section: rowData?.section ?? "",
+      // competition_code: rowData?.competition_code,
+      // class_code: rowData?.class_code,
+      // section: rowData?.section ?? "",
       name: rowData?.name ?? "",
       mobile_1: rowData?.mobile_1?.replace(getMobileCode(), "").trim() ?? "",
       mobile_2: rowData?.mobile_2?.replace(getMobileCode(), "").trim() ?? "",
@@ -220,8 +220,8 @@ function UserForm({
       email_2: rowData?.email_2 ?? "",
       dob: rowData?.dob ? new Date(rowData?.dob) : null,
       gender: rowData?.gender ?? "",
-      school_name: rowData?.school_name ?? "",
-      exam_center_id: rowData?.exam_center_id ?? "",
+      // school_name: rowData?.school_name ?? "",
+      // exam_center_id: rowData?.exam_center_id ?? "",
       address: rowData?.address ?? "",
       country: rowData?.country,
       state: rowData?.state ?? "",
@@ -232,6 +232,7 @@ function UserForm({
       cohort_code: rowData?.cohort_code,
       group_code: rowData?.group_code,
       status: rowData?.status,
+      designation: rowData?.designation,
     },
     validate: {
       name: (value) => (value.length < 2 ? "Name must have at least 2 letters" : null),
@@ -241,13 +242,13 @@ function UserForm({
       // mobile_1: (value) => (/^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/.test(value) ? null : "Invalid mobile number"),
       gender: (value) =>
         ["Female", "Male", "Other", "Prefer Not To Say"].includes(value) ? null : "Gender must be selected",
-      school_name: (value) => (value.length === 0 ? "School must be selected" : null),
-      section: (value) => (value.length === 0 ? "Section must be selected" : null),
-      class_code: (value) => (value?.length === 0 ? "Class must be selected" : null),
-      competition_code: (value) => (value?.length === 0 ? "Competition must be selected" : null),
+      // school_name: (value) => (value.length === 0 ? "School must be selected" : null),
+      // section: (value) => (value.length === 0 ? "Section must be selected" : null),
+      // class_code: (value) => (value?.length === 0 ? "Class must be selected" : null),
+      // competition_code: (value) => (value?.length === 0 ? "Competition must be selected" : null),
       state: (value) => (value.length === 0 ? "State must be selected" : null),
       city: (value) => (value.length === 0 ? "City must be selected" : null),
-      exam_center_id: (value) => (value.length === 0 ? "Exam center must be selected" : null),
+      // exam_center_id: (value) => (value.length === 0 ? "Exam center must be selected" : null),
       consented: (value) => (value === true || value === false ? null : "Communication consent must be set"),
     },
   });
@@ -326,7 +327,7 @@ function UserForm({
 
   const onChangeCityName = async (event: string) => {
     form.setFieldValue("city", event);
-    await readSchoolsData("city", event);
+    // await readSchoolsData("city", event);
   };
 
   const onChangeStateName = async (event: string) => {
@@ -334,23 +335,23 @@ function UserForm({
     await readCitiesData("state", event);
   };
 
-  const onChangeExamCenter = async (event: string) => {
-    form.setFieldValue("exam_center_id", event);
-  };
+  // const onChangeExamCenter = async (event: string) => {
+  //   form.setFieldValue("exam_center_id", event);
+  // };
 
-  const onChangeClass = async (event: string) => {
-    form.setFieldValue("class_code", event);
-  };
+  // const onChangeClass = async (event: string) => {
+  //   form.setFieldValue("class_code", event);
+  // };
 
-  const onChangeCompetition = async (event: string) => {
-    form.setFieldValue("competition_code", event);
-  };
+  // const onChangeCompetition = async (event: string) => {
+  //   form.setFieldValue("competition_code", event);
+  // };
 
-  const schoolNames = schoolsData
-    .filter((schl) => Boolean(schl.status))
-    .map((school) => {
-      return school.name;
-    });
+  // const schoolNames = schoolsData
+  //   .filter((schl) => Boolean(schl.status))
+  //   .map((school) => {
+  //     return school.name;
+  //   });
 
   const cityNames = citiesData
     .filter((city) => Boolean(city.status))
@@ -377,19 +378,19 @@ function UserForm({
       value: ec._id,
     }));
 
-  const competitionsNames = comeptitionsData
-    .filter((c) => Boolean(c.status))
-    .map((c) => ({
-      value: c.code,
-      label: c.name,
-    }));
+  // const competitionsNames = comeptitionsData
+  //   .filter((c) => Boolean(c.status))
+  //   .map((c) => ({
+  //     value: c.code,
+  //     label: c.name,
+  //   }));
 
-  const classesNames = classesData
-    .filter((c) => Boolean(c.status))
-    .map((c) => ({
-      label: c.name,
-      value: c.code,
-    }));
+  // const classesNames = classesData
+  //   .filter((c) => Boolean(c.status))
+  //   .map((c) => ({
+  //     label: c.name,
+  //     value: c.code,
+  //   }));
 
   const saveJson = (json: any) => {
     let action = !!isUpdate ? "update" : "create";
@@ -441,7 +442,7 @@ function UserForm({
           <LoadingOverlay visible={oLoader} overlayBlur={2} />
           <Flex gap={"md"} direction={"row"} justify={"center"} align={"flex-start"} w={"100%"}>
             <Flex direction={"column"} justify={"center"} align={"flex-start"} w={"100%"}>
-              <Select
+              {/* <Select
                 disabled={readonly}
                 searchable
                 nothingFound="No options"
@@ -454,8 +455,8 @@ function UserForm({
                 {...form.getInputProps("competition_code")}
                 onChange={onChangeCompetition}
                 w={"100%"}
-              />
-              <Select
+              /> */}
+              {/* <Select
                 disabled={readonly}
                 searchable
                 nothingFound="No options"
@@ -468,8 +469,8 @@ function UserForm({
                 {...form.getInputProps("class_code")}
                 onChange={onChangeClass}
                 w={"100%"}
-              />
-              {formType == "Students" && (
+              /> */}
+              {/* {formType == "Students" && (
                 <>
                   <MultiSelect
                     disabled={readonly}
@@ -504,8 +505,8 @@ function UserForm({
                     w={"100%"}
                   />
                 </>
-              )}
-              <TextInput
+              )} */}
+              {/* <TextInput
                 disabled={readonly}
                 withAsterisk
                 name="Section"
@@ -515,7 +516,7 @@ function UserForm({
                 size="md"
                 {...form.getInputProps("section")}
                 w={"100%"}
-              />
+              /> */}
               <TextInput
                 disabled={readonly}
                 withAsterisk
@@ -591,6 +592,17 @@ function UserForm({
                 mt={"md"}
                 size="md"
               />
+              <TextInput
+                disabled={readonly}
+                // withAsterisk
+                label="Designation"
+                name="designation"
+                placeholder="teacher, principal"
+                {...form.getInputProps("designation")}
+                w={"100%"}
+                mt={"md"}
+                size="md"
+              />
             </Flex>
             <Flex direction={"column"} justify={"center"} align={"flex-start"} w={"100%"}>
               <Select
@@ -607,7 +619,7 @@ function UserForm({
                 placeholder="Select your gender"
                 data={["Female", "Male", "Other", "Prefer Not To Say"]}
               />
-              <Select
+              {/* <Select
                 disabled={readonly}
                 searchable
                 name="School"
@@ -622,8 +634,8 @@ function UserForm({
                 w={"100%"}
                 label="School"
                 data={schoolNames}
-              />
-              <Select
+              /> */}
+              {/* <Select
                 disabled={readonly}
                 searchable
                 nothingFound="No options"
@@ -636,7 +648,7 @@ function UserForm({
                 {...form.getInputProps("exam_center_id")}
                 onChange={onChangeExamCenter}
                 w={"100%"}
-              />
+              /> */}
               <Textarea
                 disabled={readonly}
                 placeholder="23, Horizon Lane, Spring Creek Avenue, Paris, France - 780004"

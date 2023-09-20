@@ -273,6 +273,13 @@ export const allTypes: any = {
       filterFn: "equals",
       sortingFn: fuzzySort,
     },
+	{
+      id: "Board Type",
+      key: "board_type",
+      defaultShow: true,
+      filterFn: "equals",
+      sortingFn: fuzzySort,
+    },
     {
       id: "status",
       key: "status",
@@ -343,6 +350,12 @@ export const allTypes: any = {
       filterFn: "equals",
       sortingFn: fuzzySort,
     },
+	{
+      id: "Class Label",
+      key: "class_label",
+      filterFn: "equals",
+      sortingFn: fuzzySort,
+    },
     {
       id: "Board",
       key: "board",
@@ -356,14 +369,7 @@ export const allTypes: any = {
       defaultShow: true,
       filterFn: "equals",
       sortingFn: fuzzySort,
-    },
-    {
-      id: "Type",
-      key: "type",
-      defaultShow: true,
-      filterFn: "equals",
-      sortingFn: fuzzySort,
-    },
+    },    
     {
       id: "Tags",
       key: "tags",
@@ -374,7 +380,6 @@ export const allTypes: any = {
     {
       id: "Country",
       key: "country",
-
       filterFn: "equals",
       sortingFn: fuzzySort,
     },
@@ -386,36 +391,90 @@ export const allTypes: any = {
       sortingFn: fuzzySort,
     },
     {
-      id: "Pin-Code",
+      id: "PinCode",
       key: "pincode",
       defaultShow: true,
       filterFn: "equals",
       sortingFn: fuzzySort,
     },
     {
-      id: "Label",
-      key: "label",
-
+      id: "Name Address",
+      key: "name_address",
       filterFn: "equals",
       sortingFn: fuzzySort,
     },
     {
       id: "Geographic Address",
       key: "geo_address",
-
       filterFn: "equals",
       sortingFn: fuzzySort,
     },
     {
       id: "Contact Number",
       key: "contact_number",
-
       filterFn: "equals",
       sortingFn: fuzzySort,
     },
     {
       id: "Contact E-Mail",
       key: "contact_email",
+      filterFn: "equals",
+      sortingFn: fuzzySort,
+    },
+	{
+      id: "Principal",
+      key: "principal",
+      filterFn: "equals",
+      sortingFn: fuzzySort,
+    },
+	{
+      id: "Teacher Incharge",
+      key: "teacher_incharge",
+      filterFn: "equals",
+      sortingFn: fuzzySort,
+    },
+	{
+      id: "Relationship Manager",
+      key: "relationship_manager",
+
+      filterFn: "equals",
+      sortingFn: fuzzySort,
+    },
+	{
+      id: "Name on Certificate",
+      key: "name_certificate",
+
+      filterFn: "equals",
+      sortingFn: fuzzySort,
+    },
+	{
+      id: "Affilliation",
+      key: "affilliation",
+      filterFn: "equals",
+      sortingFn: fuzzySort,
+    },
+	{
+      id: "Paid",
+      key: "paid",
+      filterFn: "equals",
+      sortingFn: fuzzySort,
+    },
+	{
+      id: "Language",
+      key: "language",
+
+      filterFn: "equals",
+      sortingFn: fuzzySort,
+    },
+	{
+      id: "Section",
+      key: "section",
+      filterFn: "equals",
+      sortingFn: fuzzySort,
+    },
+	{
+      id: "Comments",
+      key: "comments",
 
       filterFn: "equals",
       sortingFn: fuzzySort,
@@ -427,6 +486,13 @@ export const allTypes: any = {
     { actions: true, id: "actions", defaultShow: true },
   ],
   "Exam Center": [
+    {
+      id: "Center Code",
+      key: "_id",
+      defaultShow: true,
+      filterFn: "equals",
+      sortingFn: fuzzySort,
+    },
     {
       id: "Competition",
       key: "competition",
@@ -441,6 +507,37 @@ export const allTypes: any = {
       filterFn: "equals",
       sortingFn: fuzzySort,
     },
+	{
+      id: "Mode",
+      key: "mode",
+      filterFn: "equals",
+      sortingFn: fuzzySort,
+    },
+	{
+      id: "Paper Code",
+      key: "paper_code",
+
+      filterFn: "equals",
+      sortingFn: fuzzySort,
+    },
+	{
+      id: "Address",
+      key: "address",
+      filterFn: "equals",
+      sortingFn: fuzzySort,
+    },
+	{
+      id: "State",
+      key: "state",
+      filterFn: "equals",
+      sortingFn: fuzzySort,
+    },
+	{
+      id: "City",
+      key: "city",
+      filterFn: "equals",
+      sortingFn: fuzzySort,
+    },
     {
       id: "Exam Date",
       key: "examdate",
@@ -449,30 +546,15 @@ export const allTypes: any = {
       sortingFn: fuzzySort,
     },
     {
-      id: "Time",
+      id: "Exam Time",
       key: "time",
       defaultShow: true,
       filterFn: "equals",
       sortingFn: fuzzySort,
     },
     {
-      id: "Paper Code",
-      key: "paper_code",
-
-      filterFn: "equals",
-      sortingFn: fuzzySort,
-    },
-    {
-      id: "Mode",
-      key: "mode",
-
-      filterFn: "equals",
-      sortingFn: fuzzySort,
-    },
-    {
       id: "Result Date",
       key: "result_date",
-
       filterFn: "equals",
       sortingFn: fuzzySort,
     },
@@ -508,21 +590,36 @@ export const allTypes: any = {
       id: "Seat Number",
       key: "seat_number",
       defaultShow: true,
+	  filterFn: "equals",
+      sortingFn: fuzzySort,
     },
     {
       id: "Exam Center Code",
       key: "exam_center_code",
       defaultShow: true,
+	  filterFn: "equals",
+      sortingFn: fuzzySort,
     },
     {
       id: "Competition",
       key: "competition_code",
       defaultShow: true,
+	  filterFn: "equals",
+      sortingFn: fuzzySort,
     },
     {
       id: "Class",
       key: "class_code",
       defaultShow: true,
+	  filterFn: "equals",
+      sortingFn: fuzzySort,
+    },
+	{
+      id: "Country",
+      key: "country",
+      defaultShow: false,
+      filterFn: "equals",
+      sortingFn: fuzzySort,
     },
     {
       id: "status",
@@ -970,13 +1067,11 @@ export const allTypes: any = {
     },
     {
       id: "Cohorts",
-      key: "cohort_code",
-      defaultShow: true,
+      key: "cohort_code",      
     },
     {
       id: "Groups",
-      key: "group_code",
-      defaultShow: true,
+      key: "group_code",      
     },
     {
       id: "Consented",
@@ -1057,42 +1152,14 @@ export const allTypes: any = {
     },
 
     {
-      id: "Pin-Code",
+      id: "PinCode",
       key: "pincode",
     },
     {
       id: "School",
       key: "school_name",
       defaultShow: true,
-    },
-    {
-      id: "Section",
-      key: "section",
-    },
-    {
-      id: "Class",
-      key: "class_id",
-    },
-    {
-      id: "Competition",
-      key: "competition",
-    },
-    {
-      id: "Exam Center Code",
-      key: "exam_center_code",
-    },
-    {
-      id: "Seat Number",
-      key: "seat_number",
-    },
-    {
-      id: "Consented",
-      key: "consented",
-    },
-    {
-      id: "Is Verified",
-      key: "is_verified",
-    },
+    },    
     {
       id: "status",
       key: "status",

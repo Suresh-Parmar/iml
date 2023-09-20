@@ -24,7 +24,15 @@ import {
   Avatar,
 } from "@mantine/core";
 import { HeaderPropsType } from "./types";
-import { IconChevronDown, IconHome, IconLogout, IconMoonStars, IconSun } from "@tabler/icons-react";
+import {
+  IconChevronDown,
+  IconChevronDownLeft,
+  IconHome,
+  IconLogout,
+  IconMoonStars,
+  IconSun,
+  IconUser,
+} from "@tabler/icons-react";
 import { Logo } from "./_logo";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
@@ -352,12 +360,15 @@ function Header() {
                     </UnstyledButton>
                   </Menu.Target>
                   <Menu.Dropdown>
+                    <Link prefetch={false} href={"/profile"}>
+                      <Menu.Item icon={<IconUser size="1rem" />}>Profile</Menu.Item>
+                    </Link>
                     {pathname === "/" ? (
                       <Menu.Item icon={<IconDatabaseCog size="0.9rem" stroke={1.5} />}>
                         <Link
                           href={authentication.metadata.role === "super_admin" ? "/console" : "/authentication/signup"}
                         >
-                          {authentication.metadata.role === "super_admin" ? "Admin Dashboard" : "Learning Portal"}
+                          {authentication.metadata.role == "super_admin" ? "Admin Dashboard" : "Learning Portal"}
                         </Link>
                       </Menu.Item>
                     ) : (
@@ -368,9 +379,12 @@ function Header() {
                     {isloggedIn && (
                       <Menu.Item
                         onClick={() => {
-                          router.replace("/");
-                          localStorage.clear();
-                          dispatch(signOutThunk()).unwrap();
+                          const windowConfirm = window.confirm("Are you sure you want to sign out");
+                          if (windowConfirm) {
+                            router.replace("/");
+                            localStorage.clear();
+                            dispatch(signOutThunk()).unwrap();
+                          }
                         }}
                         icon={<IconLogout size="0.9rem" stroke={1.5} />}
                       >
@@ -378,18 +392,6 @@ function Header() {
                       </Menu.Item>
                     )}
                     <Menu.Divider />
-                    <Menu.Item
-                      onClick={() => toggleColorScheme()}
-                      icon={
-                        colorScheme === "dark" ? (
-                          <IconSun size="0.9rem" stroke={1.5} />
-                        ) : (
-                          <IconMoonStars size="0.9rem" stroke={1.5} />
-                        )
-                      }
-                    >
-                      Change Theme
-                    </Menu.Item>
                   </Menu.Dropdown>
                 </Menu>
               </Group>

@@ -1,17 +1,7 @@
-import {
-  TextInput,
-  Checkbox,
-  Button,
-  Group,
-  Box,
-  Flex,
-  Textarea,
-  Select,
-  LoadingOverlay,
-} from '@mantine/core';
-import { useForm } from '@mantine/form';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { MatrixDataType, MatrixRowType } from '../Matrix';
+import { TextInput, Checkbox, Button, Group, Box, Flex, Textarea, Select, LoadingOverlay } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { MatrixDataType, MatrixRowType } from "../Matrix";
 import {
   createBoard,
   createCompetition,
@@ -23,9 +13,9 @@ import {
   readSchools,
   readStates,
   updateBoard,
-} from '@/utilities/API';
-import { DateInput } from '@mantine/dates';
-import { notifications } from '@mantine/notifications';
+} from "@/utilities/API";
+import { DateInput } from "@mantine/dates";
+import { notifications } from "@mantine/notifications";
 
 function BoardForm({
   open,
@@ -54,15 +44,14 @@ function BoardForm({
   }, []);
   const form = useForm({
     initialValues: {
-      name: rowData?.name ?? '',
-      code: rowData?.code ?? '',
-      status: rowData?.status ?? '',
+      name: rowData?.name ?? "",
+      code: rowData?.code ?? "",
+      status: rowData?.status ?? "",
+      board_type: rowData?.board_type ?? "",
     },
     validate: {
-      name: (value) =>
-        value.length < 2 ? 'Name must have at least 2 letters' : null,
-      code: (value) =>
-        value.length < 1 ? 'Code must have at least 1 letters' : null,
+      name: (value) => (value.length < 2 ? "Name must have at least 2 letters" : null),
+      code: (value) => (value.length < 1 ? "Code must have at least 1 letters" : null),
     },
   });
   const [oLoader, setOLoader] = useState<boolean>(false);
@@ -71,7 +60,7 @@ function BoardForm({
     setOLoader(true);
     if (rowData !== undefined) {
       const isBoardUpdated = await updateBoard(rowData._id, values);
-      if (isBoardUpdated.toUpperCase() === 'DOCUMENT UPDATED') {
+      if (isBoardUpdated.toUpperCase() === "DOCUMENT UPDATED") {
         const boards = await readBoards();
         setData(boards);
         setOLoader(false);
@@ -82,59 +71,55 @@ function BoardForm({
       notifications.show({
         title: `Board ${rowData.name} updated!`,
         message: `The above board has been updated with new information.`,
-        color: 'blue',
+        color: "blue",
       });
     } else {
       const isBoardCreated = await createBoard(values as MatrixRowType);
-      if (isBoardCreated.toUpperCase() === 'DOCUMENT CREATED') {
+      if (isBoardCreated.toUpperCase() === "DOCUMENT CREATED") {
         const boards = await readBoards();
         setData(boards);
         setOLoader(false);
         notifications.show({
           title: `Board created!`,
           message: `A new board has been created.`,
-          color: 'green',
+          color: "green",
         });
-      } else if (isBoardCreated.toUpperCase() === 'DOCUMENT ALREADY EXISTS') {
+      } else if (isBoardCreated.toUpperCase() === "DOCUMENT ALREADY EXISTS") {
         setOLoader(false);
         notifications.show({
           title: `Board already exists!`,
           message: `${values.name} (${values.code}) already exists.`,
-          color: 'orange',
+          color: "orange",
         });
       } else {
         setOLoader(false);
       }
     }
     form.setValues({
-      name: '',
-      code: '',
+      name: "",
+      code: "",
+      board_type: "",
       status: true,
     });
     close();
   };
 
   return (
-    <Box maw={'100%'} mx="auto">
+    <Box maw={"100%"} mx="auto">
       <form onSubmit={form.onSubmit(onHandleSubmit)}>
         <LoadingOverlay visible={oLoader} overlayBlur={2} />
-        <Flex
-          direction={'column'}
-          justify={'center'}
-          align={'flex-start'}
-          w={'100%'}
-        >
+        <Flex direction={"column"} justify={"center"} align={"flex-start"} w={"100%"}>
           <TextInput
             disabled={readonly}
             withAsterisk
             label="Name"
             placeholder="Indian Certificate of Secondary Education"
-            {...form.getInputProps('name')}
-            w={'100%'}
-            mt={'md'}
+            {...form.getInputProps("name")}
+            w={"100%"}
+            mt={"md"}
             size="md"
             onChange={(event) => {
-              form.setFieldValue('name', event.currentTarget.value);
+              form.setFieldValue("name", event.currentTarget.value);
             }}
           />
           <TextInput
@@ -142,10 +127,21 @@ function BoardForm({
             withAsterisk
             label="Code"
             placeholder="ICSE"
-            {...form.getInputProps('code')}
-            w={'100%'}
-            mt={'md'}
+            {...form.getInputProps("code")}
+            w={"100%"}
+            mt={"md"}
             size="md"
+          />
+          <TextInput
+            disabled={readonly}
+            label="Board Type"
+            {...form.getInputProps("board_type")}
+            w={"100%"}
+            mt={"md"}
+            size="md"
+            onChange={(event) => {
+              form.setFieldValue("board_type", event.currentTarget.value);
+            }}
           />
         </Flex>
         <Group position="right" mt="md">

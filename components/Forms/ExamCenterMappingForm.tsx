@@ -1,17 +1,7 @@
-import {
-  TextInput,
-  Checkbox,
-  Button,
-  Group,
-  Box,
-  Flex,
-  Textarea,
-  Select,
-  LoadingOverlay,
-} from '@mantine/core';
-import { useForm } from '@mantine/form';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { MatrixDataType, MatrixRowType } from '../Matrix';
+import { TextInput, Checkbox, Button, Group, Box, Flex, Textarea, Select, LoadingOverlay } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { MatrixDataType, MatrixRowType } from "../Matrix";
 import {
   createExamCenterMapping,
   readCities,
@@ -24,8 +14,8 @@ import {
   readSchools,
   updateExamCenterMapping,
   updateUser,
-} from '@/utilities/API';
-import { notifications } from '@mantine/notifications';
+} from "@/utilities/API";
+import { notifications } from "@mantine/notifications";
 
 function ExamCenterMappingForm({
   readonly,
@@ -75,10 +65,7 @@ function ExamCenterMappingForm({
     competitions: [],
     classes: [],
   });
-  async function readSchoolsData(
-    filterBy?: 'name' | 'city',
-    filterQuery?: string | number
-  ) {
+  async function readSchoolsData(filterBy?: "name" | "city", filterQuery?: string | number) {
     let schools: MatrixDataType;
     if (filterBy && filterQuery) {
       schools = await readSchools(filterBy, filterQuery);
@@ -96,10 +83,7 @@ function ExamCenterMappingForm({
     });
     setSchoolsData(schoolNames);
   }
-  async function readCitiesData(
-    filterBy?: 'state',
-    filterQuery?: string | number
-  ) {
+  async function readCitiesData(filterBy?: "state", filterQuery?: string | number) {
     let cities: MatrixDataType;
     if (filterBy && filterQuery) {
       cities = await readCities(filterBy, filterQuery);
@@ -118,11 +102,8 @@ function ExamCenterMappingForm({
     setCitiesData(cityNames);
     // setSelectedCity(cityNames.at(0) || "");
   }
-  async function readCountriesData(
-    filterBy?: 'name' | 'status',
-    filterQuery?: string | number
-  ) {
-    const countries = await readCountries('status', true);
+  async function readCountriesData(filterBy?: "name" | "status", filterQuery?: string | number) {
+    const countries = await readCountries("status", true);
     setRawData((previousData) => {
       return {
         ...previousData,
@@ -134,10 +115,7 @@ function ExamCenterMappingForm({
     return countriesWithFlags;
     // setSelectedCountry(countriesWithFlags.at(0) || "🇮🇳 India");
   }
-  async function readExamCentersData(
-    filterBy?: 'name' | 'status',
-    filterQuery?: string | number
-  ) {
+  async function readExamCentersData(filterBy?: "name" | "status", filterQuery?: string | number) {
     const examCenters = await readExamCenters();
     setRawData((previousData) => {
       return {
@@ -145,16 +123,11 @@ function ExamCenterMappingForm({
         examCenters: examCenters,
       };
     });
-    const examCentersNames = examCenters.map(
-      (ec) => `${ec.name} (ID: ${ec._id})`
-    );
+    const examCentersNames = examCenters.map((ec) => `${ec.name} (ID: ${ec._id})`);
     setExamCentersData(examCentersNames);
     // setSelectedCountry(countriesWithFlags.at(0) || "🇮🇳 India");
   }
-  async function readCompetitionsData(
-    filterBy?: 'name' | 'status',
-    filterQuery?: string | number
-  ) {
+  async function readCompetitionsData(filterBy?: "name" | "status", filterQuery?: string | number) {
     const competitions = await readCompetitions();
     setRawData((previousData) => {
       return {
@@ -166,10 +139,7 @@ function ExamCenterMappingForm({
     setCompetitionsData(competitionsNames);
     // setSelectedCountry(countriesWithFlags.at(0) || "🇮🇳 India");
   }
-  async function readClassesData(
-    filterBy?: 'name' | 'status',
-    filterQuery?: string | number
-  ) {
+  async function readClassesData(filterBy?: "name" | "status", filterQuery?: string | number) {
     const classes = await readClasses();
     setRawData((previousData) => {
       return {
@@ -197,24 +167,24 @@ function ExamCenterMappingForm({
   }, []);
   const form = useForm({
     initialValues: {
-      registration_number: rowData?.registration_number || '',
+      registration_number: rowData?.registration_number || "",
       status: rowData?.status || true,
-      seat_number: rowData?.seat_number || '',
-      exam_center_code: examCenterCode || '', // rawData.examCenters.find((ec) => ec._id === rowData?.exam_center_code)?.name || "",
-      competition_code: rowData?.competition_code || '',
-      class_code: rowData?.class_code || '',
+      seat_number: rowData?.seat_number || "",
+      exam_center_code: examCenterCode || "", // rawData.examCenters.find((ec) => ec._id === rowData?.exam_center_code)?.name || "",
+      competition_code: rowData?.competition_code || "",
+      class_code: rowData?.class_code || "",
     },
     validate: {},
   });
   // email_2: (value) => (value.length > 0 ? /^\S+@\S+$/.test(value) ? null : 'Invalid alternate email' : 'Invalid alternate email'),
   // mobile_2: (value) => (value.length > 0 && /^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/.test(value) ? null : "Invalid alternate mobile number"),
   const [oLoader, setOLoader] = useState<boolean>(false);
-  const [examCenterID, setExamCenterID] = useState<string>('');
-  const [classID, setClassID] = useState<string>('');
-  const [classCode, setClassCode] = useState<string>('');
-  const [competitionCode, setCompetitionCode] = useState<string>('');
+  const [examCenterID, setExamCenterID] = useState<string>("");
+  const [classID, setClassID] = useState<string>("");
+  const [classCode, setClassCode] = useState<string>("");
+  const [competitionCode, setCompetitionCode] = useState<string>("");
   return (
-    <Box maw={'100%'} mx="auto">
+    <Box maw={"100%"} mx="auto">
       <form
         onSubmit={form.onSubmit(async (values) => {
           setOLoader(true);
@@ -225,13 +195,8 @@ function ExamCenterMappingForm({
               class_code: classCode,
               competition_code: competitionCode,
             };
-            const isExamCenterMappingUpdated = await updateExamCenterMapping(
-              rowData._id,
-              formValues
-            );
-            if (
-              isExamCenterMappingUpdated.toUpperCase() === 'DOCUMENT UPDATED'
-            ) {
+            const isExamCenterMappingUpdated = await updateExamCenterMapping(rowData._id, formValues);
+            if (isExamCenterMappingUpdated.toUpperCase() === "DOCUMENT UPDATED") {
               const examCenterMapping = await readExamCentersMapping();
               setData(examCenterMapping);
               setOLoader(false);
@@ -242,7 +207,7 @@ function ExamCenterMappingForm({
             notifications.show({
               title: `Exam Center Mapping ${rowData.name} ${rowData.code} updated!`,
               message: `The above exam center mapping has been updated with new information.`,
-              color: 'blue',
+              color: "blue",
             });
           } else {
             const formValues = {
@@ -251,24 +216,17 @@ function ExamCenterMappingForm({
               class_code: classCode,
               competition_code: competitionCode,
             };
-            const isExamCenterMappingCreated = await createExamCenterMapping(
-              formValues as MatrixRowType
-            );
-            if (
-              isExamCenterMappingCreated.toUpperCase() === 'DOCUMENT CREATED'
-            ) {
+            const isExamCenterMappingCreated = await createExamCenterMapping(formValues as MatrixRowType);
+            if (isExamCenterMappingCreated.toUpperCase() === "DOCUMENT CREATED") {
               const examCenterMapping = await readExamCentersMapping();
               setData(examCenterMapping);
               setOLoader(false);
-            } else if (
-              isExamCenterMappingCreated.toUpperCase() ===
-              'DOCUMENT ALREADY EXISTS'
-            ) {
+            } else if (isExamCenterMappingCreated.toUpperCase() === "DOCUMENT ALREADY EXISTS") {
               setOLoader(false);
               notifications.show({
                 title: `Exam Center Mapping already exists!`,
                 message: `Exam Center Mapping already exists.`,
-                color: 'orange',
+                color: "orange",
               });
             } else {
               setOLoader(false);
@@ -276,36 +234,30 @@ function ExamCenterMappingForm({
             notifications.show({
               title: `Exam Center Mapping created!`,
               message: `A new exam center mapping has been created.`,
-              color: 'green',
+              color: "green",
             });
           }
           form.setValues({
-            registration_number: '',
+            registration_number: "",
             status: true,
-            seat_number: '',
-            exam_center_code: '',
-            competition_code: '',
-            class_code: '',
+            seat_number: "",
+            exam_center_code: "",
+            competition_code: "",
+            class_code: "",
           });
           close();
         })}
       >
         <LoadingOverlay visible={oLoader} overlayBlur={2} />
-        <Flex
-          gap={'md'}
-          direction={'column'}
-          justify={'center'}
-          align={'flex-start'}
-          w={'100%'}
-        >
+        <Flex gap={"md"} direction={"column"} justify={"center"} align={"flex-start"} w={"100%"}>
           <TextInput
             disabled={readonly}
             withAsterisk
             label="Registration Number"
             placeholder="123456789"
-            {...form.getInputProps('registration_number')}
-            w={'100%'}
-            mt={'md'}
+            {...form.getInputProps("registration_number")}
+            w={"100%"}
+            mt={"md"}
             size="md"
           />
           <Select
@@ -313,62 +265,60 @@ function ExamCenterMappingForm({
             searchable
             nothingFound="No options"
             data={examCentersData}
-            label={'Exam Center'}
+            label={"Exam Center"}
             name="Exam Center"
-            mt={'md'}
+            mt={"md"}
             size="md"
             withAsterisk
-            {...form.getInputProps('exam_center_code')}
+            {...form.getInputProps("exam_center_code")}
             onChange={async (event) => {
-              const iExamCenter = rawData.examCenters.find(
-                (i) => i.name === event?.split(' ').slice(0, 2).join(' ')
-              );
-              setExamCenterID(iExamCenter?._id || '');
-              form.setFieldValue('exam_center_code', event || '');
+              const iExamCenter = rawData.examCenters.find((i) => i.name === event?.split(" ").slice(0, 2).join(" "));
+              setExamCenterID(iExamCenter?._id || "");
+              form.setFieldValue("exam_center_code", event || "");
             }}
-            w={'100%'}
+            w={"100%"}
           />
           <Select
             disabled={readonly}
             searchable
             nothingFound="No options"
             data={comeptitionsData}
-            label={'Competition'}
+            label={"Competition"}
             name="Competition"
-            mt={'md'}
+            mt={"md"}
             size="md"
             withAsterisk
-            {...form.getInputProps('competition_code')}
+            {...form.getInputProps("competition_code")}
             onChange={async (event) => {
               const iComp = rawData.competitions.find((i) => i.name === event);
-              setCompetitionCode(iComp?.code || '');
-              form.setFieldValue('competition_code', event || '');
+              setCompetitionCode(iComp?.code || "");
+              form.setFieldValue("competition_code", event || "");
             }}
-            w={'100%'}
+            w={"100%"}
           />
           <Select
             disabled={readonly}
             searchable
             nothingFound="No options"
             data={classesData}
-            label={'Class'}
+            label={"Class"}
             name="Class"
-            mt={'md'}
+            mt={"md"}
             size="md"
             withAsterisk
-            {...form.getInputProps('class_code')}
+            {...form.getInputProps("class_code")}
             onChange={async (event) => {
               const iClass = rawData.classes.find((i) => i.name === event);
-              setClassCode(iClass?.code || '');
-              setClassID(iClass?._id || '');
-              form.setFieldValue('class_code', event || '');
+              setClassCode(iClass?.code || "");
+              setClassID(iClass?._id || "");
+              form.setFieldValue("class_code", event || "");
             }}
-            w={'100%'}
+            w={"100%"}
           />
         </Flex>
         <Group position="right" mt="md">
-          <Button disabled={readonly} type={'submit'}>
-            {rowData !== undefined ? 'Update' : 'Add'}
+          <Button disabled={readonly} type={"submit"}>
+            {rowData !== undefined ? "Update" : "Add"}
           </Button>
         </Group>
       </form>
