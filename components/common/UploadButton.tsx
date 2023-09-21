@@ -210,8 +210,8 @@ function UploadButton(props: any) {
 
           if (res.response && res.response["data with not correct parameters"]) {
             data = res.response["data with not correct parameters"];
-          } else if (res["list of users not updated"]) {
-            data = res["list of users not updated"];
+          } else if (res["data not found"]) {
+            data = res["data not found"];
           }
 
           saveExcel(data, "", "", formType, true);

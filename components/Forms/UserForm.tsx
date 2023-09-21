@@ -1,27 +1,13 @@
-import {
-  TextInput,
-  Checkbox,
-  Button,
-  Group,
-  Box,
-  Flex,
-  Textarea,
-  Select,
-  LoadingOverlay,
-  MultiSelect,
-} from "@mantine/core";
+import { TextInput, Checkbox, Button, Group, Box, Flex, Textarea, Select, LoadingOverlay } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { MatrixDataType, MatrixRowType } from "../Matrix";
 import {
-  createStudent,
+  createOtherUsers,
   readApiData,
   readCities,
-  readClasses,
-  readCompetitions,
   readCountries,
   readExamCenters,
-  readSchools,
   readStates,
   updateDataRes,
 } from "@/utilities/API";
@@ -292,7 +278,7 @@ function UserForm({
           });
         });
     } else {
-      createStudent(values as MatrixRowType)
+      createOtherUsers(values as MatrixRowType)
         .then(async (res) => {
           setOLoader(false);
           setshowRoles(res.data.registration_number);
