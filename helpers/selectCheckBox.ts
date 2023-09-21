@@ -14,6 +14,7 @@ export let selectCheckBOxData = (dataDefault: any, checked: any, id: any, allDat
     }
   } else {
     if (checked) {
+      data = [];
       allData.forEach((elm: any) => {
         data.push(elm[allDatakey]);
       });
