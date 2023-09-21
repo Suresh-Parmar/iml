@@ -462,7 +462,7 @@ const readAnnoucements = async () => {
 };
 
 const readApiData = async (collection: any) => {
-  let apiData = await readLandingData(collection, "find_many");
+  let apiData = await readData(collection, "find_many");
   return apiData;
 };
 
