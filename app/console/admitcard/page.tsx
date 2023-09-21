@@ -1,7 +1,7 @@
 "use client";
 import { readApiData, readCities, readClasses, readCompetitions, readSchools, readStates } from "@/utilities/API";
-import { MultiSelect, Select } from "@mantine/core";
-import React, { useEffect, useState } from "react";
+import { Group, MultiSelect, Radio, Select } from "@mantine/core";
+import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 function Page() {
@@ -19,18 +19,19 @@ function Page() {
 
   const filterData = (data: any[], key: string, val: string) => {
     let newData: any[] = [];
-    data.forEach((element: any) => {
-      element[key] = element.name;
-      element[val] = element.name;
-      if (element.group) {
-        element.groupName = element.group;
-        delete element.group;
-      }
-      if (element.status) {
-        newData.push(element);
-      }
-    });
-
+    if (Array.isArray(data)) {
+      data.forEach((element: any) => {
+        element[key] = element.name;
+        element[val] = element.name;
+        if (element.group) {
+          element.groupName = element.group;
+          delete element.group;
+        }
+        if (element.status) {
+          newData.push(element);
+        }
+      });
+    }
     return newData;
   };
 
@@ -44,24 +45,25 @@ function Page() {
 
   async function readCitiesData(filterBy?: "state", filterQuery?: string | number) {
     let cities: any[];
-    if (filterBy && filterQuery) {
-      cities = await readCities(filterBy, filterQuery);
-    } else {
-      cities = await readCities();
-    }
+    cities = await readCities(filterBy, filterQuery);
     cities = filterData(cities, "label", "value");
     setCitiesData(cities);
   }
 
   async function readSchoolsData(filterBy?: "name" | "city", filterQuery?: string | number) {
-    let schools: any;
-    if (filterBy && filterQuery) {
-      schools = await readSchools(filterBy, filterQuery);
-    } else {
-      schools = await readSchools();
-    }
-    schools = filterData(schools, "label", "value");
+    let newPayload = {
+      collection_name: "schools",
+      op_name: "find_many",
+      filter_var: {
+        country: countryName || "India",
+        state: allData.state,
+        city: allData.city,
+        affiliation: allData.affiliation,
+      },
+    };
 
+    let schools: any = await readSchools(filterBy, filterQuery, newPayload);
+    schools = filterData(schools, "label", "value");
     setSchoolsData(schools);
   }
 
@@ -81,7 +83,6 @@ function Page() {
   const getCohorts = () => {
     readApiData("cohorts")
       .then((res) => {
-        console.log(res, "resres");
         setcohortsData(filterData(res, "label", "value"));
       })
       .catch((error) => console.error(error));
@@ -99,15 +100,31 @@ function Page() {
 
   useEffect(() => {
     countryName && readStatesData();
-    readCitiesData();
-    readSchoolsData();
-    readCompetitionsData();
-    readClassesData();
-    getCohorts();
+
+    // readSchoolsData();
+    // readCompetitionsData();
+    // readClassesData();
+    // getCohorts();
   }, [countryName]);
 
-  const handleDropDownChange = (e: any, key: any) => {
-    setAllData({ ...allData, [key]: e });
+  useEffect(() => {
+    allData.state && readCitiesData("state", allData.state);
+  }, [allData.state]);
+
+  useEffect(() => {
+    allData.city && readSchoolsData("city", allData.city);
+  }, [allData.city, allData.affiliation]);
+
+  const handleDropDownChange = (e: any, key: any, clear?: any) => {
+    if (clear) {
+      if (clear == "all") {
+        setAllData({ [key]: e });
+      } else {
+        setAllData({ ...allData, [clear]: "", [key]: e });
+      }
+    } else {
+      setAllData({ ...allData, [key]: e });
+    }
   };
 
   const filters = [
@@ -117,7 +134,7 @@ function Page() {
       type: "select",
       data: statesData,
       onchange: (e: any) => {
-        handleDropDownChange(e, "state");
+        handleDropDownChange(e, "state", "all");
       },
       value: allData.state,
     },
@@ -127,64 +144,41 @@ function Page() {
       type: "select",
       data: citiesData,
       onchange: (e: any) => {
-        handleDropDownChange(e, "city");
+        handleDropDownChange(e, "city", "affiliation");
       },
       value: allData.city,
     },
     {
-      label: "School",
-      key: "school",
-      type: "multiselect",
-      data: schoolsData,
-      style: { maxWidth: "30%" },
-      onchange: (e: any) => {
-        handleDropDownChange(e, "school");
+      label: "Affiliation",
+      key: "affiliation",
+      type: "radio",
+      data: citiesData,
+      options: [
+        { label: "Yes", value: "yes" },
+        { label: "No", value: "no" },
+      ],
+      onChange: (e: any) => {
+        handleDropDownChange(e, "affiliation");
       },
-      value: allData.school,
-    },
-    {
-      label: "Class",
-      key: "class",
-      type: "multiselect",
-      data: classesData,
-      onchange: (e: any) => {
-        handleDropDownChange(e, "class");
-      },
-      value: allData.class,
-    },
-    {
-      label: "Comeptitions",
-      key: "comeptitions",
-      data: comeptitionsData,
-      type: "multiselect",
-      onchange: (e: any) => {
-        handleDropDownChange(e, "comeptitions");
-      },
-      value: allData.comeptitions,
-    },
-    {
-      label: "Cohort",
-      key: "cohort",
-      data: cohortsData,
-      type: "multiselect",
-      onchange: (e: any) => {
-        handleDropDownChange(e, "cohort");
-      },
-      value: allData.cohort,
-    },
-    {
-      label: "Group",
-      key: "group",
-      data: groupsData,
-      type: "multiselect",
-      onchange: (e: any) => {
-        handleDropDownChange(e, "group");
-      },
-      value: allData.group,
+      value: allData.affiliation || "no",
     },
   ];
 
-  const renderData = () => {
+  const renderRadio = (item: any) => {
+    const renderInputs = () => {
+      return item.options.map((itemChild: any, index: any) => {
+        return <Radio value={itemChild.value} label={itemChild.label} />;
+      });
+    };
+
+    return (
+      <Radio.Group {...item}>
+        <Group mt="xs">{renderInputs()}</Group>
+      </Radio.Group>
+    );
+  };
+
+  const renderData = useCallback(() => {
     return filters.map((item: any, index) => {
       let { type, data, label, placeholder, onchange, value, style } = item;
       if (type === "multiselect") {
@@ -202,6 +196,8 @@ function Page() {
             />
           </div>
         );
+      } else if (type == "radio") {
+        return <div key={index}>{renderRadio(item)}</div>;
       } else {
         return (
           <div key={index} style={{ maxWidth: "15%", ...style }}>
@@ -219,9 +215,30 @@ function Page() {
         );
       }
     });
-  };
+  }, [filters]);
 
-  const renderTable = () => {
+  const renderSchoolsTable = useCallback(() => {
+    if (!schoolsData.length) {
+      return <></>;
+    }
+
+    const renderTableData = () => {
+      return schoolsData.map((item: any, index: any) => {
+        return (
+          <tr key={index}>
+            <td scope="row">
+              <input type="checkbox" />
+            </td>
+            <td>{item.name}</td>
+            <td>{item.city}</td>
+            <td>{item.address}</td>
+            <td>{item.code}</td>
+            <td>{item.board}</td>
+            <td>{item.affiliation}</td>
+          </tr>
+        );
+      });
+    };
     return (
       <table className="table">
         <thead>
@@ -229,45 +246,24 @@ function Page() {
             <th scope="col">
               <input type="checkbox" />
             </th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
+            <th scope="col">Name</th>
+            <th scope="col">City</th>
+            <th scope="col">Address</th>
+            <th scope="col">Code</th>
+            <th scope="col">Board</th>
+            <th scope="col">Affiliation</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td scope="row">
-              <input type="checkbox" />
-            </td>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-          </tr>
-          <tr>
-            <td scope="row">
-              <input type="checkbox" />
-            </td>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-          </tr>
-          <tr>
-            <td scope="row">
-              <input type="checkbox" />
-            </td>
-            <td>Larry the Bird</td>
-            <td>Larry the Bird</td>
-            <td>@twitter</td>
-          </tr>
-        </tbody>
+        <tbody>{renderTableData()}</tbody>
       </table>
     );
-  };
+  }, [schoolsData]);
 
   return (
     <>
       <div className="d-flex flex-wrap gap-4 m-4">{renderData()}</div>
-      <div className="table-responsive  m-4">{renderTable()}</div>
+      <div className="table-responsive  m-4">{renderSchoolsTable()}</div>
+      {/* <div className="table-responsive  m-4">{renderTable()}</div> */}
     </>
   );
 }
