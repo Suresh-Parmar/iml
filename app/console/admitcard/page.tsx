@@ -3,6 +3,7 @@ import { readApiData, readCities, readClasses, readCompetitions, readSchools, re
 import { Group, MultiSelect, Radio, Select } from "@mantine/core";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { checkIsAllChecked, selectCheckBOxData } from "@/helpers/selectCheckBox";
 
 function Page() {
   const [allData, setAllData] = useState<any>({});
@@ -36,6 +37,8 @@ function Page() {
   };
 
   // fetch data
+
+  console.log(allData, "allData");
 
   async function readStatesData(filterBy?: "country", filterQuery?: string | number) {
     let states = await readStates(filterBy, filterQuery);
@@ -112,7 +115,7 @@ function Page() {
   }, [allData.state]);
 
   useEffect(() => {
-    allData.city && readSchoolsData("city", allData.city);
+    allData.city && allData.affiliation && readSchoolsData("city", allData.city);
   }, [allData.city, allData.affiliation]);
 
   const handleDropDownChange = (e: any, key: any, clear?: any) => {
@@ -160,7 +163,7 @@ function Page() {
       onChange: (e: any) => {
         handleDropDownChange(e, "affiliation");
       },
-      value: allData.affiliation || "no",
+      value: allData.affiliation || "",
     },
   ];
 
@@ -217,7 +220,21 @@ function Page() {
     });
   }, [filters]);
 
+  const handleCHeckBOxes = (e: any, item?: any) => {
+    let checked = e.target.checked;
+    let data = [];
+    if (!item) {
+      data = selectCheckBOxData(allData.schools, checked, false, schoolsData, "name");
+    } else {
+      data = selectCheckBOxData(allData.schools, checked, item.name, schoolsData, "name");
+    }
+
+    allData.schools = data;
+    setAllData({ ...allData });
+  };
+
   const renderSchoolsTable = useCallback(() => {
+    // const renderSchoolsTable = () => {
     if (!schoolsData.length) {
       return <></>;
     }
@@ -225,9 +242,15 @@ function Page() {
     const renderTableData = () => {
       return schoolsData.map((item: any, index: any) => {
         return (
-          <tr key={index}>
+          <tr className="capitalize" key={index}>
             <td scope="row">
-              <input type="checkbox" />
+              <input
+                type="checkbox"
+                checked={Array.isArray(allData.schools) && allData.schools.includes(item.name)}
+                onChange={(e) => {
+                  handleCHeckBOxes(e, item);
+                }}
+              />
             </td>
             <td>{item.name}</td>
             <td>{item.city}</td>
@@ -239,12 +262,19 @@ function Page() {
         );
       });
     };
+
     return (
       <table className="table">
         <thead>
           <tr>
             <th scope="col">
-              <input type="checkbox" />
+              <input
+                type="checkbox"
+                checked={checkIsAllChecked(allData.schools, schoolsData)}
+                onChange={(e) => {
+                  handleCHeckBOxes(e);
+                }}
+              />
             </th>
             <th scope="col">Name</th>
             <th scope="col">City</th>
@@ -257,7 +287,7 @@ function Page() {
         <tbody>{renderTableData()}</tbody>
       </table>
     );
-  }, [schoolsData]);
+  }, [allData.schools, schoolsData, checkIsAllChecked(allData.schools, schoolsData)]);
 
   return (
     <>
