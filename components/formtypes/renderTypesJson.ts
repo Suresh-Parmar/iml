@@ -273,7 +273,7 @@ export const allTypes: any = {
       filterFn: "equals",
       sortingFn: fuzzySort,
     },
-	{
+    {
       id: "Board Type",
       key: "board_type",
       defaultShow: true,
@@ -350,7 +350,7 @@ export const allTypes: any = {
       filterFn: "equals",
       sortingFn: fuzzySort,
     },
-	{
+    {
       id: "Class Label",
       key: "class_label",
       filterFn: "equals",
@@ -369,7 +369,7 @@ export const allTypes: any = {
       defaultShow: true,
       filterFn: "equals",
       sortingFn: fuzzySort,
-    },    
+    },
     {
       id: "Tags",
       key: "tags",
@@ -421,58 +421,58 @@ export const allTypes: any = {
       filterFn: "equals",
       sortingFn: fuzzySort,
     },
-	{
+    {
       id: "Principal",
       key: "principal",
       filterFn: "equals",
       sortingFn: fuzzySort,
     },
-	{
+    {
       id: "Teacher Incharge",
       key: "teacher_incharge",
       filterFn: "equals",
       sortingFn: fuzzySort,
     },
-	{
+    {
       id: "Relationship Manager",
       key: "relationship_manager",
 
       filterFn: "equals",
       sortingFn: fuzzySort,
     },
-	{
+    {
       id: "Name on Certificate",
       key: "name_certificate",
 
       filterFn: "equals",
       sortingFn: fuzzySort,
     },
-	{
-      id: "Affilliation",
-      key: "affilliation",
+    {
+      id: "Affiliation",
+      key: "affiliation",
       filterFn: "equals",
       sortingFn: fuzzySort,
     },
-	{
+    {
       id: "Paid",
       key: "paid",
       filterFn: "equals",
       sortingFn: fuzzySort,
     },
-	{
+    {
       id: "Language",
       key: "language",
 
       filterFn: "equals",
       sortingFn: fuzzySort,
     },
-	{
+    {
       id: "Section",
       key: "section",
       filterFn: "equals",
       sortingFn: fuzzySort,
     },
-	{
+    {
       id: "Comments",
       key: "comments",
 
@@ -507,32 +507,32 @@ export const allTypes: any = {
       filterFn: "equals",
       sortingFn: fuzzySort,
     },
-	{
+    {
       id: "Mode",
       key: "mode",
       filterFn: "equals",
       sortingFn: fuzzySort,
     },
-	{
+    {
       id: "Paper Code",
       key: "paper_code",
 
       filterFn: "equals",
       sortingFn: fuzzySort,
     },
-	{
+    {
       id: "Address",
       key: "address",
       filterFn: "equals",
       sortingFn: fuzzySort,
     },
-	{
+    {
       id: "State",
       key: "state",
       filterFn: "equals",
       sortingFn: fuzzySort,
     },
-	{
+    {
       id: "City",
       key: "city",
       filterFn: "equals",
@@ -590,31 +590,31 @@ export const allTypes: any = {
       id: "Seat Number",
       key: "seat_number",
       defaultShow: true,
-	  filterFn: "equals",
+      filterFn: "equals",
       sortingFn: fuzzySort,
     },
     {
       id: "Exam Center Code",
       key: "exam_center_code",
       defaultShow: true,
-	  filterFn: "equals",
+      filterFn: "equals",
       sortingFn: fuzzySort,
     },
     {
       id: "Competition",
       key: "competition_code",
       defaultShow: true,
-	  filterFn: "equals",
+      filterFn: "equals",
       sortingFn: fuzzySort,
     },
     {
       id: "Class",
       key: "class_code",
       defaultShow: true,
-	  filterFn: "equals",
+      filterFn: "equals",
       sortingFn: fuzzySort,
     },
-	{
+    {
       id: "Country",
       key: "country",
       defaultShow: false,
@@ -911,7 +911,6 @@ export const allTypes: any = {
     {
       id: "Display On Front",
       key: "displayonfront",
-      
     },
     {
       id: "Board",
@@ -926,12 +925,10 @@ export const allTypes: any = {
     {
       id: "HSN Code",
       key: "hsncode",
-      
     },
     {
       id: "Display On Account",
       key: "displayonaccount",
-      
     },
     {
       id: "Bundle",
@@ -1067,11 +1064,11 @@ export const allTypes: any = {
     },
     {
       id: "Cohorts",
-      key: "cohort_code",      
+      key: "cohort_code",
     },
     {
       id: "Groups",
-      key: "group_code",      
+      key: "group_code",
     },
     {
       id: "Consented",
@@ -1159,7 +1156,7 @@ export const allTypes: any = {
       id: "School",
       key: "school_name",
       defaultShow: true,
-    },    
+    },
     {
       id: "status",
       key: "status",
