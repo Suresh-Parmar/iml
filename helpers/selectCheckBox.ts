@@ -1,11 +1,11 @@
-export let selectCheckBOxData = (dataDefault, checked, id, allData, allDatakey) => {
-  let data = dataDefault ? [...dataDefault] : [];
+export let selectCheckBOxData = (dataDefault: any, checked: any, id: any, allData: any, allDatakey: any) => {
+  let data: any = dataDefault ? [...dataDefault] : [];
   if (id) {
     if (checked) {
       data.push(id);
     } else {
-      let newData = [];
-      data.map((item, index) => {
+      let newData: any = [];
+      data.map((item: any) => {
         if (item != id) {
           newData.push(item);
         }
@@ -14,7 +14,7 @@ export let selectCheckBOxData = (dataDefault, checked, id, allData, allDatakey) 
     }
   } else {
     if (checked) {
-      allData.forEach((elm) => {
+      allData.forEach((elm: any) => {
         data.push(elm[allDatakey]);
       });
     } else {
@@ -24,7 +24,7 @@ export let selectCheckBOxData = (dataDefault, checked, id, allData, allDatakey) 
   return data;
 };
 
-export const checkIsAllChecked = (data, allData) => {
+export const checkIsAllChecked = (data: any, allData: any) => {
   if (allData && data) {
     if (allData.length == data.length) {
       return true;

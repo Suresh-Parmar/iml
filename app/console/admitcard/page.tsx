@@ -10,10 +10,10 @@ function Page() {
   const [citiesData, setCitiesData] = useState<any>([]);
   const [statesData, setStatesData] = useState<any>([]);
   const [schoolsData, setSchoolsData] = useState<any>([]);
-  const [comeptitionsData, setCompetitionsData] = useState<any>([]);
-  const [classesData, setClassesData] = useState<any>([]);
-  const [groupsData, setGroupData] = useState<any>([]);
-  const [cohortsData, setcohortsData] = useState<any>([]);
+  // const [comeptitionsData, setCompetitionsData] = useState<any>([]);
+  // const [classesData, setClassesData] = useState<any>([]);
+  // const [groupsData, setGroupData] = useState<any>([]);
+  // const [cohortsData, setcohortsData] = useState<any>([]);
 
   const state: any = useSelector((state) => state);
   const countryName = state?.client?.selectedCountry?.name;
@@ -70,34 +70,34 @@ function Page() {
     setSchoolsData(schools);
   }
 
-  async function readClassesData(filterBy?: "name" | "status", filterQuery?: string | number) {
-    let classes = await readClasses();
-    classes = filterData(classes, "label", "value");
-    setClassesData(classes);
-  }
+  // async function readClassesData(filterBy?: "name" | "status", filterQuery?: string | number) {
+  //   let classes = await readClasses();
+  //   classes = filterData(classes, "label", "value");
+  //   setClassesData(classes);
+  // }
 
-  async function readCompetitionsData(filterBy?: "name" | "status", filterQuery?: string | number) {
-    let competitions = await readCompetitions();
-    competitions = filterData(competitions, "label", "value");
+  // async function readCompetitionsData(filterBy?: "name" | "status", filterQuery?: string | number) {
+  //   let competitions = await readCompetitions();
+  //   competitions = filterData(competitions, "label", "value");
 
-    setCompetitionsData(competitions);
-  }
+  //   setCompetitionsData(competitions);
+  // }
 
-  const getCohorts = () => {
-    readApiData("cohorts")
-      .then((res) => {
-        setcohortsData(filterData(res, "label", "value"));
-      })
-      .catch((error) => console.error(error));
-  };
+  // const getCohorts = () => {
+  //   readApiData("cohorts")
+  //     .then((res) => {
+  //       setcohortsData(filterData(res, "label", "value"));
+  //     })
+  //     .catch((error) => console.error(error));
+  // };
 
-  const getGroups = () => {
-    readApiData("groups")
-      .then((res) => {
-        setGroupData(filterData(res, "label", "value"));
-      })
-      .catch((error) => console.error(error));
-  };
+  // const getGroups = () => {
+  //   readApiData("groups")
+  //     .then((res) => {
+  //       setGroupData(filterData(res, "label", "value"));
+  //     })
+  //     .catch((error) => console.error(error));
+  // };
 
   // fetch data
 
@@ -170,7 +170,7 @@ function Page() {
   const renderRadio = (item: any) => {
     const renderInputs = () => {
       return item.options.map((itemChild: any, index: any) => {
-        return <Radio value={itemChild.value} label={itemChild.label} />;
+        return <Radio key={index} value={itemChild.value} label={itemChild.label} />;
       });
     };
 
@@ -220,13 +220,13 @@ function Page() {
     });
   }, [filters]);
 
-  const handleCHeckBOxes = (e: any, item?: any) => {
-    let checked = e.target.checked;
-    let data = [];
-    if (!item) {
-      data = selectCheckBOxData(allData.schools, checked, false, schoolsData, "name");
+  const handleCHeckBOxes = (e: any, item: any = "") => {
+    let checked: any = e.target.checked;
+    let data: any = [];
+    if (!!item) {
+      data = selectCheckBOxData(allData?.schools, checked, item.name, schoolsData, "name");
     } else {
-      data = selectCheckBOxData(allData.schools, checked, item.name, schoolsData, "name");
+      data = selectCheckBOxData(allData?.schools, checked, "", schoolsData, "name");
     }
 
     allData.schools = data;
@@ -247,7 +247,7 @@ function Page() {
               <input
                 type="checkbox"
                 checked={Array.isArray(allData.schools) && allData.schools.includes(item.name)}
-                onChange={(e) => {
+                onChange={(e: any) => {
                   handleCHeckBOxes(e, item);
                 }}
               />
