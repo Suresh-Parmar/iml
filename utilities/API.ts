@@ -11,6 +11,7 @@ export const SPREADSHEET_UPLOAD_API_STUDENT = `${BASE_URL}/student_creation_exce
 export const SPREADSHEET_UPDATE_API_STUDENT = `${BASE_URL}/student_update_excel`;
 export const SPREADSHEET_UPDATE_API = `${BASE_URL}/update_masters`;
 export const STUDENT_NEXT_API = `${BASE_URL}/student_panel`;
+export const OTHER_USER_CREATION = `${BASE_URL}/other_user_creation`;
 export const STUDENT_SIGNUP_NEXT_API = `${BASE_URL}/student_signup`;
 export const PAYMENTS_NEXT_API = `${BASE_URL}/payment_request`;
 export const LANDING_API = `${BASE_URL}/landing_page_data`;
@@ -683,6 +684,20 @@ const updateCountry = async (primaryKey: string, updateBody: RequestBodyType) =>
   return updateStatus;
 };
 
+const createOtherUsers = async (payload: MatrixRowType) => {
+  const response = await axios.post(
+    `${OTHER_USER_CREATION}`,
+    {
+      ...payload,
+      country: getSelectedCountry(),
+    },
+    {
+      headers: getAPIHeaders(),
+    }
+  );
+  return response;
+};
+
 const createStudent = async (payload: MatrixRowType) => {
   const response = await axios.post(
     `${STUDENT_NEXT_API}`,
@@ -960,6 +975,7 @@ export {
   createExamCenter,
   createExamCenterMapping,
   createStudentSignUp,
+  createOtherUsers,
   updateUser,
   deleteRow,
   unDeleteRow,
