@@ -52,7 +52,7 @@ export const formTypeToFetcherMapper = (formType: FormType) => {
     Payments: readPayments,
     ProductCategory: readProductCategories,
     groups: () => readApiData("groups"),
-    cohorts: () => () => readApiData("cohorts"),
+    cohorts: () => readApiData("cohorts"),
   };
 
   return mapper[formType];

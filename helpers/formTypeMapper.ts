@@ -51,6 +51,8 @@ export const formTypeToTableMapper = (formType: FormType) => {
     Products: "products",
     Payments: "payments",
     ProductCategory: "product_types",
+    cohorts: "cohorts",
+    groups: "groups",
   };
   return mapper[formType];
 };

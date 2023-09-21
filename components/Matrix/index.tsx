@@ -512,10 +512,10 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {} }: 
               <Menu.Divider />
               <Menu.Label>Manage Column Visibility</Menu.Label>
               <Flex w={"100%"} direction={"row"} wrap={"wrap"} justify={"flex-start"} align={"center"}>
-                {table.getAllLeafColumns().map((column) => {
+                {table.getAllLeafColumns().map((column, index) => {
                   if (column.id !== "actions")
                     return (
-                      <Menu.Item w={"33%"} key={column.id}>
+                      <Menu.Item w={"33%"} key={column.id + index}>
                         <Checkbox
                           label={column.id}
                           {...{
@@ -578,13 +578,13 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {} }: 
             withColumnBorders
           >
             <thead className={cx(classes.header)}>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id}>
+              {table.getHeaderGroups().map((headerGroup, index) => (
+                <tr key={headerGroup.id + index}>
                   {headerGroup.headers.map((header: any) => {
                     return header?.id !== "actions" ? (
                       <ColumnHeader
                         columnResizeMode={columnResizeMode}
-                        key={header.id}
+                        key={header?.id + index}
                         header={header}
                         table={table}
                         showFilter={false}
@@ -599,10 +599,10 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {} }: 
               ))}
             </thead>
             <tbody style={{ height: "100%" }}>
-              {table.getRowModel().rows.map((row) => (
-                <tr key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+              {table.getRowModel().rows.map((row, index) => (
+                <tr key={row.id + index}>
+                  {row.getVisibleCells().map((cell, index) => (
+                    <td key={cell.id + index}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
                   ))}
                 </tr>
               ))}
