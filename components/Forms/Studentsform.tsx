@@ -36,6 +36,7 @@ import { maxLength, selectMinDate } from "@/helpers/validations";
 import { useSelector } from "react-redux";
 import { formTypeToFetcherMapper } from "@/helpers/dataFetcher";
 import { findFromJson } from "@/helpers/filterFromJson";
+import { filterDataMulti, filterDataSingle } from "@/helpers/dropDownData";
 
 function Studentsform({
   readonly,
@@ -92,21 +93,11 @@ function Studentsform({
     return `+${getInternationalDailingCode(getSelectedCountry())}`;
   };
 
-  let filterData = (data: any, key: string): any[] => {
-    let newData: any[] = [];
-    data.forEach((item: any) => {
-      if (item[key]) {
-        newData.push(item[key]);
-      }
-    });
-    return newData;
-  };
-
   const getCohorts = () => {
     if (formType == "Students") {
       readApiData("cohorts")
         .then((res) => {
-          setCohortsData(filterData(res || [], "code"));
+          setCohortsData(filterDataSingle(res || [], "code"));
         })
         .catch((error) => console.error(error));
     }
@@ -116,7 +107,7 @@ function Studentsform({
     if (formType == "Students") {
       readApiData("groups")
         .then((res) => {
-          setGroupData(filterData(res || [], "code"));
+          setGroupData(filterDataSingle(res || [], "code"));
         })
         .catch((error) => console.error(error));
     }
@@ -149,10 +140,10 @@ function Studentsform({
     setStatesData(states);
   }
 
-  async function readCountriesData(filterBy?: "name" | "status", filterQuery?: string | number) {
-    const countries = await readCountries("status", true);
-    setCountriesData(countries);
-  }
+  // async function readCountriesData(filterBy?: "name" | "status", filterQuery?: string | number) {
+  //   const countries = await readCountries("status", true);
+  //   setCountriesData(countries);
+  // }
 
   async function readExamCentersData(filterBy?: "name" | "status", filterQuery?: string | number) {
     const examCenters = await readExamCenters();
@@ -360,73 +351,12 @@ function Studentsform({
     form.setFieldValue("competition_code", event);
   };
 
-  const schoolNames = schoolsData
-    .filter((schl) => Boolean(schl.status))
-    .map((school) => {
-      return school.name;
-    });
-
-  const cityNames = citiesData
-    .filter((city) => Boolean(city.status))
-    .map((city) => {
-      return city.name;
-    });
-
-  const stateNames = statesData
-    .filter((state) => Boolean(state.status))
-    .map((state) => {
-      return state.name;
-    });
-
-  const examCentersNames = examCentersData
-    .filter((ec) => Boolean(ec.status))
-    .map((ec) => ({
-      label: `${ec.name} (ID: ${ec._id})`,
-      value: ec._id,
-    }));
-
-  const competitionsNames = comeptitionsData
-    .filter((c) => Boolean(c.status))
-    .map((c) => ({
-      value: c.code,
-      label: c.name,
-    }));
-
-  const classesNames = classesData
-    .filter((c) => Boolean(c.status))
-    .map((c) => ({
-      label: c.name,
-      value: c.code,
-    }));
-
-  const saveJson = (json: any) => {
-    let action = !!isUpdate ? "update" : "create";
-    let data = {
-      name: showRoles,
-      data: json,
-    };
-    updateDataRes("rolemappings", data, "", "", action)
-      .then((res) => {
-        notifications.show({
-          title: `permissions updated successfully !`,
-          message: ``,
-        });
-        setTimeout(() => {
-          close();
-        }, 1000);
-      })
-      .catch((err) => {
-        console.log(err);
-        notifications.show({
-          title: `There is an issue please try again after some time !`,
-          message: ``,
-          color: "red",
-        });
-        setTimeout(() => {
-          close();
-        }, 1000);
-      });
-  };
+  const schoolNames = filterDataSingle(schoolsData || [], "name");
+  const cityNames = filterDataSingle(citiesData || [], "name");
+  const stateNames = filterDataSingle(statesData || [], "name");
+  const examCentersNames = filterDataMulti(examCentersData, "name", "_id", "ID:", "_id");
+  const competitionsNames = filterDataMulti(comeptitionsData, "name", "code");
+  const classesNames = filterDataMulti(classesData, "name", "code", "", "", false);
 
   return (
     <Box maw={"100%"} mx="auto">
