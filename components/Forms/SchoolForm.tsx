@@ -18,6 +18,7 @@ import { getReduxState } from "@/redux/hooks";
 import { getInternationalDailingCode } from "@/utilities/countriesUtils";
 import { maxLength } from "@/helpers/validations";
 import { filterDrodownData } from "@/helpers/filterFromJson";
+import { filterDataSingle } from "@/helpers/dropDownData";
 
 function SchoolForm({
   open,
@@ -106,7 +107,6 @@ function SchoolForm({
 
     const teachers = await readTeachers(filterData);
     let newData = filterDrodownData(teachers, "name", "name");
-    console.log(newData);
     setData && setData(newData);
   }
 
@@ -253,23 +253,9 @@ function SchoolForm({
     await readCitiesData("state", event);
   };
 
-  const cityNames = citiesData
-    .filter((city) => Boolean(city.status))
-    .map((city) => {
-      return city.name;
-    });
-
-  const boardNames = boardsData
-    .filter((board) => Boolean(board.status))
-    .map((board) => {
-      return board.name;
-    });
-
-  const stateNames = statesData
-    .filter((state) => Boolean(state.status))
-    .map((state) => {
-      return state.name;
-    });
+  const cityNames = filterDataSingle(citiesData || [], "name");
+  const boardNames = filterDataSingle(boardsData || [], "name");
+  const stateNames = filterDataSingle(statesData || [], "name");
 
   return (
     <Box maw={"100%"} mx="auto">

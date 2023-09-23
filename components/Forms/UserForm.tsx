@@ -19,6 +19,7 @@ import { getReduxState } from "@/redux/hooks";
 import { getInternationalDailingCode } from "@/utilities/countriesUtils";
 import { RoleMatrix } from "../permissions";
 import { formTypeToFetcherMapper } from "@/helpers/dataFetcher";
+import { filterDataSingle } from "@/helpers/dropDownData";
 
 function UserForm({
   readonly,
@@ -339,44 +340,8 @@ function UserForm({
   //     return school.name;
   //   });
 
-  const cityNames = citiesData
-    .filter((city) => Boolean(city.status))
-    .map((city) => {
-      return city.name;
-    });
-
-  const stateNames = statesData
-    .filter((state) => Boolean(state.status))
-    .map((state) => {
-      return state.name;
-    });
-
-  const countryNames = countriesData
-    .filter((country) => Boolean(country.status))
-    .map((country) => {
-      return country.name;
-    });
-
-  const examCentersNames = examCentersData
-    .filter((ec) => Boolean(ec.status))
-    .map((ec) => ({
-      label: `${ec.name} (ID: ${ec._id})`,
-      value: ec._id,
-    }));
-
-  // const competitionsNames = comeptitionsData
-  //   .filter((c) => Boolean(c.status))
-  //   .map((c) => ({
-  //     value: c.code,
-  //     label: c.name,
-  //   }));
-
-  // const classesNames = classesData
-  //   .filter((c) => Boolean(c.status))
-  //   .map((c) => ({
-  //     label: c.name,
-  //     value: c.code,
-  //   }));
+  const cityNames = filterDataSingle(citiesData || [], "name");
+  const stateNames = filterDataSingle(statesData || [], "name");
 
   const saveJson = (json: any) => {
     let action = !!isUpdate ? "update" : "create";

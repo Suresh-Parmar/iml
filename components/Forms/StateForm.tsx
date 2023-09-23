@@ -1,22 +1,10 @@
-import {
-  TextInput,
-  Button,
-  Group,
-  Box,
-  Flex,
-  Select,
-  LoadingOverlay,
-} from '@mantine/core';
-import { useForm } from '@mantine/form';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { MatrixDataType, MatrixRowType } from '../Matrix';
-import {
-  createState,
-  readCountries,
-  readStates,
-  updateState,
-} from '@/utilities/API';
-import { notifications } from '@mantine/notifications';
+import { TextInput, Button, Group, Box, Flex, Select, LoadingOverlay } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { MatrixDataType, MatrixRowType } from "../Matrix";
+import { createState, readCountries, readStates, updateState } from "@/utilities/API";
+import { notifications } from "@mantine/notifications";
+import { filterDataSingle } from "@/helpers/dropDownData";
 
 function StateForm({
   open,
@@ -120,9 +108,9 @@ function StateForm({
     form.setFieldValue('country', event || '');
   };
 
-  const countryNames = countriesData
-    .filter((c) => Boolean(c.status))
-    .map((country) => country.name);
+  // const countryNames = countriesData.filter((c) => Boolean(c.status)).map((country) => country.name);
+
+  const countryNames = filterDataSingle(countriesData || [], "name");
 
   return (
     <Box maw={'100%'} mx="auto" mih={500}>

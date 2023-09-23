@@ -16,6 +16,7 @@ import { notifications } from "@mantine/notifications";
 import { BoardType, ClassType, ProductsType } from "@/utilities/api-types";
 import { useDisclosure } from "@mantine/hooks";
 import { DataTable } from "mantine-datatable";
+import { filterDataSingle } from "@/helpers/dropDownData";
 
 function ProductForm({
   open,
@@ -168,21 +169,11 @@ function ProductForm({
     form.setFieldValue("class", value ?? "");
   };
 
-  let iterateValue = (array: any[], key: string): any[] => {
-    let val: any[] = [];
-    for (const value of array) {
-      if (value.status && value[key]) {
-        val.push(value[key]);
-      }
-    }
-    return val;
-  };
-
-  const productTypesOptions = iterateValue(productTypes, "name");
-  let boardsOptions = iterateValue(boards, "code");
-  const classesOptions = iterateValue(classes, "name");
-  const subjectsOptions = iterateValue(subjects, "name");
-  const competitionsOptions = iterateValue(competitions, "name");
+  const productTypesOptions = filterDataSingle(productTypes, "name");
+  let boardsOptions = filterDataSingle(boards, "code");
+  const classesOptions = filterDataSingle(classes, "name");
+  const subjectsOptions = filterDataSingle(subjects, "name");
+  const competitionsOptions = filterDataSingle(competitions, "name");
 
   const renderBundles = () => {
     if (!form.values.bundle) {
