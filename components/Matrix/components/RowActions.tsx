@@ -3,7 +3,7 @@ import { IconEdit, IconEye, IconLock, IconPassword, IconRefresh, IconSettings } 
 import { Row } from "@tanstack/react-table";
 import { FormType, MatrixDataType, MatrixRowType } from "../types";
 import { Dispatch, SetStateAction } from "react";
-import { deleteRow, unDeleteRow } from "@/utilities/API";
+import { deleteRow, forgotCreds, unDeleteRow } from "@/utilities/API";
 import { notifications } from "@mantine/notifications";
 import { useDisclosure } from "@mantine/hooks";
 import { formTypeToTableMapper } from "@/helpers/formTypeMapper";
@@ -52,6 +52,31 @@ const RowActions = ({
 }) => {
   const isUserForm = formTypeToTableMapper(formType) == "users" && formType != "Students";
   const [dialogOpened, { toggle: dialogToggle, close: dialogClose }] = useDisclosure(false);
+
+  const resetPassWord = () => {
+    let windowConfirm = window.confirm("Are you sure you want to reset Password?");
+    if (!windowConfirm) {
+      return;
+    }
+
+    let payload: any = {
+      registration_details: row?.original?.email_1,
+      ops_identifier: "reset_password",
+    };
+
+    forgotCreds(payload, true)
+      .then((res) => {
+        console.log(res, "resres");
+        notifications.show({
+          title: `Reset Password Successfully`,
+          message: ``,
+          autoClose: 8000,
+        });
+      })
+      .catch((err) => {
+        console.log(err, "resres");
+      });
+  };
 
   return (
     <Flex mx={"xl"} direction={"row"} justify={"center"} align={"center"} gap={"xs"}>
@@ -147,11 +172,7 @@ const RowActions = ({
         <IconEye size={"1.5rem"} />
       </ActionIcon>
       {showResetPassword && (
-        <ActionIcon
-          onClick={(event) => {
-            let windowConfirm = window.confirm("Are you sure you want to reset Password?");
-          }}
-        >
+        <ActionIcon onClick={resetPassWord}>
           <IconRefresh size={"1.5rem"} />
         </ActionIcon>
       )}
