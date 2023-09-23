@@ -20,6 +20,7 @@ import { getInternationalDailingCode } from "@/utilities/countriesUtils";
 import { RoleMatrix } from "../permissions";
 import { formTypeToFetcherMapper } from "@/helpers/dataFetcher";
 import { filterDataSingle } from "@/helpers/dropDownData";
+import { checkValidDate } from "@/helpers/validations";
 
 function UserForm({
   readonly,
@@ -205,7 +206,7 @@ function UserForm({
       mobile_2: rowData?.mobile_2?.replace(getMobileCode(), "").trim() ?? "",
       email_1: rowData?.email_1 ?? "",
       email_2: rowData?.email_2 ?? "",
-      dob: rowData?.dob ? new Date(rowData?.dob) : null,
+      dob: checkValidDate(rowData?.dob),
       gender: rowData?.gender ?? "",
       school_name: rowData?.school_name ?? "",
       exam_center_id: rowData?.exam_center_id || "",

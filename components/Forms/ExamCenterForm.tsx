@@ -12,7 +12,7 @@ import {
 } from "@/utilities/API";
 import { DatePickerInput } from "@mantine/dates";
 import { notifications } from "@mantine/notifications";
-import { maxLength, validatePhone } from "@/helpers/validations";
+import { checkValidDate, maxLength, validatePhone } from "@/helpers/validations";
 import Editor from "../editor/editor";
 import { filterDataMulti, filterDataSingle } from "@/helpers/dropDownData";
 
@@ -131,10 +131,10 @@ function ExamCenterForm({
     if (rowData !== undefined) {
       const formValues = {
         ...values,
-        examdate: new Date(values.examdate || Date()).toDateString(),
-        result_date: new Date(values.result_date || Date()).toDateString(),
-        verification_start_date: new Date(values.verification_start_date || Date()).toDateString(),
-        verification_end_date: new Date(values.verification_end_date || Date()).toDateString(),
+        examdate: checkValidDate(new Date(values.examdate || Date())),
+        result_date: checkValidDate(new Date(values.result_date || Date())),
+        verification_start_date: checkValidDate(new Date(values.verification_start_date || Date())),
+        verification_end_date: checkValidDate(new Date(values.verification_end_date || Date())),
       };
       const isExamCenterUpdated = await updateExamCenter(rowData._id, formValues);
       if (isExamCenterUpdated.toUpperCase() === "DOCUMENT UPDATED") {

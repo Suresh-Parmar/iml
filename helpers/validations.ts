@@ -139,3 +139,15 @@ export let selectMinDate = (minDate: number = 2) => {
 
   return new Date(new Date().setFullYear(new Date().getFullYear() - minDate));
 };
+
+export const checkValidDate = (date: any, returnVal: any = null, str: any = false): any => {
+  if (String(new Date(date)) == "Invalid Date") {
+    return returnVal || null;
+  } else {
+    if (str) {
+      return new Date(date).toString();
+    } else {
+      return new Date(date);
+    }
+  }
+};
