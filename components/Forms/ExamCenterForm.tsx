@@ -14,6 +14,7 @@ import { DatePickerInput } from "@mantine/dates";
 import { notifications } from "@mantine/notifications";
 import { maxLength, validatePhone } from "@/helpers/validations";
 import Editor from "../editor/editor";
+import { filterDataMulti, filterDataSingle } from "@/helpers/dropDownData";
 
 function ExamCenterForm({
   readonly,
@@ -194,24 +195,9 @@ function ExamCenterForm({
     close();
   };
 
-  const competitionsNames = comeptitionsData
-    .filter((c) => Boolean(c.status))
-    .map((c) => ({
-      value: c.code,
-      label: c.name,
-    }));
-
-  const cityNames = citiesData
-    .filter((city) => Boolean(city.status))
-    .map((city) => {
-      return city.name;
-    });
-
-  const stateNames = statesData
-    .filter((state) => Boolean(state.status))
-    .map((state) => {
-      return state.name;
-    });
+  const competitionsNames = filterDataMulti(comeptitionsData, "name", "code");
+  const cityNames = filterDataSingle(citiesData || [], "name");
+  const stateNames = filterDataSingle(statesData || [], "name");
 
   const onChangeState = async (event: any) => {
     form.setFieldValue("state", event || "");

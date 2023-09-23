@@ -16,6 +16,7 @@ import {
   updateUser,
 } from "@/utilities/API";
 import { notifications } from "@mantine/notifications";
+import { filterDataSingle } from "@/helpers/dropDownData";
 
 function ExamCenterMappingForm({
   readonly,
@@ -96,9 +97,9 @@ function ExamCenterMappingForm({
         cities: cities,
       };
     });
-    const cityNames = cities.map((city) => {
-      return city.name;
-    });
+
+    const cityNames = filterDataSingle(cities || [], "name");
+
     setCitiesData(cityNames);
     // setSelectedCity(cityNames.at(0) || "");
   }
@@ -123,7 +124,10 @@ function ExamCenterMappingForm({
         examCenters: examCenters,
       };
     });
-    const examCentersNames = examCenters.map((ec) => `${ec.name} (ID: ${ec._id})`);
+    // const examCentersNames = examCenters.map((ec) => `${ec.name} (ID: ${ec._id})`);
+
+    const examCentersNames = filterDataSingle(examCenters || [], "name", "ID:", "_id");
+
     setExamCentersData(examCentersNames);
     // setSelectedCountry(countriesWithFlags.at(0) || "🇮🇳 India");
   }
@@ -135,7 +139,8 @@ function ExamCenterMappingForm({
         competitions: competitions,
       };
     });
-    const competitionsNames = competitions.map((c) => c.name);
+    const competitionsNames = filterDataSingle(competitions || [], "name");
+
     setCompetitionsData(competitionsNames);
     // setSelectedCountry(countriesWithFlags.at(0) || "🇮🇳 India");
   }
