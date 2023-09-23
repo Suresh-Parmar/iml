@@ -32,7 +32,7 @@ import { UserRoleFormMapping } from "@/utilities/users";
 import { getReduxState } from "@/redux/hooks";
 import { getInternationalDailingCode } from "@/utilities/countriesUtils";
 import { RoleMatrix } from "../permissions";
-import { maxLength, selectMinDate } from "@/helpers/validations";
+import { checkValidDate, maxLength, selectMinDate } from "@/helpers/validations";
 import { useSelector } from "react-redux";
 import { formTypeToFetcherMapper } from "@/helpers/dataFetcher";
 import { findFromJson } from "@/helpers/filterFromJson";
@@ -217,7 +217,7 @@ function Studentsform({
       mobile_2: rowData?.mobile_2?.replace(getMobileCode(), "").trim() ?? "",
       email_1: rowData?.email_1 ?? "",
       email_2: rowData?.email_2 ?? "",
-      dob: rowData?.dob ? new Date(rowData?.dob) : null,
+      dob: checkValidDate(rowData?.dob, null),
       gender: rowData?.gender ?? "",
       school_name: rowData?.school_name ?? "",
       exam_center_id: rowData?.exam_center_id ?? "",
