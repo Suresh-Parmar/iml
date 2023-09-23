@@ -7,6 +7,7 @@ import { Button, Card, Flex, Overlay, Select, Text } from "@mantine/core";
 import { readBoardsLanding, readClassesLanding, readProductsLanding } from "@/utilities/API";
 import { MatrixDataType } from "@/components/Matrix";
 import { CardImageUrl } from "./utils";
+import { filterDataSingle } from "@/helpers/dropDownData";
 
 type FirstFormProps = {
   form: any;
@@ -56,8 +57,8 @@ export default function FirstForm({ form, onClickNext, setInvoiceBreakdown }: Fi
     return newArr;
   };
 
-  const classesNames = handleFilter(classesData, "name");
-  const boardsOptions = handleFilter(boards, "code");
+  const classesNames = filterDataSingle(classesData, "name", "", "", false);
+  const boardsOptions = filterDataSingle(boards, "code");
 
   const onChangeClasses = (event: any) => {
     form.setFieldValue("class_id", event ?? "");

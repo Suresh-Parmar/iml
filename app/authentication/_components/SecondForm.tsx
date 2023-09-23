@@ -1,4 +1,5 @@
 import { MatrixDataType } from "@/components/Matrix";
+import { filterDataSingle } from "@/helpers/dropDownData";
 import { emailFormat, validatePhone } from "@/helpers/validations";
 import { getReduxState } from "@/redux/hooks";
 import { readLandingData } from "@/utilities/API";
@@ -23,7 +24,7 @@ export default function SecondForm({ form }: SecondFormProps) {
     readExamCentersData();
   }, []);
 
-  const examCentersNames = examCentersData.map((ec) => ec.name);
+  const examCentersNames = filterDataSingle(examCentersData || [], "name");
 
   const onChangeExamCenter = async (event: any) => {
     form.setFieldValue("exam_center_code", event || "");

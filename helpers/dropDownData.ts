@@ -42,18 +42,30 @@ export const filterDataMulti = (
   return newData;
 };
 
-export let filterDataSingle = (data: any, key: string, extra: any = "", extraKey: any = ""): any[] => {
+export let filterDataSingle = (
+  data: any,
+  key: string,
+  extra: any = "",
+  extraKey: any = "",
+  sort: boolean = true
+): any[] => {
   let newData: any[] = [];
-  data.forEach((item: any) => {
-    if (item[key] && item.status && item[key] != "nan") {
-      if (extra) {
-        let data = item[key];
-        data += " (" + extra + " " + item[extraKey] + ")";
-        newData.push(data);
-      } else {
-        newData.push(item[key]);
+  if (Array.isArray(data)) {
+    data.forEach((item: any) => {
+      if (item[key] && item.status && item[key] != "nan" && String(item[key]).toLowerCase() != "none") {
+        if (extra) {
+          let data = item[key];
+          data += " (" + extra + " " + item[extraKey] + ")";
+          newData.push(data);
+        } else {
+          newData.push(item[key]);
+        }
       }
-    }
-  });
-  return newData.sort();
+    });
+  }
+  if (sort) {
+    return newData.sort();
+  } else {
+    return newData;
+  }
 };

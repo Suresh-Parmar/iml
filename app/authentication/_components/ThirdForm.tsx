@@ -3,6 +3,7 @@ import { MatrixDataType } from "@/components/Matrix";
 import { readLandingData } from "@/utilities/API";
 import { Checkbox, Flex, Select, TextInput, Textarea } from "@mantine/core";
 import { Recaptcha } from "@/components/common";
+import { filterDataSingle } from "@/helpers/dropDownData";
 
 type ThirdFormProps = {
   form: any;
@@ -36,17 +37,9 @@ export default function ThirdForm({ form, setRecaptcha }: ThirdFormProps) {
     readStatesData();
   }, []);
 
-  const schoolNames = schoolsData.map((school) => {
-    return school.name;
-  });
-
-  const stateNames = statesData.map((state) => {
-    return state.name;
-  });
-
-  const cityNames = citiesData.map((city) => {
-    return city.name;
-  });
+  const schoolNames = filterDataSingle(schoolsData || [], "name");
+  const stateNames = filterDataSingle(statesData || [], "name");
+  const cityNames = filterDataSingle(citiesData || [], "name");
 
   const onChangeState = async (event: any) => {
     form.setFieldValue("state", event || "");
