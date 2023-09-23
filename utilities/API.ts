@@ -262,8 +262,12 @@ export const LandingForms = async (
   return [];
 };
 
-const forgotCreds = async (data: any) => {
-  await axios.post(FORGOT_CREDS, data);
+const forgotCreds = async (data: any, useToken: any = false) => {
+  if (useToken) {
+    await axios.post(FORGOT_CREDS, data, { headers: getAPIHeaders() });
+  } else {
+    await axios.post(FORGOT_CREDS, data);
+  }
 };
 
 const createData = async (tableName: string, operationType: "create", payload: MatrixRowType) => {

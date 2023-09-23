@@ -22,7 +22,7 @@ function NavigationBarMain({ opened }: { opened: boolean }) {
   const consoleBaseURL = "/console";
   const router = useRouter();
   const pathname = usePathname();
-  const [siteJson, setSiteJson] = useState<any>(siteJsonData);
+  const [siteJson, setSiteJson] = useState<any>([]);
   const [show, setShow] = useState<any>(false);
 
   const reduxData: any = useSelector((state) => state);
