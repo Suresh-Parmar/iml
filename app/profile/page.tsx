@@ -22,7 +22,6 @@ function Profile() {
   let handleSave = (isPassword: any) => {
     let { password, newPassword, confirmPassword } = resetPasswordFieldsJson;
 
-    console.log(password);
     setResetPasswordFieldsJson({});
     if (isPassword) {
       if (!!password && !!newPassword && !!confirmPassword) {
@@ -53,6 +52,7 @@ function Profile() {
         }
       }
     } else {
+      console.log(fieldsDataJson);
       notifications.show({
         message: "user Profile",
         autoClose: 8000,
