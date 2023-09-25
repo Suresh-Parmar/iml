@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./profile.module.css";
 
 function UserProfile(props: any) {
-  const { dataJson } = props;
+  const { dataJson, resetPassword } = props;
+
+  let [isPassword, setisPassword] = useState<any>(false);
 
   const renderFields = () => {
-    return dataJson.map((item: any, index: any) => {
+    let dataJsonToRender = isPassword ? resetPassword : dataJson;
+    return dataJsonToRender.map((item: any, index: any) => {
       let newItem = { ...item };
       delete newItem.label;
       return (
@@ -35,7 +38,19 @@ function UserProfile(props: any) {
         <div className="col-md-8 px-4">
           {renderFields()}
 
-          <a>change Password</a>
+          <div className="mb-3 row my-4">
+            <button className="form-control btn btn-primary">Save</button>
+          </div>
+          <div className="my-2 row">
+            <a
+              className="pointer w-max px-0 py-2 text-primary"
+              onClick={() => {
+                setisPassword(!isPassword);
+              }}
+            >
+              {isPassword ? "Edit Profile" : " change Password"}
+            </a>
+          </div>
         </div>
       </div>
     </div>
