@@ -30,6 +30,7 @@ function Profile() {
             registration_details: userDataDetails,
             ops_identifier: "change_password",
             new_password: newPassword,
+            password: password,
           };
 
           forgotCreds(payload, true)
