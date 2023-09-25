@@ -1,13 +1,16 @@
 "use client";
 import { UserProfile } from "@/components/profile";
 import { useState } from "react";
+import { notifications } from "@mantine/notifications";
+import { forgotCreds } from "@/utilities/API";
+import { useSelector } from "react-redux";
 
 function Profile() {
   let [fieldsDataJson, setFieldsDataJson] = useState<any>({});
   let [resetPasswordFieldsJson, setResetPasswordFieldsJson] = useState<any>({});
+  const allReduxData: any = useSelector((state) => state);
+  let userDataDetails = allReduxData?.authentication?.user?.username;
 
-  console.log(resetPasswordFieldsJson, "resetPasswordFieldsJson");
-  console.log(fieldsDataJson, "fieldsDataJson");
   const handleFieldsChange = (json: any, setJson: any, key: string, evt: any) => {
     let value = evt.target.value;
     json[key] = value;
@@ -16,7 +19,46 @@ function Profile() {
     });
   };
 
-  let handle;
+  let handleSave = (isPassword: any) => {
+    let { password, newPassword, confirmPassword } = resetPasswordFieldsJson;
+
+    setResetPasswordFieldsJson({});
+    if (isPassword) {
+      if (!!password && !!newPassword && !!confirmPassword) {
+        if (newPassword == confirmPassword) {
+          let payload: any = {
+            registration_details: userDataDetails,
+            ops_identifier: "change_password",
+            new_password: newPassword,
+          };
+
+          forgotCreds(payload, true)
+            .then((res) => {
+              notifications.show({
+                title: `Password updated successfully`,
+                message: ``,
+                autoClose: 8000,
+              });
+            })
+            .catch((err) => {
+              console.log(err, "resres");
+            });
+        } else {
+          notifications.show({
+            title: `Password didn't match`,
+            message: ``,
+            autoClose: 8000,
+          });
+        }
+      }
+    } else {
+      console.log(fieldsDataJson);
+      notifications.show({
+        message: "user Profile",
+        autoClose: 8000,
+      });
+    }
+  };
 
   const dataJson = [
     {
@@ -68,7 +110,7 @@ function Profile() {
     },
   ];
 
-  return <UserProfile dataJson={dataJson} resetPassword={resetPasswordJson} />;
+  return <UserProfile handleSave={handleSave} dataJson={dataJson} resetPassword={resetPasswordJson} />;
 }
 
 export default Profile;

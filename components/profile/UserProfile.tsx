@@ -2,9 +2,13 @@ import React, { useState } from "react";
 import styles from "./profile.module.css";
 
 function UserProfile(props: any) {
-  const { dataJson, resetPassword } = props;
+  const { dataJson, resetPassword, handleSave } = props;
 
   let [isPassword, setisPassword] = useState<any>(false);
+
+  const handleSaveData = () => {
+    handleSave(isPassword);
+  };
 
   const renderFields = () => {
     let dataJsonToRender = isPassword ? resetPassword : dataJson;
@@ -39,7 +43,9 @@ function UserProfile(props: any) {
           {renderFields()}
 
           <div className="mb-3 row my-4">
-            <button className="form-control btn btn-primary">Save</button>
+            <button onClick={handleSaveData} className="form-control btn btn-primary">
+              Save
+            </button>
           </div>
           <div className="my-2 row">
             <a
