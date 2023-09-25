@@ -60,7 +60,7 @@ const RowActions = ({
     }
 
     let payload: any = {
-      registration_details: row?.original?.email_1,
+      registration_details: row?.original?.username,
       ops_identifier: "reset_password",
     };
 
