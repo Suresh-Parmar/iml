@@ -1,5 +1,13 @@
 "use client";
-import { readApiData, readCities, readClasses, readCompetitions, readSchools, readStates } from "@/utilities/API";
+import {
+  admitCardCountData,
+  readApiData,
+  readCities,
+  readClasses,
+  readCompetitions,
+  readSchools,
+  readStates,
+} from "@/utilities/API";
 import { Group, MultiSelect, Radio, Select } from "@mantine/core";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -10,7 +18,7 @@ function Page() {
   const [citiesData, setCitiesData] = useState<any>([]);
   const [statesData, setStatesData] = useState<any>([]);
   const [schoolsData, setSchoolsData] = useState<any>([]);
-  // const [comeptitionsData, setCompetitionsData] = useState<any>([]);
+  const [comeptitionsData, setCompetitionsData] = useState<any>([]);
   // const [classesData, setClassesData] = useState<any>([]);
   // const [groupsData, setGroupData] = useState<any>([]);
   // const [cohortsData, setcohortsData] = useState<any>([]);
@@ -33,7 +41,19 @@ function Page() {
         }
       });
     }
-    return newData;
+
+    return newData.sort((a: any, b: any) => {
+      let fa = a.label.toLowerCase(),
+        fb = b.label.toLowerCase();
+
+      if (fa < fb) {
+        return -1;
+      }
+      if (fa > fb) {
+        return 1;
+      }
+      return 0;
+    });
   };
 
   // fetch data
@@ -55,17 +75,15 @@ function Page() {
 
   async function readSchoolsData(filterBy?: "name" | "city", filterQuery?: string | number) {
     let newPayload = {
-      collection_name: "schools",
-      op_name: "find_many",
-      filter_var: {
-        country: countryName || "India",
-        state: allData.state,
-        city: allData.city,
-        affiliation: allData.affiliation,
-      },
+      country: countryName || "India",
+      competition: allData.competition || "",
+      state: allData.state,
+      city: allData.city,
+      affiliation: allData.affiliation,
     };
 
-    let schools: any = await readSchools(filterBy, filterQuery, newPayload);
+    let schools: any = await admitCardCountData(newPayload);
+    console.log(schools);
     schools = filterData(schools, "label", "value");
     setSchoolsData(schools);
   }
@@ -76,12 +94,12 @@ function Page() {
   //   setClassesData(classes);
   // }
 
-  // async function readCompetitionsData(filterBy?: "name" | "status", filterQuery?: string | number) {
-  //   let competitions = await readCompetitions();
-  //   competitions = filterData(competitions, "label", "value");
+  async function readCompetitionsData(filterBy?: "name" | "status", filterQuery?: string | number) {
+    let competitions = await readCompetitions();
+    competitions = filterData(competitions, "label", "value");
 
-  //   setCompetitionsData(competitions);
-  // }
+    setCompetitionsData(competitions);
+  }
 
   // const getCohorts = () => {
   //   readApiData("cohorts")
@@ -105,7 +123,7 @@ function Page() {
     countryName && readStatesData();
 
     // readSchoolsData();
-    // readCompetitionsData();
+    readCompetitionsData();
     // readClassesData();
     // getCohorts();
   }, [countryName]);
@@ -132,12 +150,22 @@ function Page() {
 
   const filters = [
     {
+      label: "Competition",
+      key: "competition",
+      type: "select",
+      data: comeptitionsData,
+      onchange: (e: any) => {
+        handleDropDownChange(e, "competition");
+      },
+      value: allData.competition,
+    },
+    {
       label: "State",
       key: "state",
       type: "select",
       data: statesData,
       onchange: (e: any) => {
-        handleDropDownChange(e, "state", "all");
+        handleDropDownChange(e, "state", "city");
       },
       value: allData.state,
     },
