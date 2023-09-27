@@ -23,6 +23,8 @@ function Page() {
   // const [groupsData, setGroupData] = useState<any>([]);
   // const [cohortsData, setcohortsData] = useState<any>([]);
 
+  console.log(allData, "allData");
+
   const state: any = useSelector((state) => state);
   const countryName = state?.client?.selectedCountry?.name;
 
@@ -73,8 +75,8 @@ function Page() {
     setCitiesData(cities);
   }
 
-  async function readSchoolsData(filterBy?: "name" | "city", filterQuery?: string | number) {
-    let newPayload = {
+  function readSchoolsData(isSchool: any = false) {
+    let newPayload: any = {
       country: countryName || "India",
       competition: allData.competition || "",
       state: allData.state,
@@ -82,10 +84,15 @@ function Page() {
       affiliation: allData.affiliation,
     };
 
-    let schools: any = await admitCardCountData(newPayload);
-    console.log(schools);
-    schools = filterData(schools, "label", "value");
-    setSchoolsData(schools);
+    if (isSchool) {
+      newPayload = { school_name: [allData.schools] };
+    }
+
+    console.log(newPayload, "newPayload");
+
+    admitCardCountData(newPayload).then((res) => {
+      isSchool ? console.log(res, "newPayload") : setSchoolsData(res.data);
+    });
   }
 
   // async function readClassesData(filterBy?: "name" | "status", filterQuery?: string | number) {
@@ -133,7 +140,7 @@ function Page() {
   }, [allData.state]);
 
   useEffect(() => {
-    allData.city && allData.affiliation && readSchoolsData("city", allData.city);
+    allData.city && allData.affiliation && readSchoolsData();
   }, [allData.city, allData.affiliation]);
 
   const handleDropDownChange = (e: any, key: any, clear?: any) => {
@@ -252,9 +259,9 @@ function Page() {
     let checked: any = e.target.checked;
     let data: any = [];
     if (!!item) {
-      data = selectCheckBOxData(allData?.schools, checked, item.name, schoolsData, "name");
+      data = selectCheckBOxData(allData?.schools, checked, item.school_name, schoolsData, "school_name");
     } else {
-      data = selectCheckBOxData(allData?.schools, checked, "", schoolsData, "name");
+      data = selectCheckBOxData(allData?.schools, checked, "", schoolsData, "school_name");
     }
 
     allData.schools = data;
@@ -274,18 +281,14 @@ function Page() {
             <td scope="row">
               <input
                 type="checkbox"
-                checked={Array.isArray(allData.schools) && allData.schools.includes(item.name)}
+                checked={Array.isArray(allData.schools) && allData.schools.includes(item.school_name)}
                 onChange={(e: any) => {
                   handleCHeckBOxes(e, item);
                 }}
               />
             </td>
-            <td>{item.name}</td>
-            <td>{item.city}</td>
-            <td>{item.address}</td>
-            <td>{item.code}</td>
-            <td>{item.board}</td>
-            <td>{item.affiliation}</td>
+            <td>{item.school_name}</td>
+            <td>{item.students_count}</td>
           </tr>
         );
       });
@@ -304,12 +307,8 @@ function Page() {
                 }}
               />
             </th>
-            <th scope="col">Name</th>
-            <th scope="col">City</th>
-            <th scope="col">Address</th>
-            <th scope="col">Code</th>
-            <th scope="col">Board</th>
-            <th scope="col">Affiliation</th>
+            <th scope="col">School Name</th>
+            <th scope="col">Students Count</th>
           </tr>
         </thead>
         <tbody>{renderTableData()}</tbody>
@@ -322,6 +321,7 @@ function Page() {
       <div className="d-flex flex-wrap gap-4 m-4">{renderData()}</div>
       <div className="table-responsive  m-4">{renderSchoolsTable()}</div>
       {/* <div className="table-responsive  m-4">{renderTable()}</div> */}
+      <div onClick={() => readSchoolsData(true)}>get Data</div>
     </>
   );
 }
