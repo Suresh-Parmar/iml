@@ -1,35 +1,30 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { signInWithEMail } from './authenticationAPI';
-import { AuthenticationStateType } from '../types';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { signInWithEMail } from "./authenticationAPI";
+import { AuthenticationStateType } from "../types";
 
 const initialState: AuthenticationStateType = {
   metadata: {},
   user: {},
 };
 
-export const signOutThunk = createAsyncThunk(
-  'Authentication/SignOut',
-  async () => {
-    return {
-      user: {},
-      metadata: {
-        status: 'unauthenticated',
-      },
-    };
-  }
-);
+export const updateUser = createAsyncThunk("Authentication/UpdateUser", async ({ data }: { data: any }) => {
+  return {
+    user: data,
+  };
+});
+
+export const signOutThunk = createAsyncThunk("Authentication/SignOut", async () => {
+  return {
+    user: {},
+    metadata: {
+      status: "unauthenticated",
+    },
+  };
+});
 
 export const signInWithEMailThunk = createAsyncThunk(
-  'Authentication/SignInWithEMail',
-  async ({
-    loginType,
-    email,
-    password,
-  }: {
-    loginType: 'super_admin' | 'users';
-    email: string;
-    password: string;
-  }) => {
+  "Authentication/SignInWithEMail",
+  async ({ loginType, email, password }: { loginType: "super_admin" | "users"; email: string; password: string }) => {
     if (email !== undefined && password !== undefined) {
       const response = await signInWithEMail(loginType, email, password);
       return response;
@@ -43,7 +38,7 @@ export const signInWithEMailThunk = createAsyncThunk(
 );
 
 export const authenticationSlice = createSlice({
-  name: 'Authentication',
+  name: "Authentication",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -52,7 +47,7 @@ export const authenticationSlice = createSlice({
         ...state,
         metadata: {
           ...state.metadata,
-          status: 'authenticating',
+          status: "authenticating",
           role: undefined,
           geodata: undefined,
         },
@@ -71,9 +66,15 @@ export const authenticationSlice = createSlice({
       .addCase(signOutThunk.fulfilled, () => ({
         user: {},
         metadata: {
-          status: 'unauthenticated',
+          status: "unauthenticated",
         },
-      }));
+      }))
+      .addCase(updateUser.fulfilled, (state, action: any) => {
+        return {
+          ...state,
+          user: action.payload.user,
+        };
+      });
   },
 });
 
