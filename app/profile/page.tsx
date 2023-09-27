@@ -1,15 +1,26 @@
 "use client";
 import { UserProfile } from "@/components/profile";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { notifications } from "@mantine/notifications";
 import { forgotCreds } from "@/utilities/API";
 import { useSelector } from "react-redux";
+import { updateUser } from "../authentication/state/authenticationSlice";
+import { useApplicationDispatch } from "@/redux/hooks";
 
 function Profile() {
   let [fieldsDataJson, setFieldsDataJson] = useState<any>({});
   let [resetPasswordFieldsJson, setResetPasswordFieldsJson] = useState<any>({});
+  const dispatch = useApplicationDispatch();
   const allReduxData: any = useSelector((state) => state);
-  let userDataDetails = allReduxData?.authentication?.user?.username;
+  let userDataDetails = allReduxData?.authentication?.user;
+
+  console.log(userDataDetails, "userDataDetails");
+
+  let { username } = userDataDetails;
+
+  useEffect(() => {
+    setFieldsDataJson({ ...userDataDetails });
+  }, [userDataDetails]);
 
   const handleFieldsChange = (json: any, setJson: any, key: string, evt: any) => {
     let value = evt.target.value;
@@ -17,6 +28,10 @@ function Profile() {
     setJson({
       ...json,
     });
+  };
+
+  const saveUserDetails = () => {
+    dispatch(updateUser({ data: fieldsDataJson })).unwrap();
   };
 
   let handleSave = (isPassword: any) => {
@@ -27,7 +42,7 @@ function Profile() {
       if (!!password && !!newPassword && !!confirmPassword) {
         if (newPassword == confirmPassword) {
           let payload: any = {
-            registration_details: userDataDetails,
+            registration_details: username,
             ops_identifier: "change_password",
             new_password: newPassword,
             password: password,
@@ -53,7 +68,7 @@ function Profile() {
         }
       }
     } else {
-      console.log(fieldsDataJson);
+      saveUserDetails();
       notifications.show({
         message: "user Profile",
         autoClose: 8000,
@@ -72,15 +87,23 @@ function Profile() {
     {
       label: "Email",
       placeholder: "John@gmail.com",
-      value: fieldsDataJson.email || "",
-      onChange: (e: any) => handleFieldsChange(fieldsDataJson, setFieldsDataJson, "email", e),
+      value: fieldsDataJson.email_1 || "",
+      onChange: (e: any) => handleFieldsChange(fieldsDataJson, setFieldsDataJson, "email_1", e),
       type: "email",
     },
     {
-      label: "Registration Number",
-      value: fieldsDataJson.registrationnumber || "",
-      onChange: (e: any) => handleFieldsChange(fieldsDataJson, setFieldsDataJson, "registrationnumber", e),
-      placeholder: "0000000000",
+      label: "address",
+      placeholder: "Address",
+      value: fieldsDataJson.address || "",
+      onChange: (e: any) => handleFieldsChange(fieldsDataJson, setFieldsDataJson, "address", e),
+      type: "text",
+      inputType: "textArea",
+    },
+    {
+      label: "Mobile",
+      placeholder: "0123456789",
+      value: fieldsDataJson.mobile_1 || "",
+      onChange: (e: any) => handleFieldsChange(fieldsDataJson, setFieldsDataJson, "mobile_1", e),
       type: "text",
     },
   ];
@@ -106,7 +129,6 @@ function Profile() {
       value: resetPasswordFieldsJson.confirmPassword || "",
       onChange: (e: any) =>
         handleFieldsChange(resetPasswordFieldsJson, setResetPasswordFieldsJson, "confirmPassword", e),
-
       type: "password",
     },
   ];

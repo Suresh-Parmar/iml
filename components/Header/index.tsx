@@ -351,9 +351,9 @@ function Header() {
                       })}
                     >
                       <Group spacing={7}>
-                        <Avatar alt={authentication.user?.name} radius="xl" size={28} />
+                        <Avatar alt={authentication?.user?.name} radius="xl" size={28} />
                         <Text weight={500} size="sm" sx={{ lineHeight: 1 }} mr={3}>
-                          {authentication.user?.name}
+                          {authentication?.user?.name}
                         </Text>
                         <IconChevronDown size={rem(12)} stroke={1.5} />
                       </Group>

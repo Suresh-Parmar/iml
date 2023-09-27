@@ -1,13 +1,21 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import styles from "./profile.module.css";
+import { useSelector } from "react-redux";
 
 function UserProfile(props: any) {
   const { dataJson, resetPassword, handleSave } = props;
-
   let [isPassword, setisPassword] = useState<any>(false);
+  let [userImage, setuserImage] = useState<any>("https://cdn-icons-png.flaticon.com/512/149/149071.png");
+
+  const userDataDetails: any = useSelector((state: any) => state?.authentication?.user);
+  let inputRef: any = useRef(null);
 
   const handleSaveData = () => {
     handleSave(isPassword);
+  };
+
+  const handleFile = (e: any) => {
+    setuserImage(e.target.files[0]);
   };
 
   const renderFields = () => {
@@ -15,14 +23,25 @@ function UserProfile(props: any) {
     return dataJsonToRender.map((item: any, index: any) => {
       let newItem = { ...item };
       delete newItem.label;
-      return (
-        <div className="mb-3 row" key={index}>
-          <label className="col-form-label">{item.label}</label>
-          <input className="form-control" {...newItem} />
-        </div>
-      );
+      if (newItem.inputType === "textArea") {
+        return (
+          <div className="mb-3 row" key={index}>
+            <label className="col-form-label capitalize">{item.label}</label>
+            <textarea className="form-control" {...newItem} />
+          </div>
+        );
+      } else {
+        return (
+          <div className="mb-3 row" key={index}>
+            <label className="col-form-label capitalize">{item.label}</label>
+            <input className="form-control" {...newItem} />
+          </div>
+        );
+      }
     });
   };
+
+  let userImageShow = typeof userImage == "string" ? userImage : URL.createObjectURL(userImage);
 
   return (
     <div className="m-3">
@@ -30,12 +49,27 @@ function UserProfile(props: any) {
         <div className="col-md-4">
           <div className={styles.userImage}>
             <div className={styles.imageView}>
-              <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" />
-              <span className="material-symbols-outlined">edit</span>
+              <img src={userImageShow} />
+              <input
+                onChange={handleFile}
+                ref={inputRef}
+                type="file"
+                style={{ display: "none" }}
+                accept="image/*"
+                value=""
+              />
+              <span
+                onClick={() => {
+                  inputRef.current.click();
+                }}
+                className="material-symbols-outlined"
+              >
+                edit
+              </span>
             </div>
             <div className={`${styles.userText} text-center`}>
-              <div className={styles.userName}>User Name</div>
-              <div className="role">Role</div>
+              <div className={styles.userName}>{userDataDetails?.name || "User Name"}</div>
+              <div className="role capitalize"> {userDataDetails?.role.replace("_", " ") || "Role"}</div>
             </div>
           </div>
         </div>
