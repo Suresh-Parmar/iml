@@ -18,7 +18,7 @@ export const LANDING_API = `${BASE_URL}/landing_page_data`;
 export const PAYMENT_VERIFY_API = `${BASE_URL}/verify_payment`;
 export const EXPORT_TEMPLATE = `${BASE_URL}/export_template`;
 export const FORGOT_CREDS = `${BASE_URL}/forgot_creds`;
-export const ADMITCARDCOUNT = `${BASE_URL}/admit_card_count`;
+export const ADMITCARDCOUNT = `${BASE_URL}/admit_card_download`;
 
 const getAPIHeaders = (extraHeaders: Record<string, string> = {}) => {
   // grab current state
@@ -272,7 +272,7 @@ const forgotCreds = async (data: any, useToken: any = false) => {
 };
 
 const admitCardCountData = async (data: any) => {
-  await axios.post(ADMITCARDCOUNT, data, { headers: getAPIHeaders() });
+  return await axios.post(ADMITCARDCOUNT, data, { headers: getAPIHeaders() });
 };
 
 const createData = async (tableName: string, operationType: "create", payload: MatrixRowType) => {

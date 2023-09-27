@@ -46,7 +46,7 @@ function Profile() {
             });
         } else {
           notifications.show({
-            title: `Password didn't match`,
+            title: `New Password And Confirm Password not match`,
             message: ``,
             autoClose: 8000,
           });
@@ -87,7 +87,7 @@ function Profile() {
 
   const resetPasswordJson = [
     {
-      label: "password",
+      label: "Old Password",
       placeholder: "**********",
       value: resetPasswordFieldsJson.password || "",
       type: "password",
