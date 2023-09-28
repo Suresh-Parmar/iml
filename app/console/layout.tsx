@@ -11,13 +11,10 @@ export default function ConsoleLayout({ children }: { children: React.ReactNode 
   const authentication = useAuthentication();
   let isStudent = authentication?.user?.role == "student";
 
-  if (isStudent) {
-    window.location.pathname = "/";
-    return;
-  }
-
   useEffect(() => {
-    if (!authentication?.metadata?.status || authentication.metadata.status === "unauthenticated") {
+    if (isStudent) {
+      window.location.pathname = "/";
+    } else if (!authentication?.metadata?.status || authentication.metadata.status === "unauthenticated") {
       router.replace("/authentication/signin");
     } else {
       dispatch({
@@ -39,6 +36,11 @@ export default function ConsoleLayout({ children }: { children: React.ReactNode 
       });
     }
   }, [authentication.metadata.status, dispatch, router]);
+
+  if (isStudent) {
+    window.location.pathname = "/";
+    return;
+  }
 
   return <>{children}</>;
 }
