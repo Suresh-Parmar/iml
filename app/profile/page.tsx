@@ -2,24 +2,37 @@
 import { UserProfile } from "@/components/profile";
 import { useEffect, useState } from "react";
 import { notifications } from "@mantine/notifications";
-import { forgotCreds } from "@/utilities/API";
+import { forgotCreds, updateDataRes } from "@/utilities/API";
 import { useSelector } from "react-redux";
 import { updateUser } from "../authentication/state/authenticationSlice";
-import { useApplicationDispatch } from "@/redux/hooks";
+import { getReduxState, useApplicationDispatch } from "@/redux/hooks";
+import { getInternationalDailingCode } from "@/utilities/countriesUtils";
+import Loader from "@/components/common/Loader";
 
 function Profile() {
   let [fieldsDataJson, setFieldsDataJson] = useState<any>({});
   let [resetPasswordFieldsJson, setResetPasswordFieldsJson] = useState<any>({});
+  let [loading, setLoading] = useState<any>(false);
   const dispatch = useApplicationDispatch();
   const allReduxData: any = useSelector((state) => state);
   let userDataDetails = allReduxData?.authentication?.user;
 
-  console.log(userDataDetails, "userDataDetails");
-
   let { username } = userDataDetails;
+  const getSelectedCountry = () => {
+    const state = getReduxState();
+    return state.client.selectedCountry.name;
+  };
+
+  const getMobileCode = () => {
+    return `+${getInternationalDailingCode(getSelectedCountry())}`;
+  };
 
   useEffect(() => {
-    setFieldsDataJson({ ...userDataDetails });
+    let data = structuredClone(userDataDetails);
+    if (data?.mobile_1) data.mobile_1 = data.mobile_1?.replace(getMobileCode(), "").trim();
+    if (data?.mobile_2) data.mobile_2 = data.mobile_2?.replace(getMobileCode(), "").trim();
+
+    setFieldsDataJson(data);
   }, [userDataDetails]);
 
   const handleFieldsChange = (json: any, setJson: any, key: string, evt: any) => {
@@ -31,7 +44,33 @@ function Profile() {
   };
 
   const saveUserDetails = () => {
-    dispatch(updateUser({ data: fieldsDataJson })).unwrap();
+    let newFieldData = structuredClone(fieldsDataJson);
+    if (!!newFieldData.mobile_1) newFieldData.mobile_1 = getMobileCode() + newFieldData.mobile_1;
+    if (!!newFieldData.mobile_2) newFieldData.mobile_2 = getMobileCode() + newFieldData.mobile_2;
+    setLoading(true);
+
+    updateDataRes("users", newFieldData, "_id", newFieldData._id, "update")
+      .then(async (res) => {
+        setLoading(false);
+
+        dispatch(updateUser({ data: newFieldData })).unwrap();
+        notifications.show({
+          title: `Profile Updated!`,
+          message: ``,
+          color: "blue",
+          autoClose: 5000,
+        });
+      })
+      .catch((error) => {
+        setLoading(false);
+
+        notifications.show({
+          title: `There is an issue please try again after some time !`,
+          message: ``,
+          color: "red",
+          autoClose: 5000,
+        });
+      });
   };
 
   let handleSave = (isPassword: any) => {
@@ -48,8 +87,10 @@ function Profile() {
             password: password,
           };
 
+          setLoading(true);
           forgotCreds(payload, true)
             .then((res) => {
+              setLoading(false);
               notifications.show({
                 title: `Password updated successfully`,
                 message: ``,
@@ -57,6 +98,8 @@ function Profile() {
               });
             })
             .catch((err) => {
+              setLoading(false);
+
               console.log(err, "resres");
             });
         } else {
@@ -69,10 +112,6 @@ function Profile() {
       }
     } else {
       saveUserDetails();
-      notifications.show({
-        message: "user Profile",
-        autoClose: 8000,
-      });
     }
   };
 
@@ -133,7 +172,12 @@ function Profile() {
     },
   ];
 
-  return <UserProfile handleSave={handleSave} dataJson={dataJson} resetPassword={resetPasswordJson} />;
+  return (
+    <>
+      <UserProfile handleSave={handleSave} dataJson={dataJson} resetPassword={resetPasswordJson} />
+      <Loader show={loading} />
+    </>
+  );
 }
 
 export default Profile;

@@ -140,8 +140,8 @@ function Page() {
   }, [allData.state]);
 
   useEffect(() => {
-    allData.city && allData.affiliation && readSchoolsData();
-  }, [allData.city, allData.affiliation]);
+    allData.city && readSchoolsData();
+  }, [allData.city]);
 
   const handleDropDownChange = (e: any, key: any, clear?: any) => {
     if (clear) {
@@ -186,20 +186,20 @@ function Page() {
       },
       value: allData.city,
     },
-    {
-      label: "Affiliation",
-      key: "affiliation",
-      type: "radio",
-      data: citiesData,
-      options: [
-        { label: "Yes", value: "yes" },
-        { label: "No", value: "no" },
-      ],
-      onChange: (e: any) => {
-        handleDropDownChange(e, "affiliation");
-      },
-      value: allData.affiliation || "",
-    },
+    // {
+    //   label: "Affiliation",
+    //   key: "affiliation",
+    //   type: "radio",
+    //   data: citiesData,
+    //   options: [
+    //     { label: "Yes", value: "yes" },
+    //     { label: "No", value: "no" },
+    //   ],
+    //   onChange: (e: any) => {
+    //     handleDropDownChange(e, "affiliation");
+    //   },
+    //   value: allData.affiliation || "",
+    // },
   ];
 
   const renderRadio = (item: any) => {

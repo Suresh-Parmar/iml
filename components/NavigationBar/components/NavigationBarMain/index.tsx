@@ -28,6 +28,7 @@ function NavigationBarMain({ opened }: { opened: boolean }) {
   const reduxData: any = useSelector((state) => state);
   let activeUserID = reduxData?.authentication?.user?._id;
   let defaultShow = reduxData?.authentication?.user?.role == "super_admin";
+  let excludePaths = ["profile"];
 
   const fetchData = () => {
     updateDataRes("rolemappings", "", "name", activeUserID, "find_many")
@@ -71,7 +72,9 @@ function NavigationBarMain({ opened }: { opened: boolean }) {
     let data = findFromJson(siteJson, pathname, "link");
 
     if (!data?.permissions?.view && reduxData?.authentication?.user?.role != "super_admin") {
-      router.replace(consoleBaseURL);
+      if (!excludePaths.includes(pathname)) {
+        router.replace(consoleBaseURL);
+      }
     }
   };
 
