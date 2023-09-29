@@ -28,12 +28,12 @@ function Page() {
   const state: any = useSelector((state) => state);
   const countryName = state?.client?.selectedCountry?.name;
 
-  const filterData = (data: any[], key: string, val: string) => {
+  const filterData = (data: any[], key: string, val: string, findkey: any = "") => {
     let newData: any[] = [];
     if (Array.isArray(data)) {
       data.forEach((element: any) => {
         element[key] = element.name;
-        element[val] = element.name;
+        element[val] = findkey ? element[findkey] : element.name;
         if (element.group) {
           element.groupName = element.group;
           delete element.group;
@@ -78,14 +78,15 @@ function Page() {
   function readSchoolsData(isSchool: any = false) {
     let newPayload: any = {
       country: countryName || "India",
-      competition: allData.competition || "",
+      competition_code: allData.competition || "",
       state: allData.state,
       city: allData.city,
       // affiliation: allData.affiliation,
     };
 
     if (isSchool) {
-      newPayload = { school_name: [allData.schools] };
+      // newPayload = { school_name: [allData.schools] };
+      newPayload = { school_name: ["MAHATMA INTERNATIONAL SCHOOL (CBSE)"] };
     }
 
     console.log(newPayload, "newPayload");
@@ -103,7 +104,9 @@ function Page() {
 
   async function readCompetitionsData(filterBy?: "name" | "status", filterQuery?: string | number) {
     let competitions = await readCompetitions();
-    competitions = filterData(competitions, "label", "value");
+
+    console.log(competitions, "competitions");
+    competitions = filterData(competitions, "label", "value", "code");
 
     setCompetitionsData(competitions);
   }
@@ -140,8 +143,8 @@ function Page() {
   }, [allData.state]);
 
   useEffect(() => {
-    allData.city && readSchoolsData();
-  }, [allData.city]);
+    allData.city && allData.competition && readSchoolsData();
+  }, [allData.city, allData.competition]);
 
   const handleDropDownChange = (e: any, key: any, clear?: any) => {
     if (clear) {
@@ -182,7 +185,7 @@ function Page() {
       type: "select",
       data: citiesData,
       onchange: (e: any) => {
-        handleDropDownChange(e, "city", "affiliation");
+        handleDropDownChange(e, "city");
       },
       value: allData.city,
     },
