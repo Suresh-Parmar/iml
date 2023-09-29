@@ -1050,12 +1050,12 @@ export const allTypes: any = {
     },
     {
       id: "Class",
-      key: "class_code",
+      key: "class_id",
       defaultShow: true,
     },
     {
       id: "Competition",
-      key: "competition_code",
+      key: "competition",
       defaultShow: true,
     },
     {
