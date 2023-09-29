@@ -81,7 +81,7 @@ function Page() {
       competition: allData.competition || "",
       state: allData.state,
       city: allData.city,
-      affiliation: allData.affiliation,
+      // affiliation: allData.affiliation,
     };
 
     if (isSchool) {
