@@ -85,7 +85,8 @@ function Page() {
     };
 
     if (isSchool) {
-      newPayload = { school_name: [allData.schools] };
+      // newPayload = { school_name: [allData.schools] };
+      newPayload = { school_name: ["MAHATMA INTERNATIONAL SCHOOL (CBSE)"] };
     }
 
     console.log(newPayload, "newPayload");
