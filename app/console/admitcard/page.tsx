@@ -19,13 +19,17 @@ function Page() {
   const [citiesData, setCitiesData] = useState<any>([]);
   const [statesData, setStatesData] = useState<any>([]);
   const [schoolsData, setSchoolsData] = useState<any>([]);
+  const [schoolsDataDropDown, setSchoolsDataDropDown] = useState<any>([]);
   const [comeptitionsData, setCompetitionsData] = useState<any>([]);
-  // const [classesData, setClassesData] = useState<any>([]);
-  // const [groupsData, setGroupData] = useState<any>([]);
-  // const [cohortsData, setcohortsData] = useState<any>([]);
+  const [classesData, setClassesData] = useState<any>([]);
+  const [groupsData, setGroupData] = useState<any>([]);
+  const [cohortsData, setcohortsData] = useState<any>([]);
 
   const state: any = useSelector((state) => state);
   const countryName = state?.client?.selectedCountry?.name;
+  let isStudentFilters = allData.admitCardFilter == "studentWise";
+
+  console.log(allData, "allData allData");
 
   const filterData = (data: any[], key: string, val: string, findkey: any = "") => {
     let newData: any[] = [];
@@ -37,8 +41,13 @@ function Page() {
           element.groupName = element.group;
           delete element.group;
         }
-        if (element.status) {
-          newData.push(element);
+
+        if (element.status && element[key] && element[key] != "None") {
+          let data = newData.find((elm) => elm[key] == element[key]);
+
+          if (!data) {
+            newData.push(element);
+          }
         }
       });
     }
@@ -59,8 +68,6 @@ function Page() {
 
   // fetch data
 
-  console.log(allData, "allData");
-
   async function readStatesData(filterBy?: "country", filterQuery?: string | number) {
     let states = await readStates(filterBy, filterQuery);
     states = filterData(states, "label", "value");
@@ -75,7 +82,18 @@ function Page() {
   }
 
   const downloadPdf = (data: any) => {
-    console.log(data);
+    // console.log(data);
+  };
+
+  let genrateDataFormDropDown = (data: any) => {
+    if (Array.isArray(data)) {
+      data.map((item) => {
+        item.value = item.school_name;
+        item.label = item.school_name;
+      });
+    }
+
+    return data;
   };
 
   function readSchoolsData(isSchool: any = false) {
@@ -92,51 +110,83 @@ function Page() {
     }
 
     admitCardCountData(newPayload).then((res) => {
-      isSchool ? downloadPdf(res.data) : setSchoolsData(res.data);
+      if (isSchool) {
+        downloadPdf(res.data);
+      } else {
+        let data = genrateDataFormDropDown(res.data);
+        setSchoolsDataDropDown(data);
+        setSchoolsData(res.data);
+      }
     });
   }
 
-  // async function readClassesData(filterBy?: "name" | "status", filterQuery?: string | number) {
-  //   let classes = await readClasses();
-  //   classes = filterData(classes, "label", "value");
-  //   setClassesData(classes);
-  // }
+  async function readClassesData(filterBy?: "name" | "status", filterQuery?: string | number) {
+    let classes = await readClasses();
+    classes = filterData(classes, "label", "value");
+    setClassesData(classes);
+  }
 
   async function readCompetitionsData(filterBy?: "name" | "status", filterQuery?: string | number) {
     let competitions = await readCompetitions();
 
-    console.log(competitions, "competitions");
     competitions = filterData(competitions, "label", "value", "code");
 
     setCompetitionsData(competitions);
   }
 
-  // const getCohorts = () => {
-  //   readApiData("cohorts")
-  //     .then((res) => {
-  //       setcohortsData(filterData(res, "label", "value"));
-  //     })
-  //     .catch((error) => console.error(error));
-  // };
+  const getCohorts = () => {
+    let payload = {
+      collection_name: "cohorts",
+      op_name: "find_many",
+      filter_var: {
+        country: countryName,
+        state: allData.state,
+        city: allData.city,
+        competition_code: allData.competition,
+      },
+    };
+    if (allData?.childSchoolData?.key == "select_cohort") {
+      readApiData("cohorts", payload)
+        .then((res) => {
+          setcohortsData(filterData(res, "label", "value"));
+        })
+        .catch((error) => console.error(error));
+    }
+  };
 
-  // const getGroups = () => {
-  //   readApiData("groups")
-  //     .then((res) => {
-  //       setGroupData(filterData(res, "label", "value"));
-  //     })
-  //     .catch((error) => console.error(error));
-  // };
+  const getGroups = () => {
+    let payload = {
+      collection_name: "groups",
+      op_name: "find_many",
+      filter_var: {
+        country: countryName,
+        state: allData.state,
+        city: allData.city,
+        competition_code: allData.competition,
+      },
+    };
+
+    if (allData?.childSchoolData?.key == "select_group") {
+      readApiData("groups", payload)
+        .then((res) => {
+          setGroupData(filterData(res, "label", "value"));
+        })
+        .catch((error) => console.error(error));
+    }
+  };
 
   // fetch data
 
   useEffect(() => {
     countryName && readStatesData();
-
-    // readSchoolsData();
+    countryName && readClassesData();
     readCompetitionsData();
-    // readClassesData();
-    // getCohorts();
   }, [countryName]);
+
+  useEffect(() => {
+    allData.city && allData.competition && getCohorts();
+    allData.city && allData.competition && getGroups();
+  }, [allData.city, allData.competition, allData?.childSchoolData]);
 
   useEffect(() => {
     allData.state && readCitiesData("state", allData.state);
@@ -158,7 +208,7 @@ function Page() {
     }
   };
 
-  const filters = [
+  const filtersSchools = [
     {
       label: "Competition",
       key: "competition",
@@ -204,6 +254,82 @@ function Page() {
     //   value: allData.affiliation || "",
     // },
   ];
+
+  const studentFilters = [
+    {
+      label: "Competition",
+      key: "competition",
+      type: "select",
+      data: comeptitionsData,
+      onchange: (e: any) => {
+        handleDropDownChange(e, "competition");
+      },
+      value: allData.competition,
+    },
+    {
+      label: "State",
+      key: "state",
+      type: "select",
+      data: statesData,
+      onchange: (e: any) => {
+        handleDropDownChange(e, "state", "city");
+      },
+      value: allData.state,
+    },
+    {
+      label: "City",
+      key: "city",
+      type: "select",
+      data: citiesData,
+      onchange: (e: any) => {
+        handleDropDownChange(e, "city");
+      },
+      value: allData.city,
+    },
+    {
+      label: "School / group / cohort",
+      key: "filterTypeStudent",
+      type: "radio",
+      options: [
+        { label: "School", value: "school", fetch: "" },
+        { label: "Group", value: "group", fetch: "" },
+        { label: "Cohort", value: "cohort", fetch: "" },
+      ],
+      onChange: (e: any) => {
+        let data: any = {
+          group: { data: groupsData, label: "Group", key: "select_group" },
+          cohort: { data: cohortsData, label: "Cohort", key: "select_cohort" },
+          school: { data: schoolsData, label: "School", key: "select_school" },
+        };
+        data = data[e];
+        allData.childSchoolData = data;
+        handleDropDownChange(e, "filterTypeStudent");
+      },
+      value: allData.filterTypeStudent || "",
+    },
+    {
+      label: allData?.childSchoolData?.label || "Select School",
+      key: "select_school",
+      type: "select",
+      data: allData?.childSchoolData?.data || schoolsDataDropDown,
+      onchange: (e: any) => {
+        handleDropDownChange(e, allData?.childSchoolData?.key || "select_school");
+      },
+      value: allData[allData?.childSchoolData?.key || "select_school"],
+    },
+    {
+      label: "Select Class",
+      key: "select_class",
+      type: "select",
+      data: classesData,
+      onchange: (e: any) => {
+        handleDropDownChange(e, "select_class");
+      },
+      value: allData.select_class,
+    },
+  ];
+
+  let filters = isStudentFilters ? studentFilters : filtersSchools;
 
   const renderRadio = (item: any) => {
     const renderInputs = () => {
@@ -273,7 +399,7 @@ function Page() {
 
   const renderSchoolsTable = useCallback(() => {
     // const renderSchoolsTable = () => {
-    if (!schoolsData.length) {
+    if (!schoolsData.length || isStudentFilters) {
       return <></>;
     }
 
@@ -317,17 +443,17 @@ function Page() {
         <tbody>{renderTableData()}</tbody>
       </table>
     );
-  }, [allData.schools, schoolsData, checkIsAllChecked(allData.schools, schoolsData)]);
+  }, [allData.schools, schoolsData, checkIsAllChecked(allData.schools, schoolsData), isStudentFilters]);
 
-  const schoolWiseAdmitCard = () => {
+  const AdmitCardDownLoad = () => {
     return (
       <div className="m-4">
         <div className="d-flex flex-wrap gap-4">{renderData()}</div>
         <div className="table-responsive mt-4">{renderSchoolsTable()}</div>
         {/* <div className="table-responsive  m-4">{renderTable()}</div> */}
-        {allData?.schools?.length ? (
+        {allData?.schools?.length && !isStudentFilters ? (
           <div className="btn btn-primary form-control" onClick={() => readSchoolsData(true)}>
-            DownLoad Pdf
+            Download admit cards in pdf
           </div>
         ) : (
           ""
@@ -361,7 +487,7 @@ function Page() {
   return (
     <div className="m-4">
       <div>{renderRadio(uiFilters)}</div>
-      {allData.admitCardFilter == "studentWise" ? studentWiseAdmitCard() : schoolWiseAdmitCard()}
+      {AdmitCardDownLoad()}
     </div>
   );
 }
