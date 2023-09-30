@@ -23,6 +23,7 @@ import { siteJson as siteJsonData } from "../permissions";
 import { useSelector } from "react-redux";
 import { formTypeToTableMapper } from "@/helpers/formTypeMapper";
 import { formTypeToFetcherMapper } from "@/helpers/dataFetcher";
+import Loader from "./Loader";
 
 interface SpreadSheetFormValues {
   spreadSheetFile: File | undefined;
@@ -59,6 +60,7 @@ function UploadButton(props: any) {
   const [openModal, setOpenModal] = useState(false);
   const [permissionsData, setPermissionsData] = useState<any>({});
   const [siteJson, setSiteJson] = useState<any>(siteJsonData);
+  const [loader, setLoader] = useState<any>(false);
 
   const pathname: any = usePathname();
 
@@ -68,14 +70,17 @@ function UploadButton(props: any) {
   let selectedCountry = reduxData?.client?.selectedCountry?.name;
 
   let fetchData = () => {
+    setLoader(true);
     updateDataRes("rolemappings", "", "name", activeUserID, "find_many")
       .then((res) => {
+        setLoader(false);
         let data = res?.data?.response[0];
         if (data && data?.data) {
           setSiteJson([...data.data]);
         }
       })
       .catch((error) => {
+        setLoader(false);
         console.log(error);
       });
   };
@@ -196,12 +201,15 @@ function UploadButton(props: any) {
       return;
     }
 
+    setLoader(true);
     let file = isUpdate ? form.values.updateSpreadSheetFile : form.values.spreadSheetFile;
     let meta_data: any = JSON.stringify(collection);
     if (formType && file) {
       const tableName = formTypeToTableMapper(formType);
       apiCall(isUpdate)(file, tableName, meta_data)
         .then((res) => {
+          setLoader(false);
+
           notifications.show({
             title: `File processed successfully!`,
             message: `The data in the spreadsheet has been processed and the table has been refreshed.`,
@@ -220,12 +228,17 @@ function UploadButton(props: any) {
 
           saveExcel(data, "", "", formType, true);
 
+          const fetcher = formTypeToFetcherMapper(formType);
+          const dataFetch = fetcher();
+          setData(dataFetch);
+
           form.setValues({
             spreadSheetFile: undefined,
             updateSpreadSheetFile: undefined,
           });
         })
         .catch((err) => {
+          setLoader(false);
           setOpenModal(false);
           notifications.show({
             title: `Failed to upload !`,
@@ -233,10 +246,6 @@ function UploadButton(props: any) {
             color: "red",
           });
         });
-
-      const fetcher = formTypeToFetcherMapper(formType);
-      const dataFetch = await fetcher();
-      setData(dataFetch);
     } else {
       form.setValues({
         spreadSheetFile: undefined,
@@ -308,6 +317,7 @@ function UploadButton(props: any) {
             </Box>
           )}
         </Box>
+        <Loader show={loader} />
       </ModalBox>
     );
   };
@@ -316,6 +326,7 @@ function UploadButton(props: any) {
     <>
       {renderUploadIcon()}
       {openModal && renderModal()}
+      <Loader show={loader} />
     </>
   );
 }
