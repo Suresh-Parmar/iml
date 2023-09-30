@@ -1,16 +1,9 @@
-import {
-  TextInput,
-  Button,
-  Group,
-  Box,
-  Flex,
-  LoadingOverlay,
-} from '@mantine/core';
-import { useForm } from '@mantine/form';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { MatrixDataType, MatrixRowType } from '../Matrix';
-import { createSubject, readSubjects, updateSubject } from '@/utilities/API';
-import { notifications } from '@mantine/notifications';
+import { TextInput, Button, Group, Box, Flex, LoadingOverlay } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { MatrixDataType, MatrixRowType } from "../Matrix";
+import { createSubject, readSubjects, updateSubject } from "@/utilities/API";
+import { notifications } from "@mantine/notifications";
 
 function SubjectsForm({
   open,
@@ -40,15 +33,13 @@ function SubjectsForm({
 
   const form = useForm({
     initialValues: {
-      name: rowData?.name ?? '',
-      code: rowData?.code ?? '',
-      status: rowData?.status ?? '',
+      name: rowData?.name ?? "",
+      code: rowData?.code ?? "",
+      status: rowData?.status ?? "",
     },
     validate: {
-      name: (value) =>
-        value.length < 2 ? 'Name must have at least 2 letters' : null,
-      code: (value) =>
-        value.length < 1 ? 'Code must have at least 1 letters' : null,
+      name: (value) => (value.length < 2 ? "Name must have at least 2 letters" : null),
+      code: (value) => (value.length < 1 ? "Code must have at least 1 letters" : null),
     },
   });
   const [oLoader, setOLoader] = useState<boolean>(false);
@@ -58,10 +49,10 @@ function SubjectsForm({
     if (rowData !== undefined) {
       const isSubjectUpdated = await updateSubject(rowData._id, {
         ...rowData,
-        name: values?.name ?? '',
-        code: values?.code ?? '',
+        name: values?.name ?? "",
+        code: values?.code ?? "",
       });
-      if (isSubjectUpdated.toUpperCase() === 'DOCUMENT UPDATED') {
+      if (isSubjectUpdated.toUpperCase() === "DOCUMENT UPDATED") {
         const subjects = await readSubjects();
         setData(subjects);
         setOLoader(false);
@@ -72,59 +63,54 @@ function SubjectsForm({
       notifications.show({
         title: `Subject ${rowData.name} updated!`,
         message: `The above class has been updated with new information.`,
-        color: 'blue',
+        color: "blue",
       });
     } else {
       const isSubjectCreated = await createSubject(values as MatrixRowType);
-      if (isSubjectCreated.toUpperCase() === 'DOCUMENT CREATED') {
+      if (isSubjectCreated.toUpperCase() === "DOCUMENT CREATED") {
         const subjects = await readSubjects();
         setData(subjects);
         setOLoader(false);
         notifications.show({
           title: `Subject created!`,
           message: `A new subject has been created.`,
-          color: 'green',
+          color: "green",
         });
-      } else if (isSubjectCreated.toUpperCase() === 'DOCUMENT ALREADY EXISTS') {
+      } else if (isSubjectCreated.toUpperCase() === "DOCUMENT ALREADY EXISTS") {
         setOLoader(false);
         notifications.show({
           title: `Subject already exists!`,
           message: `${values.name} (${values.code}) already exists.`,
-          color: 'orange',
+          color: "orange",
         });
       } else {
         setOLoader(false);
       }
     }
     form.setValues({
-      name: '',
-      code: '',
+      name: "",
+      code: "",
       status: true,
     });
     close();
   };
 
   return (
-    <Box maw={'100%'} mx="auto">
+    <Box maw={"100%"} mx="auto">
       <form onSubmit={form.onSubmit(onHandleSubmit)}>
         <LoadingOverlay visible={oLoader} overlayBlur={2} />
-        <Flex
-          direction={'column'}
-          justify={'center'}
-          align={'flex-start'}
-          w={'100%'}
-        >
+        <Flex direction={"column"} justify={"center"} align={"flex-start"} w={"100%"}>
           <TextInput
-            disabled={readonly}
+            disabled={readonly || !!rowData}
             withAsterisk
             label="Subject Name"
             placeholder="Maths"
-            {...form.getInputProps('name')}
-            w={'100%'}
-            mt={'md'}
+            {...form.getInputProps("name")}
+            w={"100%"}
+            mt={"md"}
             size="md"
             onChange={(event) => {
-              form.setFieldValue('name', event.currentTarget.value);
+              form.setFieldValue("name", event.currentTarget.value);
             }}
           />
           <TextInput
@@ -132,9 +118,9 @@ function SubjectsForm({
             withAsterisk
             label="Code"
             placeholder="Code 123"
-            {...form.getInputProps('code')}
-            w={'100%'}
-            mt={'md'}
+            {...form.getInputProps("code")}
+            w={"100%"}
+            mt={"md"}
             size="md"
           />
         </Flex>

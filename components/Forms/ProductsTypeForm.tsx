@@ -104,26 +104,21 @@ function ProductTypeForm({
   };
 
   return (
-    <Box maw={'100%'} mx="auto">
+    <Box maw={"100%"} mx="auto">
       <form onSubmit={form.onSubmit(onHandleSubmit)}>
         <LoadingOverlay visible={oLoader} overlayBlur={2} />
-        <Flex
-          direction={'column'}
-          justify={'center'}
-          align={'flex-start'}
-          w={'100%'}
-        >
+        <Flex direction={"column"} justify={"center"} align={"flex-start"} w={"100%"}>
           <TextInput
-            disabled={readonly}
+            disabled={readonly || !!rowData}
             withAsterisk
             label="Name"
             placeholder="Name"
-            {...form.getInputProps('name')}
-            w={'100%'}
-            mt={'md'}
+            {...form.getInputProps("name")}
+            w={"100%"}
+            mt={"md"}
             size="md"
             onChange={(event) => {
-              form.setFieldValue('name', event.currentTarget.value);
+              form.setFieldValue("name", event.currentTarget.value);
             }}
           />
           <TextInput
@@ -131,12 +126,12 @@ function ProductTypeForm({
             withAsterisk
             label="Code"
             placeholder="Code"
-            {...form.getInputProps('code')}
-            w={'100%'}
-            mt={'md'}
+            {...form.getInputProps("code")}
+            w={"100%"}
+            mt={"md"}
             size="md"
             onChange={(event) => {
-              form.setFieldValue('code', event.currentTarget.value);
+              form.setFieldValue("code", event.currentTarget.value);
             }}
           />
           <TextInput
@@ -144,12 +139,12 @@ function ProductTypeForm({
             withAsterisk
             label="Tax Name"
             placeholder="Tax Name"
-            {...form.getInputProps('taxname')}
-            w={'100%'}
-            mt={'md'}
+            {...form.getInputProps("taxname")}
+            w={"100%"}
+            mt={"md"}
             size="md"
             onChange={(event) => {
-              form.setFieldValue('taxname', event.currentTarget.value);
+              form.setFieldValue("taxname", event.currentTarget.value);
             }}
           />
           <TextInput
@@ -157,12 +152,12 @@ function ProductTypeForm({
             withAsterisk
             label="Tax Percent"
             placeholder="Tax Percent"
-            {...form.getInputProps('taxpercent')}
-            w={'100%'}
-            mt={'md'}
+            {...form.getInputProps("taxpercent")}
+            w={"100%"}
+            mt={"md"}
             size="md"
             onChange={(event) => {
-              form.setFieldValue('taxpercent', event.currentTarget.value);
+              form.setFieldValue("taxpercent", event.currentTarget.value);
             }}
           />
         </Flex>

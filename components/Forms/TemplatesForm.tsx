@@ -1,17 +1,10 @@
-import {
-  TextInput,
-  Button,
-  Group,
-  Box,
-  Flex,
-  LoadingOverlay,
-} from '@mantine/core';
-import { useForm } from '@mantine/form';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { MatrixDataType, MatrixRowType } from '../Matrix';
-import { createTemplates, readTempates, updateTemplate } from '@/utilities/API';
-import { notifications } from '@mantine/notifications';
-import Editor from '../editor/editor';
+import { TextInput, Button, Group, Box, Flex, LoadingOverlay } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { MatrixDataType, MatrixRowType } from "../Matrix";
+import { createTemplates, readTempates, updateTemplate } from "@/utilities/API";
+import { notifications } from "@mantine/notifications";
+import Editor from "../editor/editor";
 
 function TemplatesForm({
   open,
@@ -42,11 +35,10 @@ function TemplatesForm({
   const form = useForm({
     initialValues: {
       ...rowData,
-      name: rowData?.name ?? '',
+      name: rowData?.name ?? "",
     },
     validate: {
-      name: (value) =>
-        value?.length < 2 ? 'Name must have at least 2 letters' : null,
+      name: (value) => (value?.length < 2 ? "Name must have at least 2 letters" : null),
     },
   });
   const [oLoader, setOLoader] = useState<boolean>(false);
@@ -58,7 +50,7 @@ function TemplatesForm({
       const isTemplateUpdated = await updateTemplate(rowData._id, {
         ...values,
       });
-      if (isTemplateUpdated.toUpperCase() === 'DOCUMENT UPDATED') {
+      if (isTemplateUpdated.toUpperCase() === "DOCUMENT UPDATED") {
         const templates = await readTempates();
         setData(templates);
         setOLoader(false);
@@ -69,27 +61,25 @@ function TemplatesForm({
       notifications.show({
         title: `Template ${rowData.name} updated!`,
         message: `The above class has been updated with new information.`,
-        color: 'blue',
+        color: "blue",
       });
     } else {
       const isTemplateCreated = await createTemplates(values as MatrixRowType);
-      if (isTemplateCreated.toUpperCase() === 'DOCUMENT CREATED') {
+      if (isTemplateCreated.toUpperCase() === "DOCUMENT CREATED") {
         const templates = await readTempates();
         setData(templates);
         setOLoader(false);
         notifications.show({
           title: `Template created!`,
           message: `A new template has been created.`,
-          color: 'green',
+          color: "green",
         });
-      } else if (
-        isTemplateCreated.toUpperCase() === 'DOCUMENT ALREADY EXISTS'
-      ) {
+      } else if (isTemplateCreated.toUpperCase() === "DOCUMENT ALREADY EXISTS") {
         setOLoader(false);
         notifications.show({
           title: `Template already exists!`,
           message: `${values.name} already exists.`,
-          color: 'orange',
+          color: "orange",
         });
       } else {
         setOLoader(false);
@@ -99,26 +89,21 @@ function TemplatesForm({
   };
 
   return (
-    <Box maw={'100%'} mx="auto">
+    <Box maw={"100%"} mx="auto">
       <form onSubmit={form.onSubmit(onHandleSubmit)}>
         <LoadingOverlay visible={oLoader} overlayBlur={2} />
-        <Flex
-          direction={'column'}
-          justify={'center'}
-          align={'flex-start'}
-          w={'100%'}
-        >
+        <Flex direction={"column"} justify={"center"} align={"flex-start"} w={"100%"}>
           <TextInput
-            disabled={readonly}
+            disabled={readonly || !!rowData}
             withAsterisk
             label="Name"
             placeholder="Name"
-            {...form.getInputProps('name')}
-            w={'100%'}
-            mt={'md'}
+            {...form.getInputProps("name")}
+            w={"100%"}
+            mt={"md"}
             size="md"
             onChange={(event) => {
-              form.setFieldValue('name', event.currentTarget.value);
+              form.setFieldValue("name", event.currentTarget.value);
             }}
           />
           <TextInput
@@ -126,12 +111,12 @@ function TemplatesForm({
             withAsterisk
             label="Short name"
             placeholder="Short name"
-            {...form.getInputProps('shortname')}
-            w={'100%'}
-            mt={'md'}
+            {...form.getInputProps("shortname")}
+            w={"100%"}
+            mt={"md"}
             size="md"
             onChange={(event) => {
-              form.setFieldValue('shortname', event.currentTarget.value);
+              form.setFieldValue("shortname", event.currentTarget.value);
             }}
           />
           <TextInput
@@ -139,12 +124,12 @@ function TemplatesForm({
             withAsterisk
             label="Subject"
             placeholder="Subject"
-            {...form.getInputProps('subject')}
-            w={'100%'}
-            mt={'md'}
+            {...form.getInputProps("subject")}
+            w={"100%"}
+            mt={"md"}
             size="md"
             onChange={(event) => {
-              form.setFieldValue('subject', event.currentTarget.value);
+              form.setFieldValue("subject", event.currentTarget.value);
             }}
           />
           <TextInput
@@ -152,19 +137,20 @@ function TemplatesForm({
             withAsterisk
             label="Template Type"
             placeholder="Template Type"
-            {...form.getInputProps('templatetype')}
-            w={'100%'}
-            mt={'md'}
+            {...form.getInputProps("templatetype")}
+            w={"100%"}
+            mt={"md"}
             size="md"
             onChange={(event) => {
-              form.setFieldValue('templatetype', event.currentTarget.value);
+              form.setFieldValue("templatetype", event.currentTarget.value);
             }}
           />
           <Editor
             readOnly={readonly}
             placeholder="Add template content"
             label="Content"
-            {...form.getInputProps('content')}/>
+            {...form.getInputProps("content")}
+          />
         </Flex>
         <Group position="right" mt="md">
           <Button disabled={readonly} type="submit">
