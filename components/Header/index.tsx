@@ -381,8 +381,6 @@ function Header() {
                         onClick={() => {
                           const windowConfirm = window.confirm("Are you sure you want to sign out");
                           if (windowConfirm) {
-                            router.replace("/");
-                            localStorage.clear();
                             dispatch(signOutThunk()).unwrap();
                           }
                         }}
