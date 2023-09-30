@@ -106,40 +106,35 @@ function SiteForm({
   };
 
   return (
-    <Box maw={'100%'} mx="auto">
+    <Box maw={"100%"} mx="auto">
       <form onSubmit={form.onSubmit(onHandleSubmit)}>
         <LoadingOverlay visible={oLoader} overlayBlur={2} />
-        <Flex
-          direction={'column'}
-          justify={'center'}
-          align={'flex-start'}
-          w={'100%'}
-        >
+        <Flex direction={"column"} justify={"center"} align={"flex-start"} w={"100%"}>
           <TextInput
-            disabled={readonly}
+            disabled={readonly || !!rowData}
             withAsterisk
             label="Name"
             placeholder="Name"
-            {...form.getInputProps('name')}
-            w={'100%'}
-            mt={'md'}
+            {...form.getInputProps("name")}
+            w={"100%"}
+            mt={"md"}
             size="md"
             onChange={(event) => {
-              form.setFieldValue('name', event.currentTarget.value);
+              form.setFieldValue("name", event.currentTarget.value);
             }}
           />
           <Select
             disabled={readonly}
             withAsterisk
-            w={'100%'}
-            mt={'md'}
+            w={"100%"}
+            mt={"md"}
             size="md"
             label="Default Rows"
             placeholder="Default Rows"
             data={[10, 20, 30, 40, 50].map((pageSize) => `${pageSize}`)}
-            {...form.getInputProps('defaultrows')}
+            {...form.getInputProps("defaultrows")}
             onChange={(value) => {
-              form.setFieldValue('defaultrows', Number(value));
+              form.setFieldValue("defaultrows", Number(value));
             }}
             value={`${form.values.defaultrows}`}
           />
@@ -148,15 +143,12 @@ function SiteForm({
             withAsterisk
             label="Google Analytics Code"
             placeholder="Google Analytics Code"
-            {...form.getInputProps('googleanalyticscode')}
-            w={'100%'}
-            mt={'md'}
+            {...form.getInputProps("googleanalyticscode")}
+            w={"100%"}
+            mt={"md"}
             size="md"
             onChange={(event) => {
-              form.setFieldValue(
-                'googleanalyticscode',
-                event.currentTarget.value
-              );
+              form.setFieldValue("googleanalyticscode", event.currentTarget.value);
             }}
           />
           <TextInput
@@ -164,12 +156,12 @@ function SiteForm({
             withAsterisk
             label="Contact Number"
             placeholder="Contact Number"
-            {...form.getInputProps('contactnumber')}
-            w={'100%'}
-            mt={'md'}
+            {...form.getInputProps("contactnumber")}
+            w={"100%"}
+            mt={"md"}
             size="md"
             onChange={(event) => {
-              form.setFieldValue('contactnumber', event.currentTarget.value);
+              form.setFieldValue("contactnumber", event.currentTarget.value);
             }}
           />
           <TextInput
@@ -177,12 +169,12 @@ function SiteForm({
             withAsterisk
             label="Address"
             placeholder="Address"
-            {...form.getInputProps('address')}
-            w={'100%'}
-            mt={'md'}
+            {...form.getInputProps("address")}
+            w={"100%"}
+            mt={"md"}
             size="md"
             onChange={(event) => {
-              form.setFieldValue('address', event.currentTarget.value);
+              form.setFieldValue("address", event.currentTarget.value);
             }}
           />
           <TextInput
@@ -190,12 +182,12 @@ function SiteForm({
             withAsterisk
             label="Pan Number"
             placeholder="Pan Number"
-            {...form.getInputProps('pannumber')}
-            w={'100%'}
-            mt={'md'}
+            {...form.getInputProps("pannumber")}
+            w={"100%"}
+            mt={"md"}
             size="md"
             onChange={(event) => {
-              form.setFieldValue('pannumber', event.currentTarget.value);
+              form.setFieldValue("pannumber", event.currentTarget.value);
             }}
           />
           <TextInput
@@ -203,12 +195,12 @@ function SiteForm({
             withAsterisk
             label="Gst Number"
             placeholder="Gst Number"
-            {...form.getInputProps('gstnumber')}
-            w={'100%'}
-            mt={'md'}
+            {...form.getInputProps("gstnumber")}
+            w={"100%"}
+            mt={"md"}
             size="md"
             onChange={(event) => {
-              form.setFieldValue('gstnumber', event.currentTarget.value);
+              form.setFieldValue("gstnumber", event.currentTarget.value);
             }}
           />
         </Flex>

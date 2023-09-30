@@ -113,26 +113,21 @@ function StateForm({
   const countryNames = filterDataSingle(countriesData || [], "name");
 
   return (
-    <Box maw={'100%'} mx="auto" mih={500}>
+    <Box maw={"100%"} mx="auto" mih={500}>
       <form onSubmit={form.onSubmit(onHandleSubmit)}>
         <LoadingOverlay visible={oLoader} overlayBlur={2} />
-        <Flex
-          direction={'column'}
-          justify={'center'}
-          align={'flex-start'}
-          w={'100%'}
-        >
+        <Flex direction={"column"} justify={"center"} align={"flex-start"} w={"100%"}>
           <TextInput
-            disabled={readonly}
+            disabled={readonly || !!rowData}
             withAsterisk
             label="Name"
             placeholder="John Doe"
-            {...form.getInputProps('name')}
-            w={'100%'}
-            mt={'md'}
+            {...form.getInputProps("name")}
+            w={"100%"}
+            mt={"md"}
             size="md"
             onChange={(event) => {
-              form.setFieldValue('name', event.currentTarget.value);
+              form.setFieldValue("name", event.currentTarget.value);
             }}
           />
           <Select
@@ -140,14 +135,14 @@ function StateForm({
             searchable
             nothingFound="No options"
             data={countryNames}
-            label={'Country'}
+            label={"Country"}
             name="Country"
-            mt={'md'}
+            mt={"md"}
             size="md"
             withAsterisk
-            {...form.getInputProps('country')}
+            {...form.getInputProps("country")}
             onChange={onChangeCountry}
-            w={'100%'}
+            w={"100%"}
             dropdownPosition="bottom"
           />
         </Flex>

@@ -101,7 +101,7 @@ function AnnouncementsForm({
   let renderFormData = () => {
     let formData = [
       {
-        disabled: readonly,
+        disabled: readonly || !!rowData,
         withAsterisk: true,
         label: "Name",
         placeholder: "John Die",

@@ -264,7 +264,7 @@ function SchoolForm({
         <Flex gap={"md"} direction={"row"} justify={"center"} align={"flex-start"} w={"100%"}>
           <div style={{ display: "grid", gridTemplateColumns: "auto auto", gap: "10px", width: "100%" }}>
             <TextInput
-              disabled={readonly || rowData !== undefined}
+              disabled={readonly || !!rowData }
               withAsterisk
               label="Name"
               placeholder="John Doe"

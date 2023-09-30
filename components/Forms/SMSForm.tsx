@@ -105,26 +105,21 @@ function SMSForm({
   };
 
   return (
-    <Box maw={'100%'} mx="auto">
+    <Box maw={"100%"} mx="auto">
       <form onSubmit={form.onSubmit(onHandleSubmit)}>
         <LoadingOverlay visible={oLoader} overlayBlur={2} />
-        <Flex
-          direction={'column'}
-          justify={'center'}
-          align={'flex-start'}
-          w={'100%'}
-        >
+        <Flex direction={"column"} justify={"center"} align={"flex-start"} w={"100%"}>
           <TextInput
-            disabled={readonly}
+            disabled={readonly || !!rowData}
             withAsterisk
             label="Name"
             placeholder="Name"
-            {...form.getInputProps('name')}
-            w={'100%'}
-            mt={'md'}
+            {...form.getInputProps("name")}
+            w={"100%"}
+            mt={"md"}
             size="md"
             onChange={(event) => {
-              form.setFieldValue('name', event.currentTarget.value);
+              form.setFieldValue("name", event.currentTarget.value);
             }}
           />
           <TextInput
@@ -132,12 +127,12 @@ function SMSForm({
             withAsterisk
             label="Username"
             placeholder="Username"
-            {...form.getInputProps('username')}
-            w={'100%'}
-            mt={'md'}
+            {...form.getInputProps("username")}
+            w={"100%"}
+            mt={"md"}
             size="md"
             onChange={(event) => {
-              form.setFieldValue('username', event.currentTarget.value);
+              form.setFieldValue("username", event.currentTarget.value);
             }}
           />
           <TextInput
@@ -145,12 +140,12 @@ function SMSForm({
             withAsterisk
             label="Password"
             placeholder="Password"
-            {...form.getInputProps('password')}
-            w={'100%'}
-            mt={'md'}
+            {...form.getInputProps("password")}
+            w={"100%"}
+            mt={"md"}
             size="md"
             onChange={(event) => {
-              form.setFieldValue('password', event.currentTarget.value);
+              form.setFieldValue("password", event.currentTarget.value);
             }}
           />
           <TextInput
@@ -158,12 +153,12 @@ function SMSForm({
             withAsterisk
             label="SMPP Host"
             placeholder="SMPP Host"
-            {...form.getInputProps('smpphost')}
-            w={'100%'}
-            mt={'md'}
+            {...form.getInputProps("smpphost")}
+            w={"100%"}
+            mt={"md"}
             size="md"
             onChange={(event) => {
-              form.setFieldValue('smpphost', event.currentTarget.value);
+              form.setFieldValue("smpphost", event.currentTarget.value);
             }}
           />
         </Flex>

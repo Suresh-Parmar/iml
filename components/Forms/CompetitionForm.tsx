@@ -136,7 +136,7 @@ function CompetitionForm({
         <Flex gap={"md"} direction={"row"} justify={"center"} align={"flex-start"} w={"100%"}>
           <Flex direction={"column"} justify={"center"} align={"flex-start"} w={"100%"}>
             <TextInput
-              disabled={readonly}
+              disabled={readonly || !!rowData}
               withAsterisk
               label="Name"
               placeholder="John Doe"

@@ -225,7 +225,7 @@ function ExamCenterForm({
             w={"100%"}
           />
           <TextInput
-            disabled={readonly}
+            disabled={readonly || !!rowData}
             withAsterisk
             label="Name"
             name="Name"

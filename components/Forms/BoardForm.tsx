@@ -110,7 +110,7 @@ function BoardForm({
         <LoadingOverlay visible={oLoader} overlayBlur={2} />
         <Flex direction={"column"} justify={"center"} align={"flex-start"} w={"100%"}>
           <TextInput
-            disabled={readonly}
+            disabled={readonly || !!rowData}
             withAsterisk
             label="Name"
             placeholder="Indian Certificate of Secondary Education"

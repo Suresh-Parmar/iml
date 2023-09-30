@@ -1,17 +1,7 @@
-import {
-  TextInput,
-  Checkbox,
-  Button,
-  Group,
-  Box,
-  Flex,
-  Textarea,
-  Select,
-  LoadingOverlay,
-} from '@mantine/core';
-import { useForm } from '@mantine/form';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { MatrixDataType, MatrixRowType } from '../Matrix';
+import { TextInput, Checkbox, Button, Group, Box, Flex, Textarea, Select, LoadingOverlay } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { MatrixDataType, MatrixRowType } from "../Matrix";
 import {
   createClass,
   createCompetition,
@@ -24,9 +14,9 @@ import {
   readSchools,
   readStates,
   updateClass,
-} from '@/utilities/API';
-import { DateInput } from '@mantine/dates';
-import { notifications } from '@mantine/notifications';
+} from "@/utilities/API";
+import { DateInput } from "@mantine/dates";
+import { notifications } from "@mantine/notifications";
 
 function ClassForm({
   open,
@@ -55,21 +45,17 @@ function ClassForm({
   }, []);
   const form = useForm({
     initialValues: {
-      name: rowData?.name || '',
-      status: rowData?.status ?? '',
-      code: rowData?.code || '',
-      roman_code: rowData?.roman_code || '',
-      order_code: rowData?.order_code || '',
+      name: rowData?.name || "",
+      status: rowData?.status ?? "",
+      code: rowData?.code || "",
+      roman_code: rowData?.roman_code || "",
+      order_code: rowData?.order_code || "",
     },
     validate: {
-      name: (value) =>
-        value.length < 2 ? 'Name must have at least 2 letters' : null,
-      code: (value) =>
-        value.length < 1 ? 'Code must have at least 1 letters' : null,
-      roman_code: (value) =>
-        value.length < 1 ? 'Roman Code must have at least 1 letters' : null,
-      order_code: (value) =>
-        value.length < 1 ? 'Order Code must have at least 1 letters' : null,
+      name: (value) => (value.length < 2 ? "Name must have at least 2 letters" : null),
+      code: (value) => (value.length < 1 ? "Code must have at least 1 letters" : null),
+      roman_code: (value) => (value.length < 1 ? "Roman Code must have at least 1 letters" : null),
+      order_code: (value) => (value.length < 1 ? "Order Code must have at least 1 letters" : null),
     },
   });
   const [oLoader, setOLoader] = useState<boolean>(false);
@@ -78,7 +64,7 @@ function ClassForm({
     setOLoader(true);
     if (rowData !== undefined) {
       const isClassUpdated = await updateClass(rowData._id, values);
-      if (isClassUpdated.toUpperCase() === 'DOCUMENT UPDATED') {
+      if (isClassUpdated.toUpperCase() === "DOCUMENT UPDATED") {
         const classes = await readClasses();
         setData(classes);
         setOLoader(false);
@@ -89,59 +75,54 @@ function ClassForm({
       notifications.show({
         title: `Class ${rowData.name} updated!`,
         message: `The above class has been updated with new information.`,
-        color: 'blue',
+        color: "blue",
       });
     } else {
       const isClassCreated = await createClass(values as MatrixRowType);
-      if (isClassCreated.toUpperCase() === 'DOCUMENT CREATED') {
+      if (isClassCreated.toUpperCase() === "DOCUMENT CREATED") {
         const classes = await readClasses();
         setData(classes);
         setOLoader(false);
         notifications.show({
           title: `Class created!`,
           message: `A new class has been created.`,
-          color: 'green',
+          color: "green",
         });
-      } else if (isClassCreated.toUpperCase() === 'DOCUMENT ALREADY EXISTS') {
+      } else if (isClassCreated.toUpperCase() === "DOCUMENT ALREADY EXISTS") {
         setOLoader(false);
         notifications.show({
           title: `Class already exists!`,
           message: `${values.name} (${values.code}) already exists.`,
-          color: 'orange',
+          color: "orange",
         });
       } else {
         setOLoader(false);
       }
     }
     form.setValues({
-      name: '',
-      code: '',
+      name: "",
+      code: "",
       status: true,
     });
     close();
   };
 
   return (
-    <Box maw={'100%'} mx="auto">
+    <Box maw={"100%"} mx="auto">
       <form onSubmit={form.onSubmit(onHandleSubmit)}>
         <LoadingOverlay visible={oLoader} overlayBlur={2} />
-        <Flex
-          direction={'column'}
-          justify={'center'}
-          align={'flex-start'}
-          w={'100%'}
-        >
+        <Flex direction={"column"} justify={"center"} align={"flex-start"} w={"100%"}>
           <TextInput
-            disabled={readonly}
+            disabled={readonly || rowData != undefined}
             withAsterisk
             label="Name"
             placeholder="John Doe"
-            {...form.getInputProps('name')}
-            w={'100%'}
-            mt={'md'}
+            {...form.getInputProps("name")}
+            w={"100%"}
+            mt={"md"}
             size="md"
             onChange={(event) => {
-              form.setFieldValue('name', event.currentTarget.value);
+              form.setFieldValue("name", event.currentTarget.value);
             }}
           />
           <TextInput
@@ -149,9 +130,9 @@ function ClassForm({
             withAsterisk
             label="Code"
             placeholder="Code 123"
-            {...form.getInputProps('code')}
-            w={'100%'}
-            mt={'md'}
+            {...form.getInputProps("code")}
+            w={"100%"}
+            mt={"md"}
             size="md"
           />
           <TextInput
@@ -159,9 +140,9 @@ function ClassForm({
             withAsterisk
             label="Roman Code"
             placeholder="IX"
-            {...form.getInputProps('roman_code')}
-            w={'100%'}
-            mt={'md'}
+            {...form.getInputProps("roman_code")}
+            w={"100%"}
+            mt={"md"}
             size="md"
           />
           <TextInput
@@ -169,9 +150,9 @@ function ClassForm({
             withAsterisk
             label="Order Code"
             placeholder="2"
-            {...form.getInputProps('order_code')}
-            w={'100%'}
-            mt={'md'}
+            {...form.getInputProps("order_code")}
+            w={"100%"}
+            mt={"md"}
             size="md"
           />
         </Flex>

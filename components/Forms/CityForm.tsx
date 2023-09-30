@@ -1,25 +1,10 @@
-import {
-  TextInput,
-  Button,
-  Group,
-  Box,
-  Flex,
-  Select,
-  LoadingOverlay,
-} from '@mantine/core';
-import { useForm } from '@mantine/form';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { MatrixDataType, MatrixRowType } from '../Matrix';
-import {
-  createCity,
-  readCities,
-  readCountries,
-  readDataCustomFilter,
-  readStates,
-  updateCity,
-} from '@/utilities/API';
+import { TextInput, Button, Group, Box, Flex, Select, LoadingOverlay } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { MatrixDataType, MatrixRowType } from "../Matrix";
+import { createCity, readCities, readCountries, readDataCustomFilter, readStates, updateCity } from "@/utilities/API";
 
-import { notifications } from '@mantine/notifications';
+import { notifications } from "@mantine/notifications";
 
 function CityForm({
   open,
@@ -42,17 +27,14 @@ function CityForm({
   const [countriesData, setCountriesData] = useState<MatrixDataType>([]);
 
   async function readCountriesData() {
-    const countries = await readCountries('status', true);
+    const countries = await readCountries("status", true);
     setCountriesData(countries);
   }
 
-  async function readStatesData(
-    filterBy?: 'country',
-    filterQuery?: string | number
-  ) {
+  async function readStatesData(filterBy?: "country", filterQuery?: string | number) {
     let states: MatrixDataType;
     if (filterBy && filterQuery) {
-      states = await readDataCustomFilter('states', 'find_many', {
+      states = await readDataCustomFilter("states", "find_many", {
         [filterBy]: filterQuery,
         status: true,
       });
@@ -74,7 +56,7 @@ function CityForm({
 
   useEffect(() => {
     if (rowData?.country) {
-      readStatesData('country', rowData.country);
+      readStatesData("country", rowData.country);
     }
   }, [rowData?.country]);
 
@@ -84,17 +66,15 @@ function CityForm({
 
   const form = useForm({
     initialValues: {
-      name: rowData?.name ?? '',
-      state: rowData?.state ?? '',
-      country: rowData?.country ?? '',
-      status: rowData?.status ?? '',
+      name: rowData?.name ?? "",
+      state: rowData?.state ?? "",
+      country: rowData?.country ?? "",
+      status: rowData?.status ?? "",
     },
     validate: {
-      name: (value) =>
-        value.length < 2 ? 'Name must have at least 2 letters' : null,
-      state: (value) => (value.length === 0 ? 'State must be selected' : null),
-      country: (value) =>
-        value.length === 0 ? 'Country must be selected' : null,
+      name: (value) => (value.length < 2 ? "Name must have at least 2 letters" : null),
+      state: (value) => (value.length === 0 ? "State must be selected" : null),
+      country: (value) => (value.length === 0 ? "Country must be selected" : null),
     },
   });
   const [oLoader, setOLoader] = useState<boolean>(false);
@@ -104,7 +84,7 @@ function CityForm({
     values = { ...values };
     if (rowData !== undefined) {
       const isCityUpdated = await updateCity(rowData._id, values);
-      if (isCityUpdated.toUpperCase() === 'DOCUMENT UPDATED') {
+      if (isCityUpdated.toUpperCase() === "DOCUMENT UPDATED") {
         const cities = await readCities();
         setData(cities);
         setOLoader(false);
@@ -115,74 +95,65 @@ function CityForm({
       notifications.show({
         title: `City ${rowData.name} updated!`,
         message: `The above city has been updated with new information.`,
-        color: 'blue',
+        color: "blue",
       });
     } else {
       const isCityCreated = await createCity(values as MatrixRowType);
-      if (isCityCreated.toUpperCase() === 'DOCUMENT CREATED') {
+      if (isCityCreated.toUpperCase() === "DOCUMENT CREATED") {
         const cities = await readCities();
         setData(cities);
         setOLoader(false);
         notifications.show({
           title: `City created!`,
           message: `A new city has been created.`,
-          color: 'green',
+          color: "green",
         });
-      } else if (isCityCreated.toUpperCase() === 'DOCUMENT ALREADY EXISTS') {
+      } else if (isCityCreated.toUpperCase() === "DOCUMENT ALREADY EXISTS") {
         setOLoader(false);
         notifications.show({
           title: `City already exists!`,
           message: `${values.name} already exists.`,
-          color: 'orange',
+          color: "orange",
         });
       } else {
         setOLoader(false);
       }
     }
     form.setValues({
-      name: '',
-      state: '',
-      country: '',
+      name: "",
+      state: "",
+      country: "",
       status: true,
     });
     close();
   };
 
   const onChangeCountry = async (event: any) => {
-    form.setFieldValue('country', event ?? '');
-    form.setFieldValue('state', '');
-    await readStatesData('country', event ?? '');
+    form.setFieldValue("country", event ?? "");
+    form.setFieldValue("state", "");
+    await readStatesData("country", event ?? "");
   };
 
-  const stateNames = statesData
-    .filter((c) => Boolean(c.status))
-    .map((state) => state.name);
+  const stateNames = statesData.filter((c) => Boolean(c.status)).map((state) => state.name);
 
-  const countryNames = countriesData
-    .filter((c) => Boolean(c.status))
-    .map((country) => country.name);
+  const countryNames = countriesData.filter((c) => Boolean(c.status)).map((country) => country.name);
 
   return (
-    <Box maw={'100%'} mx="auto" mih={500}>
+    <Box maw={"100%"} mx="auto" mih={500}>
       <form onSubmit={form.onSubmit(onHandleSubmit)}>
         <LoadingOverlay visible={oLoader} overlayBlur={2} />
-        <Flex
-          direction={'column'}
-          justify={'center'}
-          align={'flex-start'}
-          w={'100%'}
-        >
+        <Flex direction={"column"} justify={"center"} align={"flex-start"} w={"100%"}>
           <TextInput
-            disabled={readonly}
+            disabled={readonly || rowData != undefined}
             withAsterisk
             label="Name"
             placeholder="John Doe"
-            {...form.getInputProps('name')}
-            w={'100%'}
-            mt={'md'}
+            {...form.getInputProps("name")}
+            w={"100%"}
+            mt={"md"}
             size="md"
             onChange={(event) => {
-              form.setFieldValue('name', event.currentTarget.value);
+              form.setFieldValue("name", event.currentTarget.value);
             }}
           />
           <Select
@@ -190,30 +161,30 @@ function CityForm({
             searchable
             nothingFound="No options"
             data={countryNames}
-            label={'Country'}
+            label={"Country"}
             name="Country"
-            mt={'md'}
+            mt={"md"}
             size="md"
             withAsterisk
-            {...form.getInputProps('country')}
+            {...form.getInputProps("country")}
             onChange={onChangeCountry}
-            w={'100%'}
+            w={"100%"}
           />
           <Select
-            disabled={readonly || form.values.country === ''}
+            disabled={readonly || form.values.country === ""}
             searchable
             nothingFound="No options"
             data={stateNames}
-            label={'State'}
+            label={"State"}
             name="State"
-            mt={'md'}
+            mt={"md"}
             size="md"
             withAsterisk
-            {...form.getInputProps('state')}
+            {...form.getInputProps("state")}
             onChange={async (event) => {
-              form.setFieldValue('state', event ?? '');
+              form.setFieldValue("state", event ?? "");
             }}
-            w={'100%'}
+            w={"100%"}
           />
         </Flex>
         <Group position="right" mt="md">
