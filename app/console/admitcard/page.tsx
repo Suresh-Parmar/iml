@@ -418,6 +418,9 @@ function Page() {
             </td>
             <td>{item.school_name}</td>
             <td>{item.students_count}</td>
+            <td>
+              <span className="material-symbols-outlined">download</span>
+            </td>
           </tr>
         );
       });
@@ -438,6 +441,7 @@ function Page() {
             </th>
             <th scope="col">School Name</th>
             <th scope="col">Students Count</th>
+            <th scope="col"> download</th>
           </tr>
         </thead>
         <tbody>{renderTableData()}</tbody>
