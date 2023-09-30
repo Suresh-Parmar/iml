@@ -65,6 +65,7 @@ function UploadButton(props: any) {
   const reduxData: any = useSelector((state) => state);
   let activeUserID = reduxData?.authentication?.user?._id;
   let defaultShow = reduxData?.authentication?.user?.role == "super_admin";
+  let selectedCountry = reduxData?.client?.selectedCountry?.name;
 
   let fetchData = () => {
     updateDataRes("rolemappings", "", "name", activeUserID, "find_many")
@@ -178,7 +179,10 @@ function UploadButton(props: any) {
       }
     } else {
       if (formType == "Students") {
-        return uploadSpreadsheetStudent;
+        return (file: any, collection: any, meta_data: any) => {
+          let newMetaData = JSON.stringify({ country: selectedCountry });
+          return uploadSpreadsheetStudent(file, collection, newMetaData);
+        };
       } else {
         return uploadSpreadsheet;
       }
