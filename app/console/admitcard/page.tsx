@@ -462,14 +462,6 @@ function Page() {
     );
   };
 
-  const studentWiseAdmitCard = () => {
-    return (
-      <div className="m-4">
-        <SingleStudent />
-      </div>
-    );
-  };
-
   const uiFilters = {
     label: "Filter By",
     key: "",
