@@ -73,8 +73,9 @@ function Profile() {
       });
   };
 
-  let handleSave = (isPassword: any) => {
+  let handleSave = (activePage: any) => {
     let { password, newPassword, confirmPassword } = resetPasswordFieldsJson;
+    let isPassword = activePage.link == "password";
 
     setResetPasswordFieldsJson({});
     if (isPassword) {
