@@ -361,7 +361,7 @@ function Header() {
                   </Menu.Target>
                   <Menu.Dropdown>
                     <Link prefetch={false} href={"/profile"}>
-                      <Menu.Item icon={<IconUser size="1rem" />}>Profile</Menu.Item>
+                      <Menu.Item icon={<IconUser size="1rem" />}>Manage Account</Menu.Item>
                     </Link>
                     {pathname === "/" ? (
                       <Menu.Item icon={<IconDatabaseCog size="0.9rem" stroke={1.5} />}>

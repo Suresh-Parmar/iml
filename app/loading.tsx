@@ -19,7 +19,3 @@ export default function Loading() {
     </Container>
   );
 }
-
-// 1. change password // profile
-// 3 fields
-// 2 reset passWord only for admin

@@ -264,12 +264,14 @@ function Page() {
       onchange: (e: any) => {
         handleDropDownChange(e, "competition");
       },
+      style: { maxWidth: "35%", width: "20%" },
       value: allData.competition,
     },
     {
       label: "State",
       key: "state",
       type: "select",
+      style: { maxWidth: "35%", width: "20%" },
       data: statesData,
       onchange: (e: any) => {
         handleDropDownChange(e, "state", "city");
@@ -278,6 +280,7 @@ function Page() {
     },
     {
       label: "City",
+      style: { maxWidth: "35%", width: "20%" },
       key: "city",
       type: "select",
       data: citiesData,
@@ -310,6 +313,7 @@ function Page() {
     {
       label: allData?.childSchoolData?.label || "Select School",
       key: "select_school",
+      style: { maxWidth: "35%", width: "25%" },
       type: "select",
       data: allData?.childSchoolData?.data || schoolsDataDropDown,
       onchange: (e: any) => {
@@ -320,6 +324,7 @@ function Page() {
     {
       label: "Select Class",
       key: "select_class",
+      style: { maxWidth: "35%", width: "25%" },
       type: "select",
       data: classesData,
       onchange: (e: any) => {
