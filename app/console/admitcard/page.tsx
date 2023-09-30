@@ -12,6 +12,7 @@ import { Group, MultiSelect, Radio, Select } from "@mantine/core";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { checkIsAllChecked, selectCheckBOxData } from "@/helpers/selectCheckBox";
+import { SingleStudent } from "@/components/admitCard";
 
 function Page() {
   const [allData, setAllData] = useState<any>({});
@@ -22,8 +23,6 @@ function Page() {
   // const [classesData, setClassesData] = useState<any>([]);
   // const [groupsData, setGroupData] = useState<any>([]);
   // const [cohortsData, setcohortsData] = useState<any>([]);
-
-  console.log(allData, "allData");
 
   const state: any = useSelector((state) => state);
   const countryName = state?.client?.selectedCountry?.name;
@@ -75,6 +74,10 @@ function Page() {
     setCitiesData(cities);
   }
 
+  const downloadPdf = (data: any) => {
+    console.log(data);
+  };
+
   function readSchoolsData(isSchool: any = false) {
     let newPayload: any = {
       country: countryName || "India",
@@ -85,14 +88,11 @@ function Page() {
     };
 
     if (isSchool) {
-      // newPayload = { school_name: [allData.schools] };
-      newPayload = { school_name: ["MAHATMA INTERNATIONAL SCHOOL (CBSE)"] };
+      newPayload = { school_name: allData.schools };
     }
 
-    console.log(newPayload, "newPayload");
-
     admitCardCountData(newPayload).then((res) => {
-      isSchool ? console.log(res, "newPayload") : setSchoolsData(res.data);
+      isSchool ? downloadPdf(res.data) : setSchoolsData(res.data);
     });
   }
 
@@ -319,13 +319,50 @@ function Page() {
     );
   }, [allData.schools, schoolsData, checkIsAllChecked(allData.schools, schoolsData)]);
 
+  const schoolWiseAdmitCard = () => {
+    return (
+      <div className="m-4">
+        <div className="d-flex flex-wrap gap-4">{renderData()}</div>
+        <div className="table-responsive mt-4">{renderSchoolsTable()}</div>
+        {/* <div className="table-responsive  m-4">{renderTable()}</div> */}
+        {allData?.schools?.length ? (
+          <div className="btn btn-primary form-control" onClick={() => readSchoolsData(true)}>
+            DownLoad Pdf
+          </div>
+        ) : (
+          ""
+        )}
+      </div>
+    );
+  };
+
+  const studentWiseAdmitCard = () => {
+    return (
+      <div className="m-4">
+        <SingleStudent />
+      </div>
+    );
+  };
+
+  const uiFilters = {
+    label: "Filter By",
+    key: "",
+    type: "radio",
+    options: [
+      { label: "School Wise", value: "schoolWise" },
+      { label: "Student Wise", value: "studentWise" },
+    ],
+    onChange: (e: any) => {
+      handleDropDownChange(e, "admitCardFilter");
+    },
+    value: allData.admitCardFilter || "schoolWise",
+  };
+
   return (
-    <>
-      <div className="d-flex flex-wrap gap-4 m-4">{renderData()}</div>
-      <div className="table-responsive  m-4">{renderSchoolsTable()}</div>
-      {/* <div className="table-responsive  m-4">{renderTable()}</div> */}
-      <div onClick={() => readSchoolsData(true)}>get Data</div>
-    </>
+    <div className="m-4">
+      <div>{renderRadio(uiFilters)}</div>
+      {allData.admitCardFilter == "studentWise" ? studentWiseAdmitCard() : schoolWiseAdmitCard()}
+    </div>
   );
 }
 
