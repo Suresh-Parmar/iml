@@ -135,18 +135,8 @@ function Page() {
   }
 
   const getCohorts = () => {
-    let payload = {
-      collection_name: "cohorts",
-      op_name: "find_many",
-      filter_var: {
-        country: countryName,
-        state: allData.state,
-        city: allData.city,
-        competition_code: allData.competition,
-      },
-    };
     if (allData?.childSchoolData?.key == "select_cohort") {
-      readApiData("cohorts", payload)
+      readApiData("cohorts")
         .then((res) => {
           setcohortsData(filterData(res, "label", "value"));
         })
@@ -155,19 +145,8 @@ function Page() {
   };
 
   const getGroups = () => {
-    let payload = {
-      collection_name: "groups",
-      op_name: "find_many",
-      filter_var: {
-        country: countryName,
-        state: allData.state,
-        city: allData.city,
-        competition_code: allData.competition,
-      },
-    };
-
     if (allData?.childSchoolData?.key == "select_group") {
-      readApiData("groups", payload)
+      readApiData("groups")
         .then((res) => {
           setGroupData(filterData(res, "label", "value"));
         })
