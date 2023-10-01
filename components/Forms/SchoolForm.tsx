@@ -164,19 +164,19 @@ function SchoolForm({
 
     validate: {
       name: (value) => (value.length < 2 ? "Name must have at least 2 letters" : null),
-      principal: (value) => (value.length < 2 ? "Name must have at least 2 letters" : null),
-      teacher_incharge: (value) => (value.length < 2 ? "must have at least 2 letters" : null),
-      relationship_manager: (value) => (value.length < 2 ? "must have at least 2 letters" : null),
+      // principal: (value) => (value.length < 2 ? "Name must have at least 2 letters" : null),
+      // teacher_incharge: (value) => (value.length < 2 ? "must have at least 2 letters" : null),
+      // relationship_manager: (value) => (value.length < 2 ? "must have at least 2 letters" : null),
       // group: (value) => (value.length < 2 ? "must be selected" : null),
-      board: (value) => (value.length === 0 ? "Board must be selected" : null),
+      // board: (value) => (value.length === 0 ? "Board must be selected" : null),
       state: (value) => (value.length === 0 ? "State must be selected" : null),
       city: (value) => (value.length === 0 ? "City must be selected" : null),
-      address: (value) => (value.length < 2 ? "Address must have at least 50 letters" : null),
-      name_address: (value) => (value.length < 2 ? "Address must have at least 50 letters" : null),
-      label: (value) => (value.length < 2 ? "Address must have at least 50 letters" : null),
-      pincode: (value) => (/^[1-9][0-9]{5}$/.test(value) ? null : "Invalid pin-code"), // ^[1-9][0-9]{5}$ // ^[1-9]{1}[0-9]{2}\\s{0, 1}[0-9]{3}$
-      contact_number: (value) =>
-        /^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/.test(value) ? null : "Invalid mobile number",
+      // address: (value) => (value.length < 2 ? "Address must have at least 50 letters" : null),
+      // name_address: (value) => (value.length < 2 ? "Address must have at least 50 letters" : null),
+      // label: (value) => (value.length < 2 ? "Address must have at least 50 letters" : null),
+      // pincode: (value) => (/^[1-9][0-9]{5}$/.test(value) ? null : "Invalid pin-code"), // ^[1-9][0-9]{5}$ // ^[1-9]{1}[0-9]{2}\\s{0, 1}[0-9]{3}$
+      // contact_number: (value) =>
+      //   /^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/.test(value) ? null : "Invalid mobile number",
       // contact_email: isEmail("Invalid email"),
     },
   });
@@ -264,7 +264,7 @@ function SchoolForm({
         <Flex gap={"md"} direction={"row"} justify={"center"} align={"flex-start"} w={"100%"}>
           <div style={{ display: "grid", gridTemplateColumns: "auto auto", gap: "10px", width: "100%" }}>
             <TextInput
-              disabled={readonly || !!rowData }
+              disabled={readonly || !!rowData}
               withAsterisk
               label="Name"
               placeholder="John Doe"
@@ -288,7 +288,7 @@ function SchoolForm({
             />
             <TextInput
               disabled={readonly}
-              withAsterisk
+              // withAsterisk
               name="Contact Number"
               label="Contact Number"
               placeholder="9876320145"
@@ -307,13 +307,13 @@ function SchoolForm({
               label={"Board"}
               mt={"md"}
               size="md"
-              withAsterisk
+              // withAsterisk
               {...form.getInputProps("board")}
               w={"100%"}
             />
             <TextInput
               disabled={readonly}
-              withAsterisk
+              // withAsterisk
               label="Class Label"
               placeholder="Class Label"
               {...form.getInputProps("label")}
@@ -331,7 +331,7 @@ function SchoolForm({
               label={"Group"}
               mt={"md"}
               size="md"
-              withAsterisk
+              // withAsterisk
               {...form.getInputProps("group")}
               w={"100%"}
             />
@@ -361,7 +361,7 @@ function SchoolForm({
                 placeholder="23, Horizon Lane, Spring Creek Avenue, Paris, France - 780004"
                 label="Name Address"
                 {...form.getInputProps("name_address")}
-                withAsterisk
+                // withAsterisk
                 autosize
                 // minRows={3}
                 w={"100%"}
@@ -379,7 +379,7 @@ function SchoolForm({
                 placeholder="23, Horizon Lane, Spring Creek Avenue, Paris, France - 780004"
                 label="Address"
                 {...form.getInputProps("address")}
-                withAsterisk
+                // withAsterisk
                 autosize
                 // minRows={3}
                 w={"100%"}
@@ -420,7 +420,7 @@ function SchoolForm({
             />
             <TextInput
               disabled={readonly}
-              withAsterisk
+              // withAsterisk
               label="Pin-Code"
               placeholder="780004"
               {...form.getInputProps("pincode")}
@@ -447,7 +447,7 @@ function SchoolForm({
               label={"Relationship Manager"}
               mt={"md"}
               size="md"
-              withAsterisk
+              // withAsterisk
               {...form.getInputProps("relationship_manager")}
               w={"100%"}
             />
@@ -460,7 +460,7 @@ function SchoolForm({
               placeholder="Principal"
               mt={"md"}
               size="md"
-              withAsterisk
+              // withAsterisk
               {...form.getInputProps("principal")}
               w={"100%"}
             />
@@ -473,7 +473,7 @@ function SchoolForm({
               mt={"md"}
               placeholder="Teacher Incharge"
               size="md"
-              withAsterisk
+              // withAsterisk
               {...form.getInputProps("teacher_incharge")}
               w={"100%"}
             />

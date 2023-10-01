@@ -29,8 +29,6 @@ function Page() {
   const countryName = state?.client?.selectedCountry?.name;
   let isStudentFilters = allData.admitCardFilter == "studentWise";
 
-  console.log(allData, "allData allData");
-
   const filterData = (data: any[], key: string, val: string, findkey: any = "") => {
     let newData: any[] = [];
     if (Array.isArray(data)) {
