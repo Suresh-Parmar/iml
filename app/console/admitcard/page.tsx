@@ -110,6 +110,7 @@ function Page() {
     admitCardCountData(newPayload).then((res) => {
       if (isSchool) {
         downloadPdf(res.data);
+        setSchoolsData(res.data);
       } else {
         let data = genrateDataFormDropDown(res.data);
         setSchoolsDataDropDown(data);
@@ -401,7 +402,13 @@ function Page() {
             <td>{item.school_name}</td>
             <td>{item.students_count}</td>
             <td>
-              <span className="material-symbols-outlined">download</span>
+              {!item.admit_card_url ? (
+                <span className="material-symbols-outlined">download</span>
+              ) : (
+                <a href={item.admit_card_url} target="_blank" style={{ color: "blue" }}>
+                  <span className="material-symbols-outlined">download</span>
+                </a>
+              )}
             </td>
           </tr>
         );
@@ -439,7 +446,7 @@ function Page() {
         {/* <div className="table-responsive  m-4">{renderTable()}</div> */}
         {allData?.schools?.length && !isStudentFilters ? (
           <div className="btn btn-primary form-control" onClick={() => readSchoolsData(true)}>
-            Download admit cards in pdf
+            Genrate PDF
           </div>
         ) : (
           ""
