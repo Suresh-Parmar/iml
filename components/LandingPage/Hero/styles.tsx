@@ -3,13 +3,8 @@ import { createStyles, rem } from "@mantine/core";
 const useStyles = createStyles((theme) => ({
   header: {
     paddingTop: theme.spacing.sm,
-    backgroundColor:
-      theme.colorScheme === "dark"
-        ? theme.colors.dark[6]
-        : theme.colors.gray[0],
-    borderBottom: `${rem(1)} solid ${
-      theme.colorScheme === "dark" ? "transparent" : theme.colors.gray[2]
-    }`,
+    backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[0],
+    borderBottom: `${rem(1)} solid ${theme.colorScheme === "dark" ? "transparent" : theme.colors.gray[2]}`,
     marginBottom: rem(120),
   },
   mainSection: {
@@ -23,8 +18,7 @@ const useStyles = createStyles((theme) => ({
     transition: "background-color 100ms ease",
 
     "&:hover": {
-      backgroundColor:
-        theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.white,
+      backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.white,
     },
 
     [theme.fn.smallerThan("xs")]: {
@@ -39,8 +33,7 @@ const useStyles = createStyles((theme) => ({
   },
 
   userActive: {
-    backgroundColor:
-      theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.white,
+    backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.white,
   },
 
   tabs: {
@@ -48,10 +41,10 @@ const useStyles = createStyles((theme) => ({
       display: "none",
     },
   },
-  flex:{
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+  flex: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
   tabsList: {
     borderBottom: "0 !important",
@@ -63,19 +56,12 @@ const useStyles = createStyles((theme) => ({
     backgroundColor: "transparent",
 
     "&:hover": {
-      backgroundColor:
-        theme.colorScheme === "dark"
-          ? theme.colors.dark[5]
-          : theme.colors.gray[1],
+      backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.colors.gray[1],
     },
 
     "&[data-active]": {
-      backgroundColor:
-        theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
-      borderColor:
-        theme.colorScheme === "dark"
-          ? theme.colors.dark[7]
-          : theme.colors.gray[2],
+      backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
+      borderColor: theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.colors.gray[2],
     },
   },
   link: {
@@ -97,10 +83,7 @@ const useStyles = createStyles((theme) => ({
     },
 
     ...theme.fn.hover({
-      backgroundColor:
-        theme.colorScheme === "dark"
-          ? theme.colors.dark[6]
-          : theme.colors.gray[0],
+      backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[0],
     }),
   },
 
@@ -110,27 +93,19 @@ const useStyles = createStyles((theme) => ({
     borderRadius: theme.radius.md,
 
     ...theme.fn.hover({
-      backgroundColor:
-        theme.colorScheme === "dark"
-          ? theme.colors.dark[7]
-          : theme.colors.gray[0],
+      backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.colors.gray[0],
     }),
 
     "&:active": theme.activeStyles,
   },
 
   dropdownFooter: {
-    backgroundColor:
-      theme.colorScheme === "dark"
-        ? theme.colors.dark[7]
-        : theme.colors.gray[0],
+    backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.colors.gray[0],
     margin: `calc(${theme.spacing.md} * -1)`,
     marginTop: theme.spacing.sm,
     padding: `${theme.spacing.md} calc(${theme.spacing.md} * 2)`,
     paddingBottom: theme.spacing.xl,
-    borderTop: `${rem(1)} solid ${
-      theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.colors.gray[1]
-    }`,
+    borderTop: `${rem(1)} solid ${theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.colors.gray[1]}`,
   },
 
   hiddenMobile: {

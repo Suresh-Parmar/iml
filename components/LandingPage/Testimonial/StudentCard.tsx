@@ -3,6 +3,7 @@ import React from "react";
 import { useStyles } from "./style";
 import Images from "next/image";
 import { IconUser } from "@tabler/icons-react";
+import { setGetData } from "@/helpers/getLocalStorage";
 // import Avatar
 
 type TestimonialResponse = {
@@ -24,7 +25,9 @@ function StudentCard({
   name,
   school,
 }: TestimonialResponse) {
-  const { classes } = useStyles();
+    let isDarkThem = setGetData("colorScheme");
+
+  const { classes } = useStyles(isDarkThem);
   return (
     <Paper
       shadow="lg"

@@ -13,6 +13,7 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { createContactUs } from "@/utilities/API";
+import { setGetData } from "@/helpers/getLocalStorage";
 
 export type ContactType = {
   name: string;
@@ -25,18 +26,18 @@ export type ContactType = {
 };
 
 const useStyles = createStyles((theme) => ({
-  wrapper:{
+  wrapper: {
     backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.colors.white,
   },
-  input :{
-     color : theme.colorScheme === "dark" ? theme.colors.gray[1] : theme.colors.dark[8]
-  }
-}))
+  input: {
+    color: theme.colorScheme === "dark" ? theme.colors.gray[1] : theme.colors.dark[8],
+  },
+}));
 
 function ContactForm() {
+  let isDarkThem = setGetData("colorScheme");
 
-
-  const { classes } = useStyles();
+  const { classes } = useStyles(isDarkThem);
   const form = useForm({
     initialValues: {
       name: "",
@@ -48,10 +49,8 @@ function ContactForm() {
       answer: "",
     },
     validate: {
-      name: (value) =>
-        value.length < 2 ? "Name must have at least 2 letters" : null,
-      email: (value) =>
-        !/\S+@\S+\.\S+/.test(value) ? "Invalid email format" : null,
+      name: (value) => (value.length < 2 ? "Name must have at least 2 letters" : null),
+      email: (value) => (!/\S+@\S+\.\S+/.test(value) ? "Invalid email format" : null),
       mobileNumber: (value) => {
         if (!value) {
           return "Mobile number is required";
@@ -60,19 +59,17 @@ function ContactForm() {
         }
         return null;
       },
-      answer: (value) =>
-        value !== "12" ? "Incorrect answer to the math question" : null,
+      answer: (value) => (value !== "12" ? "Incorrect answer to the math question" : null),
     },
   });
 
   const handleSubmit = async (values: any) => {
-
     let formValues = {
       ...values,
     };
 
     let data = await createContactUs(formValues);
-    console.log("Successfully ",data);
+    console.log("Successfully ", data);
 
     form.setValues({
       name: "",
@@ -86,14 +83,9 @@ function ContactForm() {
   };
 
   return (
-    <Box maw={"100%"}  mx="auto">
+    <Box maw={"100%"} mx="auto">
       <form onSubmit={form.onSubmit(handleSubmit)}>
-        <Flex
-          direction={"column"}
-          justify={"center"}
-          align={"flex-start"}
-          w={"100%"}
-        >
+        <Flex direction={"column"} justify={"center"} align={"flex-start"} w={"100%"}>
           <TextInput
             withAsterisk
             label="Name"

@@ -105,6 +105,62 @@ export const allTypes: any = {
     },
     { actions: true, id: "actions", defaultShow: true },
   ],
+  marks: [
+    {
+      id: "Registration No.",
+      key: "name",
+      defaultShow: true,
+      filterFn: "equals",
+      sortingFn: fuzzySort,
+    },
+    {
+      id: "Marks %",
+      key: "% marks",
+      defaultShow: true,
+      filterFn: "equals",
+      sortingFn: fuzzySort,
+    },
+    {
+      id: "Class",
+      key: "class",
+      defaultShow: true,
+      filterFn: "equals",
+      sortingFn: fuzzySort,
+    },
+    {
+      id: "Series",
+      key: "series",
+      defaultShow: true,
+      filterFn: "equals",
+      sortingFn: fuzzySort,
+    },
+    {
+      id: "Total Marks",
+      key: "total marks",
+      defaultShow: true,
+      filterFn: "equals",
+      sortingFn: fuzzySort,
+    },
+    {
+      id: "Updated By",
+      key: "updated_by",
+      defaultShow: true,
+      filterFn: "equals",
+      sortingFn: fuzzySort,
+    },
+    {
+      id: "Rank",
+      key: "rank",
+      defaultShow: true,
+      filterFn: "equals",
+      sortingFn: fuzzySort,
+    },
+    {
+      id: "status",
+      key: "status",
+    },
+    { actions: true, id: "actions", defaultShow: true },
+  ],
   testimonials: [
     {
       id: "Name",
@@ -869,6 +925,105 @@ export const allTypes: any = {
     {
       id: "status",
       key: "status",
+      defaultShow: true,
+    },
+    { actions: true, id: "actions", defaultShow: true },
+  ],
+  Dispatch: [
+    {
+      id: "RazorPayOrderID",
+      key: "order_id",
+      defaultShow: false,
+    },
+    {
+      id: "Dispatch ID",
+      key: "dispatch_id",
+      defaultShow: true,
+    },
+    {
+      id: "Order ID",
+      key: "receipt_number",
+      defaultShow: true,
+    },
+    {
+      id: "Receiver Type",
+      key: "receiver_type",
+      defaultShow: true,
+    },
+    {
+      id: "Receiver Name",
+      key: "receiver_name",
+      defaultShow: true,
+    },
+    {
+      id: "City",
+      key: "city",
+      defaultShow: true,
+    },
+    {
+      id: "Invoice No",
+      key: "invoice_number",
+      defaultShow: true,
+    },
+    {
+      id: "Dispatch Date",
+      key: "dispatch_date",
+      defaultShow: true,
+    },
+    {
+      id: "Courier Name",
+      key: "courier_name",
+      defaultShow: true,
+    },
+    {
+      id: "Warehouse Name",
+      key: "warehouse_name",
+      defaultShow: false,
+    },
+    {
+      id: "AWB No",
+      key: "awb_number",
+      defaultShow: true,
+    },
+    {
+      id: "Status",
+      key: "status",
+      defaultShow: true,
+    },
+
+    {
+      id: "EWay Bill No",
+      key: "eway_bill_no",
+      defaultShow: false,
+    },
+    {
+      id: "Actual Weight",
+      key: "actual_weight",
+      defaultShow: false,
+    },
+    {
+      id: "No Of Boxes",
+      key: "boxes",
+      defaultShow: false,
+    },
+    {
+      id: "Packed By",
+      key: "packed_by",
+      defaultShow: false,
+    },
+    {
+      id: "Checked By",
+      key: "checked_by",
+      defaultShow: false,
+    },
+    {
+      id: "Amount",
+      key: "amount",
+      defaultShow: false,
+    },
+    {
+      id: "Created At",
+      key: "created_at",
       defaultShow: true,
     },
     { actions: true, id: "actions", defaultShow: true },

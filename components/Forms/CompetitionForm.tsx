@@ -6,6 +6,8 @@ import { createCompetition, readCompetitions, readData, updateCompetition } from
 import { notifications } from "@mantine/notifications";
 import { getReduxState } from "@/redux/hooks";
 import Editor from "../editor/editor";
+import { useSelector } from "react-redux";
+import { setGetData } from "@/helpers/getLocalStorage";
 
 function CompetitionForm({
   open,
@@ -62,10 +64,11 @@ function CompetitionForm({
     },
   });
   const [oLoader, setOLoader] = useState<boolean>(false);
+  let reduxData = useSelector((state: any) => state.data);
+  let selectedCountryLocal = setGetData("selectedCountry", "", true);
 
   const getSelectedCountry = () => {
-    const state = getReduxState();
-    return state.client.selectedCountry.name;
+    return reduxData?.selectedCountry?.country_code || selectedCountryLocal?.country_code || "";
   };
 
   const onHandleSubmit = async (values: any) => {

@@ -1,10 +1,11 @@
-import { useAuthentication } from '@/app/authentication/state';
+import { setGetData } from "@/helpers/getLocalStorage";
 
 function IsLoggedIn() {
-    const authentication = useAuthentication();
-    const isLogin = authentication.metadata.status === "authenticated"
+  const authentication: any = setGetData("userData", false, true);
 
-  return isLogin
+  const isLogin = authentication?.metadata?.status === "authenticated";
+
+  return isLogin;
 }
 
-export default IsLoggedIn
+export default IsLoggedIn;

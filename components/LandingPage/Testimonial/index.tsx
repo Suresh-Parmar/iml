@@ -1,4 +1,3 @@
-"use client";
 import { Box, Center, Text, Title } from "@mantine/core";
 import React, { useEffect, useRef, useState } from "react";
 import StudentCard from "./StudentCard";
@@ -7,6 +6,7 @@ import { useStyles } from "./style";
 import Autoplay from "embla-carousel-autoplay";
 import { TeacherCard } from "./TeacherCard";
 import { readTestimonial } from "@/utilities/API";
+import { setGetData } from "@/helpers/getLocalStorage";
 // import Matrix, { MatrixDataType } from '@/components/Matrix';
 const data = [
   {
@@ -107,7 +107,9 @@ type TestimonialResponse = {
 function StudentTestimonial() {
   const autoplay = useRef(Autoplay({ delay: 2000 }));
   const teacherTestimonailRef = useRef(Autoplay({ delay: 3000 }));
-  const { classes } = useStyles();
+    let isDarkThem = setGetData("colorScheme");
+
+  const { classes } = useStyles(isDarkThem);
   const [StudentData, setStudentData] = useState<TestimonialResponse[]>([]);
   const [teacherData, setteacherData] = useState<TestimonialResponse[]>([]);
 
@@ -125,13 +127,13 @@ function StudentTestimonial() {
 
   const getData = async () => {
     const testimonial: any = await readTestimonial();
-    let teacherArr = testimonial?.filter((item:any) => {
-      return( item?.role === "teacher" &&  item)
-    })
-    setteacherData(teacherArr)
-    let studentArr = testimonial?.filter((item:any) => {
-      return( item?.role !== "teacher" &&  item)
-    })
+    let teacherArr = testimonial?.filter((item: any) => {
+      return item?.role === "teacher" && item;
+    });
+    setteacherData(teacherArr);
+    let studentArr = testimonial?.filter((item: any) => {
+      return item?.role !== "teacher" && item;
+    });
     setStudentData(studentArr);
   };
 
@@ -188,29 +190,29 @@ function StudentTestimonial() {
           </Text>
         </Center>
         <Box w={"80%"} mt={"40px"} m={"auto"}>
-        <Carousel
-          withIndicators
-          height={400}
-          slideSize="33.4%"
-          slideGap="xs"
-          loop
-          align="start"
-          breakpoints={[
-            { maxWidth: "md", slideSize: "50%" },
-            { maxWidth: "sm", slideSize: "100%", slideGap: 1 },
-          ]}
-          mx="auto"
-          classNames={{
-            viewport: classes.carouselCont,
-            container: classes.carouselCont,
-            indicators: classes.indicator,
-            controls: classes.controlers,
-          }}
-          plugins={[teacherTestimonailRef.current]}
-          onMouseEnter={teacherTestimonailRef.current.stop}
-          onMouseLeave={teacherTestimonailRef.current.reset}
-          slidesToScroll={1}
-        >
+          <Carousel
+            withIndicators
+            height={400}
+            slideSize="33.4%"
+            slideGap="xs"
+            loop
+            align="start"
+            breakpoints={[
+              { maxWidth: "md", slideSize: "50%" },
+              { maxWidth: "sm", slideSize: "100%", slideGap: 1 },
+            ]}
+            mx="auto"
+            classNames={{
+              viewport: classes.carouselCont,
+              container: classes.carouselCont,
+              indicators: classes.indicator,
+              controls: classes.controlers,
+            }}
+            plugins={[teacherTestimonailRef.current]}
+            onMouseEnter={teacherTestimonailRef.current.stop}
+            onMouseLeave={teacherTestimonailRef.current.reset}
+            slidesToScroll={1}
+          >
             {teacherSlides}
           </Carousel>
         </Box>

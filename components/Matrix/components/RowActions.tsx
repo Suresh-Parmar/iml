@@ -2,12 +2,14 @@ import { ActionIcon, Button, Dialog, Flex, Switch, Tooltip, Text } from "@mantin
 import { IconEdit, IconEye, IconLock, IconPassword, IconRefresh, IconSettings } from "@tabler/icons-react";
 import { Row } from "@tanstack/react-table";
 import { FormType, MatrixDataType, MatrixRowType } from "../types";
-import { Dispatch, SetStateAction } from "react";
-import { deleteRow, forgotCreds, unDeleteRow } from "@/utilities/API";
+import { Dispatch, SetStateAction, useState } from "react";
+import { deleteRow, dispatchIDGenration, forgotCreds, trackShipment, unDeleteRow } from "@/utilities/API";
 import { notifications } from "@mantine/notifications";
 import { useDisclosure } from "@mantine/hooks";
 import { formTypeToTableMapper } from "@/helpers/formTypeMapper";
 import { formTypeToFetcherMapper } from "@/helpers/dataFetcher";
+import Loader from "@/components/common/Loader";
+import { DispatchModalData } from "@/components/dispatch";
 
 const RowActions = ({
   setReadOnly,
@@ -29,6 +31,7 @@ const RowActions = ({
   defaultShow,
   permissionsData,
   showResetPassword,
+  showCreateForm,
 }: {
   extra?: any;
   open: () => void;
@@ -49,9 +52,18 @@ const RowActions = ({
   defaultShow?: any;
   permissionsData?: any;
   showResetPassword?: any;
+  showCreateForm?: any;
 }) => {
   const isUserForm = formTypeToTableMapper(formType) == "users" && formType != "Students";
   const [dialogOpened, { toggle: dialogToggle, close: dialogClose }] = useDisclosure(false);
+
+  const [loading, setLoading] = useState(false);
+  const [labelData, setLabelData] = useState("");
+  const [shipmentDetails, setShipmentDetails] = useState("");
+  let newFormType: any = formType;
+  let isDispatchForm: any = newFormType === "Dispatch";
+
+  let formRowData: any = row?.original;
 
   const resetPassWord = () => {
     let windowConfirm = window.confirm("Are you sure you want to reset Password?");
@@ -75,6 +87,44 @@ const RowActions = ({
       })
       .catch((err) => {
         console.log(err, "resres");
+      });
+  };
+
+  const createShipment = () => {
+    let data: any = structuredClone(row?.original);
+    let payload = { dispatch_id: data?.dispatch_id };
+    // let payload = { dispatch_id: "D10020" };
+
+    let windowConfirm = window.confirm("Are you sure you want to create shipment");
+    if (windowConfirm && data?.dispatch_id) {
+      setLoading(true);
+      dispatchIDGenration(payload)
+        .then((res) => {
+          setLabelData(res.data.label_url);
+          setLoading(false);
+        })
+        .catch((err) => {
+          setLoading(false);
+          console.log(err);
+        });
+    }
+  };
+
+  let label_url = formRowData?.label_url;
+
+  const trackShipmentDetails = () => {
+    let data = {
+      shipment_id: formRowData.awb_number,
+    };
+    setLoading(true);
+    trackShipment(data)
+      .then((res) => {
+        setLoading(false);
+        setShipmentDetails(res.data);
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.log(err);
       });
   };
 
@@ -129,7 +179,16 @@ const RowActions = ({
           </Button>
         </Flex>
       </Dialog>
-      {(permissionsData?.permissions?.delete && showStatus) || defaultShow ? (
+
+      {isDispatchForm ? (
+        formRowData?.awb_number ? (
+          <span className="material-symbols-outlined pointer gray" onClick={trackShipmentDetails}>
+            distance
+          </span>
+        ) : (
+          ""
+        )
+      ) : (permissionsData?.permissions?.delete && showStatus) || defaultShow ? (
         <Tooltip label={status ? "Disable the user" : "Enable the user"}>
           <Switch
             checked={status ? true : false}
@@ -139,7 +198,7 @@ const RowActions = ({
           />
         </Tooltip>
       ) : null}
-      {(permissionsData?.permissions?.update && showEdit) || defaultShow ? (
+      {((permissionsData?.permissions?.update && showEdit) || defaultShow) && showCreateForm ? (
         <ActionIcon
           onClick={(event) => {
             setReadOnly(false);
@@ -162,20 +221,37 @@ const RowActions = ({
           <IconSettings size={"1.5rem"} />
         </ActionIcon>
       ) : null}
-      <ActionIcon
-        onClick={(event) => {
-          setReadOnly(true);
-          setRowData(row.original);
-          open();
-        }}
-      >
-        <IconEye size={"1.5rem"} />
-      </ActionIcon>
+      {showCreateForm && (
+        <ActionIcon
+          onClick={(event) => {
+            setReadOnly(true);
+            setRowData(row.original);
+            open();
+          }}
+        >
+          <IconEye size={"1.5rem"} />
+        </ActionIcon>
+      )}
       {showResetPassword && (
         <ActionIcon onClick={resetPassWord}>
           <IconRefresh size={"1.5rem"} />
         </ActionIcon>
       )}
+      {isDispatchForm ? (
+        labelData || label_url ? (
+          <a href={labelData || label_url} target="_blank" className="text-success">
+            <span className="material-symbols-outlined">download</span>
+          </a>
+        ) : (
+          <span className="material-symbols-outlined pointer gray" onClick={createShipment}>
+            box_add
+          </span>
+        )
+      ) : (
+        ""
+      )}
+      <DispatchModalData data={shipmentDetails} />
+      <Loader show={loading} />
     </Flex>
   );
 };

@@ -1,0 +1,87 @@
+{
+  "id": 219400,
+  "waybill_no": "20894512020222",
+  "status": "Cancelled",
+  "status_dp": "Created",
+  "status_history": null,
+  "pickup_date_time": "2023-10-14T16:09:25+05:30",
+  "mode": {
+    "id": 16,
+    "delivery_partner": {
+      "id": 11,
+      "name": "Delhivery Enterprise",
+      "common_name": "delhivery_enterprise",
+      "is_pickup_ready": true,
+      "is_public": true,
+      "is_shipment_ready": true,
+      "is_insurance_available": false,
+      "cut_off_time": "13:00:00",
+      "is_to_pay_available": false,
+      "is_cheque_available": false,
+      "logo": "https://dp-logos.s3.ap-south-1.amazonaws.com/delhivery_enterprise.png",
+      "is_disable": false,
+      "is_listing_ready": true
+    },
+    "mode_name": "surface",
+    "common_name": "Surface",
+    "is_active": true
+  },
+  "original_edd": null,
+  "edd": null,
+  "add": null,
+  "ship_date": null,
+  "from_warehouse": {
+    "id": 268483,
+    "name": "Vishal Mega Mart 2",
+    "contact_person_name": "HEMANT TEDROS",
+    "contact_person_email": "hemloshali5333@gmail.com",
+    "contact_person_contact_no": "9911441014",
+    "address": {
+      "id": 266369,
+      "address_line_1": "SHOP NO104 GROUND FLOOR WALKWAY MALL TEDHI BRIDGE",
+      "address_line_2": "MALL ROAD null",
+      "pincode": "110019",
+      "city": "Delhi",
+      "state": "Delhi",
+      "country": ""
+    }
+  },
+  "to_warehouse": {
+    "id": 300609,
+    "name": "PANVEL",
+    "contact_person_name": "Ankit Rao",
+    "contact_person_email": null,
+    "contact_person_contact_no": "1234567890",
+    "address": {
+      "id": 301455,
+      "address_line_1": "Khanda Colony, PanvelKhanda Colony, Panvel",
+      "address_line_2": "asaba hobli ,shidlagatta road, hosakote null",
+      "pincode": "410209",
+      "city": "PANVEL",
+      "state": "Maharashtra",
+      "country": ""
+    }
+  },
+  "delivery_partner": {
+    "id": 11,
+    "name": "Delhivery Enterprise",
+    "common_name": "delhivery_enterprise",
+    "is_pickup_ready": true,
+    "is_public": true,
+    "is_shipment_ready": true,
+    "is_insurance_available": false,
+    "cut_off_time": "13:00:00",
+    "is_to_pay_available": false,
+    "is_cheque_available": false,
+    "logo": "https://dp-logos.s3.ap-south-1.amazonaws.com/delhivery_enterprise.png",
+    "is_disable": false,
+    "is_listing_ready": true
+  },
+  "packaging_unit_details": [346899, 346898],
+  "created_at": "2023-10-13T21:39:25.944691+05:30",
+  "updated_at": "2023-10-14T10:14:39.876141+05:30",
+  "no_of_units": 2,
+  "approx_weight": "22.00",
+  "reason_for_delay": null,
+  "tracking_status": true
+}

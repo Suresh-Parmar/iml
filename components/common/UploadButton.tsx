@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState, useEffect } from "react";
 import { Box, Button, FileInput } from "@mantine/core";
 import { IconDownload, IconFileSpreadsheet, IconUpload } from "@tabler/icons-react";
@@ -24,6 +22,8 @@ import { useSelector } from "react-redux";
 import { formTypeToTableMapper } from "@/helpers/formTypeMapper";
 import { formTypeToFetcherMapper } from "@/helpers/dataFetcher";
 import Loader from "./Loader";
+import { useRoleCrudOpsgetQuery } from "@/redux/apiSlice";
+import { iterateData } from "@/helpers/getData";
 
 interface SpreadSheetFormValues {
   spreadSheetFile: File | undefined;
@@ -56,38 +56,54 @@ const SpreadSheetFIleInput = ({
 };
 
 function UploadButton(props: any) {
-  const { formType, data, setData } = props;
+  const { formType, data, setData, label } = props;
   const [openModal, setOpenModal] = useState(false);
   const [permissionsData, setPermissionsData] = useState<any>({});
   const [siteJson, setSiteJson] = useState<any>(siteJsonData);
   const [loader, setLoader] = useState<any>(false);
-
   const pathname: any = usePathname();
+  const reduxData: any = useSelector((state: any) => state?.data);
 
-  const reduxData: any = useSelector((state) => state);
-  let activeUserID = reduxData?.authentication?.user?._id;
-  let defaultShow = reduxData?.authentication?.user?.role == "super_admin";
-  let selectedCountry = reduxData?.client?.selectedCountry?.name;
+  let activeUserID = reduxData?.userData?.user?._id;
+  let defaultShow = reduxData?.userData?.user?.role == "super_admin";
+  let selectedCountry = reduxData?.selectedCountry?.name;
 
-  let fetchData = () => {
-    setLoader(true);
-    updateDataRes("rolemappings", "", "name", activeUserID, "find_many")
-      .then((res) => {
-        setLoader(false);
-        let data = res?.data?.response[0];
-        if (data && data?.data) {
-          setSiteJson([...data.data]);
-        }
-      })
-      .catch((error) => {
-        setLoader(false);
-        console.log(error);
-      });
-  };
+  let rolesData = useRoleCrudOpsgetQuery(activeUserID);
+  rolesData = iterateData(rolesData);
 
   useEffect(() => {
-    activeUserID && !defaultShow && fetchData();
-  }, [activeUserID]);
+    if (loader) {
+      notifications.show({
+        title: `uploading ...`,
+        loading: true,
+        message: ``,
+        color: "green",
+        autoClose: 1000,
+      });
+    }
+  }, [loader]);
+
+  // let fetchData = () => {
+  //   setLoader(true);
+  //   updateDataRes("rolemappings", "", "name", activeUserID, "find_many")
+  //     .then((res) => {
+  //       setLoader(false);
+  //       let data = res?.data?.response[0];
+  //       if (data && data?.data) {
+  //         setSiteJson([...data.data]);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       setLoader(false);
+  //       console.log(error);
+  //     });
+  // };
+
+  useEffect(() => {
+    if (rolesData[0]?.data && Array.isArray(rolesData[0].data)) {
+      setSiteJson(rolesData[0]?.data);
+    }
+  }, [rolesData]);
 
   const handleisValid = (pathname: string) => {
     if (pathname.includes("/")) {
@@ -209,13 +225,14 @@ function UploadButton(props: any) {
       apiCall(isUpdate)(file, tableName, meta_data)
         .then((res) => {
           setLoader(false);
-
-          notifications.show({
-            title: `File processed successfully!`,
-            message: `The data in the spreadsheet has been processed and the table has been refreshed.`,
-            color: "green",
-            autoClose: 8000,
-          });
+          setTimeout(() => {
+            notifications.show({
+              title: `File processed successfully!`,
+              message: `The data in the spreadsheet has been processed and the table has been refreshed.`,
+              color: "green",
+              autoClose: 8000,
+            });
+          }, 1200);
           setOpenModal(false);
 
           let data;
@@ -227,10 +244,11 @@ function UploadButton(props: any) {
           }
 
           saveExcel(data, "", "", formType, true);
-
-          const fetcher = formTypeToFetcherMapper(formType);
-          const dataFetch = fetcher();
-          setData(dataFetch);
+          let fetchGridData = async () => {
+            const fetcher = await formTypeToFetcherMapper(formType)();
+            setData(fetcher);
+          };
+          fetchGridData();
 
           form.setValues({
             spreadSheetFile: undefined,
@@ -240,23 +258,26 @@ function UploadButton(props: any) {
         .catch((err) => {
           setLoader(false);
           setOpenModal(false);
-          notifications.show({
-            title: `Failed to upload !`,
-            message: `For some reasons file uploading failed, please contact administrator.`,
-            color: "red",
-          });
+          setTimeout(() => {
+            notifications.show({
+              title: `Failed to upload !`,
+              message: `For some reasons file uploading failed, please contact administrator.`,
+              color: "red",
+            });
+          }, 1200);
         });
     } else {
       form.setValues({
         spreadSheetFile: undefined,
         updateSpreadSheetFile: undefined,
       });
-
-      notifications.show({
-        title: `No file found!`,
-        message: `If you have selected a file already, please re-select it.`,
-        color: "red",
-      });
+      setTimeout(() => {
+        notifications.show({
+          title: `No file found!`,
+          message: `If you have selected a file already, please re-select it.`,
+          color: "red",
+        });
+      }, 1200);
     }
   };
 
@@ -291,7 +312,7 @@ function UploadButton(props: any) {
 
   const renderModal = () => {
     return (
-      <ModalBox title={formType} open={openModal} setOpen={setOpenModal}>
+      <ModalBox title={label || formType} open={openModal} setOpen={setOpenModal}>
         <Box mx={30} pt={10} style={{ cursor: "pointer" }}>
           <DownloadFile
             data={[]}
@@ -299,7 +320,7 @@ function UploadButton(props: any) {
             formType={formType}
             filterString=""
             ShowIcon={IconDownload}
-            title={`${formType} Template`}
+            title={`${label || formType} Template`}
             hideMsg={true}
           />
         </Box>

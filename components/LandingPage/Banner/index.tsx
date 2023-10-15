@@ -1,5 +1,6 @@
 import { Title, Text, Container, Button, Overlay, createStyles, rem, Box } from '@mantine/core';
 import BgImage from '../assets/background.jpg';
+import { setGetData } from '@/helpers/getLocalStorage';
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -97,7 +98,9 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export function Banner() {
-  const { classes, cx } = useStyles();
+let isDarkThem = setGetData("colorScheme");
+
+  const { classes, cx } = useStyles(isDarkThem);
 
   return (
     <Box id={'/'} className={classes.wrapper}>

@@ -9,6 +9,7 @@ import { siteJson as siteJsonData } from "@/components/permissions";
 import { usePathname } from "next/navigation";
 import { findFromJson } from "@/helpers/filterFromJson";
 import { formTypeToTableMapper } from "@/helpers/formTypeMapper";
+import { setGetData } from "@/helpers/getLocalStorage";
 
 function RenderFormTypes(
   formType: any,
@@ -20,21 +21,22 @@ function RenderFormTypes(
   setReadOnly: any,
   setRowData: any,
   setOLoader: any,
-  extra?: any
+  extra?: any,
+  showCreateForm?: any
 ) {
   const [siteJson, setSiteJson] = useState<any>(siteJsonData);
   const [permissionsData, setPermissionsData] = useState<any>({});
   const pathname: any = usePathname();
 
-  const reduxData: any = useSelector((state) => state);
-  let activeUserID = reduxData?.authentication?.user?._id;
+  let getLocalStorageDataRoles = setGetData("rolemappings", "", true);
+  let activeUserID = setGetData("userData", "", true)?.user?._id;
 
   const getServerRoleMatrix = () => {
     updateDataRes("rolemappings", "", "name", activeUserID, "find_many")
       .then((res) => {
         let data = res?.data?.response[0];
         if (data && data?.data) {
-          localStorage.setItem("rolemappings", JSON.stringify(data.data));
+          setGetData("rolemappings", data.data, true);
           setSiteJson([...data.data]);
         }
       })
@@ -44,16 +46,10 @@ function RenderFormTypes(
   };
 
   let fetchData = () => {
-    let getLocalStorageData = localStorage.getItem("rolemappings");
-    if (!getLocalStorageData) {
-      getServerRoleMatrix();
+    if (getLocalStorageDataRoles) {
+      setSiteJson(getLocalStorageDataRoles);
     } else {
-      try {
-        let localJson = JSON.parse(getLocalStorageData);
-        setSiteJson(localJson);
-      } catch (e) {
-        getServerRoleMatrix();
-      }
+      getServerRoleMatrix();
     }
   };
 
@@ -66,7 +62,8 @@ function RenderFormTypes(
     setPermissionsData({ ...data });
   };
 
-  let isSuperAdmin = reduxData?.authentication?.user?.role == "super_admin";
+  let isSuperAdmin = setGetData("userData", "", true)?.user?.role == "super_admin";
+
   let isUserForm = formTypeToTableMapper(formType) == "users";
   let showResetPassword = isSuperAdmin && isUserForm;
 
@@ -108,6 +105,7 @@ function RenderFormTypes(
           defaultShow={isSuperAdmin}
           permissionsData={permissionsData}
           showResetPassword={showResetPassword}
+          showCreateForm={showCreateForm}
         />
       ),
       header: () => (

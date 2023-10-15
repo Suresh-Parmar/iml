@@ -12,19 +12,20 @@ import {
 } from '@mantine/core';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import Link from 'next/link';
+import { setGetData } from '@/helpers/getLocalStorage';
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles((theme,colorScheme:any) => ({
   control: {
     fontWeight: 500,
     display: 'block',
     width: '100%',
     padding: `${theme.spacing.xs} ${theme.spacing.md}`,
-    color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
+    color: colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
     fontSize: theme.fontSizes.sm,
 
     '&:hover': {
-      backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[0],
-      color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+      backgroundColor: colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[0],
+      color: colorScheme === 'dark' ? theme.white : theme.black,
     },
   },
 
@@ -36,13 +37,13 @@ const useStyles = createStyles((theme) => ({
     paddingLeft: rem(31),
     marginLeft: rem(30),
     fontSize: theme.fontSizes.sm,
-    color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.gray[7],
-    borderLeft: `${rem(1)} solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]
+    color: colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.gray[7],
+    borderLeft: `${rem(1)} solid ${colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]
       }`,
 
     '&:hover': {
-      backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[0],
-      color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+      backgroundColor: colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[0],
+      color: colorScheme === 'dark' ? theme.white : theme.black,
     },
   },
 
@@ -59,7 +60,9 @@ interface LinksGroupProps {
 }
 
 export function LinksGroup({ icon: Icon, label, initiallyOpened, links }: LinksGroupProps) {
-  const { classes, theme } = useStyles();
+let colorScheme = setGetData("colorScheme");
+
+  const { classes, theme } = useStyles(colorScheme);
   const hasLinks = Array.isArray(links);
   const [opened, setOpened] = useState(initiallyOpened || false);
   const ChevronIcon = theme.dir === 'ltr' ? IconChevronRight : IconChevronLeft;

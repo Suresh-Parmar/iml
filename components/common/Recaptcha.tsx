@@ -1,6 +1,8 @@
 import dynamic from "next/dynamic";
 import React, { useRef, LegacyRef } from "react";
 import { useMantineColorScheme } from "@mantine/core";
+import { useSelector } from "react-redux";
+import { changeColorTheme } from "@/redux/slice";
 
 const ReCAPTCHABase = dynamic(
   async () => {
@@ -19,9 +21,10 @@ const ReCAPTCHABase = dynamic(
 
 const Recaptcha = (props: any): any => {
   const { setRecaptcha, captchaSize } = props;
-  const { colorScheme } = useMantineColorScheme();
   const recaptchaRef = useRef<LegacyRef<any>>(null);
   const RECAPTCHA_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_KEY;
+  const allReduxData = useSelector((state: any) => state.data);
+  let colorScheme = allReduxData.colorScheme;
 
   const renderRecaptcha = () => {
     return (

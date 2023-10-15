@@ -6,37 +6,38 @@ import { useMediaQuery } from "@mantine/hooks";
 import SingleCard from "./SingleCard";
 import { useStyles } from "./style";
 import { readAnnoucements } from "@/utilities/API";
+import { setGetData } from "@/helpers/getLocalStorage";
 
 const data = [
   {
     imgLink: "https://www.ignitedmindlab.com/css/template1/images/circle1.png",
     title: "Best forests to visit in North America",
     category: "nature",
-    // color: 
+    // color:
   },
   {
     imgLink: "https://www.ignitedmindlab.com/css/template1/images/circle2.png",
     title: "Hawaii beaches review: better than you think",
     category: "beach",
-    // color: 
+    // color:
   },
   {
     imgLink: "https://www.ignitedmindlab.com/css/template1/images/circle3.png",
     title: "Mountains at night: 12 best locations to enjoy the view",
     category: "nature",
-    // color: 
+    // color:
   },
   {
     imgLink: "https://www.ignitedmindlab.com/css/template1/images/circle2.png",
     title: "Aurora in Norway: when to visit for best experience",
     category: "nature",
-    // color: 
+    // color:
   },
   {
     imgLink: "https://www.ignitedmindlab.com/css/template1/images/circle3.png",
     title: "Mountains at night: 12 best locations to enjoy the view",
     category: "nature",
-    // color: 
+    // color:
   },
 ];
 
@@ -52,6 +53,7 @@ type AnnoucementType = {
 
 function Annoucement() {
   const autoplay = useRef(Autoplay({ delay: 2000 }));
+
   const { classes } = useStyles();
   const [annoucementData, setannoucementData] = useState<AnnoucementType[]>([]);
   const theme = useMantineTheme();
@@ -96,7 +98,7 @@ function Annoucement() {
             viewport: classes.carouselCont,
             container: classes.carouselCont,
             indicators: classes.indicator,
-            controls: classes.controlers
+            controls: classes.controlers,
           }}
           // plugins={[autoplay.current]}
           // onMouseEnter={autoplay.current.stop}

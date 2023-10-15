@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useEffect } from "react";
 import { Box, Button, ThemeIcon, Tooltip } from "@mantine/core";
 import { IconTableExport } from "@tabler/icons-react";

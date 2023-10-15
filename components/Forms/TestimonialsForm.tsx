@@ -1,9 +1,8 @@
-import { TextInput, Checkbox, Button, Group, Box, Flex, LoadingOverlay } from "@mantine/core";
+import { TextInput, Button, Group, Box, Flex, LoadingOverlay, Select } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { MatrixDataType, MatrixRowType } from "../Matrix";
-import { dynamicCreate, dynamicDataUpdate, readTestimonial } from "@/utilities/API";
-import { DateInput, DatePickerInput } from "@mantine/dates";
+import { dynamicCreate, dynamicDataUpdate, readApiData } from "@/utilities/API";
 import { notifications } from "@mantine/notifications";
 import Editor from "../editor/editor";
 
@@ -42,6 +41,7 @@ function TestimonialsForm({
       startdate: rowData?.startdate ?? "",
       enddate: rowData?.enddate ?? "",
       thumbnail: rowData?.thumbnail ?? "",
+      role: rowData?.role ?? "",
     },
     validate: {
       name: (value) => (value.length < 2 ? "Name must have at least 2 letters" : null),
@@ -55,7 +55,7 @@ function TestimonialsForm({
     if (rowData !== undefined) {
       const isBoardUpdated = await dynamicDataUpdate("testimonials", rowData._id, values);
       if (isBoardUpdated.toUpperCase() === "DOCUMENT UPDATED") {
-        const boards = await readTestimonial();
+        const boards = await readApiData("testimonials");
         setData(boards);
         setOLoader(false);
       } else {
@@ -70,7 +70,7 @@ function TestimonialsForm({
     } else {
       const isBoardCreated = await dynamicCreate("testimonials", values as MatrixRowType);
       if (isBoardCreated.toUpperCase() === "DOCUMENT CREATED") {
-        const boards = await readTestimonial();
+        const boards = await readApiData("testimonials");
         setData(boards);
         setOLoader(false);
         notifications.show({
@@ -104,7 +104,7 @@ function TestimonialsForm({
   let renderFormData = () => {
     let formData = [
       {
-        disabled: readonly || !!rowData,
+        disabled: readonly,
         withAsterisk: true,
         label: "Name",
         placeholder: "John Die",
@@ -135,6 +135,18 @@ function TestimonialsForm({
         ...form.getInputProps("thumbnail"),
       },
       {
+        data: ["Student", "Teacher"],
+        inputType: "dropdown",
+        disabled: readonly,
+        withAsterisk: true,
+        label: "Role",
+        placeholder: "Role",
+        w: "100%",
+        mt: "md",
+        size: "md",
+        ...form.getInputProps("role"),
+      },
+      {
         inputType: "editor",
         readonly: readonly,
         withAsterisk: true,
@@ -150,6 +162,19 @@ function TestimonialsForm({
     return formData.map((item: any, index) => {
       if (item.inputType == "editor") {
         return <Editor key={index} {...item} />;
+      } else if (item.inputType == "dropdown") {
+        return (
+          <Select
+            key={index}
+            disabled={readonly}
+            searchable
+            nothingFound="No options"
+            mt={"md"}
+            size="md"
+            w={"100%"}
+            {...item}
+          />
+        );
       } else {
         return <TextInput key={index} {...item} />;
       }

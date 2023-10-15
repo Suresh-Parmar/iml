@@ -12,49 +12,45 @@ import {
   IconAffiliate,
   IconDownload,
 } from "@tabler/icons-react";
-import siteJsonData from "../../../permissions/SiteJson.json";
 import { findFromJson } from "@/helpers/filterFromJson";
-import { useSelector } from "react-redux";
-import { updateDataRes } from "@/utilities/API";
-import Loader from "@/components/common/Loader";
+import { setGetData } from "@/helpers/getLocalStorage";
+import { useRoleCrudOpsgetQuery } from "@/redux/apiSlice";
+import { iterateData } from "@/helpers/getData";
 
 function NavigationBarMain({ opened }: { opened: boolean }) {
   const consoleBaseURL = "/console";
   const router = useRouter();
   const pathname = usePathname();
   const [siteJson, setSiteJson] = useState<any>([]);
-  const [show, setShow] = useState<any>(false);
 
-  const reduxData: any = useSelector((state) => state);
-  let activeUserID = reduxData?.authentication?.user?._id;
-  let defaultShow = reduxData?.authentication?.user?.role == "super_admin";
+  let userData: any = setGetData("userData", false, true);
+  let activeUserID = userData?.user?._id;
+  let defaultShow = userData?.metadata?.role == "super_admin";
+
   let excludePaths = ["profile"];
 
-  const fetchData = () => {
-    updateDataRes("rolemappings", "", "name", activeUserID, "find_many")
-      .then((res) => {
-        let data = res?.data?.response[0];
-        if (data && data?.data) {
-          localStorage.setItem("rolemappings", JSON.stringify(data.data));
-          setSiteJson([...data.data]);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  let rolesData = useRoleCrudOpsgetQuery(activeUserID);
+  rolesData = iterateData(rolesData);
+
+  // const fetchData = () => {
+  //   updateDataRes("rolemappings", "", "name", activeUserID, "find_many")
+  //     .then((res) => {
+  //       let data = res?.data?.response[0];
+  //       if (data && data?.data) {
+  //         setGetData("rolemappings", data.data, true);
+  //         setSiteJson([...data.data]);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
 
   useEffect(() => {
-    if (show) {
-      setTimeout(() => {
-        setShow(false);
-      }, 1000);
+    if (rolesData[0]?.data && Array.isArray(rolesData[0].data)) {
+      setSiteJson(rolesData[0]?.data);
     }
-  }, [pathname]);
-
-  useEffect(() => {
-    activeUserID && fetchData();
-  }, [activeUserID]);
+  }, [rolesData]);
 
   useEffect(() => {
     handleisValid(pathname);
@@ -71,10 +67,8 @@ function NavigationBarMain({ opened }: { opened: boolean }) {
 
     let data = findFromJson(siteJson, pathname, "link");
 
-    if (!data?.permissions?.view && reduxData?.authentication?.user?.role != "super_admin") {
-      if (!excludePaths.includes(pathname)) {
-        router.replace(consoleBaseURL);
-      }
+    if (!data?.permissions?.view && !excludePaths.includes(pathname)) {
+      router.replace(consoleBaseURL);
     }
   };
 
@@ -166,6 +160,13 @@ function NavigationBarMain({ opened }: { opened: boolean }) {
           label: "Site Configs",
           description: "Site Configs",
         },
+        {
+          href: `${consoleBaseURL}/bulkEmail`,
+          icon: <IconMap size="2rem" />,
+          color: "blue",
+          label: "Bulk Email",
+          description: "Bulk Email",
+        },
       ],
     },
     {
@@ -198,6 +199,13 @@ function NavigationBarMain({ opened }: { opened: boolean }) {
           description: "Payments of the system",
         },
         {
+          href: `${consoleBaseURL}/dispatch`,
+          icon: <IconMap size="2rem" />,
+          color: "blue",
+          label: "Dispatch",
+          description: "dispatch of the system",
+        },
+        {
           href: `${consoleBaseURL}/boards`,
           icon: <IconVocabulary size="2rem" />,
           color: "pink",
@@ -209,6 +217,13 @@ function NavigationBarMain({ opened }: { opened: boolean }) {
           icon: <IconChalkboard size="2rem" />,
           color: "green",
           label: "Classes",
+          description: "Grades and levels",
+        },
+        {
+          href: `${consoleBaseURL}/markssheet`,
+          icon: <IconChalkboard size="2rem" />,
+          color: "green",
+          label: "Marks Sheet",
           description: "Grades and levels",
         },
         {
@@ -357,7 +372,7 @@ function NavigationBarMain({ opened }: { opened: boolean }) {
           description: "All users of the system",
         },
         {
-          href: `${consoleBaseURL}/markssheet`,
+          href: `${consoleBaseURL}/markssheetdownload`,
           icon: <IconUser size="2rem" />,
           color: "gray",
           label: "Marks Sheet",
@@ -382,9 +397,9 @@ function NavigationBarMain({ opened }: { opened: boolean }) {
   ];
   const [showLabel, setShowLabel] = useState<boolean>(false);
 
-  const useStyles = createStyles((theme) => ({
+  const useStyles = createStyles((theme, colorScheme: any) => ({
     navbar: {
-      backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.white,
+      backgroundColor: colorScheme === "dark" ? theme.colors.dark[6] : theme.white,
       paddingBottom: 0,
     },
 
@@ -393,8 +408,8 @@ function NavigationBarMain({ opened }: { opened: boolean }) {
       paddingTop: 0,
       marginLeft: `calc(${theme.spacing.md} * -1)`,
       marginRight: `calc(${theme.spacing.md} * -1)`,
-      color: theme.colorScheme === "dark" ? theme.white : theme.black,
-      borderBottom: `${rem(1)} solid ${theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[3]}`,
+      color: colorScheme === "dark" ? theme.white : theme.black,
+      borderBottom: `${rem(1)} solid ${colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[3]}`,
     },
 
     links: {
@@ -410,10 +425,12 @@ function NavigationBarMain({ opened }: { opened: boolean }) {
     footer: {
       marginLeft: `calc(${theme.spacing.md} * -1)`,
       marginRight: `calc(${theme.spacing.md} * -1)`,
-      borderTop: `${rem(1)} solid ${theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[3]}`,
+      borderTop: `${rem(1)} solid ${colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[3]}`,
     },
   }));
-  const { classes } = useStyles();
+
+  let colorScheme = setGetData("colorScheme");
+  const { classes } = useStyles(colorScheme);
 
   const NavLinkIcon = (navigationBarLink: any) => {
     return (
@@ -450,7 +467,6 @@ function NavigationBarMain({ opened }: { opened: boolean }) {
               } else {
                 if (pathname != navigationBarLink.href) {
                   router.replace(navigationBarLink.href);
-                  setShow(true);
                 }
               }
             }}
@@ -471,7 +487,6 @@ function NavigationBarMain({ opened }: { opened: boolean }) {
                   onClick={() => {
                     if (pathname != navLink.href) {
                       router.replace(navLink.href);
-                      setShow(true);
                     }
                   }}
                 />
@@ -480,7 +495,6 @@ function NavigationBarMain({ opened }: { opened: boolean }) {
           </NavLink>
         );
       })}
-      <Loader show={show} />
     </Navbar.Section>
   );
 }
