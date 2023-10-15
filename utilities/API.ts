@@ -2,7 +2,8 @@ import { MatrixDataType, MatrixRowType } from "@/components/Matrix";
 import axios from "axios";
 
 import { GeographicalInformationType, RequestBodyType, PaymentResponseType, ContactUSType } from "./api-types";
-import { dispatchSignoutThunk, getReduxState } from "@/redux/hooks";
+import { getReduxState } from "@/redux/hooks";
+import { clearLocalData, setGetData } from "@/helpers/getLocalStorage";
 
 export const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 export const NEXT_API = `${BASE_URL}/crud_ops`;
@@ -18,22 +19,35 @@ export const LANDING_API = `${BASE_URL}/landing_page_data`;
 export const PAYMENT_VERIFY_API = `${BASE_URL}/verify_payment`;
 export const EXPORT_TEMPLATE = `${BASE_URL}/export_template`;
 export const FORGOT_CREDS = `${BASE_URL}/forgot_creds`;
+export const SEND_BULK = `${BASE_URL}/send_bulk_email`;
+export const SEND_BULK_STUDENT = `${BASE_URL}/bulk_email_to_student`;
 export const ADMITCARDCOUNT = `${BASE_URL}/admit_card_download`;
+export const STUDENTDETAILS = `${BASE_URL}/Student_details`;
+export const DISPATCH_REQUEST = `${BASE_URL}/dispatch_request`;
+export const SHIPMENT_CREATION = `${BASE_URL}/shipment_dispatch_request`;
+export const TRACKSHIPMENT = `${BASE_URL}/track_shipment`;
+export const OMRSHEET = `${BASE_URL}/OMR`;
+export const CERTIFICATE = `${BASE_URL}/Certificate`;
+export const UPDATEREQUEST = `${BASE_URL}/update_request_student`;
+
+let userData: any = setGetData("userData", false, true);
 
 const getAPIHeaders = (extraHeaders: Record<string, string> = {}) => {
+  let userData: any = setGetData("userData", false, true);
+  let authToken = userData?.metadata?.token;
   // grab current state
-  const state = getReduxState();
   // get the JWT token out of it
-  const authToken = state?.authentication?.metadata?.token;
   return {
     Authorization: `Bearer ${authToken}`,
     ...extraHeaders,
   };
 };
 
+let selectedCountryLocal = setGetData("selectedCountry", "", true);
+
 const getSelectedCountry = () => {
   const state = getReduxState();
-  return state.client.selectedCountry.name;
+  return state?.data?.selectedCountry?.label || selectedCountryLocal?.country_code || userData?.user?.country;
 };
 
 async function getGeographicalInformation() {
@@ -84,7 +98,8 @@ export const readDataCustomFilter = async (
     return responseJSON;
   } catch (err: any) {
     if (err?.response?.status === 401) {
-      dispatchSignoutThunk();
+      clearLocalData();
+      window.location.pathname = "/";
     }
   }
   return [];
@@ -129,7 +144,8 @@ export const readData = async (
     return responseJSON;
   } catch (err: any) {
     if (err?.response?.status === 401) {
-      dispatchSignoutThunk();
+      clearLocalData();
+      window.location.pathname = "/";
     }
   }
   return [];
@@ -225,7 +241,8 @@ export const readLandingData = async (
     return responseJSON;
   } catch (err: any) {
     if (err?.response?.status === 401) {
-      dispatchSignoutThunk();
+      clearLocalData();
+      window.location.pathname = "/";
     }
   }
   return [];
@@ -257,7 +274,8 @@ export const LandingForms = async (
     return responseJSON;
   } catch (err: any) {
     if (err?.response?.status === 401) {
-      dispatchSignoutThunk();
+      clearLocalData();
+      window.location.pathname = "/";
     }
   }
   return [];
@@ -273,6 +291,34 @@ const forgotCreds = async (data: any, useToken: any = false) => {
 
 const admitCardCountData = async (data: any) => {
   return await axios.post(ADMITCARDCOUNT, data, { headers: getAPIHeaders() });
+};
+
+const omrSheetDownload = async (data: any) => {
+  return await axios.post(OMRSHEET, data, { headers: getAPIHeaders() });
+};
+
+const certificateDownload = async (data: any) => {
+  return await axios.post(CERTIFICATE, data, { headers: getAPIHeaders() });
+};
+
+const updateRequest = async (data: any) => {
+  return await axios.post(UPDATEREQUEST, data, { headers: getAPIHeaders() });
+};
+
+const studentDetails = async (data: any) => {
+  return await axios.post(STUDENTDETAILS, data, { headers: getAPIHeaders() });
+};
+
+const dispatchRequest = async (data: any) => {
+  return await axios.post(DISPATCH_REQUEST, data, { headers: getAPIHeaders() });
+};
+
+const dispatchIDGenration = async (data: any) => {
+  return await axios.post(SHIPMENT_CREATION, data, { headers: getAPIHeaders() });
+};
+
+const trackShipment = async (data: any) => {
+  return await axios.post(TRACKSHIPMENT, data, { headers: getAPIHeaders() });
 };
 
 const createData = async (tableName: string, operationType: "create", payload: MatrixRowType) => {
@@ -506,10 +552,23 @@ export const readProductsLanding = async (className: string, boardName: string) 
     return responseJSON;
   } catch (err: any) {
     if (err?.response?.status === 401) {
-      dispatchSignoutThunk();
+      clearLocalData();
+      window.location.pathname = "/";
     }
   }
   return [];
+};
+
+export const sendBulkEmail = (requestBody: any) => {
+  return axios.post(`${SEND_BULK}`, requestBody, {
+    headers: getAPIHeaders(),
+  });
+};
+
+export const sendBulkEmailToStudent = (requestBody: any) => {
+  return axios.post(`${SEND_BULK_STUDENT}`, requestBody, {
+    headers: getAPIHeaders(),
+  });
 };
 
 export const readBoardsLanding = async () => {
@@ -555,12 +614,12 @@ export const readTempates = async (filterBy?: "country_id", filterQuery?: string
   return templates;
 };
 
-export const readPayments = async (filterBy?: "country_id", filterQuery?: string | number) => {
+export const readPayments = async (filterBy?: "country_id", filterQuery?: string | number, customData: any = "") => {
   let payments: MatrixDataType;
   if (filterBy && filterQuery) {
-    payments = await readData("payments", "find_many", filterBy, filterQuery);
+    payments = await readData("payments", "find_many", filterBy, filterQuery, customData);
   } else {
-    payments = await readData("payments", "find_many");
+    payments = await readData("payments", "find_many", undefined, "", customData);
   }
   return payments;
 };
@@ -1026,8 +1085,15 @@ export {
   updateState,
   dynamicDataUpdate,
   dynamicCreate,
+  updateRequest,
   forgotCreds,
   admitCardCountData,
+  studentDetails,
+  omrSheetDownload,
+  certificateDownload,
+  dispatchRequest,
+  dispatchIDGenration,
+  trackShipment,
   readApiData,
   updateDataRes,
 };

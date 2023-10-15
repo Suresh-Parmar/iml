@@ -110,6 +110,8 @@ export type AnnoucementType = {
   whatsnew: string;
   _id: string;
   capital: string;
+  summary: string;
+  newsdate: any;
 };
 
 export type Testimonials = {

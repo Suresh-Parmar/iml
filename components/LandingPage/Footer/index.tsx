@@ -4,6 +4,8 @@ import { IconBrandTwitter, IconBrandYoutube, IconBrandInstagram } from "@tabler/
 import { useStyles } from "./styles";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
+import { setGetData } from "@/helpers/getLocalStorage";
 
 interface FooterLinksProps {
   data: {
@@ -13,8 +15,12 @@ interface FooterLinksProps {
 }
 
 export function Footer({ data }: FooterLinksProps) {
-  const { classes } = useStyles();
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  let reduxData: any = useSelector((state: any) => state);
+  let colorScheme = reduxData?.data?.colorScheme;
+
+  let isDarkThem = setGetData("colorScheme");
+  const { classes } = useStyles(isDarkThem);
+
   const router = useRouter();
 
   const handleNavigate = (nav: string) => {

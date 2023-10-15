@@ -1,5 +1,3 @@
-"use client";
-
 import React, { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import {
   Flex,
@@ -34,7 +32,6 @@ import {
   getFacetedMinMaxValues,
   getSortedRowModel,
   FilterFn,
-  ColumnDef,
   flexRender,
   SortingState,
   ColumnOrderState,
@@ -52,17 +49,12 @@ import {
   IconChevronsRight,
   IconColumns,
   IconSearch,
-  IconTableOptions,
 } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 
-import dayjs from "dayjs";
-
 import { DebouncedInput } from "./components/DebouncedInput";
-import { useApplicationSelector } from "@/redux/hooks";
-import { clientStateSelector } from "@/app/state/clientSelector";
 import { FormType, MatrixDataType, MatrixRowType, UsersTypes } from "./types";
-import { fuzzyFilter, fuzzySort } from "./utilities";
+import { fuzzyFilter } from "./utilities";
 import ColumnHeader from "./components/ColumnHeader";
 import { UserForm } from "../Forms/UserForm";
 import { Studentsform } from "../Forms/Studentsform";
@@ -86,13 +78,16 @@ import { OrderConfigForm } from "../Forms/OrderConfigForm";
 import { ProductForm } from "../Forms/ProductsForm";
 import { ProductTypeForm } from "../Forms/ProductsTypeForm";
 import { UploadButton } from "../common";
-import { AnnouncementsForm, CohortsForm, GroupsForm, TestimonialsForm } from "../Forms";
+import { AnnouncementsForm, CohortsForm, GroupsForm, TestimonialsForm, DispatchForm } from "../Forms";
 import { RenderFormTypes } from "../formtypes";
 import { allTypes } from "../formtypes/renderTypesJson";
 import { usePathname } from "next/navigation";
 import { findFromJson } from "@/helpers/filterFromJson";
 import { siteJson as allJsonData } from "../permissions";
 import { useSelector } from "react-redux";
+import { setGetData } from "@/helpers/getLocalStorage";
+import { useRoleCrudOpsgetQuery } from "@/redux/apiSlice";
+import { iterateData } from "@/helpers/getData";
 declare module "@tanstack/table-core" {
   interface FilterFns {
     fuzzy: FilterFn<unknown>;
@@ -159,13 +154,17 @@ type MatrixProps = {
   formTypeData?: any;
 };
 
-function Matrix({ data, setData, showCreateForm, formType, formTypeData = {} }: MatrixProps) {
+function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, showLabel }: any) {
   const theme = useMantineTheme();
-  const { classes, cx } = useStyles();
+  let colorScheme = setGetData("colorScheme");
+
+  const { classes, cx } = useStyles(colorScheme);
   const [oLoader, setOLoader] = useState<boolean>(false);
   const [rowData, setRowData] = useState<MatrixRowType>();
 
-  const clientState = useApplicationSelector(clientStateSelector);
+  const reduxData: any = useSelector((state) => state);
+
+  const clientState = reduxData.data;
   const [columnResizeMode, setColumnResizeMode] = useState<ColumnResizeMode>("onChange");
   const [expanded, setExpanded] = useState<ExpandedState>({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -176,26 +175,32 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {} }: 
 
   const pathname = usePathname();
 
-  const reduxData: any = useSelector((state) => state);
-  let activeUserID = reduxData?.authentication?.user?._id;
-  let defaultShow = reduxData?.authentication?.user?.role == "super_admin";
+  let userData: any = setGetData("userData", false, true);
+  let activeUserID = userData?.user?._id;
+  let defaultShow = userData?.metadata?.role == "super_admin";
 
-  let fetchData = () => {
-    updateDataRes("rolemappings", "", "name", activeUserID, "find_many")
-      .then((res) => {
-        let data = res?.data?.response[0];
-        if (data && data?.data) {
-          setSiteJson([...data.data]);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  let rolesData = useRoleCrudOpsgetQuery(activeUserID);
+  rolesData = iterateData(rolesData);
+
+  // let fetchData = () => {
+  //   updateDataRes("rolemappings", "", "name", activeUserID, "find_many")
+  //     .then((res) => {
+  //       let data = res?.data?.response[0];
+  //       if (data && data?.data) {
+  //         setSiteJson([...data.data]);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
 
   useEffect(() => {
-    activeUserID && !defaultShow && fetchData();
-  }, [activeUserID]);
+    if (rolesData[0]?.data && Array.isArray(rolesData[0].data)) {
+      setSiteJson(rolesData[0]?.data);
+    }
+    // activeUserID && !defaultShow && fetchData();
+  }, [rolesData]);
 
   const handleisValid = (pathname: string) => {
     if (pathname.includes("/")) {
@@ -237,14 +242,11 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {} }: 
     setReadOnly,
     setRowData,
     setOLoader,
-    setIsExtra
+    setIsExtra,
+    showCreateForm
   );
 
   const [columnOrder, setColumnOrder] = useState<ColumnOrderState>(columns.map((column) => column.id as string));
-
-  /**
-   * Pagination
-   */
 
   const [{ pageIndex, pageSize }, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
@@ -263,7 +265,7 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {} }: 
     if (permissionsData?.permissions?.updateFile || permissionsData?.permissions?.uploadFile || defaultShow) {
       return (
         <Box ml={10}>
-          <UploadButton formType={formType} data={data} setData={setData} />
+          <UploadButton formType={formType} data={data} setData={setData} label={showLabel} />
         </Box>
       );
     }
@@ -344,6 +346,7 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {} }: 
     "Exam Center": ExamCenterForm,
     "Exam Center Mappings": ExamCenterMappingForm,
     announcements: AnnouncementsForm,
+    Dispatch: DispatchForm,
     testimonials: TestimonialsForm,
     groups: GroupsForm,
     cohorts: CohortsForm,
@@ -391,6 +394,16 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {} }: 
         alignItems: "flex-start",
       }}
     >
+      {/* --data '{
+    "school_names":[
+        "Learners'\'' Academy, Bandra (W), Mumbai"
+    ],
+    "email_short_name":"Online GF Admit Card",
+    "smtp_name":"Socketlabs IML",
+    "subject":"This is a test subject by ankit",
+    "city":"PANVEL",
+    "competition":"Mental Maths Competition - 2023" */}
+
       <Modal
         opened={opened}
         onClose={() => {
@@ -400,9 +413,9 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {} }: 
         closeOnClickOutside={false}
         title={`${formTitle}`}
         centered
-        size={isExtra ? "100%" : "70%"}
+        size={isExtra ? "100%" : "75%"}
         overlayProps={{
-          color: theme.colorScheme === "dark" ? theme.colors.dark[9] : theme.colors.gray[2],
+          color: colorScheme === "dark" ? theme.colors.dark[9] : theme.colors.gray[2],
           opacity: 0.55,
           blur: 3,
         }}
@@ -556,7 +569,7 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {} }: 
                     open();
                   }}
                 >
-                  Add {formType}
+                  Add {showLabel || formType}
                 </Button>
               )}
           </Flex>
@@ -592,7 +605,12 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {} }: 
                         hideVisibleIcon
                       />
                     ) : (
-                      <div style={{ background: "white" }}></div>
+                      <div
+                        className="d-flex justify-content-center align-items-center bold h-100"
+                        style={{ background: "white" }}
+                      >
+                        Actions
+                      </div>
                     );
                   })}
                 </tr>

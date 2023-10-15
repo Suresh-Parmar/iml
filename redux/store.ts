@@ -1,47 +1,22 @@
-import {
-  configureStore,
-  ThunkAction,
-  Action,
-  combineReducers,
-  createSerializableStateInvariantMiddleware,
-} from "@reduxjs/toolkit";
-import storage from "redux-persist/lib/storage";
-import { persistReducer } from "redux-persist";
-
-import { authenticationReducer } from "../app/authentication/state";
-import { clientReducer } from "../app/state";
-
-const persistConfig = {
-  key: "root",
-  storage,
-};
+import { configureStore, createSerializableStateInvariantMiddleware, isPlain } from "@reduxjs/toolkit";
+import dataslice from "./slice";
+import { apiSlice } from "./apiSlice";
 
 const serializableMiddleware = createSerializableStateInvariantMiddleware({
   isSerializable: () => true,
 });
-
-const reducers = combineReducers({
-  client: clientReducer,
-  authentication: authenticationReducer,
+export const store = configureStore({
+  reducer: {
+    data: dataslice,
+    [apiSlice.reducerPath]: apiSlice.reducer,
+  },
+  middleware: (getDefault) =>
+    getDefault({
+      serializableCheck: false,
+    }).concat(serializableMiddleware, apiSlice.middleware),
 });
 
-const persistedReducer = persistReducer(persistConfig, reducers);
-
-export function makeStore() {
-  return configureStore({
-    reducer: persistedReducer,
-    middleware: (getDefault) =>
-      getDefault({
-        serializableCheck: false,
-      }).concat(serializableMiddleware),
-  });
-}
-
-const store = makeStore();
-
-export type ApplicationState = ReturnType<typeof store.getState>;
-export type ApplicationDispatch = typeof store.dispatch;
-
-export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, ApplicationState, unknown, Action<string>>;
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 
 export default store;

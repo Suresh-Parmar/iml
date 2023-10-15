@@ -182,6 +182,20 @@
     }
   },
   {
+    "title": "Dispatch",
+    "link": "dispatch",
+    "icon": "dispatch",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  },
+  {
     "title": "School",
     "link": "schools",
     "icon": "school",

@@ -21,6 +21,8 @@ import { RoleMatrix } from "../permissions";
 import { formTypeToFetcherMapper } from "@/helpers/dataFetcher";
 import { filterDataSingle } from "@/helpers/dropDownData";
 import { checkValidDate } from "@/helpers/validations";
+import { useSelector } from "react-redux";
+import { setGetData } from "@/helpers/getLocalStorage";
 
 function UserForm({
   readonly,
@@ -65,13 +67,15 @@ function UserForm({
   //   setSchoolsData(schools);
   // }
 
+  let reduxData = useSelector((state: any) => state.data);
+  let selectedCountryLocal = setGetData("selectedCountry", "", true);
+
   const getSelectedCountry = () => {
-    const state = getReduxState();
-    return state.client.selectedCountry.name;
+    return reduxData?.selectedCountry?.country_code || selectedCountryLocal?.country_code || "";
   };
 
   const getMobileCode = () => {
-    return `+${getInternationalDailingCode(getSelectedCountry())}`;
+    return `+${getSelectedCountry()}`;
   };
 
   let filterData = (data: any, key: string): any[] => {

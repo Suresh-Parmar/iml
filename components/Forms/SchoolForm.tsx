@@ -19,6 +19,8 @@ import { getInternationalDailingCode } from "@/utilities/countriesUtils";
 import { maxLength } from "@/helpers/validations";
 import { filterDrodownData } from "@/helpers/filterFromJson";
 import { filterDataSingle } from "@/helpers/dropDownData";
+import { useSelector } from "react-redux";
+import { setGetData } from "@/helpers/getLocalStorage";
 
 function SchoolForm({
   open,
@@ -45,9 +47,11 @@ function SchoolForm({
   const [principal, setPrincipal] = useState<any>([]);
   const [relationshipManager, setrelationshipManager] = useState<any>([]);
 
+  let reduxData = useSelector((state: any) => state.data);
+  let selectedCountryLocal = setGetData("selectedCountry", "", true);
+
   const getSelectedCountry = () => {
-    const state = getReduxState();
-    return state.client.selectedCountry.name;
+    return reduxData?.selectedCountry?.country_code || selectedCountryLocal?.country_code || "";
   };
 
   useEffect(() => {
@@ -130,7 +134,7 @@ function SchoolForm({
   }, []);
 
   const getMobileCode = () => {
-    return `+${getInternationalDailingCode(getSelectedCountry())}`;
+    return `+${getSelectedCountry()}`;
   };
 
   const form = useForm({

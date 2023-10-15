@@ -81,8 +81,7 @@ function ProductForm({
   }
 
   async function fetchProducts() {
-    const classname = form.values.class?.replace("Class", "");
-    const productsRes = await readProducts("class", classname?.trim());
+    const productsRes = await readProducts("class", form.values.class);
     setProducts(productsRes);
   }
 
@@ -287,6 +286,30 @@ function ProductForm({
               form.setFieldValue("name", event.currentTarget.value);
             }}
           />
+          <TextInput
+            disabled={readonly}
+            label="SKU Name"
+            placeholder="SKU Name"
+            {...form.getInputProps("sku_name")}
+            w={"100%"}
+            mt={"md"}
+            size="md"
+            onChange={(event) => {
+              form.setFieldValue("sku_name", event.currentTarget.value);
+            }}
+          />
+          <TextInput
+            disabled={readonly}
+            label="SKU Code"
+            placeholder="SKU Code"
+            {...form.getInputProps("sku_code")}
+            w={"100%"}
+            mt={"md"}
+            size="md"
+            onChange={(event) => {
+              form.setFieldValue("sku_code", event.currentTarget.value);
+            }}
+          />
           <Select
             disabled={readonly}
             searchable
@@ -347,8 +370,8 @@ function ProductForm({
           <TextInput
             disabled={readonly}
             withAsterisk
-            label="Quantiy"
-            placeholder="Quantiy"
+            label="Max Selling Quantiy"
+            placeholder="Max Selling Quantiy"
             {...form.getInputProps("qty")}
             w={"100%"}
             mt={"md"}

@@ -2,10 +2,11 @@ import { TextInput, Checkbox, Button, Group, Box, Flex, LoadingOverlay } from "@
 import { useForm } from "@mantine/form";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { MatrixDataType, MatrixRowType } from "../Matrix";
-import { dynamicCreate, dynamicDataUpdate, readAnnoucements } from "@/utilities/API";
-import { DateInput, DatePickerInput } from "@mantine/dates";
+import { dynamicCreate, dynamicDataUpdate, readAnnoucements, readApiData } from "@/utilities/API";
+import { DateInput } from "@mantine/dates";
 import { notifications } from "@mantine/notifications";
 import Editor from "../editor/editor";
+import { checkValidDate } from "@/helpers/validations";
 
 function AnnouncementsForm({
   open,
@@ -32,14 +33,18 @@ function AnnouncementsForm({
       setFormTitle(`Add Board`);
     }
   }, []);
+
   const form = useForm({
     initialValues: {
       name: rowData?.name ?? "",
-      status: rowData?.status ?? "",
-      capital: rowData?.capital ?? "",
       whatsnew: rowData?.whatsnew ?? "",
-      enddate: rowData?.enddate ?? "",
-      role: rowData?.role ?? "",
+      status: rowData?.status ?? "",
+      newsdate: checkValidDate(rowData?.newsdate, null),
+      enddate: checkValidDate(rowData?.enddate, null),
+      summary: rowData?.summary || "",
+      //
+      // capital: rowData?.capital ?? "",
+      // role: rowData?.role ?? "",
     },
     validate: {
       name: (value) => (value.length < 2 ? "Name must have at least 2 letters" : null),
@@ -53,7 +58,7 @@ function AnnouncementsForm({
     if (rowData !== undefined) {
       const isBoardUpdated = await dynamicDataUpdate("announcements", rowData._id, values);
       if (isBoardUpdated.toUpperCase() === "DOCUMENT UPDATED") {
-        const boards = await readAnnoucements();
+        const boards = await readApiData("announcements");
         setData(boards);
         setOLoader(false);
       } else {
@@ -68,7 +73,7 @@ function AnnouncementsForm({
     } else {
       const isBoardCreated = await dynamicCreate("announcements", values as MatrixRowType);
       if (isBoardCreated.toUpperCase() === "DOCUMENT CREATED") {
-        const boards = await readAnnoucements();
+        const boards = await readApiData("announcements");
         setData(boards);
         setOLoader(false);
         notifications.show({
@@ -89,11 +94,11 @@ function AnnouncementsForm({
     }
     form.setValues({
       name: "",
-      capital: "",
       whatsnew: "",
       enddate: "",
-      role: "",
       status: true,
+      summary: "",
+      newsdate: "",
     });
     close();
   };
@@ -101,7 +106,7 @@ function AnnouncementsForm({
   let renderFormData = () => {
     let formData = [
       {
-        disabled: readonly || !!rowData,
+        disabled: readonly,
         withAsterisk: true,
         label: "Name",
         placeholder: "John Die",
@@ -109,26 +114,6 @@ function AnnouncementsForm({
         mt: "md",
         size: "md",
         ...form.getInputProps("name"),
-      },
-      {
-        disabled: readonly,
-        withAsterisk: true,
-        label: "Role",
-        placeholder: "Admin",
-        w: "100%",
-        mt: "md",
-        size: "md",
-        ...form.getInputProps("role"),
-      },
-      {
-        disabled: readonly,
-        withAsterisk: true,
-        label: "Capital",
-        placeholder: "capital",
-        w: "100%",
-        mt: "md",
-        size: "md",
-        ...form.getInputProps("capital"),
       },
       {
         inputType: "editor",
@@ -141,11 +126,55 @@ function AnnouncementsForm({
         size: "md",
         ...form.getInputProps("whatsnew"),
       },
+      {
+        disabled: readonly,
+        withAsterisk: true,
+        label: "Summary",
+        placeholder: "Summary",
+        w: "100%",
+        mt: "md",
+        size: "md",
+        ...form.getInputProps("summary"),
+      },
+      {
+        inputType: "date",
+        disabled: readonly,
+        label: "End Date",
+        placeholder: new Date(Date.now()).toDateString(),
+        w: "100%",
+        mt: "md",
+        size: "md",
+        ...form.getInputProps("enddate"),
+      },
+      {
+        inputType: "date",
+        disabled: readonly,
+        label: "News Date",
+        placeholder: new Date(Date.now()).toDateString(),
+        w: "100%",
+        mt: "md",
+        size: "md",
+        ...form.getInputProps("newsdate"),
+      },
     ];
 
     return formData.map((item: any, index) => {
       if (item.inputType == "editor") {
         return <Editor key={index} {...item} />;
+      } else if (item.inputType == "date") {
+        return (
+          <DateInput
+            key={index}
+            popoverProps={{
+              withinPortal: true,
+            }}
+            valueFormat="ddd MMM DD YYYY"
+            w={"100%"}
+            mt={"md"}
+            size="md"
+            {...item}
+          />
+        );
       } else {
         return <TextInput key={index} {...item} />;
       }

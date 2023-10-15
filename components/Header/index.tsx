@@ -1,9 +1,6 @@
 import {
   Header as MantineHeader,
-  HoverCard,
-  SimpleGrid,
   ThemeIcon,
-  Anchor,
   Center,
   Drawer,
   Collapse,
@@ -11,7 +8,6 @@ import {
   Text,
   Box,
   Group,
-  useMantineColorScheme,
   rem,
   Button,
   ScrollArea,
@@ -23,36 +19,24 @@ import {
   Menu,
   Avatar,
 } from "@mantine/core";
-import { HeaderPropsType } from "./types";
-import {
-  IconChevronDown,
-  IconChevronDownLeft,
-  IconHome,
-  IconLogout,
-  IconMoonStars,
-  IconSun,
-  IconUser,
-} from "@tabler/icons-react";
+import { IconChevronDown, IconHome, IconLogout, IconMoonStars, IconSun, IconUser } from "@tabler/icons-react";
 import { Logo } from "./_logo";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { useAuthentication } from "@/app/authentication/state";
-import { forwardRef, useEffect, useState } from "react";
-import { clientStateSelector } from "@/app/state/clientSelector";
-import { getGeographicalInformation, readCountriesLandingWithFlags, readCountriesWithFlags } from "@/utilities/API";
+
+import { forwardRef, useEffect, useMemo, useState } from "react";
 import ReactCountryFlag from "react-country-flag";
 import { useDisclosure } from "@mantine/hooks";
-
 import { useStyles } from "../LandingPage/Hero/styles";
-// import { mockdata } from "../LandingPage/Hero/Menu";
-import Marquee from "react-fast-marquee";
-import { GeographicalInformationType } from "@/utilities/api-types";
-import { useApplicationDispatch, useApplicationSelector } from "@/redux/hooks";
-import IsLoggedIn from "@/utilities/IsLoggedIn";
 import { mockdata } from "../LandingPage/Hero/Menu";
-import { signOutThunk } from "@/app/authentication/state/authenticationSlice";
 import { IconDatabaseCog } from "@tabler/icons-react";
 import ProgressBar from "./ProgressBar";
+import { useFinduserGeoLocationQuery, useGetAllLocationsQuery, useLandingPageAPisQuery } from "@/redux/apiSlice";
+import { getUserData, iterateData } from "@/helpers/getData";
+import { useDispatch, useSelector } from "react-redux";
+import { changeColorTheme, setSelectedCountryRedux } from "@/redux/slice";
+import { findFromJson } from "@/helpers/filterFromJson";
+import { clearLocalData, setGetData } from "@/helpers/getLocalStorage";
 interface ItemProps extends React.ComponentPropsWithoutRef<"div"> {
   value: string;
   label: string;
@@ -72,7 +56,6 @@ const CountryComponent = forwardRef<HTMLDivElement, ItemProps>(({ value, label, 
 });
 
 CountryComponent.displayName = "CountryComponent";
-let interval: any = undefined;
 
 const RenderProgress = () => {
   let [progress, setProgress] = useState<number>(0);
@@ -107,6 +90,7 @@ const RenderProgress = () => {
         position: "relative",
         color: "#fff",
         fontWeight: 700,
+        marginBottom: 10,
       }}
     >
       <Box
@@ -129,22 +113,80 @@ const RenderProgress = () => {
 function Header() {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
   const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
+  const dispatch = useDispatch();
+  // const isloggedIn = IsLoggedIn();
+  let authentication: any = setGetData("userData", "", true);
+  let isloggedIn: any = authentication?.metadata?.status == "authenticated";
+
+  let locationData = useFinduserGeoLocationQuery("");
+  locationData = iterateData(locationData);
+
+  let apiCountryData = {
+    value: locationData.country,
+    label: locationData?.country_name,
+    currency: locationData?.currency,
+    country_code: String(locationData.country_calling_code).replace("+", ""),
+  };
+
+  const allReduxData = useSelector((state: any) => state.data);
+
+  useEffect(() => {
+    if (!allReduxData?.selectedCountry?.value) {
+      setGetData("selectedCountry", apiCountryData, true);
+    }
+  }, [apiCountryData, allReduxData?.selectedCountry?.value]);
+
+  let colorScheme = allReduxData.colorScheme;
   const { classes, theme, cx } = useStyles();
-  const [geoData, setGeoData] = useState<GeographicalInformationType>();
-  const authentication = useAuthentication();
-  const dispatch = useApplicationDispatch();
-  const clientState = useApplicationSelector(clientStateSelector);
-  const isloggedIn = IsLoggedIn();
 
-  const previousCountry = clientState.selectedCountry;
+  let toggleColorScheme = () => {
+    dispatch(changeColorTheme(""));
+  };
 
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const [countriesData, setCountriesData] = useState<
     {
       value: string;
       label: string;
     }[]
   >([]);
+
+  let userCountry: any = getUserData("country");
+
+  let payload = {
+    collection_name: "countries",
+    op_name: "find_many",
+    filter_var: {
+      status: true,
+    },
+  };
+
+  let landingPageCountriesPayload = {
+    collection_name: "countries",
+    op_name: "find_many",
+    filter_var: {
+      status: true,
+    },
+  };
+
+  let countriesDataApi: any = useGetAllLocationsQuery(payload);
+  countriesDataApi = iterateData(countriesDataApi);
+
+  let landingPageCountries = useLandingPageAPisQuery(landingPageCountriesPayload);
+  landingPageCountries = iterateData(landingPageCountries);
+
+  useEffect(() => {
+    let countryApiData = isloggedIn ? countriesDataApi : landingPageCountries;
+    if (Array.isArray(countryApiData)) {
+      const countriesWithFlags = countryApiData.map((country) => {
+        return {
+          value: country["ISO Alpha-2 Code"],
+          label: country.name,
+          country_code: country["ISD Code"],
+        };
+      });
+      setCountriesData(countriesWithFlags);
+    }
+  }, [countriesDataApi, landingPageCountries]);
 
   const links = mockdata?.map((item) => (
     <UnstyledButton className={classes.subLink} key={item.title}>
@@ -164,60 +206,51 @@ function Header() {
     </UnstyledButton>
   ));
 
-  const [selectedCountry, setSelectedCountry] = useState<string | null>(previousCountry.countryCode);
+  const [selectedCountry, setSelectedCountry] = useState<string | null>("");
   const [userMenuOpened, setUserMenuOpened] = useState(false);
 
   const router = useRouter();
   const pathname = usePathname();
 
-  async function readCountriesData() {
-    const countries = await readCountriesWithFlags();
-    setCountriesData(countries);
-  }
-  async function readCountriesOnLanding() {
-    const countries = await readCountriesLandingWithFlags();
-    setCountriesData(countries);
-  }
-  const getGeoData = async () => {
-    const geographicalInformation = await getGeographicalInformation();
-    setGeoData(geographicalInformation);
-    setSelectedCountry(geographicalInformation.country_code);
+  useEffect(() => {
+    if (!userCountry) {
+      setSelectedCountry(locationData?.country_code);
+    } else {
+      let key = findFromJson(countriesData, userCountry, "label");
+      setSelectedCountry(key?.value);
+    }
+  }, [locationData, userCountry, countriesData]);
+
+  useEffect(() => {
+    let country = findFromJson(countriesData, selectedCountry, "value");
+    dispatch(setSelectedCountryRedux(country));
+    setGetData("selectedCountry", country, true);
+  }, [selectedCountry]);
+
+  const signoutUser = () => {
+    let windowConfirm = window.confirm("Are you sure you want to sign out");
+
+    if (windowConfirm) {
+      clearLocalData();
+      window.location.pathname = "/";
+    }
   };
 
-  useEffect(() => {
-    if (isloggedIn) {
-      readCountriesData();
-    } else {
-      readCountriesOnLanding();
-    }
-    // Get Geo Data When no country is in redux
-    if (!previousCountry.name) {
-      getGeoData();
-    }
-  }, []);
-
-  const [progress, setProgress] = useState(0);
-  const [adverIndex, setAdverIndex] = useState(0);
-
-  useEffect(() => {
-    const countryName = countriesData.find((country) => country.value === selectedCountry)?.label;
-    if (countryName) {
-      dispatch({
-        type: "Client/UpdateCountry",
-        payload: {
-          name: countryName,
-          countryCode: selectedCountry,
-        },
-      });
-    }
-  }, [selectedCountry]);
+  const handleCountryChange = (e: any) => {
+    let country = findFromJson(countriesData, e, "value");
+    setSelectedCountry(e);
+  };
+  let height = isloggedIn ? 65 : 96;
 
   return (
     <>
-      <MantineHeader height={96}>
+      <MantineHeader height={height}>
         {!isloggedIn && <RenderProgress />}
-        <Group position="apart" px="md" sx={{ height: "calc(100% - 34px)" }}>
-          <Logo colorScheme={colorScheme} />
+        <Group position="apart" px="md" pb={10} pt={5} sx={{ height: "calc(100% - 34px)" }}>
+          <Logo
+            // colorScheme={colorScheme}
+            colorScheme={"light"}
+          />
           <Box className={classes.flex}>
             {!isloggedIn ? (
               <Group sx={{ height: "100%" }} spacing={0} className={classes.hiddenMobile}>
@@ -238,46 +271,6 @@ function Header() {
                   Courses
                 </Link>
 
-                {/* <HoverCard
-                  width={600}
-                  position="bottom"
-                  radius="md"
-                  shadow="md"
-                  withinPortal
-                >
-                  <HoverCard.Target>
-                    <a href="#" className={classes.link}>
-                      <Center inline>
-                        <Box component="span" mr={5}>
-                          Courses
-                        </Box>
-                        <IconChevronDown
-                          size={16}
-                          color={theme.fn.primaryColor()}
-                        />
-                      </Center>
-                    </a>
-                  </HoverCard.Target>
-
-                  <HoverCard.Dropdown sx={{ overflow: "hidden" }}>
-                    <Group position="apart" px="md">
-                      <Text fw={500}>Features</Text>
-                      <Anchor href="#" fz="xs">
-                        View all
-                      </Anchor>
-                    </Group>
-
-                    <Divider
-                      my="sm"
-                      mx="-md"
-                      color={theme.colorScheme === "dark" ? "dark.5" : "gray.1"}
-                    />
-
-                    <SimpleGrid cols={2} spacing={0}>
-                      {links}
-                    </SimpleGrid>
-                  </HoverCard.Dropdown>
-                </HoverCard> */}
                 <a href="#" className={classes.link}>
                   Gallery
                 </a>
@@ -286,11 +279,6 @@ function Header() {
                 </a>
 
                 <Group>
-                  {/* <LoadingOverlay
-                    visible={geoData === undefined}
-                    className={classes.hiddenTablet}
-                    overlayBlur={2}
-                  /> */}
                   <Select
                     itemComponent={CountryComponent}
                     style={{ width: "140px" }}
@@ -308,7 +296,13 @@ function Header() {
                   <Link href={"/authentication/signup"}>
                     <Button>Buy Online</Button>
                   </Link>
-                  <ActionIcon variant="default" onClick={() => toggleColorScheme()} size={36}>
+                  <ActionIcon
+                    variant="default"
+                    onClick={() => {
+                      toggleColorScheme();
+                    }}
+                    size={36}
+                  >
                     {colorScheme === "dark" ? <IconSun size="1rem" /> : <IconMoonStars size="1rem" />}
                   </ActionIcon>
                 </Group>
@@ -328,9 +322,7 @@ function Header() {
                   // onChange={setSelectedCountry}
                   data={countriesData}
                   className={classes.hiddenTablet}
-                  onChange={(e) => {
-                    setSelectedCountry(e);
-                  }}
+                  onChange={handleCountryChange}
                 />
                 <ActionIcon variant="default" onClick={() => toggleColorScheme()} size={36}>
                   {colorScheme === "dark" ? <IconSun size="1rem" /> : <IconMoonStars size="1rem" />}
@@ -361,31 +353,33 @@ function Header() {
                   </Menu.Target>
                   <Menu.Dropdown>
                     <Link prefetch={false} href={"/profile"}>
-                      <Menu.Item icon={<IconUser size="1rem" />}>Manage Account</Menu.Item>
+                      <Menu.Item icon={<IconUser size="1rem" />}>Profile</Menu.Item>
                     </Link>
                     {pathname === "/" ? (
-                      <Menu.Item icon={<IconDatabaseCog size="0.9rem" stroke={1.5} />}>
-                        <Link
-                          href={authentication.metadata.role === "super_admin" ? "/console" : "/authentication/signup"}
-                        >
-                          {authentication.metadata.role == "super_admin" ? "Admin Dashboard" : "Learning Portal"}
+                      <Menu.Item
+                        onClick={() => {
+                          router.replace(authentication?.metadata?.role === "super_admin" ? "/console" : "/");
+                        }}
+                        icon={<IconDatabaseCog size="0.9rem" stroke={1.5} />}
+                      >
+                        <Link href={authentication?.metadata?.role === "super_admin" ? "/console" : "/"}>
+                          {authentication?.metadata?.role == "super_admin" ? "Admin Dashboard" : "Learning Portal"}
                         </Link>
                       </Menu.Item>
                     ) : (
-                      <Menu.Item icon={<IconHome size="0.9rem" stroke={1.5} />}>
-                        <Link href={"/"}>Home</Link>
+                      <Menu.Item
+                        onClick={() => {
+                          router.replace("/");
+                        }}
+                        icon={<IconHome size="0.9rem" stroke={1.5} />}
+                      >
+                        <Link href="/" prefetch={false}>
+                          Home
+                        </Link>
                       </Menu.Item>
                     )}
                     {isloggedIn && (
-                      <Menu.Item
-                        onClick={() => {
-                          const windowConfirm = window.confirm("Are you sure you want to sign out");
-                          if (windowConfirm) {
-                            dispatch(signOutThunk()).unwrap();
-                          }
-                        }}
-                        icon={<IconLogout size="0.9rem" stroke={1.5} />}
-                      >
+                      <Menu.Item onClick={signoutUser} icon={<IconLogout size="0.9rem" stroke={1.5} />}>
                         Sign-Out
                       </Menu.Item>
                     )}
@@ -453,166 +447,6 @@ function Header() {
         </ScrollArea>
       </Drawer>
     </>
-
-    // <MantineHeader height={{ base: 40, md: 50 }} p="sm">
-    //   <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
-    //   {/* <MediaQuery largerThan="sm" styles={{ display: 'none' }}> */}
-    //   {/* {
-    //       authentication.metadata.status === "authenticated" && pathname !== "/"
-    //       && <ActionIcon size={"xl"} radius="xs" onClick={() => {
-    //         dispatch({
-    //           type: "Client/ControlApplicationShellComponents", payload: {
-    //             ...clientState,
-    //             showNavigationBar: !clientState.showNavigationBar,
-    //           }
-    //         });
-    //       }}
-    //       >
-    //         {
-    //           clientState.showNavigationBar
-    //             ? <IconLayoutSidebarLeftCollapse size={rem(30)} />
-    //             : <IconLayoutSidebarLeftExpand size={rem(30)} />
-    //         }
-    //       </ActionIcon>
-    //     } */}
-
-    //   <Box
-    //       sx={(theme) => ({
-    //         width: '100%',
-    //       })}
-    //     >
-    //       <Group position="apart" px={0}>
-    //         <Logo colorScheme={colorScheme} />
-    //   <Group position="apart">
-    //   <Box>
-    //           <LoadingOverlay visible={geoData === undefined} overlayBlur={2} />
-    //             <Select
-    //               itemComponent={CountryComponent}
-    //               icon={<ReactCountryFlag countryCode={selectedCountry || ""} svg />}
-    //               value={selectedCountry}
-    //               onChange={setSelectedCountry}
-    //               data={countriesData}
-    //             />
-    //           </Box>
-    //   {
-    //             authentication.metadata.status === "authenticated"
-    //               ? (
-    //                 <>
-    //   {/* {
-    //                     pathname === "/" &&
-    //                     (<Link href={"/console"}>
-    //                       <Button variant={"filled"}>
-    //                         {authentication.metadata.role === "admin" ? "Admin Dashboard" : "Learning Portal"}
-    //                       </Button>
-    //                     </Link>)
-    //                   } */}
-    //   </>
-    //               )
-    //               : (
-    //                 <>
-    //                   <Link href={"/authentication/signup"}>
-    //                     <Button variant={"light"}>Sign-Up</Button>
-    //                   </Link>
-    //                   <Link href={"/authentication/signin"}>
-    //                     <Button variant={"filled"}>Sign-In</Button>
-    //                   </Link>
-    //                 </>
-    //               )
-    //           }
-    //   {
-    //             authentication.metadata.status === "authenticated" &&
-    //             <Menu
-    //               width={260}
-    //               position="bottom-end"
-    //               transitionProps={{ transition: 'pop-top-right' }}
-    //               onClose={() => setUserMenuOpened(false)}
-    //               onOpen={() => setUserMenuOpened(true)}
-    //               withinPortal
-    //               closeOnItemClick={false}
-    //             >
-    //               <Menu.Target>
-    //                 <UnstyledButton
-    //                   className={cx(classes.user, { [classes.userActive]: userMenuOpened })}
-    //                 >
-    //                   <Group spacing={7}>
-    //                     <Avatar alt={authentication.user?.name} radius="xl" size={28} />
-    //                     <Text weight={500} size="sm" sx={{ lineHeight: 1 }} mr={3}>
-    //                       {authentication.user?.name}
-    //                     </Text>
-    //                     <IconChevronDown size={rem(12)} stroke={1.5} />
-    //                   </Group>
-    //                 </UnstyledButton>
-    //               </Menu.Target>
-    //               <Menu.Dropdown>
-    //                 {
-    //                   pathname === "/" ?
-    //                     <Menu.Item
-    //                       icon={<IconDatabaseCog size="0.9rem" stroke={1.5} />}
-    //                     >
-    //                       <Link href={authentication.metadata.role === "super_admin" ? "/console" : "/authentication/signup"}>
-    //                         {authentication.metadata.role === "super_admin" ? "Admin Dashboard" : "Learning Portal"}
-    //                       </Link>
-    //                     </Menu.Item>
-    //                     : <Menu.Item
-    //                       icon={<IconHome size="0.9rem" stroke={1.5} />}
-    //                     >
-    //                       <Link href={"/"}>
-    //                         Home
-    //                       </Link>
-    //                     </Menu.Item>
-    //                 }
-    //                 {
-    //                   authentication.metadata.status === "authenticated"
-    //                   && <Menu.Item onClick={async () => {
-    //                     await dispatch(signOutThunk()).unwrap();
-    //                     router.push("/");
-    //                   }} icon={<IconLogout size="0.9rem" stroke={1.5} />}>
-    //                     Sign-Out
-    //                   </Menu.Item>
-    //                 }
-    //                 <Menu.Divider />
-    //                 <Menu.Item onClick={() => toggleColorScheme()} icon={colorScheme === 'dark' ? <IconSun size="0.9rem" stroke={1.5} /> : <IconMoonStars size="0.9rem" stroke={1.5} />}>
-    //                   Change Theme
-    //                 </Menu.Item>
-    //               </Menu.Dropdown>
-    //             </Menu>
-    //           }
-    //   {authentication.metadata.status === "unauthenticated" && (
-    //     <ActionIcon
-    //       variant="default"
-    //       onClick={() => toggleColorScheme()}
-    //       size={36}
-    //     >
-    //       {colorScheme === "dark" ? (
-    //         <IconSun size="1rem" />
-    //       ) : (
-    //         <IconMoonStars size="1rem" />
-    //       )}
-    //     </ActionIcon>
-    //   )}
-    //   {
-    //             authentication.metadata.status === "authenticated" && pathname !== "/"
-    //             && <ActionIcon size={"xl"} radius="xs" onClick={() => {
-    //               dispatch({
-    //                 type: "Client/ControlApplicationShellComponents", payload: {
-    //                   ...clientState,
-    //                   showAsideBar: !clientState.showAsideBar,
-    //                 }
-    //               });
-    //             }}
-    //             >
-    //               {
-    //                 clientState.showAsideBar
-    //                   ? <IconLayoutSidebarRightCollapse size={rem(30)} />
-    //                   : <IconLayoutSidebarRightExpand size={rem(30)} />
-    //               }
-    //             </ActionIcon>
-    //           }
-    //   </Group>
-    //       </Group>
-    //     </Box>
-    //   </div>
-    // </MantineHeader>
   );
 }
 

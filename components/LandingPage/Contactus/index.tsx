@@ -1,24 +1,27 @@
 import React, { useState } from "react";
 import { Box, Button, Flex, Grid, Text, TextInput, Title, createStyles } from "@mantine/core";
 import ContactForm from "../form/contactForm";
+import { setGetData } from "@/helpers/getLocalStorage";
 
-const useStyles = createStyles((theme) => ({
-  wrapper:{
+const useStyles = createStyles((theme, colorScheme: any) => ({
+  wrapper: {
     backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.colors.white,
   },
-  title :{
+  title: {
     color: theme.colorScheme === "dark" ? theme.colors.gray[0] : theme.colors.dark[8],
   },
-  text:{
+  text: {
     color: theme.colorScheme === "dark" ? theme.colors.gray[1] : "#495057",
   },
   subHead: {
-    color: theme.colorScheme === "dark" ? '#3b79ee' : '#072e78'
-  }
-}))
+    color: theme.colorScheme === "dark" ? "#3b79ee" : "#072e78",
+  },
+}));
 
 function Contactus() {
-  const { classes } = useStyles();
+  let isDarkThem = setGetData("colorScheme");
+
+  const { classes } = useStyles(isDarkThem);
   const [MobileNo, setMobileNo] = useState("");
   return (
     <Box id="Contactus" className={classes.wrapper} py={80}>
@@ -27,7 +30,7 @@ function Contactus() {
           <Grid.Col sm={12} md={4} lg={6.5} p={"10px 5% 10px 10px"}>
             <Box mb={"30px"} sx={{ borderLeft: "3px solid #1C3E7E" }}>
               <Title
-              className={classes.title}
+                className={classes.title}
                 sx={{
                   display: "flex",
                   fontSize: "46px",
@@ -37,11 +40,7 @@ function Contactus() {
                 }}
               >
                 {" "}
-                Contact{" "}
-                <span style={{ color: "#E01E22", paddingLeft: "10px" }}>
-                  {" "}
-                  {"  Us"}{" "}
-                </span>
+                Contact <span style={{ color: "#E01E22", paddingLeft: "10px" }}> {"  Us"} </span>
               </Title>
             </Box>
             <ContactForm />
@@ -54,17 +53,17 @@ function Contactus() {
               display: "flex",
               justifyContent: "center",
               // alignItems: "center",
-              marginTop:"118px",
+              marginTop: "118px",
             }}
           >
             <Box>
-              <Title variant="h4"  className={classes.title} style={{ padding: "8px 0" }}>
-                Office <span style={{color:"#E01E22"}}>Address</span>
+              <Title variant="h4" className={classes.title} style={{ padding: "8px 0" }}>
+                Office <span style={{ color: "#E01E22" }}>Address</span>
               </Title>
-              <div className={classes.subHead} style={{ textTransform: "uppercase",marginTop:"10px" }}>
+              <div className={classes.subHead} style={{ textTransform: "uppercase", marginTop: "10px" }}>
                 Ignited Mind Lab
               </div>
-              <div >
+              <div>
                 <p>C-157, Antop Hill Warehouse Complex,</p>
                 <p>Near Barkat Ali Naka, Wadala (E),</p>
                 <p>Mumbai – 400 037</p>
@@ -75,9 +74,12 @@ function Contactus() {
                 <Box className={classes.subHead}>Phone</Box>
                 022-50020110 / 50020120
               </div>
-              <br/>
+              <br />
               <Box>
-                <span className={classes.subHead} style={{fontSize:"16px"}}> Get address by SMS:</span>
+                <span className={classes.subHead} style={{ fontSize: "16px" }}>
+                  {" "}
+                  Get address by SMS:
+                </span>
                 <Flex direction={"column"} gap={"md"}>
                   <TextInput
                     label="Mobile"

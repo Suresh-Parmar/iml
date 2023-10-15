@@ -37,6 +37,7 @@ import { useSelector } from "react-redux";
 import { formTypeToFetcherMapper } from "@/helpers/dataFetcher";
 import { findFromJson } from "@/helpers/filterFromJson";
 import { filterDataMulti, filterDataSingle } from "@/helpers/dropDownData";
+import { setGetData } from "@/helpers/getLocalStorage";
 
 function Studentsform({
   readonly,
@@ -84,13 +85,13 @@ function Studentsform({
     setSchoolsData(schools);
   }
 
+  let selectedCountryLocal = setGetData("selectedCountry", "", true);
   const getSelectedCountry = () => {
-    const state = getReduxState();
-    return state.client.selectedCountry.name;
+    return allReduxData?.data?.selectedCountry?.country_code || selectedCountryLocal?.country_code || "";
   };
 
   const getMobileCode = () => {
-    return `+${getInternationalDailingCode(getSelectedCountry())}`;
+    return `+${getSelectedCountry()}`;
   };
 
   const getCohorts = () => {
