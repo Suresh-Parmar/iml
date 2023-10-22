@@ -8,108 +8,65 @@ function DownLoadProduct() {
   let userDataDetails = setGetData("userData", "", true);
   userDataDetails = userDataDetails?.user;
   const [loader, setLoader] = useState<any>(false);
-  const [url, setUrl] = useState<any>("");
+  const [url, setUrl] = useState<any>({});
 
-  const genrateStudentPdf = (item: any, index: any) => {
+  const callAPi = (item: any, index: any) => {
+    let apis: any = {
+      admitCard: admitCardCountData,
+      certificate: certificateDownload,
+      omr: omrSheetDownload,
+      marksheet: omrSheetDownload,
+    };
+    let payload = { username: [userDataDetails.username] };
     setLoader(true);
-    if (item.label == "Download Admit Card" && index === 0) {
-      admitCardCountData({ username: [userDataDetails.username] })
-        .then((res) => {
-          setLoader(false);
-          // console.log(res.data);
-          setUrl(res.data.admit_card_url);
-          if (res.data.admit_card_url) {
-            var link = document.createElement("a");
-            link.href = res.data.admit_card_url;
-            link.setAttribute("target", "_blank");
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-          }
-        })
-        .catch((errors) => {
-          setLoader(false);
-        });
-    } else if (item.label === "Download Certificate" && index === 1) {
-      certificateDownload({ username: [userDataDetails.username] })
-        .then((res) => {
-          setLoader(false);
-          // console.log(res.data);
-          setUrl(res.data.admit_card_url);
-          if (res.data.admit_card_url) {
-            var link = document.createElement("a");
-            link.href = res.data.admit_card_url;
-            link.setAttribute("target", "_blank");
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-          }
-        })
-        .catch((errors) => {
-          setLoader(false);
-        });
-    }
-    // else if (item.label === 'Download Marksheet') {
-    //   certificateDownload({ username: [userDataDetails.username] })
-    //     .then((res) => {
-    //       setLoader(false);
-    //       // console.log(res.data);
-    //       setUrl(res.data.admit_card_url);
-    //       if (res.data.admit_card_url) {
-    //         var link = document.createElement('a');
-    //         link.href = res.data.admit_card_url;
-    //         link.setAttribute('target', '_blank');
-    //         document.body.appendChild(link);
-    //         link.click();
-    //         document.body.removeChild(link);
-    //       }
-    //     })
-    //     .catch((errors) => {
-    //       setLoader(false);
-    //     });
-    // }
-    else {
-      omrSheetDownload({ username: [userDataDetails.username] })
-        .then((res) => {
-          setLoader(false);
-          // console.log(res.data);
-          setUrl(res.data.admit_card_url);
-          if (res.data.admit_card_url) {
-            var link = document.createElement("a");
-            link.href = res.data.admit_card_url;
-            link.setAttribute("target", "_blank");
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-          }
-        })
-        .catch((errors) => {
-          setLoader(false);
-        });
-    }
+    let callApi = apis[item.key](payload);
+    callApi
+      .then((res: any) => {
+        setLoader(false);
+        setUrl({ ...url, [item.apiKey]: res.data[item.apiKey] });
+        if (res.data[item.apiKey]) {
+          var link = document.createElement("a");
+          link.href = res.data[item.apiKey];
+          link.setAttribute("target", "_blank");
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+      })
+      .catch((errors: any) => {
+        setLoader(false);
+      });
   };
 
   const downloadsCardImages = [
     {
       label: "Download Admit Card",
       type: "downloads",
+      key: "admitCard",
       url: "https://www.placementstore.com/wp-content/uploads/Admit-Card.jpg",
+      apiKey: "admit_card_url",
     },
     {
       label: "Download Certificate",
+      key: "certificate",
       type: "downloads",
       url: "https://i.pinimg.com/474x/11/b7/b5/11b7b5e2cd89d3f503211bcb2e939fb8.jpg",
+      apiKey: "certificate_url",
     },
     {
       label: "Download OMR",
       type: "downloads",
+      key: "omr",
       url: "https://i0.wp.com/www.sscgyan.com/wp-content/uploads/2019/02/OMR-Sheet-Pdf.jpg?fit=549%2C350&ssl=1",
+      apiKey: "OMR_url",
     },
 
     {
       label: "Download Marksheet",
+      key: "marksheet",
       type: "downloads",
       url: "https://i0.wp.com/www.sscgyan.com/wp-content/uploads/2019/02/OMR-Sheet-Pdf.jpg?fit=549%2C350&ssl=1",
+      apiKey: "marksheet_url",
     },
   ];
 
@@ -140,18 +97,17 @@ function DownLoadProduct() {
               alt={item.label}
               src={item.url}
             />
-            {url ? (
-              <a href={url} className="form-control btn btn-primary">
-                <button> {item.label}</button>
+            {url[item.apiKey] ? (
+              <a href={url[item.apiKey]} className="form-control btn btn-primary">
+                {item.label}
               </a>
             ) : (
               <button
                 className="form-control btn btn-outline-primary"
                 onClick={() => {
-                  genrateStudentPdf(item, index);
+                  callAPi(item, index);
                 }}
               >
-                {" "}
                 {item.label}
               </button>
             )}

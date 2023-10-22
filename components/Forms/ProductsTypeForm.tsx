@@ -1,20 +1,9 @@
-import {
-  TextInput,
-  Button,
-  Group,
-  Box,
-  Flex,
-  LoadingOverlay,
-} from '@mantine/core';
-import { useForm } from '@mantine/form';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { MatrixDataType, MatrixRowType } from '../Matrix';
-import {
-  createProductType,
-  readProductCategories,
-  updateProductType,
-} from '@/utilities/API';
-import { notifications } from '@mantine/notifications';
+import { TextInput, Button, Group, Box, Flex, LoadingOverlay } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { MatrixDataType, MatrixRowType } from "../Matrix";
+import { createProductType, readProductCategories, updateProductType } from "@/utilities/API";
+import { notifications } from "@mantine/notifications";
 
 function ProductTypeForm({
   open,
@@ -45,11 +34,10 @@ function ProductTypeForm({
   const form = useForm({
     initialValues: {
       ...rowData,
-      name: rowData?.name ?? '',
+      name: rowData?.name ?? "",
     },
     validate: {
-      name: (value) =>
-        value?.length < 2 ? 'Name must have at least 2 letters' : null,
+      name: (value) => (value?.length < 2 ? "Name must have at least 2 letters" : null),
     },
   });
   const [oLoader, setOLoader] = useState<boolean>(false);
@@ -61,7 +49,7 @@ function ProductTypeForm({
       const isProductTypeUpdated = await updateProductType(rowData._id, {
         ...values,
       });
-      if (isProductTypeUpdated.toUpperCase() === 'DOCUMENT UPDATED') {
+      if (isProductTypeUpdated.toUpperCase() === "DOCUMENT UPDATED") {
         const productTypes = await readProductCategories();
         setData(productTypes);
         setOLoader(false);
@@ -72,29 +60,25 @@ function ProductTypeForm({
       notifications.show({
         title: `Product Type ${rowData.name} updated!`,
         message: `The above class has been updated with new information.`,
-        color: 'blue',
+        color: "blue",
       });
     } else {
-      const isProductTypeCreated = await createProductType(
-        values as MatrixRowType
-      );
-      if (isProductTypeCreated.toUpperCase() === 'DOCUMENT CREATED') {
+      const isProductTypeCreated = await createProductType(values as MatrixRowType);
+      if (isProductTypeCreated.toUpperCase() === "DOCUMENT CREATED") {
         const productTypes = await readProductCategories();
         setData(productTypes);
         setOLoader(false);
         notifications.show({
           title: `Product Type created!`,
           message: `A new product type has been created.`,
-          color: 'green',
+          color: "green",
         });
-      } else if (
-        isProductTypeCreated.toUpperCase() === 'DOCUMENT ALREADY EXISTS'
-      ) {
+      } else if (isProductTypeCreated.toUpperCase() === "DOCUMENT ALREADY EXISTS") {
         setOLoader(false);
         notifications.show({
           title: `Product type already exists!`,
           message: `${values.name} already exists.`,
-          color: 'orange',
+          color: "orange",
         });
       } else {
         setOLoader(false);
@@ -109,7 +93,7 @@ function ProductTypeForm({
         <LoadingOverlay visible={oLoader} overlayBlur={2} />
         <Flex direction={"column"} justify={"center"} align={"flex-start"} w={"100%"}>
           <TextInput
-            disabled={readonly || !!rowData}
+            disabled={readonly}
             withAsterisk
             label="Name"
             placeholder="Name"

@@ -176,6 +176,9 @@ function UploadButton(props: any) {
     city: {
       collection_name: "cities",
     },
+    dispatch: {
+      collection_name: "payments",
+    },
   };
 
   let collection = {};

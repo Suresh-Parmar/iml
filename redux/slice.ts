@@ -35,6 +35,9 @@ export const counterSlice = createSlice({
     UpdateCountry: (state, action) => {
       state.selectedCountry = action.payload;
     },
+    UpdateUserRedux: (state, action) => {
+      state.userData = action.payload;
+    },
 
     ControlApplicationShellComponents: (state, action) => {
       state.showAsideBar = action.payload.showAsideBar;
@@ -50,7 +53,12 @@ export const counterSlice = createSlice({
   },
 });
 
-export const { setSelectedCountryRedux, changeColorTheme, UpdateCountry, ControlApplicationShellComponents } =
-  counterSlice.actions;
+export const {
+  setSelectedCountryRedux,
+  UpdateUserRedux,
+  changeColorTheme,
+  UpdateCountry,
+  ControlApplicationShellComponents,
+} = counterSlice.actions;
 
 export default counterSlice.reducer;

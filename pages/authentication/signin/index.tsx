@@ -112,7 +112,7 @@ export default function SignIn() {
       if (authentication?.metadata?.role != "student") {
         router.replace("/console");
       } else {
-        router.replace("/");
+        router.replace("/profile");
       }
     } else {
       dispatch(

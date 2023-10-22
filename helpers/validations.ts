@@ -2,19 +2,49 @@ import { notifications } from "@mantine/notifications";
 import Excel from "exceljs";
 import { saveAs } from "file-saver";
 
-export const validatePhone = (val: string, len: number = 0): string => {
+export const validatePhone = (val: string, len: number = 0, maxVal: any = 0): string => {
   const regex = /[^0-9]/g;
   let filteredValue = val.replace(regex, "");
 
   if (len && filteredValue.length > len) {
     filteredValue = filteredValue.slice(0, len);
   }
+
+  if (maxVal && maxVal < filteredValue) {
+    return maxVal;
+  }
+
+  return filteredValue;
+};
+
+export const validateAlpha = (val: string, isStr: any = false, len: number = 0): string => {
+  let filteredValue;
+  if (isStr) {
+    filteredValue = val.replace(/[^a-zA-Z]/g, "");
+  } else {
+    filteredValue = val.replace(/[^a-zA-Z0-9]/g, "");
+  }
+
+  if (len && filteredValue.length > len) {
+    filteredValue = filteredValue.slice(0, len);
+  }
+
   return filteredValue;
 };
 
 export const emailFormat = (val: string): string => {
   let value = val.replaceAll(/[^a-zA-Z0-9._%+\-@]/g, "");
   return value;
+};
+
+export const calculatePhoneLen = (str: any) => {
+  if (String(str).includes("+")) {
+    return 13 - String(str).length;
+  } else if (String(str).length) {
+    return 12 - String(str).length;
+  } else {
+    return 10;
+  }
 };
 
 export const validatePhoneOREmail = (val: any, len: number, inputType: any) => {

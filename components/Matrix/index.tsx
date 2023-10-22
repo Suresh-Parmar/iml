@@ -78,7 +78,7 @@ import { OrderConfigForm } from "../Forms/OrderConfigForm";
 import { ProductForm } from "../Forms/ProductsForm";
 import { ProductTypeForm } from "../Forms/ProductsTypeForm";
 import { UploadButton } from "../common";
-import { AnnouncementsForm, CohortsForm, GroupsForm, TestimonialsForm, DispatchForm } from "../Forms";
+import { AnnouncementsForm, CohortsForm, GroupsForm, TestimonialsForm, DispatchForm, MarksSheetForm } from "../Forms";
 import { RenderFormTypes } from "../formtypes";
 import { allTypes } from "../formtypes/renderTypesJson";
 import { usePathname } from "next/navigation";
@@ -88,6 +88,7 @@ import { useSelector } from "react-redux";
 import { setGetData } from "@/helpers/getLocalStorage";
 import { useRoleCrudOpsgetQuery } from "@/redux/apiSlice";
 import { iterateData } from "@/helpers/getData";
+import { WarehouseForm } from "../Forms/WarehouseForm";
 declare module "@tanstack/table-core" {
   interface FilterFns {
     fuzzy: FilterFn<unknown>;
@@ -350,6 +351,8 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
     testimonials: TestimonialsForm,
     groups: GroupsForm,
     cohorts: CohortsForm,
+    warehouses: WarehouseForm,
+    marks: MarksSheetForm,
   };
 
   const Component = components[formType];

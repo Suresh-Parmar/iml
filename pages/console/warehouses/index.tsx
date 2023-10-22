@@ -1,11 +1,11 @@
 import { Container } from "@mantine/core";
 import Matrix, { MatrixDataType } from "@/components/Matrix";
 import { useEffect, useState } from "react";
-import { readExamCentersMapping } from "@/utilities/API";
-import Loader from "@/components/common/Loader";
+import { readApiData, readPayments } from "@/utilities/API";
 import { useSelector } from "react-redux";
+import Loader from "@/components/common/Loader";
 
-export default function ExamCenterMappings() {
+export default function Warehouses() {
   const [data, setData] = useState<MatrixDataType>([]);
   const [loader, setLoader] = useState<any>(false);
   const userData: any = useSelector((state: any) => state.data);
@@ -14,20 +14,16 @@ export default function ExamCenterMappings() {
   useEffect(() => {
     setLoader(true);
     async function readData() {
-      const examCenterMappings = await readExamCentersMapping();
-      setData(examCenterMappings);
+      const newData = await readApiData("warehouses");
+      setData(newData);
       setLoader(false);
     }
     readData();
   }, [selectedCountry]);
+
   return (
     <Container h={"100%"} fluid p={0}>
-      <Matrix
-        data={data.length > 0 ? data : []}
-        setData={setData}
-        showCreateForm={true}
-        formType={"Exam Center Mappings"}
-      />
+      <Matrix data={data.length > 0 ? data : []} setData={setData} showCreateForm={true} formType="warehouses" />
       <Loader show={loader} />
     </Container>
   );

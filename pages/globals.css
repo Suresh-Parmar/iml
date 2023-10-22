@@ -179,3 +179,22 @@ a {
   padding: 0;
   max-width: 100dvw;
 } */
+
+.pdfLogo img {
+  height: unset;
+  width: 30vw;
+  padding: 40px;
+}
+
+.pdfLogo h3 {
+  font-size: 1.3rem;
+  margin-top: -25px !important;
+}
+
+.productView {
+  font-weight: 500;
+}
+
+.relative {
+  position: relative;
+}

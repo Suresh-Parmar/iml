@@ -115,7 +115,14 @@ export const allTypes: any = {
     },
     {
       id: "Marks %",
-      key: "% marks",
+      key: "percent",
+      defaultShow: true,
+      filterFn: "equals",
+      sortingFn: fuzzySort,
+    },
+    {
+      id: "Seat Number",
+      key: "seatnumber",
       defaultShow: true,
       filterFn: "equals",
       sortingFn: fuzzySort,
@@ -136,7 +143,14 @@ export const allTypes: any = {
     },
     {
       id: "Total Marks",
-      key: "total marks",
+      key: "totalmarks",
+      defaultShow: true,
+      filterFn: "equals",
+      sortingFn: fuzzySort,
+    },
+    {
+      id: "Marks",
+      key: "marks",
       defaultShow: true,
       filterFn: "equals",
       sortingFn: fuzzySort,
@@ -144,13 +158,20 @@ export const allTypes: any = {
     {
       id: "Updated By",
       key: "updated_by",
-      defaultShow: true,
+      defaultShow: false,
       filterFn: "equals",
       sortingFn: fuzzySort,
     },
     {
       id: "Rank",
       key: "rank",
+      defaultShow: true,
+      filterFn: "equals",
+      sortingFn: fuzzySort,
+    },
+    {
+      id: "Grade",
+      key: "grade",
       defaultShow: true,
       filterFn: "equals",
       sortingFn: fuzzySort,
@@ -972,7 +993,7 @@ export const allTypes: any = {
     },
     {
       id: "Courier Name",
-      key: "courier_name",
+      key: "warehouse_name",
       defaultShow: true,
     },
     {
@@ -1035,6 +1056,21 @@ export const allTypes: any = {
       defaultShow: true,
     },
     {
+      id: "Title",
+      key: "title",
+      defaultShow: true,
+    },
+    {
+      id: "Description",
+      key: "description",
+      defaultShow: false,
+    },
+    {
+      id: "Product Type",
+      key: "producttype",
+      defaultShow: true,
+    },
+    {
       id: "Subject",
       key: "subject",
       defaultShow: true,
@@ -1043,29 +1079,6 @@ export const allTypes: any = {
       id: "Competition",
       key: "competition",
       defaultShow: true,
-    },
-    {
-      id: "Product Type",
-      key: "producttype",
-      defaultShow: true,
-    },
-    {
-      id: "Amount",
-      key: "amount",
-      defaultShow: true,
-    },
-    {
-      id: "Quantity",
-      key: "qty",
-      defaultShow: true,
-    },
-    {
-      id: "Image Url",
-      key: "imageurl",
-    },
-    {
-      id: "Display On Front",
-      key: "displayonfront",
     },
     {
       id: "Board",
@@ -1077,13 +1090,80 @@ export const allTypes: any = {
       key: "class",
       defaultShow: true,
     },
+
+    {
+      id: "Product Price",
+      key: "amount",
+      defaultShow: true,
+    },
+    {
+      id: "Bundle Price",
+      key: "product_bundle_price",
+      defaultShow: true,
+    },
+    {
+      id: "Tax Name",
+      key: "taxname",
+      defaultShow: true,
+    },
+    {
+      id: "Tax %",
+      key: "taxpercent",
+      defaultShow: true,
+    },
+    {
+      id: "Last Buying",
+      key: "lastbuyingdate",
+      defaultShow: true,
+    },
+    {
+      id: "Last Access",
+      key: "lastaccessdate",
+      defaultShow: true,
+    },
+    {
+      id: "Show Front",
+      key: "showfront",
+      defaultShow: false,
+    },
+    {
+      id: "Show In Account",
+      key: "showinaccount",
+      defaultShow: false,
+    },
+    {
+      id: "Associated with Board",
+      key: "associatedwithboard",
+      defaultShow: false,
+    },
+    {
+      id: "Login Required",
+      key: "loginrequired",
+      defaultShow: false,
+    },
+    {
+      id: "Show To Eligible",
+      key: "showtoeligible",
+      defaultShow: false,
+    },
+    {
+      id: "Quantity",
+      key: "qty",
+      defaultShow: true,
+    },
+    {
+      id: "Image Url",
+      key: "imageurl",
+      defaultShow: false,
+    },
+    {
+      id: "Resource Fileurl",
+      key: "resourcefileurl",
+      defaultShow: false,
+    },
     {
       id: "HSN Code",
       key: "hsncode",
-    },
-    {
-      id: "Display On Account",
-      key: "displayonaccount",
     },
     {
       id: "Bundle",
@@ -1095,6 +1175,63 @@ export const allTypes: any = {
       key: "country",
     },
 
+    {
+      id: "status",
+      key: "status",
+    },
+    { actions: true, id: "actions", defaultShow: true },
+  ],
+  warehouses: [
+    {
+      id: "Name",
+      key: "name",
+      defaultShow: true,
+    },
+    {
+      id: "Pickup Address Line1",
+      key: "pickup_addressline1",
+      defaultShow: true,
+    },
+    {
+      id: "Pickup Address Line2",
+      key: "pickup_addressline2",
+      defaultShow: true,
+    },
+    {
+      id: "Pickup City",
+      key: "pickup_city",
+      defaultShow: true,
+    },
+    {
+      id: "Pickup State",
+      key: "pickup_state",
+      defaultShow: true,
+    },
+    {
+      id: "Pickup Pincode",
+      key: "pickup_pincode",
+      defaultShow: true,
+    },
+    {
+      id: "Pickup Contact Person Name",
+      key: "pickup_contact_personname",
+      defaultShow: false,
+    },
+    {
+      id: "Pickup Contact Person Number",
+      key: "pickup_contact_personnumber",
+      defaultShow: false,
+    },
+    {
+      id: "Pickup Contact PersonEmail",
+      key: "pickup_contact_personemail",
+      defaultShow: false,
+    },
+    {
+      id: "Country",
+      key: "country",
+      defaultShow: false,
+    },
     {
       id: "status",
       key: "status",

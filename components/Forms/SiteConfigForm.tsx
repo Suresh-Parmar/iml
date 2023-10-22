@@ -111,7 +111,7 @@ function SiteForm({
         <LoadingOverlay visible={oLoader} overlayBlur={2} />
         <Flex direction={"column"} justify={"center"} align={"flex-start"} w={"100%"}>
           <TextInput
-            disabled={readonly || !!rowData}
+            disabled={readonly }
             withAsterisk
             label="Name"
             placeholder="Name"

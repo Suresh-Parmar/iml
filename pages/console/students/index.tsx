@@ -11,20 +11,19 @@ export default function Students() {
   const userData: any = useSelector((state: any) => state.data);
   let selectedCountry = userData?.selectedCountry?.label;
 
-  
   useEffect(() => {
-    setLoader(true)
     async function readData() {
+      setLoader(true);
       const students = await readStudents();
       setData(students);
-      setLoader(false)
+      setLoader(false);
     }
     readData();
   }, [selectedCountry]);
   return (
     <Container h={"100%"} fluid p={0}>
       <Matrix data={data.length > 0 ? data : []} setData={setData} showCreateForm={true} formType="Students" />
-      <Loader show={loader}/>
+      <Loader show={loader} />
     </Container>
   );
 }

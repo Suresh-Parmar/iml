@@ -28,6 +28,7 @@ function Page() {
   const [cohortsData, setcohortsData] = useState<any>([]);
   const [loader, setLoader] = useState<any>(false);
   const [studentGridData, setStudentGridData] = useState<any>([]);
+  const [zipUrl, setZipUrl] = useState<any>("");
 
   useEffect(() => {
     if (loader) {
@@ -99,14 +100,11 @@ function Page() {
 
   let migrateData = (data: any[], data1: any[], by: string, isStudent: any = false) => {
     let newData: any[] = [];
-
     data1.map((item: any) => {
       let newItem = data.find((itemchild: any, i: any) => item[by] == itemchild[by]);
       if (newItem) {
-        if (!isStudent) {
-          newItem.students_count = item.students_count;
-        }
-        newData.push(newItem);
+        let newDataa = { ...item, ...newItem };
+        newData.push(newDataa);
       } else {
         delete item.admit_card_url;
         newData.push(item);
@@ -150,6 +148,9 @@ function Page() {
       .then((res) => {
         setLoader(false);
         if (isSchool) {
+          if (Array.isArray(res.data) && res.data.length > 1) {
+            setZipUrl(res.data[res.data.length - 1]?.zip_file);
+          }
           downloadPdf(res.data);
         } else {
           let data = genrateDataFormDropDown(res.data);
@@ -498,6 +499,14 @@ function Page() {
 
     return (
       <div className="my-4 table-responsive" style={{ maxHeight: "350px", overflow: "auto" }}>
+        <div className="d-flex justify-content-between px-4">
+          <span></span>
+          {zipUrl && (
+            <a href={zipUrl} target="_blank">
+              <span className="material-symbols-outlined text-success">folder_zip</span>
+            </a>
+          )}
+        </div>
         <table className={`table table-striped table-${themeColor}`}>
           <thead
             style={{

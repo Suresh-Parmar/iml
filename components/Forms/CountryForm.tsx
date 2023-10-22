@@ -122,7 +122,7 @@ function CountryForm({
         <Flex gap={"md"} direction={"row"} justify={"center"} align={"flex-start"} w={"100%"}>
           <Flex direction={"column"} justify={"center"} align={"flex-start"} w={"100%"}>
             <TextInput
-              disabled={readonly || !!rowData}
+              disabled={readonly}
               withAsterisk
               label="Name"
               placeholder="Transylvania"

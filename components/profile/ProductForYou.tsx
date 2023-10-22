@@ -1,41 +1,54 @@
-import React from 'react';
+import { readProducts } from "@/utilities/API";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 function ProductForYou() {
-  const productForYou = [
-    {
-      label: 'Product For You',
-      type: 'productForYou',
-      url: 'https://upload.wikimedia.org/wikipedia/commons/6/65/Product_Photography.jpg',
-    },
-    {
-      label: 'Your Product',
-      placeholder: 'Your Product',
-      url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9tCLEAV2iYqAtYASaa3uSu42Aub2uZGjJsg&usqp=CAU',
-      type: 'yourProductJson',
-    },
-    {
-      label: 'Product For You',
-      url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZ1XaT72OTVDy4q9t_qjwvCh0fDWz4jSUzTg5vSV5FGAjOZiJWwh5hm2zMMhWkhNForic&usqp=CAU',
-      type: 'yourProductJson',
-    },
-    {
-      label: 'Product For You',
-      url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5rfhx3I7xTAyv9aRuu-puFKAWOv-TZS4gNdypFNtlKAoGLQzY98AHa1dUjhOqEioI0O0&usqp=CAU',
-      type: 'yourProductJson',
-    },
-  ];
+  const [product, setyourProducts] = useState<any>([]);
+
+  let userData = useSelector((state: any) => state?.data?.userData?.user);
+
+  const filterYourProducts = () => {
+    //  const payload = { username: userData.username };
+    //  studentAvailableproducts(payload);
+
+    readProducts("class", userData?.class_id)
+      .then((res: any) => {
+        setyourProducts(res);
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    userData.class_id && filterYourProducts();
+  }, [userData?.class_id]);
 
   return (
     <div>
-      <div style={{ marginBottom: '20px', fontSize: '30px' }}>Product For you</div>;
-      {productForYou.map((item, index) => (
-        <img
+      <div style={{ marginBottom: "20px", fontSize: "30px" }}>Product For you</div>
+      {product.map((item: any, index: any) => (
+        <div
           key={index}
-          className='ms-3 alt={item.label}  justify-align-item-center'
-          src={item.url}
-          width='270'
-          height='270'
-        />
+          className="rounded relative"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "10px",
+            border: "1px solid gray",
+            padding: "10px",
+            width: "300px",
+          }}
+        >
+          <img
+            style={{ objectFit: "cover", width: "100%", borderRadius: "5px", height: "200px" }}
+            className="justify-align-item-center"
+            alt={item.name}
+            src={item.image_url}
+          />
+          <div className="productView">{item.name}</div>
+        </div>
       ))}
     </div>
   );

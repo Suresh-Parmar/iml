@@ -5,17 +5,19 @@ import {
   readCities,
   readClasses,
   readCompetitions,
+  readExamCenters,
   readSchools,
   readStates,
   studentDetails,
 } from "@/utilities/API";
-import { Group, MultiSelect, Radio, Select } from "@mantine/core";
+import { Group, MultiSelect, Radio, Select, TextInput } from "@mantine/core";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { checkIsAllChecked, selectCheckBOxData } from "@/helpers/selectCheckBox";
 import Loader from "@/components/common/Loader";
 import { filterData } from "@/helpers/filterData";
 import { findFromJson } from "@/helpers/filterFromJson";
+import { validateAlpha } from "@/helpers/validations";
 
 function Page() {
   const [allData, setAllData] = useState<any>({});
@@ -27,8 +29,10 @@ function Page() {
   const [classesData, setClassesData] = useState<any>([]);
   const [groupsData, setGroupData] = useState<any>([]);
   const [cohortsData, setcohortsData] = useState<any>([]);
+  const [dataExamCenters, setDataExamCenters] = useState<any>([]);
   const [loader, setLoader] = useState<any>(false);
   const [studentGridData, setStudentGridData] = useState<any>([]);
+  const [examDate, setExamDate] = useState<any>([]);
 
   useEffect(() => {
     if (loader) {
@@ -40,7 +44,7 @@ function Page() {
 
   const state: any = useSelector((state: any) => state.data);
   const countryName = state?.selectedCountry?.label;
-  let isStudentFilters = allData.admitCardFilter == "studentWise";
+  // let isStudentFilters = allData.admitCardFilter == "studentWise";
   let themeColor = state?.colorScheme;
 
   let genratePayloadStudentWise = () => {
@@ -78,6 +82,26 @@ function Page() {
         console.log(error);
       });
   };
+
+  async function readExamCentersData() {
+    setLoader(true);
+    let examCentersData: any = await readExamCenters("city", allData.city);
+    setLoader(false);
+    let examCenters = filterData(examCentersData, "label", "value");
+
+    let examCentersDate = filterData(
+      structuredClone(examCentersData),
+      "label",
+      "value",
+      "examdate",
+      true,
+      "",
+      "examdate"
+    );
+    setExamDate(examCentersDate);
+    // examCenters.unshift("all");
+    setDataExamCenters(examCenters);
+  }
 
   useEffect(() => {
     allData.city && allData.filterTypeStudent && allData.select_class && getStudentDetailsApi();
@@ -133,42 +157,42 @@ function Page() {
     return data;
   };
 
-  function readSchoolsData(isSchool: any = false) {
-    let newPayload: any = {
-      country: countryName || "India",
-      competition_code: allData.competition || "",
-      state: allData.state,
-      city: allData.city,
-      // affiliation: allData.affiliation,
-    };
+  // function readSchoolsData(isSchool: any = false) {
+  //   let newPayload: any = {
+  //     country: countryName || "India",
+  //     competition_code: allData.competition || "",
+  //     state: allData.state,
+  //     city: allData.city,
+  //     exam_date: allData.exam_date,
+  //     exam_center: allData.exam_center,
+  //     series: allData.series,
+  //   };
 
-    if (isSchool) {
-      newPayload = { school_name: allData.schools };
-    }
+  //   console.log(newPayload);
 
-    setLoader(true);
-    omrSheetDownload(newPayload)
-      .then((res) => {
-        setLoader(false);
-        if (isSchool) {
-          downloadPdf(res.data);
-        } else {
-          let data = genrateDataFormDropDown(res.data);
-          setSchoolsDataDropDown(data);
-          setSchoolsData(res.data);
-        }
-      })
-      .catch((errors) => {
-        setLoader(false);
-      });
-  }
+  //   setLoader(true);
+  //   omrSheetDownload(newPayload)
+  //     .then((res) => {
+  //       setLoader(false);
+  //       // if (isSchool) {
+  //       downloadPdf(res.data);
+  //       // } else {
+  //       //   let data = genrateDataFormDropDown(res.data);
+  //       //   setSchoolsDataDropDown(data);
+  //       //   setSchoolsData(res.data);
+  //       // }
+  //     })
+  //     .catch((errors) => {
+  //       setLoader(false);
+  //     });
+  // }
 
-  async function readClassesData(filterBy?: "name" | "status", filterQuery?: string | number) {
-    let classes: any = await readClasses();
-    classes = filterData(classes, "label", "value", "", false);
-    classes.unshift("all");
-    setClassesData(classes);
-  }
+  // async function readClassesData(filterBy?: "name" | "status", filterQuery?: string | number) {
+  //   let classes: any = await readClasses();
+  //   classes = filterData(classes, "label", "value", "", false);
+  //   classes.unshift("all");
+  //   setClassesData(classes);
+  // }
 
   async function readCompetitionsData(filterBy?: "name" | "status", filterQuery?: string | number) {
     let competitions = await readCompetitions();
@@ -178,56 +202,61 @@ function Page() {
     setCompetitionsData(competitions);
   }
 
-  const getCohorts = () => {
-    if (allData?.childSchoolData?.key == "select_cohort") {
-      setLoader(true);
-      readApiData("cohorts")
-        .then((res) => {
-          setLoader(false);
-          setcohortsData(filterData(res, "label", "value"));
-        })
-        .catch((error) => {
-          console.error(error);
-          setLoader(false);
-        });
-    }
-  };
+  // const getCohorts = () => {
+  //   if (allData?.childSchoolData?.key == "select_cohort") {
+  //     setLoader(true);
+  //     readApiData("cohorts")
+  //       .then((res) => {
+  //         setLoader(false);
+  //         setcohortsData(filterData(res, "label", "value"));
+  //       })
+  //       .catch((error) => {
+  //         console.error(error);
+  //         setLoader(false);
+  //       });
+  //   }
+  // };
 
-  const getGroups = () => {
-    if (allData?.childSchoolData?.key == "select_group") {
-      setLoader(true);
-      readApiData("groups")
-        .then((res) => {
-          setLoader(false);
-          setGroupData(filterData(res, "label", "value"));
-        })
-        .catch((error) => {
-          console.error(error);
-          setLoader(false);
-        });
-    }
-  };
+  // const getGroups = () => {
+  //   if (allData?.childSchoolData?.key == "select_group") {
+  //     setLoader(true);
+  //     readApiData("groups")
+  //       .then((res) => {
+  //         setLoader(false);
+  //         setGroupData(filterData(res, "label", "value"));
+  //       })
+  //       .catch((error) => {
+  //         console.error(error);
+  //         setLoader(false);
+  //       });
+  //   }
+  // };
 
   // fetch data
 
   useEffect(() => {
     countryName && readStatesData();
-    countryName && readClassesData();
+    // countryName && readClassesData();
+    readExamCentersData();
     readCompetitionsData();
   }, [countryName]);
 
   useEffect(() => {
-    allData.city && allData.competition && getCohorts();
-    allData.city && allData.competition && getGroups();
-  }, [allData.city, allData.competition, allData?.childSchoolData]);
+    allData.city && readExamCentersData();
+  }, [allData.city]);
+
+  // useEffect(() => {
+  //   allData.city && allData.competition && getCohorts();
+  //   allData.city && allData.competition && getGroups();
+  // }, [allData.city, allData.competition, allData?.childSchoolData]);
 
   useEffect(() => {
     allData.state && readCitiesData("state", allData.state);
   }, [allData.state]);
 
-  useEffect(() => {
-    allData.city && allData.competition && readSchoolsData();
-  }, [allData.city, allData.competition]);
+  // useEffect(() => {
+  //   allData.exam_center && readSchoolsData();
+  // }, [allData.exam_center]);
 
   const handleDropDownChange = (e: any, key: any, clear?: any) => {
     if (clear) {
@@ -241,151 +270,79 @@ function Page() {
     }
   };
 
-  const filtersSchools = [
-    {
-      label: "Competition",
-      style: { maxWidth: "35%", width: "20%" },
-      key: "competition",
-      type: "select",
-      data: comeptitionsData,
-      onchange: (e: any) => {
-        handleDropDownChange(e, "competition");
-      },
-      value: allData.competition,
-    },
-    {
-      label: "State",
-      key: "state",
-      type: "select",
-      style: { maxWidth: "35%", width: "20%" },
-      data: statesData,
-      onchange: (e: any) => {
-        handleDropDownChange(e, "state", "city");
-      },
-      value: allData.state,
-    },
-    {
-      label: "City",
-      key: "city",
-      style: { maxWidth: "35%", width: "20%" },
-      type: "select",
-      data: citiesData,
-      onchange: (e: any) => {
-        handleDropDownChange(e, "city");
-      },
-      value: allData.city,
-    },
-    // {
-    //   label: "Affiliation",
-    //   key: "affiliation",
-    //   type: "radio",
-    //   data: citiesData,
-    //   options: [
-    //     { label: "Yes", value: "yes" },
-    //     { label: "No", value: "no" },
-    //   ],
-    //   onChange: (e: any) => {
-    //     handleDropDownChange(e, "affiliation");
-    //   },
-    //   value: allData.affiliation || "",
-    // },
-  ];
-
   const studentFilters = [
     {
       label: "Competition",
+      placeholder: "Competition",
       key: "competition",
       type: "select",
       data: comeptitionsData,
-      onchange: (e: any) => {
+      onChange: (e: any) => {
         handleDropDownChange(e, "competition");
       },
-      style: { maxWidth: "35%", width: "20%" },
       value: allData.competition,
     },
+    // {
+    //   type: "select",
+    //   label: "Exam Center",
+    //   data: dataExamCenters,
+    //   value: allData.exam_center,
+    //   placeholder: "Exam Center",
+    //   onChange: (e: any) => {
+    //     // let data = findFromJson(dataExamCenters, e, "name");
+    //     handleDropDownChange(e, "exam_center");
+    //   },
+    // },
+    {
+      type: "select",
+      label: "Exam Date",
+      data: examDate,
+      value: allData.exam_date,
+      placeholder: "Exam Date",
+      onChange: (e: any) => {
+        // let data = findFromJson(dataExamCenters, e, "name");
+        handleDropDownChange(e, "exam_date");
+      },
+    },
+    {
+      label: "Series",
+      placeholder: "A",
+      key: "series",
+      type: "input",
+      data: comeptitionsData,
+      onChange: (e: any) => {
+        let val = validateAlpha(e.target.value, true, 1);
+        val = val.toUpperCase();
+        handleDropDownChange(val, "series");
+      },
+      value: allData.series,
+    },
+
     {
       label: "State",
+      placeholder: "State",
       key: "state",
       type: "select",
-      style: { maxWidth: "35%", width: "20%" },
       data: statesData,
-      onchange: (e: any) => {
+      onChange: (e: any) => {
         handleDropDownChange(e, "state", "city");
       },
       value: allData.state,
     },
     {
       label: "City",
-      style: { maxWidth: "35%", width: "20%" },
+      placeholder: "City",
       key: "city",
       type: "select",
       data: citiesData,
-      onchange: (e: any) => {
-        handleDropDownChange(e, "city");
+      onChange: (e: any) => {
+        handleDropDownChange(e, "city", "exam_center");
       },
       value: allData.city,
     },
-    {
-      label: "School / group / cohort",
-      key: "filterTypeStudent",
-      type: "radio",
-      options: [
-        { label: "School", value: "school", fetch: "" },
-        { label: "Group", value: "group", fetch: "" },
-        { label: "Cohort", value: "cohort", fetch: "" },
-      ],
-      onChange: (e: any) => {
-        let data: any = {
-          group: { data: groupsData, label: "Group", key: "select_group" },
-          cohort: { data: cohortsData, label: "Cohort", key: "select_cohort" },
-          school: { data: schoolsData, label: "School", key: "select_school" },
-        };
-        data = data[e];
-        allData.childSchoolData = data;
-        handleDropDownChange(e, "filterTypeStudent");
-      },
-      value: allData.filterTypeStudent || "",
-    },
-    {
-      hideInput: !allData.filterTypeStudent,
-      label: allData?.childSchoolData?.label || "Select School",
-      key: "select_school",
-      style: { maxWidth: "35%", width: "25%" },
-      type: "select",
-      data: allData?.childSchoolData?.data || schoolsDataDropDown,
-      onchange: (e: any) => {
-        handleDropDownChange(e, allData?.childSchoolData?.key || "select_school");
-      },
-      value: allData[allData?.childSchoolData?.key || "select_school"],
-    },
-    {
-      label: "Select Class",
-      key: "select_class",
-      style: { maxWidth: "35%", width: "25%" },
-      type: "select",
-      data: classesData,
-      onchange: (e: any) => {
-        handleDropDownChange(e, "select_class");
-      },
-      value: allData.select_class,
-    },
   ];
 
-  let filters = isStudentFilters ? studentFilters : filtersSchools;
-
-  const renderRadio = (item: any) => {
-    const renderInputs = () => {
-      return item.options.map((itemChild: any, index: any) => {
-        return <Radio key={index} value={itemChild.value} label={itemChild.label} />;
-      });
-    };
-
-    return (
-      <Radio.Group {...item}>
-        <Group mt="xs">{renderInputs()}</Group>
-      </Radio.Group>
-    );
-  };
+  let filters = studentFilters;
 
   const renderData = useCallback(() => {
     return filters.map((item: any, index) => {
@@ -395,52 +352,25 @@ function Page() {
       let { type, data, label, placeholder, onchange, value, style } = item;
       if (type === "multiselect") {
         return (
-          <div key={index} style={{ maxWidth: "15%", ...style }}>
-            <MultiSelect
-              searchable={true}
-              size="sm"
-              w="100%"
-              onChange={onchange}
-              value={value || ""}
-              data={data}
-              label={label}
-              placeholder={placeholder || label}
-            />
+          <div key={index}>
+            <MultiSelect searchable={true} size="sm" {...item} />
           </div>
         );
-      } else if (type == "radio") {
-        return <div key={index}>{renderRadio(item)}</div>;
+      } else if (type === "select") {
+        return (
+          <div key={index}>
+            <Select searchable={true} size="sm" {...item} />
+          </div>
+        );
       } else {
         return (
-          <div key={index} style={{ maxWidth: "15%", ...style }}>
-            <Select
-              searchable={true}
-              size="sm"
-              w="100%"
-              onChange={onchange}
-              value={value || ""}
-              data={data}
-              label={label}
-              placeholder={placeholder || label}
-            />
+          <div key={index}>
+            <TextInput {...item} />
           </div>
         );
       }
     });
   }, [filters]);
-
-  const handleCHeckBOxes = (e: any, item: any = "") => {
-    let checked: any = e.target.checked;
-    let data: any = [];
-    if (!!item) {
-      data = selectCheckBOxData(allData?.schools, checked, item.school_name, schoolsData, "school_name");
-    } else {
-      data = selectCheckBOxData(allData?.schools, checked, "", schoolsData, "school_name");
-    }
-
-    allData.schools = data;
-    setAllData({ ...allData });
-  };
 
   const handleCHeckBOxesStudents = (
     e: any,
@@ -462,116 +392,37 @@ function Page() {
     setAllData({ ...allData });
   };
 
-  const renderSchoolsTable = useCallback(() => {
-    // const renderSchoolsTable = () => {
-    if (!schoolsData.length || isStudentFilters) {
-      return <></>;
-    }
-
-    const renderTableData = () => {
-      return schoolsData.map((item: any, index: any) => {
-        return (
-          <tr className="capitalize" key={index}>
-            <td scope="row">
-              <input
-                type="checkbox"
-                checked={Array.isArray(allData.schools) && allData.schools.includes(item.school_name)}
-                onChange={(e: any) => {
-                  handleCHeckBOxes(e, item);
-                }}
-              />
-            </td>
-            <td>{item.school_name}</td>
-            <td className="text-center">{item.students_count}</td>
-            <td className="text-center">
-              {item?.OMR_url ? (
-                <a href={item.OMR_url} target="_blank">
-                  <span className="material-symbols-outlined text-success">download</span>
-                </a>
-              ) : (
-                <span className="material-symbols-outlined text-secondary">download</span>
-              )}
-            </td>
-          </tr>
-        );
-      });
-    };
-
-    return (
-      <div className="my-4 table-responsive" style={{ maxHeight: "350px", overflow: "auto" }}>
-        <table className={`table table-striped table-${themeColor}`}>
-          <thead
-            style={{
-              position: "sticky",
-              top: 0,
-            }}
-          >
-            <tr>
-              <th scope="col">
-                <input
-                  type="checkbox"
-                  checked={checkIsAllChecked(allData.schools, schoolsData)}
-                  onChange={(e) => {
-                    handleCHeckBOxes(e);
-                  }}
-                />
-              </th>
-              <th scope="col">School Name</th>
-              <th scope="col" className="text-center">
-                Students Count
-              </th>
-              <th scope="col" className="text-center">
-                download
-              </th>
-            </tr>
-          </thead>
-          <tbody>{renderTableData()}</tbody>
-        </table>
-      </div>
-    );
-  }, [allData.schools, schoolsData, themeColor, checkIsAllChecked(allData.schools, schoolsData), isStudentFilters]);
-
   const renderUsersTable = useCallback(() => {
-    // const renderSchoolsTable = () => {
-    if (!studentGridData.length || !isStudentFilters) {
+    if (!dataExamCenters.length) {
       return <></>;
     }
 
     const renderTableData = () => {
-      return studentGridData.map((item: any, index: any) => {
+      return dataExamCenters.map((item: any, index: any) => {
         return (
           <tr className="capitalize" key={index}>
             <td scope="row">
               <input
                 type="checkbox"
-                checked={Array.isArray(allData.studentsData) && allData.studentsData.includes(item["Registration No"])}
+                checked={Array.isArray(allData.exam_center) && allData.exam_center.includes(item["_id"])}
                 onChange={(e: any) => {
-                  handleCHeckBOxesStudents(
-                    e,
-                    item,
-                    allData.studentsData,
-                    studentGridData,
-                    "Registration No",
-                    "studentsData"
-                  );
+                  handleCHeckBOxesStudents(e, item, allData.exam_center, dataExamCenters, "_id", "exam_center");
                 }}
               />
             </td>
-            <td>{item["Student Name"]}</td>
-            <td>{item["School"]}</td>
-            <td>{item["Registration No"]}</td>
-            <td>{item["Seat No"]}</td>
-            <td>{item["Division"]}</td>
-            <td>{item["Group"]}</td>
-            {/* <td className="text-center">
-              {item?.OMR_url ? (
-                <a href={item.OMR_url} target="_blank">
+            <td>{item["name"]}</td>
+            <td>{item["_id"]}</td>
+            <td>{item["mode"]}</td>
+            <td>{item["paper_code"]}</td>
+            <td className="text-center">
+              {item?.certificate_url ? (
+                <a href={item.certificate_url} target="_blank">
                   <span className="material-symbols-outlined text-success">download</span>
                 </a>
               ) : (
                 <span className="material-symbols-outlined text-secondary">download</span>
               )}
-            </td> */}
+            </td>
           </tr>
         );
       });
@@ -590,51 +441,40 @@ function Page() {
               <th scope="col">
                 <input
                   type="checkbox"
-                  checked={checkIsAllChecked(allData.studentsData, studentGridData)}
+                  checked={checkIsAllChecked(allData.exam_center, dataExamCenters)}
                   onChange={(e: any) => {
-                    handleCHeckBOxesStudents(
-                      e,
-                      false,
-                      allData.studentsData,
-                      studentGridData,
-                      "Registration No",
-                      "studentsData"
-                    );
+                    handleCHeckBOxesStudents(e, false, allData.exam_center, dataExamCenters, "_id", "exam_center");
                   }}
                 />
               </th>
-              <th scope="col">Student Name</th>
-              <th scope="col">School</th>
-              <th scope="col">Registration No</th>
-              <th scope="col">Seat No</th>
-              <th scope="col">Division</th>
-              <th scope="col">Group</th>
-              {/* <th scope="col" className="text-center">
+              <th scope="col">Center</th>
+              <th scope="col">Center Code</th>
+              <th scope="col">Exam Type</th>
+              <th scope="col">Paper Type</th>
+              <th scope="col" className="text-center">
                 download
-              </th> */}
+              </th>
             </tr>
           </thead>
           <tbody>{renderTableData()}</tbody>
         </table>
       </div>
     );
-  }, [
-    allData.studentsData,
-    studentGridData,
-    checkIsAllChecked(allData.studentsData, studentGridData),
-    isStudentFilters,
-    themeColor,
-  ]);
-
-  // let downloadPdfstudent = (data: any, allData: any, setALlData: any, key: any = "") => {
-  //   let newData = migrateData(data, allData, key, true);
-  //   console.log(newData, "newData");
-  //   setALlData([...newData]);
-  // };
+  }, [allData.studentsData, dataExamCenters, checkIsAllChecked(allData.exam_center, dataExamCenters), themeColor]);
 
   const genrateStudentPdf = () => {
+    let newPayload: any = {
+      country: countryName || "India",
+      competition_code: allData.competition || "",
+      state: allData.state,
+      city: allData.city,
+      exam_date: allData.exam_date,
+      exam_center: allData.exam_center,
+      series: allData.series,
+    };
+
     setLoader(true);
-    omrSheetDownload({ username: allData.studentsData })
+    omrSheetDownload(newPayload)
       .then((res) => {
         setLoader(false);
         // console.log(res.data);
@@ -654,19 +494,12 @@ function Page() {
 
   const AdmitCardDownLoad = () => {
     return (
-      <div className="m-4">
+      <div>
         <div className="d-flex flex-wrap gap-4">{renderData()}</div>
-        <div className="table-responsive mt-4">{renderSchoolsTable()}</div>
         <div className="table-responsive mt-4">{renderUsersTable()}</div>
         {/* <div className="table-responsive  m-4">{renderTable()}</div> */}
-        {allData?.schools?.length && !isStudentFilters ? (
-          <div className="btn btn-primary form-control" onClick={() => readSchoolsData(true)}>
-            Generate PDF
-          </div>
-        ) : (
-          ""
-        )}
-        {allData?.studentsData?.length && isStudentFilters ? (
+
+        {allData?.exam_center?.length ? (
           <div className="btn btn-primary form-control" onClick={() => genrateStudentPdf()}>
             Generate PDF
           </div>
@@ -677,23 +510,8 @@ function Page() {
     );
   };
 
-  const uiFilters = {
-    label: "Filter By",
-    key: "",
-    type: "radio",
-    options: [
-      { label: "School Wise", value: "schoolWise" },
-      { label: "Student Wise", value: "studentWise" },
-    ],
-    onChange: (e: any) => {
-      handleDropDownChange(e, "admitCardFilter");
-    },
-    value: allData.admitCardFilter || "schoolWise",
-  };
-
   return (
     <div className="mx-4 py-5" style={{ maxHeight: "100%", overflow: "auto" }}>
-      <div>{renderRadio(uiFilters)}</div>
       {AdmitCardDownLoad()}
       <Loader show={loader} />
     </div>

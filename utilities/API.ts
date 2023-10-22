@@ -29,6 +29,9 @@ export const TRACKSHIPMENT = `${BASE_URL}/track_shipment`;
 export const OMRSHEET = `${BASE_URL}/OMR`;
 export const CERTIFICATE = `${BASE_URL}/Certificate`;
 export const UPDATEREQUEST = `${BASE_URL}/update_request_student`;
+export const UPLOAMEDIA = `${BASE_URL}/data_to_bucket`;
+export const STUDENTAVAILABLEPRODUCTS = `${BASE_URL}/student_available_products`;
+export const OMRSTUDENT = `${BASE_URL}/OMRStudents`;
 
 let userData: any = setGetData("userData", false, true);
 
@@ -42,6 +45,21 @@ const getAPIHeaders = (extraHeaders: Record<string, string> = {}) => {
     ...extraHeaders,
   };
 };
+
+axios.interceptors.response.use(
+  function (response) {
+    // Do something with response data
+    return response;
+  },
+  function (error) {
+    if (error?.response?.status === 401) {
+      clearLocalData();
+      window.location.pathname = "/";
+    } else {
+      return Promise.reject(error);
+    }
+  }
+);
 
 let selectedCountryLocal = setGetData("selectedCountry", "", true);
 
@@ -294,6 +312,10 @@ const admitCardCountData = async (data: any) => {
 };
 
 const omrSheetDownload = async (data: any) => {
+  return await axios.post(OMRSTUDENT, data, { headers: getAPIHeaders() });
+};
+
+const omrSheetDownloadAll = async (data: any) => {
   return await axios.post(OMRSHEET, data, { headers: getAPIHeaders() });
 };
 
@@ -303,6 +325,14 @@ const certificateDownload = async (data: any) => {
 
 const updateRequest = async (data: any) => {
   return await axios.post(UPDATEREQUEST, data, { headers: getAPIHeaders() });
+};
+
+const uploadMedia = async (data: any) => {
+  return await axios.post(UPLOAMEDIA, data, { headers: getAPIHeaders() });
+};
+
+const studentAvailableproducts = async (data: any) => {
+  return await axios.post(STUDENTAVAILABLEPRODUCTS, data, { headers: getAPIHeaders() });
 };
 
 const studentDetails = async (data: any) => {
@@ -461,8 +491,8 @@ const readAnnoucementsAdmin = async (filterBy?: "name" | "state", filterQuery?: 
   return annoucements;
 };
 
-const readExamCenters = async (filterBy?: "name" | "state", filterQuery?: string | number) => {
-  const examCenters = await readData("exam_centers", "find_many");
+const readExamCenters = async (filterBy?: "name" | "state" | "city", filterQuery?: string | number) => {
+  const examCenters = await readData("exam_centers", "find_many", filterBy, filterQuery);
   return examCenters;
 };
 
@@ -471,8 +501,8 @@ const readExamCentersMapping = async (filterBy?: "name" | "state", filterQuery?:
   return examCentersMapping;
 };
 
-const readStudents = async () => {
-  const students = await readData("users", "find_many", "role", "student");
+const readStudents = async (customData: any = false) => {
+  const students = await readData("users", "find_many", "role", "student", customData);
   return students;
 };
 
@@ -1086,10 +1116,13 @@ export {
   dynamicDataUpdate,
   dynamicCreate,
   updateRequest,
+  uploadMedia,
+  studentAvailableproducts,
   forgotCreds,
   admitCardCountData,
   studentDetails,
   omrSheetDownload,
+  omrSheetDownloadAll,
   certificateDownload,
   dispatchRequest,
   dispatchIDGenration,

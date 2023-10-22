@@ -18,7 +18,7 @@ function Loader(props: any) {
           alignItems: "center",
           display: "flex",
           background: "#ffffffc9",
-          zIndex: 99999999,
+          zIndex: 999999999,
         }}
       >
         <div className="spinner-grow spinner-grow-sm mx-1 text-danger" role="status" />
