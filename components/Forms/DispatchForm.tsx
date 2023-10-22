@@ -236,6 +236,35 @@ function DispatchForm(props: any) {
     return all;
   };
 
+  const calcuLateWeight = () => {
+    let val = 0;
+    allData.products.map((item: any, index: any) => {
+      let data = findFromJson(products, item.sku_name, "value");
+      if (!isNaN(+data.weight)) {
+        val += +data.weight;
+      }
+      if (item.quantity) {
+        val *= item.quantity;
+      }
+    });
+
+    allData.approx_weight = val;
+    setAllData({ ...allData });
+  };
+
+  useEffect(() => {
+    calcuLateWeight();
+  }, [products, allData.products]);
+
+  let handleNestedFieldData = (key: any, val: any, nestedKey: any) => {
+    if (allData[nestedKey]) {
+      allData[nestedKey][key] = val;
+    } else {
+      allData[nestedKey] = { [key]: val };
+    }
+    setAllData({ ...allData });
+  };
+
   const studentFilters = [
     {
       label: "State",
@@ -314,6 +343,7 @@ function DispatchForm(props: any) {
       withAsterisk: calculateData("amount") > 50000,
       style: { minWidth: "31%" },
       type: "text",
+      disabled: calculateData("amount") < 50000 || !calculateData("amount"),
       onChange: (e: any) => {
         let val = validatePhone(e.target.value);
         handleDropDownChange(val, "eway_bill_no");
@@ -324,9 +354,10 @@ function DispatchForm(props: any) {
 
   const fields = [
     {
-      style: { minWidth: "48%" },
+      style: { widht: "10%" },
       label: "Approx Weight",
       placeholder: "Approx Weight",
+      disabled: true,
       onChange: (e: any) => {
         let val = validatePhone(e.target.value);
         handleDropDownChange(val, "approx_weight");
@@ -334,7 +365,7 @@ function DispatchForm(props: any) {
       value: allData.approx_weight || "",
     },
     {
-      style: { minWidth: "48%" },
+      style: { widht: "10%" },
       label: "Actual Weight",
       placeholder: "Actual Weight",
       onChange: (e: any) => {
@@ -344,18 +375,58 @@ function DispatchForm(props: any) {
       value: allData.actual_weight || "",
     },
     {
-      style: { minWidth: "48%" },
+      style: { widht: "10%" },
       label: "No. Of Boxes",
       placeholder: "No. Of Boxes",
       onChange: (e: any) => {
-        let val = validatePhone(e.target.value);
+        let val = validatePhone(e.target.value, 5);
         handleDropDownChange(val, "boxes");
       },
       value: allData.boxes || "",
     },
     {
+      style: { widht: "10%" },
+      label: "Weight",
+      placeholder: "Weight",
+      onChange: (e: any) => {
+        let val = validatePhone(e.target.value, 5);
+        handleNestedFieldData("weight", val, "packaging_unit_details");
+      },
+      value: allData.packaging_unit_details?.weight || "",
+    },
+    {
+      style: { widht: "10%" },
+      label: "Length",
+      placeholder: "Length",
+      onChange: (e: any) => {
+        let val = validatePhone(e.target.value, 5);
+        handleNestedFieldData("length", val, "packaging_unit_details");
+      },
+      value: allData.packaging_unit_details?.length || "",
+    },
+    {
+      style: { widht: "10%" },
+      label: "Height",
+      placeholder: "Height",
+      onChange: (e: any) => {
+        let val = validatePhone(e.target.value, 5);
+        handleNestedFieldData("height", val, "packaging_unit_details");
+      },
+      value: allData.packaging_unit_details?.height || "",
+    },
+    {
+      style: { widht: "10%" },
+      label: "Width",
+      placeholder: "Width",
+      onChange: (e: any) => {
+        let val = validatePhone(e.target.value, 5);
+        handleNestedFieldData("width", val, "packaging_unit_details");
+      },
+      value: allData.packaging_unit_details?.width || "",
+    },
+    {
       disabled: true,
-      style: { minWidth: "48%" },
+      style: { widht: "10%" },
       label: "Weight Per Box",
       placeholder: "Weight Per Box",
       onChange: (e: any) => {
@@ -364,6 +435,17 @@ function DispatchForm(props: any) {
       },
       value:
         calculateNumbers(allData.actual_weight, allData.boxes, false, "weight_per_box") || allData.weight_per_box || "",
+    },
+    {
+      disabled: true,
+      style: { widht: "10%" },
+      label: "Awb No.",
+      placeholder: "Awb No.",
+      onChange: (e: any) => {
+        let val = validatePhone(e.target.value);
+        handleDropDownChange(val, "awb_number");
+      },
+      value: allData.awb_number || "",
     },
     {
       type: "select",
@@ -376,17 +458,7 @@ function DispatchForm(props: any) {
       },
       value: allData.warehouse_name || "",
     },
-    {
-      disabled: true,
-      style: { minWidth: "48%" },
-      label: "Awb No.",
-      placeholder: "Awb No.",
-      onChange: (e: any) => {
-        let val = validatePhone(e.target.value);
-        handleDropDownChange(val, "awb_number");
-      },
-      value: allData.awb_number || "",
-    },
+
     // {
     //   type: "date",
     //   style: { minWidth: "48%" },
@@ -469,7 +541,7 @@ function DispatchForm(props: any) {
       if (type === "multiselect") {
         return (
           <div key={index} style={{ ...style }}>
-            <MultiSelect disabled={readonly} searchable={true} size="sm" w="100%" {...item} />
+            <MultiSelect disabled={readonly} searchable={true} size="sm" {...item} />
           </div>
         );
       } else if (type == "radio") {
@@ -477,13 +549,13 @@ function DispatchForm(props: any) {
       } else if (type == "select") {
         return (
           <div key={index} style={{ ...style }}>
-            <Select disabled={readonly} searchable={true} w={"100%"} mt={"md"} size="md" {...item} />
+            <Select disabled={readonly} searchable={true} mt={"md"} size="md" {...item} />
           </div>
         );
       } else {
         return (
           <div key={index} style={style}>
-            <TextInput disabled={readonly} w={"100%"} mt={"md"} size="md" {...item} />
+            <TextInput disabled={readonly} mt={"md"} size="md" {...item} />
           </div>
         );
       }
@@ -514,6 +586,7 @@ function DispatchForm(props: any) {
     dataObj?.splice(index, 1);
     allData.products.splice(index, 1);
     setNestedData([...dataObj]);
+    allData.products = [...allData.products];
     setAllData({ ...allData });
   };
 
@@ -523,6 +596,7 @@ function DispatchForm(props: any) {
     } else {
       allData.products[index] = { [key]: val };
     }
+    allData.products = [...allData.products];
     setAllData({ ...allData });
   };
 
@@ -605,7 +679,8 @@ function DispatchForm(props: any) {
                 size="md"
               />
               <TextInput
-                disabled={readonly}
+                disabled={true}
+                // disabled={readonly}
                 value={
                   calculateNumbers(
                     allData.products[index]?.rate,
@@ -682,14 +757,35 @@ function DispatchForm(props: any) {
       }
     }
 
+    let dataArr: any = [];
+
+    let objData = {
+      units: 1,
+      weight: 11,
+      length: 40,
+      height: 30,
+      width: 30,
+      display_in: "cm",
+    };
+
+    for (let index = 0; index < allData.boxes; index++) {
+      objData.weight = allData.packaging_unit_details.weight;
+      objData.length = allData.packaging_unit_details.length;
+      objData.height = allData.packaging_unit_details.height;
+      objData.width = allData.packaging_unit_details.width;
+
+      dataArr.push(objData);
+    }
+
     let data = {
+      packaging_unit_details: dataArr,
       country: countryName,
       receiver_type: allData?.childSchoolData?.label,
       receiver_name: allData.receiver_name,
       city: allData.city,
       state: allData.state,
       // dispatch_date: allData.dispatch_date,
-      eway_bill_no: allData["eway_bill_no"],
+      eway_bill_no: allData["eway_bill_no"] || "",
       approx_weight: allData.approx_weight,
       actual_weight: allData.actual_weight,
       boxes: allData.boxes,
@@ -728,6 +824,25 @@ function DispatchForm(props: any) {
   const updateDataRes = () => {
     let amount = calculateData("amount");
 
+    let dataArr: any = [];
+
+    let objData = {
+      units: 1,
+      weight: 11,
+      length: 40,
+      height: 30,
+      width: 30,
+      display_in: "cm",
+    };
+
+    for (let index = 0; index < allData.boxes; index++) {
+      objData.weight = allData.packaging_unit_details.weight;
+      objData.length = allData.packaging_unit_details.length;
+      objData.height = allData.packaging_unit_details.height;
+      objData.width = allData.packaging_unit_details.width;
+      dataArr.push(objData);
+    }
+
     let validate = ["city", "state"];
     // if (!validateData(allData, validate)) {
     //   alert("Please fill all mandatory fields");
@@ -742,13 +857,14 @@ function DispatchForm(props: any) {
     }
 
     let dataToUpdate = {
+      packaging_unit_details: dataArr,
       country: countryName,
       receiver_type: allData?.childSchoolData?.label,
       receiver_name: allData.receiver_name,
       city: allData.city,
       state: allData.state,
       // dispatch_date: allData.dispatch_date,
-      eway_bill_no: allData["eway_bill_no"],
+      eway_bill_no: allData["eway_bill_no"] || "",
       approx_weight: allData.approx_weight,
       actual_weight: allData.actual_weight,
       boxes: allData.boxes,

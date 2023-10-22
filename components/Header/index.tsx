@@ -120,6 +120,7 @@ function Header() {
 
   let locationData = useFinduserGeoLocationQuery("");
   locationData = iterateData(locationData);
+  const localCountry = setGetData("selectedCountry", "", true);
 
   let apiCountryData = {
     value: locationData.country,
@@ -168,14 +169,15 @@ function Header() {
     },
   };
 
-  let countriesDataApi: any = useGetAllLocationsQuery(payload);
-  countriesDataApi = iterateData(countriesDataApi);
+  // let countriesDataApi: any = useGetAllLocationsQuery(payload);
+  // countriesDataApi = iterateData(countriesDataApi);
 
   let landingPageCountries = useLandingPageAPisQuery(landingPageCountriesPayload);
   landingPageCountries = iterateData(landingPageCountries);
 
   useEffect(() => {
-    let countryApiData = isloggedIn ? countriesDataApi : landingPageCountries;
+    // let countryApiData = isloggedIn ? countriesDataApi : landingPageCountries;
+    let countryApiData = landingPageCountries;
     if (Array.isArray(countryApiData)) {
       const countriesWithFlags = countryApiData.map((country) => {
         return {
@@ -186,7 +188,7 @@ function Header() {
       });
       setCountriesData(countriesWithFlags);
     }
-  }, [countriesDataApi, landingPageCountries]);
+  }, [landingPageCountries]);
 
   const links = mockdata?.map((item) => (
     <UnstyledButton className={classes.subLink} key={item.title}>
@@ -213,7 +215,9 @@ function Header() {
   const pathname = usePathname();
 
   useEffect(() => {
-    if (!userCountry) {
+    if (localCountry) {
+      setSelectedCountry(localCountry.value);
+    } else if (!userCountry) {
       setSelectedCountry(locationData?.country_code);
     } else {
       let key = findFromJson(countriesData, userCountry, "label");
@@ -223,8 +227,10 @@ function Header() {
 
   useEffect(() => {
     let country = findFromJson(countriesData, selectedCountry, "value");
-    dispatch(setSelectedCountryRedux(country));
-    setGetData("selectedCountry", country, true);
+    if (country?.value) {
+      dispatch(setSelectedCountryRedux(country));
+      setGetData("selectedCountry", country, true);
+    }
   }, [selectedCountry]);
 
   const signoutUser = () => {
@@ -429,7 +435,7 @@ function Header() {
           <Group position="center" grow pb="xl" px="md">
             <Button
               onClick={() => {
-                // navigate("/authentication/signup");
+                router.replace("/authentication/signup");
               }}
               variant={"light"}
             >
@@ -437,7 +443,7 @@ function Header() {
             </Button>
             <Button
               onClick={() => {
-                // navigate("/authentication/signin");
+                router.replace("/authentication/signin");
               }}
               variant={"filled"}
             >

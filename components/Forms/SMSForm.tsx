@@ -1,20 +1,9 @@
-import {
-  TextInput,
-  Button,
-  Group,
-  Box,
-  Flex,
-  LoadingOverlay,
-} from '@mantine/core';
-import { useForm } from '@mantine/form';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { MatrixDataType, MatrixRowType } from '../Matrix';
-import {
-  createSMSConfig,
-  readSMSConfigs,
-  updateSMSConfig,
-} from '@/utilities/API';
-import { notifications } from '@mantine/notifications';
+import { TextInput, Button, Group, Box, Flex, LoadingOverlay } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { MatrixDataType, MatrixRowType } from "../Matrix";
+import { createSMSConfig, readSMSConfigs, updateSMSConfig } from "@/utilities/API";
+import { notifications } from "@mantine/notifications";
 
 function SMSForm({
   open,
@@ -45,11 +34,10 @@ function SMSForm({
   const form = useForm({
     initialValues: {
       ...rowData,
-      name: rowData?.name ?? '',
+      name: rowData?.name ?? "",
     },
     validate: {
-      name: (value) =>
-        value?.length < 2 ? 'Name must have at least 2 letters' : null,
+      name: (value) => (value?.length < 2 ? "Name must have at least 2 letters" : null),
     },
   });
   const [oLoader, setOLoader] = useState<boolean>(false);
@@ -61,7 +49,7 @@ function SMSForm({
       const isSmsUpdated = await updateSMSConfig(rowData._id, {
         ...values,
       });
-      if (isSmsUpdated.toUpperCase() === 'DOCUMENT UPDATED') {
+      if (isSmsUpdated.toUpperCase() === "DOCUMENT UPDATED") {
         const smsConfigs = await readSMSConfigs();
         setData(smsConfigs);
         setOLoader(false);
@@ -72,33 +60,33 @@ function SMSForm({
       notifications.show({
         title: `SMS Config ${rowData.name} updated!`,
         message: `The above class has been updated with new information.`,
-        color: 'blue',
+        color: "blue",
       });
     } else {
       const isSmsCreated = await createSMSConfig(values as MatrixRowType);
-      if (isSmsCreated.toUpperCase() === 'DOCUMENT CREATED') {
+      if (isSmsCreated.toUpperCase() === "DOCUMENT CREATED") {
         const smsConfigs = await readSMSConfigs();
         setData(smsConfigs);
         setOLoader(false);
         notifications.show({
           title: `SMS Config created!`,
           message: `A new sms config has been created.`,
-          color: 'green',
+          color: "green",
         });
-      } else if (isSmsCreated.toUpperCase() === 'DOCUMENT ALREADY EXISTS') {
+      } else if (isSmsCreated.toUpperCase() === "DOCUMENT ALREADY EXISTS") {
         setOLoader(false);
         notifications.show({
           title: `SMS Config already exists!`,
           message: `${values.name} already exists.`,
-          color: 'orange',
+          color: "orange",
         });
       } else {
         setOLoader(false);
       }
     }
     form.setValues({
-      name: '',
-      code: '',
+      name: "",
+      code: "",
       status: true,
     });
     close();
@@ -110,7 +98,7 @@ function SMSForm({
         <LoadingOverlay visible={oLoader} overlayBlur={2} />
         <Flex direction={"column"} justify={"center"} align={"flex-start"} w={"100%"}>
           <TextInput
-            disabled={readonly || !!rowData}
+            disabled={readonly}
             withAsterisk
             label="Name"
             placeholder="Name"

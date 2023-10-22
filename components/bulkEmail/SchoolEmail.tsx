@@ -182,6 +182,7 @@ function SchoolEmail(props: any) {
   };
 
   const testData = [
+    { label: "None", value: "" },
     { label: "Admit Cards", value: "admit_cards" },
     { label: "Certifications", value: "certifications" },
     { label: "Attach File", value: "attached" },
@@ -309,13 +310,16 @@ function SchoolEmail(props: any) {
 
     if (allData.attachment_name) {
       if (allData.attachment_name == "attached") {
+        if (!allData.attachment_name_File) {
+          alert("Please select attachment");
+          return;
+        }
         payloadData.append("file", allData.attachment_name_File);
-        payloadData.append("meta_data", JSON.stringify(metaData));
-      } else {
-        metaData.attachment_name = allData.attachment_name;
-        payloadData.append("meta_data", JSON.stringify(metaData));
       }
+      metaData.attachment_name = allData.attachment_name;
     }
+
+    payloadData.append("meta_data", JSON.stringify(metaData));
 
     setLoader(true);
     sendBulkEmail(payloadData)

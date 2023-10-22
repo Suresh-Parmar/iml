@@ -26,7 +26,7 @@ export default function Announcements() {
       <Matrix
         data={data.length > 0 ? data : []}
         setData={setData}
-        showCreateForm={false}
+        showCreateForm={true}
         formType="marks"
         showLabel="Marks Sheet"
       />

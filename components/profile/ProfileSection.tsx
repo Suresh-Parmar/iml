@@ -41,13 +41,17 @@ function ProfileSection(props: any) {
             <label className="col-form-label capitalize">{item.label}</label>
             <div className="input-group">
               <input className="form-control" {...newItem} />
-              <div className="input-group-append">
+              <div className=" ">
                 <button
-                  className="btn btn-outline-secondary"
+                  className="btn btn-outline-secondary d-flex align-items-center justify-content-center"
                   type="button"
                   onClick={() => togglePasswordVisibility(index)}
                 >
-                  {passwordVisible[index] ? "Hide" : "Show"}
+                  {passwordVisible[index] ? (
+                    <span className="material-symbols-outlined">visibility_off</span>
+                  ) : (
+                    <span className="material-symbols-outlined">visibility</span>
+                  )}
                 </button>
               </div>
             </div>
@@ -75,10 +79,19 @@ function ProfileSection(props: any) {
         {activePage.link === "productForYou" && <ProductForYou />}
         {activePage.link === "downloads" && <DownLoadProduct />}
       </>
-      {activePage.link !== "yourProduct" &&
-        activePage.link !== "productForYou" &&
-        activePage.link !== "downloads" &&
-        renderFields()}
+      {activePage.link == "profile" && (
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "47% 47%",
+            gap: "10px",
+            justifyContent: "space-between",
+          }}
+        >
+          {renderFields()}
+        </div>
+      )}
+      {activePage.link == "password" && renderFields()}
     </div>
   );
 }

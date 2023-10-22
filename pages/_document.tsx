@@ -5,6 +5,7 @@ export default function Document() {
     <Html lang="en">
       <Head />
       <head>
+        <link href="https://fonts.cdnfonts.com/css/c39hrp48dhtt" rel="stylesheet"></link>
         <title> IML </title>
       </head>
       <body>

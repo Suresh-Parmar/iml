@@ -23,7 +23,7 @@ export default function Console() {
         ControlApplicationShellComponents({
           showHeader: true,
           showFooter: false,
-          showNavigationBar: false,
+          showNavigationBar: role == "student",
           hideNavigationBar: false,
           showAsideBar: false,
         })

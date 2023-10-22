@@ -205,6 +205,15 @@ function ExamCenterForm({
     await readCitiesData("state", event);
   };
 
+  const setDatesExtra = (e: any, keyArr: any[]) => {
+    keyArr.map((key: any) => {
+      let values: any = { ...form.values };
+      if (e > values[key]) {
+        form.setFieldValue(key, e);
+      }
+    });
+  };
+
   return (
     <Box maw={"100%"} mx="auto">
       <form onSubmit={form.onSubmit(onHandleSubmit)}>
@@ -225,7 +234,7 @@ function ExamCenterForm({
             w={"100%"}
           />
           <TextInput
-            disabled={readonly || !!rowData}
+            disabled={readonly}
             withAsterisk
             label="Name"
             name="Name"
@@ -324,6 +333,10 @@ function ExamCenterForm({
             mt={"md"}
             size="md"
             minDate={new Date()}
+            onChange={(e: any) => {
+              form.setFieldValue("examdate", e);
+              setDatesExtra(e, ["verification_end_date", "verification_start_date", "result_date"]);
+            }}
           />
           <TextInput
             disabled={readonly}
@@ -346,6 +359,10 @@ function ExamCenterForm({
             label="Result Date"
             placeholder={`${new Date(Date.now()).toDateString()}`}
             {...form.getInputProps("result_date")}
+            onChange={(e: any) => {
+              form.setFieldValue("result_date", e);
+              setDatesExtra(e, ["verification_end_date", "verification_start_date"]);
+            }}
             w={"100%"}
             mt={"md"}
             size="md"
@@ -362,6 +379,10 @@ function ExamCenterForm({
             label="Verification Start Date"
             placeholder={`${new Date(Date.now()).toDateString()}`}
             {...form.getInputProps("verification_start_date")}
+            onChange={(e: any) => {
+              form.setFieldValue("verification_start_date", e);
+              setDatesExtra(e, ["verification_end_date"]);
+            }}
             w={"100%"}
             mt={"md"}
             size="md"

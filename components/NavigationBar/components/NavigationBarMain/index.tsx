@@ -206,6 +206,13 @@ function NavigationBarMain({ opened }: { opened: boolean }) {
           description: "dispatch of the system",
         },
         {
+          href: `${consoleBaseURL}/warehouses`,
+          icon: <IconMap size="2rem" />,
+          color: "blue",
+          label: "Warehouses",
+          description: "Warehouses of the system",
+        },
+        {
           href: `${consoleBaseURL}/boards`,
           icon: <IconVocabulary size="2rem" />,
           color: "pink",
@@ -390,6 +397,13 @@ function NavigationBarMain({ opened }: { opened: boolean }) {
           icon: <IconUser size="2rem" />,
           color: "gray",
           label: "OMR Sheet",
+          description: "All users of the system",
+        },
+        {
+          href: `${consoleBaseURL}/attendancesheet`,
+          icon: <IconUser size="2rem" />,
+          color: "gray",
+          label: "Attendance Sheet",
           description: "All users of the system",
         },
       ],

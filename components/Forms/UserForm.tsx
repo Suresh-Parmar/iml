@@ -474,7 +474,7 @@ function UserForm({
                 w={"100%"}
               /> */}
               <TextInput
-                disabled={readonly || !!rowData}
+                disabled={readonly}
                 withAsterisk
                 label="Name"
                 name="Name"

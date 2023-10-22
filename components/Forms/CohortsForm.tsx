@@ -96,7 +96,7 @@ function CohortsForm({
   let renderFormData = () => {
     let formData = [
       {
-        disabled: readonly || !!rowData,
+        disabled: readonly ,
         withAsterisk: true,
         label: "Name",
         placeholder: "John Die",
