@@ -68,6 +68,7 @@ function CompetitionForm({
       mode_id: (value) => (value.length === 0 ? "Mode must be selected" : null),
     },
   });
+  let formValues: any = form.values;
   const [oLoader, setOLoader] = useState<boolean>(false);
   let reduxData = useSelector((state: any) => state.data);
   let selectedCountryLocal = setGetData("selectedCountry", "", true);
@@ -150,7 +151,7 @@ function CompetitionForm({
         mt: "md",
         size: "md",
         onChange: (event: any) => {
-          let val = validatePhone(event.currentTarget.value, 3, 100);
+          let val = validatePhone(event.currentTarget.value, 3);
           form.setFieldValue("class" + item._id, val);
         },
       };
@@ -236,11 +237,10 @@ function CompetitionForm({
     },
     {
       disabled: readonly,
-      withAsterisk: true,
       label: "Tags",
       placeholder: "Tag1",
       ...form.getInputProps("tags"),
-      w: "100%",
+
       mt: "md",
       size: "md",
       onChange: (event: any) => {
@@ -248,9 +248,26 @@ function CompetitionForm({
       },
     },
     {
+      type: "dropdown",
       disabled: readonly,
-      divStyle: { width: "100%" },
-      label: "passing marks(%)",
+      searchable: true,
+      nothingFound: "No options",
+      data: ["Paid", "Free", "Both"],
+      name: "charges",
+      withAsterisk: true,
+      label: "Charges",
+      ...form.getInputProps("charges"),
+
+      mt: "md",
+      size: "md",
+      onChange: async (event: any) => {
+        form.setFieldValue("charges", event ?? "");
+      },
+    },
+    {
+      disabled: readonly,
+      // divStyle: { width: "100%" },
+      label: "Passing Marks(%)",
       placeholder: "99",
       ...form.getInputProps("passing_marks"),
       w: "100%",
@@ -272,7 +289,7 @@ function CompetitionForm({
       mt: "md",
       size: "md",
       onChange: (event: any) => {
-        let val = validatePhone(event.currentTarget.value, 3, 100);
+        let val = validatePhone(event.currentTarget.value, 3, !!formValues.grade_a_max ? +formValues.grade_a_max : 100);
         form.setFieldValue("grade_a_min", val);
       },
     },
@@ -286,7 +303,10 @@ function CompetitionForm({
       mt: "md",
       size: "md",
       onChange: (event: any) => {
-        let val = validatePhone(event.currentTarget.value, 3, 100);
+        let val: any = validatePhone(event.currentTarget.value, 3, 100);
+        if (val < Number(formValues?.grade_a_min)) {
+          val = formValues.grade_a_min;
+        }
         form.setFieldValue("grade_a_max", val);
       },
     },
@@ -300,7 +320,7 @@ function CompetitionForm({
       mt: "md",
       size: "md",
       onChange: (event: any) => {
-        let val = validatePhone(event.currentTarget.value, 3, 100);
+        let val = validatePhone(event.currentTarget.value, 3, !!formValues.grade_b_max ? +formValues.grade_b_max : 100);
         form.setFieldValue("grade_b_min", val);
       },
     },
@@ -314,7 +334,10 @@ function CompetitionForm({
       mt: "md",
       size: "md",
       onChange: (event: any) => {
-        let val = validatePhone(event.currentTarget.value, 3, 100);
+        let val: any = validatePhone(event.currentTarget.value, 3, 100);
+        if (val < Number(formValues?.grade_b_min)) {
+          val = formValues.grade_b_min;
+        }
         form.setFieldValue("grade_b_max", val);
       },
     },
@@ -328,7 +351,7 @@ function CompetitionForm({
       mt: "md",
       size: "md",
       onChange: (event: any) => {
-        let val = validatePhone(event.currentTarget.value, 3, 100);
+        let val = validatePhone(event.currentTarget.value, 3, !!formValues.grade_c_max ? +formValues.grade_c_max : 100);
         form.setFieldValue("grade_c_min", val);
       },
     },
@@ -342,7 +365,10 @@ function CompetitionForm({
       mt: "md",
       size: "md",
       onChange: (event: any) => {
-        let val = validatePhone(event.currentTarget.value, 3, 100);
+        let val: any = validatePhone(event.currentTarget.value, 3, 100);
+        if (val < Number(formValues?.grade_c_min)) {
+          val = formValues.grade_c_min;
+        }
         form.setFieldValue("grade_c_max", val);
       },
     },
@@ -356,7 +382,7 @@ function CompetitionForm({
       mt: "md",
       size: "md",
       onChange: (event: any) => {
-        let val = validatePhone(event.currentTarget.value, 3, 100);
+        let val = validatePhone(event.currentTarget.value, 3, !!formValues.grade_d_max ? +formValues.grade_d_max : 100);
         form.setFieldValue("grade_d_min", val);
       },
     },
@@ -370,11 +396,14 @@ function CompetitionForm({
       mt: "md",
       size: "md",
       onChange: (event: any) => {
-        let val = validatePhone(event.currentTarget.value, 3, 100);
+        let val: any = validatePhone(event.currentTarget.value, 3, 100);
+        if (val < Number(formValues?.grade_d_min)) {
+          val = formValues.grade_d_min;
+        }
         form.setFieldValue("grade_d_max", val);
       },
     },
-    { title: "Cutt-off Marks Setting for Grand Finale" },
+    { title: "Cut-off Marks Setting for Grand Finale" },
     ...classesDataJson(),
     {
       type: "editor",
