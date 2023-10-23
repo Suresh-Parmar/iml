@@ -32,6 +32,7 @@ import { DataTable } from "mantine-datatable";
 import { filterDataSingle } from "@/helpers/dropDownData";
 import { validatePhone } from "@/helpers/validations";
 import Loader from "../common/Loader";
+import Editor from "../editor/editor";
 
 function ProductForm({
   open,
@@ -205,17 +206,25 @@ function ProductForm({
     // fetchCompetitions(value ?? "");
   };
 
-  const onChangeClass = (value: string) => {
-    form.setFieldValue("class", value ?? "");
-  };
-
   const productTypesOptions = filterDataSingle(productTypes, "name");
-  let boardsOptions = filterDataSingle(boards, "code");
+  let board_category = filterDataSingle(boards, "board_type");
   const classesOptions = filterDataSingle(classes, "name", "", "", false);
   const subjectsOptions = filterDataSingle(subjects, "name");
   const competitionsOptions = filterDataSingle(competitions, "name");
+  let boardsOptions = [];
 
   let formValues: any = form.values;
+
+  if (formValues.boardcategory) {
+    let dataBoard: any = [];
+    boards.map((item) => {
+      if (item.board_type == formValues.boardcategory) {
+        dataBoard.push(item);
+      }
+    });
+
+    boardsOptions = filterDataSingle(dataBoard, "code");
+  }
 
   useEffect(() => {
     formValues.subject && fetchCompetitions(formValues.subject ?? "");
@@ -238,7 +247,7 @@ function ProductForm({
         columns={[
           { accessor: "name" },
           { accessor: "hsncode" },
-          { accessor: "amount" },
+          { accessor: "product_bundle_price" },
           { accessor: "delivery" },
           { accessor: "gst" },
         ]}
@@ -271,6 +280,22 @@ function ProductForm({
             }}
             w={"100%"}
           />
+          <Select
+            disabled={readonly}
+            searchable
+            nothingFound="Board Category"
+            data={board_category}
+            label={"Board Category"}
+            name="boardcategory"
+            mt={"md"}
+            size="md"
+            withAsterisk
+            {...form.getInputProps("boardcategory")}
+            // onChange={(value) => {
+            //   form.setFieldValue("boardcategory", value ?? "");
+            // }}
+            w={"100%"}
+          />
           <MultiSelect
             disabled={readonly}
             searchable
@@ -287,7 +312,7 @@ function ProductForm({
             }}
             w={"100%"}
           />
-          <Select
+          <MultiSelect
             disabled={readonly}
             searchable
             nothingFound="No options"
@@ -298,7 +323,6 @@ function ProductForm({
             size="md"
             withAsterisk
             {...form.getInputProps("class")}
-            onChange={onChangeClass}
             w={"100%"}
           />
           <Radio.Group
@@ -333,13 +357,20 @@ function ProductForm({
               form.setFieldValue("name", event.currentTarget.value);
             }}
           />
+          <Editor
+            disabled={readonly}
+            withAsterisk
+            label="Description"
+            placeholder="Description"
+            {...form.getInputProps("description")}
+          />
           <TextInput
             disabled={readonly}
             label="SKU Name"
             placeholder="SKU Name"
             {...form.getInputProps("sku_name")}
             w={"100%"}
-            mt={"md"}
+            style={{ marginTop: 40 }}
             size="md"
             onChange={(event) => {
               form.setFieldValue("sku_name", event.currentTarget.value);
@@ -398,7 +429,7 @@ function ProductForm({
             mt={"md"}
             size="md"
             onChange={(event) => {
-              let val = validatePhone(event.currentTarget.value, 5);
+              let val = validatePhone(event.currentTarget.value, 0, undefined, true, form.values.amount);
               form.setFieldValue("amount", val);
             }}
           />
@@ -412,21 +443,21 @@ function ProductForm({
             mt={"md"}
             size="md"
             onChange={(event) => {
-              let val = validatePhone(event.currentTarget.value, 8);
-              form.setFieldValue("hsncode", val);
+              // let val = validatePhone(event.currentTarget.value, 8);
+              form.setFieldValue("hsncode", event.currentTarget.value);
             }}
           />
           <TextInput
             disabled={readonly}
             withAsterisk
-            label="Max Selling Quantity"
-            placeholder="Max Selling Quantity"
+            label="Inventry Quantity"
+            placeholder="Inventry Quantity"
             {...form.getInputProps("qty")}
             w={"100%"}
             mt={"md"}
             size="md"
             onChange={(event) => {
-              let val = validatePhone(event.currentTarget.value, 4);
+              let val = validatePhone(event.currentTarget.value);
               form.setFieldValue("qty", val);
             }}
           />
@@ -440,7 +471,8 @@ function ProductForm({
             mt={"md"}
             size="md"
             onChange={(event) => {
-              form.setFieldValue("product_bundle_price", event.currentTarget.value);
+              let val = validatePhone(event.currentTarget.value, 0, undefined, true, formValues?.product_bundle_price);
+              form.setFieldValue("product_bundle_price", val);
             }}
           />
           <TextInput
@@ -498,7 +530,7 @@ function ProductForm({
               form.setFieldValue("lastaccessdate", event.currentTarget.value);
             }}
           />
-          <TextInput
+          {/* <TextInput
             disabled={readonly}
             withAsterisk
             label="Seq Number"
@@ -511,23 +543,27 @@ function ProductForm({
               let val = validatePhone(event.currentTarget.value, 3);
               form.setFieldValue("seqnumber", val);
             }}
-          />
+          /> */}
           <FileInput
             disabled={readonly}
             withAsterisk
             label="Resource File"
-            placeholder="Resource File"
+            placeholder={formValues?.resourcefileurl || "Resource File"}
             {...form.getInputProps("resourcefileurl")}
             w={"100%"}
             mt={"md"}
             size="md"
-            accept="image/png,image/jpeg"
+            accept=".pdf, .xls, .xlsx, .doc, .docx, .zip, .rar, image/*"
             onChange={(event) => {
               form.setFieldValue("resourcefileurl", event);
             }}
+            rightSection={formValues?.resourcefileurl ? <span className="material-symbols-outlined">folder</span> : ""}
           />
+          <span style={{ fontSize: "12px" }}>
+            {typeof formValues?.resourcefileurl == "string" ? formValues?.resourcefileurl : ""}
+          </span>
 
-          {formValues?.resourcefileurl && (
+          {/* {formValues?.resourcefileurl && (
             <div className="m-3">
               {typeof formValues?.resourcefileurl === "object" ? (
                 <img style={{ height: "150px" }} src={URL.createObjectURL(formValues?.resourcefileurl)} />
@@ -535,12 +571,12 @@ function ProductForm({
                 <img style={{ height: "150px" }} src={formValues?.resourcefileurl} />
               )}
             </div>
-          )}
+          )} */}
           <FileInput
             disabled={readonly}
             withAsterisk
             label="image upload url "
-            placeholder="image upload url "
+            placeholder={formValues?.imageuploadurl || "image upload url"}
             {...form.getInputProps("imageuploadurl")}
             w={"100%"}
             mt={"md"}
