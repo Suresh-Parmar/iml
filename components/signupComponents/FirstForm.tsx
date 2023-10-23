@@ -99,7 +99,7 @@ export default function FirstForm({ form, onClickNext, setInvoiceBreakdown }: Fi
         w={"100%"}
       />
       <Flex w={"100%"} mt="xs" gap={"xs"} wrap={"wrap"} direction={"row"} justify={"center"} align={"stretch"}>
-        {products.map((product) => {
+        {products.map((product: any) => {
           return (
             <Card
               w={"30%"}
@@ -111,7 +111,7 @@ export default function FirstForm({ form, onClickNext, setInvoiceBreakdown }: Fi
             >
               {form.values.class_id === "" && <Overlay blur={15} center color="#ffffff" />}
               <Card.Section>
-                <Image src={CardImageUrl} height={262.5} width={350} alt="Norway" />
+                <img src={product?.imageuploadurl} height={262.5} width={350} alt="Norway" />
                 <Flex direction={"row"} justify={"center"} align={"center"} w={"100%"}>
                   <Text align={"center"} mx={"md"} my={"md"} fw={"bold"} fz={"md"}>
                     {product.name}

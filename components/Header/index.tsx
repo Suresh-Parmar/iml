@@ -184,6 +184,7 @@ function Header() {
           value: country["ISO Alpha-2 Code"],
           label: country.name,
           country_code: country["ISD Code"],
+          currency: country["Currency Short Name"],
         };
       });
       setCountriesData(countriesWithFlags);
