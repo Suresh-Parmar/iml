@@ -1057,7 +1057,7 @@ export const allTypes: any = {
     },
     {
       id: "Title",
-      key: "title",
+      key: "name",
       defaultShow: true,
     },
     {
