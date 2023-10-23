@@ -2,10 +2,25 @@ import { notifications } from "@mantine/notifications";
 import Excel from "exceljs";
 import { saveAs } from "file-saver";
 
-export const validatePhone = (val: string, len: number = 0, maxVal: any = 0): string => {
-  const regex = /[^0-9]/g;
-  let filteredValue = val.replace(regex, "");
+export const validatePhone = (
+  val: string,
+  len: number = 0,
+  maxVal: any = 0,
+  allowDot: any = false,
+  oldVal: any = ""
+): string => {
+  let regex: any = /[^0-9]/g;
+  let filteredValue: any;
 
+  if (allowDot) {
+    if (/^\d*\.?\d{0,2}$/.test(val)) {
+      filteredValue = val;
+    } else {
+      filteredValue = oldVal;
+    }
+  } else {
+    filteredValue = val.replace(regex, "");
+  }
   if (len && filteredValue.length > len) {
     filteredValue = filteredValue.slice(0, len);
   }
