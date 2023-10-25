@@ -101,29 +101,40 @@ export default function FirstForm({ form, onClickNext, setInvoiceBreakdown }: Fi
       <Flex w={"100%"} mt="xs" gap={"xs"} wrap={"wrap"} direction={"row"} justify={"center"} align={"stretch"}>
         {products.map((product: any) => {
           return (
-            <Card
-              w={"30%"}
+            <div
               key={`product-${product._id}`}
-              shadow={form.values.competition === product ? "xl" : "none"}
-              padding="lg"
-              radius="md"
-              withBorder={form.values.competition === product.name}
+              className="rounded relative"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "10px",
+                border: "1px solid gray",
+                padding: "10px",
+              }}
             >
-              {form.values.class_id === "" && <Overlay blur={15} center color="#ffffff" />}
-              <Card.Section>
-                <img src={product?.imageuploadurl} height={262.5} width={350} alt="Norway" />
-                <Flex direction={"row"} justify={"center"} align={"center"} w={"100%"}>
-                  <Text align={"center"} mx={"md"} my={"md"} fw={"bold"} fz={"md"}>
-                    {product.name}
-                  </Text>
+              <Card
+                shadow={form.values.competition === product ? "xl" : "none"}
+                padding="lg"
+                radius="md"
+                withBorder={form.values.competition === product.name}
+              >
+                {form.values.class_id === "" && <Overlay blur={15} center color="#ffffff" />}
+                <Card.Section>
+                  <img src={product?.imageuploadurl} height={262.5} width={350} alt="Norway" />
+                  <Flex direction={"row"} justify={"center"} align={"center"} w={"100%"}>
+                    <Text align={"center"} mx={"md"} my={"md"} fw={"bold"} fz={"md"}>
+                      {product.name}
+                    </Text>
+                  </Flex>
+                </Card.Section>
+                <Flex mt={"sm"} w={"100%"} justify={"center"}>
+                  <Button color="blue" variant="light" onClick={() => onClickSubmitCompetition(product.name, product)}>
+                    {`₹ ${Number(product.amount).toFixed(2)}`}
+                  </Button>
                 </Flex>
-              </Card.Section>
-              <Flex mt={"sm"} w={"100%"} justify={"center"}>
-                <Button color="blue" variant="light" onClick={() => onClickSubmitCompetition(product.name, product)}>
-                  {`₹ ${Number(product.amount).toFixed(2)}`}
-                </Button>
-              </Flex>
-            </Card>
+              </Card>
+            </div>
           );
         })}
       </Flex>

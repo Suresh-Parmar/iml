@@ -8,6 +8,7 @@ import {
   readCompetitions,
   readExamCenters,
   readStates,
+  readTempates,
   updateExamCenter,
 } from "@/utilities/API";
 import { DatePickerInput } from "@mantine/dates";
@@ -15,6 +16,8 @@ import { notifications } from "@mantine/notifications";
 import { checkValidDate, maxLength, validatePhone } from "@/helpers/validations";
 import Editor from "../editor/editor";
 import { filterDataMulti, filterDataSingle } from "@/helpers/dropDownData";
+import { filterData, formatedDate } from "@/helpers/filterData";
+import { findFromJson } from "@/helpers/filterFromJson";
 
 function ExamCenterForm({
   readonly,
@@ -28,7 +31,7 @@ function ExamCenterForm({
   open: () => void;
   close: () => void;
   setData: Dispatch<SetStateAction<MatrixDataType>>;
-  rowData?: MatrixRowType;
+  rowData?: any;
   setRowData: Dispatch<SetStateAction<MatrixRowType | undefined>>;
   setFormTitle: Dispatch<SetStateAction<string>>;
   readonly?: boolean;
@@ -36,11 +39,22 @@ function ExamCenterForm({
   const [comeptitionsData, setCompetitionsData] = useState<MatrixDataType>([]);
   const [citiesData, setCitiesData] = useState<MatrixDataType>([]);
   const [statesData, setStatesData] = useState<MatrixDataType>([]);
+  const [templatesData, settemplatesData] = useState<any>([]);
 
   async function readCompetitionsData() {
     const competitions = await readCompetitions("status", true);
     setCompetitionsData(competitions);
   }
+
+  const readTemplates = async () => {
+    const templates = await readTempates("templatetype", "instruction");
+    let data = filterData(templates, "label", "value");
+    settemplatesData(data);
+  };
+
+  useEffect(() => {
+    readTemplates();
+  }, []);
 
   useEffect(() => {
     readCompetitionsData();
@@ -101,6 +115,7 @@ function ExamCenterForm({
       city: rowData?.city ?? "",
       max_number: rowData?.max_number ?? "",
       instructions: rowData?.instructions ?? "",
+      instructions_template: rowData?.instructions_template ?? "",
       imladdress: rowData?.imladdress ?? "",
     },
     validate: {
@@ -131,10 +146,10 @@ function ExamCenterForm({
     if (rowData !== undefined) {
       const formValues = {
         ...values,
-        examdate: checkValidDate(new Date(values.examdate || Date())),
-        result_date: checkValidDate(new Date(values.result_date || Date())),
-        verification_start_date: checkValidDate(new Date(values.verification_start_date || Date())),
-        verification_end_date: checkValidDate(new Date(values.verification_end_date || Date())),
+        examdate: formatedDate(checkValidDate(new Date(values.examdate || Date()))),
+        result_date: formatedDate(checkValidDate(new Date(values.result_date || Date()))),
+        verification_start_date: formatedDate(checkValidDate(new Date(values.verification_start_date || Date()))),
+        verification_end_date: formatedDate(checkValidDate(new Date(values.verification_end_date || Date()))),
       };
       const isExamCenterUpdated = await updateExamCenter(rowData._id, formValues);
       if (isExamCenterUpdated.toUpperCase() === "DOCUMENT UPDATED") {
@@ -153,11 +168,12 @@ function ExamCenterForm({
     } else {
       const formValues = {
         ...values,
-        examdate: new Date(values.examdate || Date()).toDateString(),
-        result_date: new Date(values.result_date || Date()).toDateString(),
-        verification_start_date: new Date(values.verification_start_date || Date()).toDateString(),
-        verification_end_date: new Date(values.verification_end_date || Date()).toDateString(),
+        examdate: formatedDate(values.examdate),
+        result_date: formatedDate(values.result_date),
+        verification_start_date: formatedDate(values.verification_start_date),
+        verification_end_date: formatedDate(values.verification_end_date),
       };
+
       const isExamCenterCreated = await createExamCenter(formValues as MatrixRowType);
       if (isExamCenterCreated.toUpperCase() === "DOCUMENT CREATED") {
         const examCenters = await readExamCenters();
@@ -434,11 +450,32 @@ function ExamCenterForm({
               size="md"
             />
           </div>
+
+          <Select
+            disabled={readonly}
+            searchable
+            nothingFound="Instructions"
+            data={templatesData}
+            label={"Instructions"}
+            mt={"md"}
+            size="md"
+            withAsterisk
+            {...form.getInputProps("instructions_template")}
+            onChange={(event) => {
+              let data = findFromJson(templatesData, event, "value");
+              form.setFieldValue("instructions_template", event);
+              form.setFieldValue("instructions", data.content);
+            }}
+            w={"100%"}
+            style={{ gridColumn: "1 / -1" }}
+          />
+
           <div style={{ gridColumn: "1 / -1", marginBottom: "50px" }}>
             <Editor
-              readOnly={readonly}
-              placeholder="Instructions"
-              label="Instructions"
+              readOnly={true}
+              // readOnly={readonly}
+              placeholder="Instructions Source"
+              label="Instructions Source"
               {...form.getInputProps("instructions")}
             />
           </div>

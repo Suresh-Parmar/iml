@@ -118,7 +118,7 @@ function ProductTypeForm({
               form.setFieldValue("code", event.currentTarget.value);
             }}
           />
-          <TextInput
+          {/* <TextInput
             disabled={readonly}
             withAsterisk
             label="Tax Name"
@@ -143,7 +143,7 @@ function ProductTypeForm({
             onChange={(event) => {
               form.setFieldValue("taxpercent", event.currentTarget.value);
             }}
-          />
+          /> */}
         </Flex>
         <Group position="right" mt="md">
           <Button disabled={readonly} type="submit">

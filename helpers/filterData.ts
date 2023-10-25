@@ -47,3 +47,10 @@ export const filterData = (
   }
   return newData;
 };
+
+export const formatedDate = (dateObj: any) => {
+  let date: any = new Date(dateObj);
+  const options = { weekday: "short", month: "short", day: "numeric", year: "numeric" };
+  const formattedDate = date.toLocaleDateString("en-US", options).replace(/,/g, "");
+  return formattedDate;
+};
