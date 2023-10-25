@@ -126,7 +126,7 @@ export const readDataCustomFilter = async (
 export const readData = async (
   tableName: string,
   operationType: "find" | "find_many",
-  filterBy?: "name" | "country_id" | "state" | "city" | "status" | "role" | "country" | "subject_id" | "class",
+  filterBy?: any,
   filterQuery?: string | number | boolean,
   data?: any
 ) => {
@@ -634,7 +634,7 @@ export const readOrderConfigs = async (filterBy?: "country_id", filterQuery?: st
   return smtpConfigs;
 };
 
-export const readTempates = async (filterBy?: "country_id", filterQuery?: string | number) => {
+export const readTempates = async (filterBy?: any, filterQuery?: string | number) => {
   let templates: MatrixDataType;
   if (filterBy && filterQuery) {
     templates = await readData("templates", "find_many", filterBy, filterQuery);
