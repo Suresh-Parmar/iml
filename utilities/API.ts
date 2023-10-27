@@ -315,7 +315,7 @@ const omrSheetDownload = async (data: any) => {
   return await axios.post(OMRSTUDENT, data, { headers: getAPIHeaders() });
 };
 
-const omrSheetDownloadAll = async (data: any) => {
+const omrSheetDownloadStudent = async (data: any) => {
   return await axios.post(OMRSHEET, data, { headers: getAPIHeaders() });
 };
 
@@ -1122,7 +1122,7 @@ export {
   admitCardCountData,
   studentDetails,
   omrSheetDownload,
-  omrSheetDownloadAll,
+  omrSheetDownloadStudent,
   certificateDownload,
   dispatchRequest,
   dispatchIDGenration,

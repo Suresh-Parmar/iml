@@ -10,9 +10,9 @@ function ProfileSidebar(props: any) {
   const allData = [
     { title: "Profile", link: "profile", showImage: true },
     { title: "Password", link: "password", showImage: false },
-    userDataDetails.role == "student" && { title: "Your Product", link: "yourProduct", showImage: false },
-    userDataDetails.role == "student" && { title: "Product For You", link: "productForYou", showImage: false },
-    userDataDetails.role == "student" && { title: "Downloads", link: "downloads", showImage: false },
+    userDataDetails?.role == "student" && { title: "Your Product", link: "yourProduct", showImage: false },
+    userDataDetails?.role == "student" && { title: "Product For You", link: "productForYou", showImage: false },
+    userDataDetails?.role == "student" && { title: "Downloads", link: "downloads", showImage: false },
   ];
 
   const renderData = () => {
