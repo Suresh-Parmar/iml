@@ -38,7 +38,7 @@ function Page() {
     if (loader) {
       setTimeout(() => {
         setLoader(false);
-      }, 4000);
+      }, 30000);
     }
   }, [loader]);
 
@@ -121,25 +121,6 @@ function Page() {
     cities = filterData(cities, "label", "value");
     setCitiesData(cities);
   }
-
-  let migrateData = (data: any[], data1: any[], by: string, isStudent: any = false) => {
-    let newData: any[] = [];
-
-    data1.map((item: any) => {
-      let newItem = data.find((itemchild: any, i: any) => item[by] == itemchild[by]);
-      if (newItem) {
-        if (!isStudent) {
-          newItem.students_count = item.students_count;
-        }
-        newData.push(newItem);
-      } else {
-        delete item.OMR_url;
-        newData.push(item);
-      }
-    });
-
-    return newData;
-  };
 
   const downloadPdf = (data: any) => {
     let newData = migrateData(data, schoolsData, "school_name");
@@ -415,8 +396,8 @@ function Page() {
             <td>{item["mode"]}</td>
             <td>{item["paper_code"]}</td>
             <td className="text-center">
-              {item?.certificate_url ? (
-                <a href={item.certificate_url} target="_blank">
+              {item?.OMR_url ? (
+                <a href={item.OMR_url} target="_blank">
                   <span className="material-symbols-outlined text-success">download</span>
                 </a>
               ) : (
@@ -462,6 +443,22 @@ function Page() {
     );
   }, [allData.studentsData, dataExamCenters, checkIsAllChecked(allData.exam_center, dataExamCenters), themeColor]);
 
+  let migrateData = (data: any[], data1: any[], by: string, mainKey: any = "") => {
+    let newData: any[] = [];
+    data1.map((item: any) => {
+      let newItem = data.find((itemchild: any, i: any) => item[mainKey] == itemchild[by]);
+      if (newItem) {
+        let newDataa = { ...item, ...newItem };
+        newData.push(newDataa);
+      } else {
+        delete item.admit_card_url;
+        newData.push(item);
+      }
+    });
+
+    return newData;
+  };
+
   const genrateStudentPdf = () => {
     let newPayload: any = {
       country: countryName || "India",
@@ -477,15 +474,8 @@ function Page() {
     omrSheetDownload(newPayload)
       .then((res) => {
         setLoader(false);
-        // console.log(res.data);
-        if (res.data.OMR_url) {
-          var link = document.createElement("a");
-          link.href = res.data.OMR_url;
-          link.setAttribute("target", "_blank");
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        }
+        let newData = migrateData(res.data, dataExamCenters, "Exam center", "_id");
+        setDataExamCenters([...newData]);
       })
       .catch((errors) => {
         setLoader(false);

@@ -1,5 +1,5 @@
 import { setGetData } from "@/helpers/getLocalStorage";
-import { admitCardCountData, certificateDownload, omrSheetDownload } from "@/utilities/API";
+import { admitCardCountData, certificateDownload, omrSheetDownload, omrSheetDownloadStudent } from "@/utilities/API";
 import { Button } from "@mantine/core";
 import React, { useState } from "react";
 import Loader from "../common/Loader";
@@ -14,10 +14,10 @@ function DownLoadProduct() {
     let apis: any = {
       admitCard: admitCardCountData,
       certificate: certificateDownload,
-      omr: omrSheetDownload,
+      omr: omrSheetDownloadStudent,
       marksheet: omrSheetDownload,
     };
-    let payload = { username: [userDataDetails.username] };
+    let payload = { username: [userDataDetails?.username] };
     setLoader(true);
     let callApi = apis[item.key](payload);
     callApi
