@@ -6,6 +6,7 @@ import { readBoardsLanding, readClassesLanding, readProductsLanding } from "@/ut
 import { MatrixDataType } from "@/components/Matrix";
 import { CardImageUrl } from "../../pageComponents/utils";
 import { filterDataSingle } from "@/helpers/dropDownData";
+import { useSelector } from "react-redux";
 
 type FirstFormProps = {
   form: any;
@@ -17,10 +18,16 @@ export default function FirstForm({ form, onClickNext, setInvoiceBreakdown }: Fi
   const [classesData, setClassesData] = useState<MatrixDataType>([]);
   const [products, setProducts] = useState<MatrixDataType>([]);
   const [boards, setBoards] = useState<MatrixDataType>([]);
+  const selectedCountry: any = useSelector((state: any) => state?.data?.selectedCountry);
 
   useEffect(() => {
     readBoardsData();
-  }, []);
+  }, [selectedCountry?.value]);
+
+  useEffect(() => {
+    form.values.class_id && form.values.board && readProductsLandingData(form.values.class_id, form.values.board);
+    form.values.board && readClassesData();
+  }, [selectedCountry?.value, form.values.board]);
 
   async function readClassesData() {
     const classes = await readClassesLanding();
@@ -67,7 +74,9 @@ export default function FirstForm({ form, onClickNext, setInvoiceBreakdown }: Fi
 
   const onChangeBoard = (event: any) => {
     form.setFieldValue("board", event ?? "");
-    readClassesData();
+    form.setFieldValue("class_code", "");
+    form.setFieldValue("class_id", "");
+    // readClassesData();
   };
 
   return (
