@@ -24,12 +24,10 @@ function Page() {
   const [citiesData, setCitiesData] = useState<any>([]);
   const [statesData, setStatesData] = useState<any>([]);
   const [schoolsData, setSchoolsData] = useState<any>([]);
-  const [schoolsDataDropDown, setSchoolsDataDropDown] = useState<any>([]);
   const [comeptitionsData, setCompetitionsData] = useState<any>([]);
   const [classesData, setClassesData] = useState<any>([]);
-  const [groupsData, setGroupData] = useState<any>([]);
-  const [cohortsData, setcohortsData] = useState<any>([]);
   const [dataExamCenters, setDataExamCenters] = useState<any>([]);
+  const [filteredDataExamCenter, setFilteredDataExamCenter] = useState<any>([]);
   const [loader, setLoader] = useState<any>(false);
   const [studentGridData, setStudentGridData] = useState<any>([]);
   const [examDate, setExamDate] = useState<any>([]);
@@ -41,6 +39,18 @@ function Page() {
       }, 30000);
     }
   }, [loader]);
+
+  useEffect(() => {
+    if (allData.exam_date) {
+      let data: any = [];
+      filteredDataExamCenter.map((item: any) => {
+        if (item.examdate == allData.exam_date) {
+          data.push(item);
+        }
+      });
+      setDataExamCenters([...data]);
+    }
+  }, [allData?.exam_date]);
 
   const state: any = useSelector((state: any) => state.data);
   const countryName = state?.selectedCountry?.label;
@@ -72,6 +82,7 @@ function Page() {
 
     return obj;
   };
+
   let getStudentDetailsApi = () => {
     let payload = genratePayloadStudentWise();
     studentDetails(payload)
@@ -84,8 +95,21 @@ function Page() {
   };
 
   async function readExamCentersData() {
+    let payload: any = {
+      collection_name: "exam_centers",
+      op_name: "find_many",
+      filter_var: {
+        city: allData.city,
+        country: countryName || "India",
+      },
+    };
+
+    if (allData.competition) {
+      payload.filter_var.competition = allData.competition;
+    }
+
     setLoader(true);
-    let examCentersData: any = await readExamCenters("city", allData.city);
+    let examCentersData: any = await readExamCenters("city", allData.city, payload);
     setLoader(false);
     let examCenters = filterData(examCentersData, "label", "value");
 
@@ -101,6 +125,7 @@ function Page() {
     setExamDate(examCentersDate);
     // examCenters.unshift("all");
     setDataExamCenters(examCenters);
+    setFilteredDataExamCenter(examCenters);
   }
 
   useEffect(() => {
@@ -122,59 +147,6 @@ function Page() {
     setCitiesData(cities);
   }
 
-  const downloadPdf = (data: any) => {
-    let newData = migrateData(data, schoolsData, "school_name");
-    setSchoolsData([...newData]);
-  };
-
-  let genrateDataFormDropDown = (data: any) => {
-    if (Array.isArray(data)) {
-      data.map((item) => {
-        item.value = item.school_name;
-        item.label = item.school_name;
-      });
-    }
-
-    return data;
-  };
-
-  // function readSchoolsData(isSchool: any = false) {
-  //   let newPayload: any = {
-  //     country: countryName || "India",
-  //     competition_code: allData.competition || "",
-  //     state: allData.state,
-  //     city: allData.city,
-  //     exam_date: allData.exam_date,
-  //     exam_center: allData.exam_center,
-  //     series: allData.series,
-  //   };
-
-  //   console.log(newPayload);
-
-  //   setLoader(true);
-  //   omrSheetDownload(newPayload)
-  //     .then((res) => {
-  //       setLoader(false);
-  //       // if (isSchool) {
-  //       downloadPdf(res.data);
-  //       // } else {
-  //       //   let data = genrateDataFormDropDown(res.data);
-  //       //   setSchoolsDataDropDown(data);
-  //       //   setSchoolsData(res.data);
-  //       // }
-  //     })
-  //     .catch((errors) => {
-  //       setLoader(false);
-  //     });
-  // }
-
-  // async function readClassesData(filterBy?: "name" | "status", filterQuery?: string | number) {
-  //   let classes: any = await readClasses();
-  //   classes = filterData(classes, "label", "value", "", false);
-  //   classes.unshift("all");
-  //   setClassesData(classes);
-  // }
-
   async function readCompetitionsData(filterBy?: "name" | "status", filterQuery?: string | number) {
     let competitions = await readCompetitions();
 
@@ -182,38 +154,6 @@ function Page() {
 
     setCompetitionsData(competitions);
   }
-
-  // const getCohorts = () => {
-  //   if (allData?.childSchoolData?.key == "select_cohort") {
-  //     setLoader(true);
-  //     readApiData("cohorts")
-  //       .then((res) => {
-  //         setLoader(false);
-  //         setcohortsData(filterData(res, "label", "value"));
-  //       })
-  //       .catch((error) => {
-  //         console.error(error);
-  //         setLoader(false);
-  //       });
-  //   }
-  // };
-
-  // const getGroups = () => {
-  //   if (allData?.childSchoolData?.key == "select_group") {
-  //     setLoader(true);
-  //     readApiData("groups")
-  //       .then((res) => {
-  //         setLoader(false);
-  //         setGroupData(filterData(res, "label", "value"));
-  //       })
-  //       .catch((error) => {
-  //         console.error(error);
-  //         setLoader(false);
-  //       });
-  //   }
-  // };
-
-  // fetch data
 
   useEffect(() => {
     countryName && readStatesData();
@@ -223,21 +163,12 @@ function Page() {
   }, [countryName]);
 
   useEffect(() => {
-    allData.city && readExamCentersData();
-  }, [allData.city]);
-
-  // useEffect(() => {
-  //   allData.city && allData.competition && getCohorts();
-  //   allData.city && allData.competition && getGroups();
-  // }, [allData.city, allData.competition, allData?.childSchoolData]);
+    (allData.city || allData.competition) && readExamCentersData();
+  }, [allData.city, allData.competition]);
 
   useEffect(() => {
     allData.state && readCitiesData("state", allData.state);
   }, [allData.state]);
-
-  // useEffect(() => {
-  //   allData.exam_center && readSchoolsData();
-  // }, [allData.exam_center]);
 
   const handleDropDownChange = (e: any, key: any, clear?: any) => {
     if (clear) {
@@ -259,26 +190,16 @@ function Page() {
       type: "select",
       data: comeptitionsData,
       onChange: (e: any) => {
-        handleDropDownChange(e, "competition");
+        handleDropDownChange(e, "competition", "all");
       },
       value: allData.competition,
     },
-    // {
-    //   type: "select",
-    //   label: "Exam Center",
-    //   data: dataExamCenters,
-    //   value: allData.exam_center,
-    //   placeholder: "Exam Center",
-    //   onChange: (e: any) => {
-    //     // let data = findFromJson(dataExamCenters, e, "name");
-    //     handleDropDownChange(e, "exam_center");
-    //   },
-    // },
+
     {
       type: "select",
       label: "Exam Date",
       data: examDate,
-      value: allData.exam_date,
+      value: allData.exam_date || null,
       placeholder: "Exam Date",
       onChange: (e: any) => {
         // let data = findFromJson(dataExamCenters, e, "name");

@@ -491,8 +491,12 @@ const readAnnoucementsAdmin = async (filterBy?: "name" | "state", filterQuery?: 
   return annoucements;
 };
 
-const readExamCenters = async (filterBy?: "name" | "state" | "city", filterQuery?: string | number) => {
-  const examCenters = await readData("exam_centers", "find_many", filterBy, filterQuery);
+const readExamCenters = async (
+  filterBy?: "name" | "state" | "city",
+  filterQuery?: string | number,
+  customData: any = ""
+) => {
+  const examCenters = await readData("exam_centers", "find_many", filterBy, filterQuery, customData);
   return examCenters;
 };
 

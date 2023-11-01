@@ -1,14 +1,54 @@
 import { setGetData } from "@/helpers/getLocalStorage";
-import { admitCardCountData, certificateDownload, omrSheetDownload, omrSheetDownloadStudent } from "@/utilities/API";
-import { Button } from "@mantine/core";
-import React, { useState } from "react";
+import {
+  admitCardCountData,
+  certificateDownload,
+  omrSheetDownload,
+  omrSheetDownloadStudent,
+  readCompetitions,
+  readSubjects,
+} from "@/utilities/API";
+import { Button, MultiSelect, Select } from "@mantine/core";
+import React, { useEffect, useState } from "react";
 import Loader from "../common/Loader";
+import { filterData } from "@/helpers/filterData";
+import { useSelector } from "react-redux";
 
 function DownLoadProduct() {
   let userDataDetails = setGetData("userData", "", true);
   userDataDetails = userDataDetails?.user;
   const [loader, setLoader] = useState<any>(false);
   const [url, setUrl] = useState<any>({});
+  const [comeptitionsData, setCompetitionsData] = useState<any>([]);
+  const [subjectsData, setSubjectsData] = useState<any>([]);
+  const [allData, setAllData] = useState<any>({});
+
+  const state: any = useSelector((state: any) => state.data);
+  const countryName = state?.selectedCountry?.label;
+
+  async function readCompetitionsData() {
+    setLoader(true);
+    let competitions = await readCompetitions("subject_id", allData.subject);
+    setLoader(false);
+
+    competitions = filterData(competitions, "label", "value");
+    setCompetitionsData(competitions);
+  }
+
+  async function readSubjectsData() {
+    setLoader(true);
+    let subjects = await readSubjects();
+    setLoader(false);
+    subjects = filterData(subjects, "label", "value");
+    setSubjectsData(subjects);
+  }
+
+  useEffect(() => {
+    readSubjectsData();
+  }, [countryName]);
+
+  useEffect(() => {
+    allData.subject && readCompetitionsData();
+  }, [allData.subject]);
 
   const callAPi = (item: any, index: any) => {
     let apis: any = {
@@ -17,7 +57,7 @@ function DownLoadProduct() {
       omr: omrSheetDownloadStudent,
       marksheet: omrSheetDownload,
     };
-    let payload = { username: [userDataDetails?.username] };
+    let payload = { username: [userDataDetails?.username], competition: allData.competition };
     setLoader(true);
     let callApi = apis[item.key](payload);
     callApi
@@ -70,9 +110,71 @@ function DownLoadProduct() {
     },
   ];
 
+  const handleDropDownChange = (e: any, key: any, clear?: any) => {
+    if (clear) {
+      if (clear == "all") {
+        setAllData({ [key]: e });
+      } else {
+        setAllData({ ...allData, [clear]: "", [key]: e });
+      }
+    } else {
+      setAllData({ ...allData, [key]: e });
+    }
+  };
+
+  const downloadFilters = [
+    {
+      label: "Subject",
+      key: "subject",
+      type: "select",
+      data: subjectsData,
+      onChange: (e: any) => {
+        handleDropDownChange(e, "subject", "competition");
+      },
+      value: allData.subject,
+    },
+    {
+      label: "Competition",
+      key: "competition",
+      type: "select",
+      data: comeptitionsData,
+      onChange: (e: any) => {
+        handleDropDownChange(e, "competition");
+      },
+      value: allData.competition,
+    },
+  ];
+
+  const renderFilters = () => {
+    const renderData = () => {
+      return downloadFilters.map((item: any, index) => {
+        if (item.hideInput) {
+          return;
+        }
+        let { type, data, label, placeholder, onchange, value, style } = item;
+        if (type === "multiselect") {
+          return (
+            <div key={index}>
+              <MultiSelect searchable={true} {...item} />
+            </div>
+          );
+        } else {
+          return (
+            <div key={index}>
+              <Select searchable={true} {...item} />
+            </div>
+          );
+        }
+      });
+    };
+
+    return <div className="d-flex flex-wrap gap-4 mb-5">{renderData()}</div>;
+  };
+
   return (
     <div>
       <div style={{ marginBottom: "20px", fontSize: "30px" }}>Download</div>
+      <div>{renderFilters()}</div>
       <div
         className="justify-content-center "
         style={{ display: "flex", flexDirection: "row", gap: "25px", flexWrap: "wrap" }}
@@ -92,7 +194,7 @@ function DownLoadProduct() {
             }}
           >
             <img
-              style={{ objectFit: "cover", width: "100%", borderRadius: "5px", height: "200px" }}
+              style={{ objectFit: "cover", width: "100%", borderRadius: "5px", height: "150px" }}
               className="justify-align-item-center"
               alt={item.label}
               src={item.url}

@@ -248,8 +248,8 @@ function ProductForm({
           { accessor: "name" },
           { accessor: "hsncode" },
           { accessor: "product_bundle_price" },
-          { accessor: "delivery" },
-          { accessor: "gst" },
+          // { accessor: "delivery" },
+          { accessor: "taxpercent" },
         ]}
         selectedRecords={selectedRecords}
         onSelectedRecordsChange={setSelectedRecords}
@@ -332,13 +332,13 @@ function ProductForm({
             }}
             name="bundle"
             withAsterisk
-            label="Is this combination of bundled product?"
+            label="Which Product is this?"
             mt={"md"}
             size="md"
           >
             <Group mt="xs">
-              <Radio value={"yes"} label="Yes" disabled={readonly || Boolean(rowData?.bundle)} />
-              <Radio value={"no"} label="No" disabled={readonly || Boolean(rowData?.bundle)} />
+              <Radio value={"yes"} label="Bundle" disabled={readonly || Boolean(rowData?.bundle)} />
+              <Radio value={"no"} label="Unit" disabled={readonly || Boolean(rowData?.bundle)} />
             </Group>
           </Radio.Group>
           <Box w={"100%"} mt="md">
@@ -422,20 +422,6 @@ function ProductForm({
           <TextInput
             disabled={readonly}
             withAsterisk
-            label="Amount"
-            placeholder="Amount"
-            {...form.getInputProps("amount")}
-            w={"100%"}
-            mt={"md"}
-            size="md"
-            onChange={(event) => {
-              let val = validatePhone(event.currentTarget.value, 0, undefined, true, form.values.amount);
-              form.setFieldValue("amount", val);
-            }}
-          />
-          <TextInput
-            disabled={readonly}
-            withAsterisk
             label="HSN Code"
             placeholder="HSN Code"
             {...form.getInputProps("hsncode")}
@@ -464,6 +450,20 @@ function ProductForm({
           <TextInput
             disabled={readonly}
             withAsterisk
+            label="Amount"
+            placeholder="Amount"
+            {...form.getInputProps("amount")}
+            w={"100%"}
+            mt={"md"}
+            size="md"
+            onChange={(event) => {
+              let val = validatePhone(event.currentTarget.value, 0, undefined, true, form.values.amount);
+              form.setFieldValue("amount", val);
+            }}
+          />
+          <TextInput
+            disabled={readonly}
+            withAsterisk
             label="Product Bundle Price"
             placeholder="Product Bundle Price"
             {...form.getInputProps("product_bundle_price")}
@@ -476,8 +476,7 @@ function ProductForm({
             }}
           />
           <TextInput
-            disabled={readonly}
-            withAsterisk
+            disabled={readonly || form.values.bundle}
             label="Tax Name"
             placeholder="Tax Name"
             {...form.getInputProps("taxname")}
@@ -489,8 +488,7 @@ function ProductForm({
             }}
           />
           <TextInput
-            disabled={readonly}
-            withAsterisk
+            disabled={readonly || form.values.bundle}
             label="Tax Percent"
             placeholder="Tax Percent"
             {...form.getInputProps("taxpercent")}

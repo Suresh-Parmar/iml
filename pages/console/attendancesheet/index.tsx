@@ -19,56 +19,12 @@ function AttendanceSheet() {
   const [singleExamCenter, setSingleExamCenter] = useState<any>({});
   const [classWiseData, setClassWiseData] = useState<any>([]);
   const [finlaPrintRecord, setFinlaPrintRecord] = useState<any>([]);
+  const [examDate, setExamDate] = useState<any>([]);
 
   const state: any = useSelector((state: any) => state.data);
   const countryName = state?.selectedCountry?.label;
 
-  // let testDataTest = [
-  //   ...studentsData,
-  //   ...studentsData,
-  //   ...studentsData,
-  //   ...studentsData,
-  //   ...studentsData,
-  //   ...studentsData,
-  //   ...studentsData,
-  //   ...studentsData,
-  //   ...studentsData,
-  //   ...studentsData,
-  //   ...studentsData,
-  //   ...studentsData,
-  //   ...studentsData,
-  //   ...studentsData,
-  //   ...studentsData,
-  //   ...studentsData,
-  //   ...studentsData,
-  //   ...studentsData,
-  //   ...studentsData,
-  //   ...studentsData,
-  //   ...studentsData,
-  //   ...studentsData,
-  // ];
-
-  // let pageSize = 22;
-
-  // useEffect(() => {
-  //   filterDataStudentaaa();
-  // }, [studentsData]);
-
-  // let filterDataStudentaaa = () => {
-  //   let arr: any = [];
-  //   let newArr: any = [];
-  //   testDataTest.map((data: any, index: any) => {
-  //     newArr.push(data);
-  //     if (index % pageSize == 0) {
-  //       if (index > 0) {
-  //         arr.push(newArr);
-  //         newArr = [];
-  //       }
-  //     }
-  //   });
-  //   arr.push(newArr);
-  //   setFinlaPrintRecord([...arr]);
-  // };
+  console.log(allData);
 
   useEffect(() => {
     countryName && readStatesData();
@@ -138,8 +94,20 @@ function AttendanceSheet() {
     let examCenters: any = await readExamCenters();
     setLoader(false);
     examCenters = filterData(examCenters, "label", "value", "_id");
-    // examCenters.unshift("all");
     setDataExamCenters(examCenters);
+
+    let examCentersData = filterData(examCenters, "label", "value", "_id");
+    let examCentersDate = filterData(
+      structuredClone(examCentersData),
+      "label",
+      "value",
+      "examdate",
+      true,
+      "",
+      "examdate"
+    );
+    setExamDate(examCentersDate);
+    // examCenters.unshift("all");
   }
 
   async function readClassesData(filterBy?: "name" | "status", filterQuery?: string | number) {
@@ -222,6 +190,17 @@ function AttendanceSheet() {
         let data = findFromJson(dataExamCenters, e, "_id");
         setSingleExamCenter(data);
         handleDropDownChange(e, "exam_center");
+      },
+    },
+    {
+      type: "select",
+      label: "Exam Date",
+      data: examDate,
+      value: allData.exam_date || null,
+      placeholder: "Exam Date",
+      onChange: (e: any) => {
+        // let data = findFromJson(dataExamCenters, e, "name");
+        handleDropDownChange(e, "exam_date");
       },
     },
     {
