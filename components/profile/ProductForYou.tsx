@@ -10,7 +10,6 @@ function ProductForYou() {
   let userData = useSelector((state: any) => state?.data?.userData?.user);
   let country = useSelector((state: any) => state?.data.selectedCountry);
 
-
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: country.currency || "USD",
@@ -129,8 +128,11 @@ function ProductForYou() {
             <div
               className="btn btn-outline-danger"
               onClick={() => {
-                setBuyDetails(item);
-                makePayment(item);
+                let windowconfirm = window.confirm("Are you sure you want to buy this product?");
+                if (windowconfirm) {
+                  setBuyDetails(item);
+                  makePayment(item);
+                }
               }}
             >
               BUY {formatter.format(item.product_bundle_price)}
