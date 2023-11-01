@@ -1248,17 +1248,7 @@ export const allTypes: any = {
       id: "Code",
       key: "code",
       defaultShow: true,
-    },
-    {
-      id: "Tax Name",
-      key: "taxname",
-      defaultShow: true,
-    },
-    {
-      id: "Tax Percent",
-      key: "taxpercent",
-      defaultShow: true,
-    },
+    },    
     {
       id: "status",
       key: "status",
