@@ -176,6 +176,9 @@ function UploadButton(props: any) {
     city: {
       collection_name: "cities",
     },
+    "exam center mappings": {
+      collection_name: "exam_center_mapping",
+    },
     dispatch: {
       collection_name: "payments",
     },
