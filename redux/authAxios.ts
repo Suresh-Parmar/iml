@@ -19,11 +19,15 @@ authAPI.interceptors.response.use(
   }
 );
 
-if (token) {
-  authAPI.interceptors.request.use((request) => {
+authAPI.interceptors.request.use((request) => {
+  if (!token) {
+    let userData: any = setGetData("userData", false, true);
+    token = userData?.metadata?.token;
+  }
+  if (token) {
     request.headers["Authorization"] = `Bearer ${token}`;
-    return request;
-  });
-}
+  }
+  return request;
+});
 
 export default authAPI;

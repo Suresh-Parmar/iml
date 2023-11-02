@@ -22,7 +22,7 @@ import { forgotCreds } from "@/utilities/API";
 import { notifications } from "@mantine/notifications";
 import { checkValidCred } from "@/helpers/validations";
 import { useFinduserGeoLocationQuery } from "@/redux/apiSlice";
-import { ControlApplicationShellComponents, changeColorTheme } from "@/redux/slice";
+import { ControlApplicationShellComponents, UpdateUserRedux, changeColorTheme } from "@/redux/slice";
 import { useDispatch, useSelector } from "react-redux";
 import { setGetData } from "@/helpers/getLocalStorage";
 
@@ -191,12 +191,13 @@ export default function SignIn() {
         } else {
           setGetData("userData", response, true);
           setTimeout(() => {
+            // dispatch(UpdateUserRedux(response));
             if (response.user.role != "student") {
               router.replace("/console");
             } else {
               router.replace("/");
             }
-          }, 50);
+          }, 100);
 
           // window.location.pathname = "/console";
         }
