@@ -190,7 +190,15 @@ export default function SignIn() {
           setPasswordInput("");
         } else {
           setGetData("userData", response, true);
-          window.location.pathname = "/console";
+          setTimeout(() => {
+            if (response.user.role != "student") {
+              router.replace("/console");
+            } else {
+              router.replace("/");
+            }
+          }, 50);
+
+          // window.location.pathname = "/console";
         }
       } catch (err) {
         console.log(err, "errrrr");
