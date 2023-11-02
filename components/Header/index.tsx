@@ -121,6 +121,7 @@ function Header() {
   let locationData = useFinduserGeoLocationQuery("");
   locationData = iterateData(locationData);
   const localCountry = setGetData("selectedCountry", "", true);
+  let isStudent = authentication?.user?.role == "student";
 
   let apiCountryData = {
     value: locationData.country,
@@ -297,6 +298,7 @@ function Header() {
                     data={countriesData}
                     className={classes.hiddenTablet}
                   />
+
                   <Link href={"/authentication/signin"}>
                     <Button variant="default">Log in</Button>
                   </Link>
@@ -321,16 +323,19 @@ function Header() {
                   className={classes.hiddenTablet}
                   overlayBlur={2}
                 /> */}
-                <Select
-                  itemComponent={CountryComponent}
-                  style={{ width: "140px" }}
-                  icon={<ReactCountryFlag countryCode={selectedCountry || ""} svg />}
-                  value={selectedCountry}
-                  // onChange={setSelectedCountry}
-                  data={countriesData}
-                  className={classes.hiddenTablet}
-                  onChange={handleCountryChange}
-                />
+
+                {!isStudent && (
+                  <Select
+                    itemComponent={CountryComponent}
+                    style={{ width: "140px" }}
+                    icon={<ReactCountryFlag countryCode={selectedCountry || ""} svg />}
+                    value={selectedCountry}
+                    // onChange={setSelectedCountry}
+                    data={countriesData}
+                    className={classes.hiddenTablet}
+                    onChange={handleCountryChange}
+                  />
+                )}
                 <ActionIcon variant="default" onClick={() => toggleColorScheme()} size={36}>
                   {colorScheme === "dark" ? <IconSun size="1rem" /> : <IconMoonStars size="1rem" />}
                 </ActionIcon>

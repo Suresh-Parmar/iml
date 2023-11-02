@@ -23,7 +23,7 @@ export const setGetData = (key: any = "", value: any = "", isjsonVal: boolean = 
 
 export const clearLocalData = () => {
   if (process.browser) {
-    localStorage.clear();
-    sessionStorage.clear();
+    localStorage.removeItem("userData");
+    // sessionStorage.clear();
   }
 };
