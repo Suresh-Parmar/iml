@@ -68,6 +68,15 @@ function ProductForm({
     },
   });
 
+  useEffect(() => {
+    let val = 0;
+    selectedRecords.map((record: any) => {
+      val += +record?.product_bundle_price;
+    });
+
+    val && form.setFieldValue("product_bundle_price", val);
+  }, [selectedRecords]);
+
   async function fetchProductTypes() {
     const productTypesRes = await readProductCategories();
     setProductTypes(productTypesRes);

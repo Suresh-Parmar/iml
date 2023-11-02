@@ -240,7 +240,8 @@ function Header() {
 
     if (windowConfirm) {
       clearLocalData();
-      window.location.pathname = "/";
+      router.replace("/authentication/signin");
+      // window.location.pathname = "/";
     }
   };
 
