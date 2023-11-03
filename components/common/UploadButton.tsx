@@ -24,6 +24,7 @@ import { formTypeToFetcherMapper } from "@/helpers/dataFetcher";
 import Loader from "./Loader";
 import { useRoleCrudOpsgetQuery } from "@/redux/apiSlice";
 import { iterateData } from "@/helpers/getData";
+import { setGetData } from "@/helpers/getLocalStorage";
 
 interface SpreadSheetFormValues {
   spreadSheetFile: File | undefined;
@@ -64,8 +65,10 @@ function UploadButton(props: any) {
   const pathname: any = usePathname();
   const reduxData: any = useSelector((state: any) => state?.data);
 
-  let activeUserID = reduxData?.userData?.user?._id;
-  let defaultShow = reduxData?.userData?.user?.role == "super_admin";
+  let userData = setGetData("userData", "", true) || {};
+
+  let activeUserID = userData?.user?._id;
+  let defaultShow = userData?.user?.role == "super_admin";
   let selectedCountry = reduxData?.selectedCountry?.name;
 
   let rolesData = useRoleCrudOpsgetQuery(activeUserID);
