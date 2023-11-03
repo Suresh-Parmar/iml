@@ -220,7 +220,7 @@ function Page() {
   useEffect(() => {
     allData.city && allData.competition && getCohorts();
     allData.city && allData.competition && getGroups();
-  }, [allData.city, allData.competition, allData?.childSchoolData]);
+  }, [allData.city, allData.competition, allData?.childSchoolData?.key]);
 
   useEffect(() => {
     allData.state && readCitiesData("state", allData.state);
@@ -229,6 +229,18 @@ function Page() {
   useEffect(() => {
     allData.city && allData.competition && readSchoolsData();
   }, [allData.city, allData.competition]);
+
+  let dataObj: any = {
+    group: { data: groupsData, label: "Group", key: "select_group" },
+    cohort: { data: cohortsData, label: "Cohort", key: "select_cohort" },
+    school: { data: schoolsData, label: "School", key: "select_school" },
+  };
+
+  useEffect(() => {
+    let data = dataObj[allData.filterTypeStudent];
+    allData.childSchoolData = data;
+    setAllData({ ...allData });
+  }, [groupsData, cohortsData, schoolsData]);
 
   const handleDropDownChange = (e: any, key: any, clear?: any) => {
     if (clear) {
@@ -336,12 +348,7 @@ function Page() {
         { label: "Cohort", value: "cohort", fetch: "" },
       ],
       onChange: (e: any) => {
-        let data: any = {
-          group: { data: groupsData, label: "Group", key: "select_group" },
-          cohort: { data: cohortsData, label: "Cohort", key: "select_cohort" },
-          school: { data: schoolsData, label: "School", key: "select_school" },
-        };
-        data = data[e];
+        let data: any = dataObj[e];
         allData.childSchoolData = data;
         handleDropDownChange(e, "filterTypeStudent");
       },
