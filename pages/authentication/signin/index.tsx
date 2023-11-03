@@ -190,16 +190,16 @@ export default function SignIn() {
           setPasswordInput("");
         } else {
           setGetData("userData", response, true);
-          setTimeout(() => {
-            // dispatch(UpdateUserRedux(response));
-            if (response.user.role != "student") {
-              router.replace("/console");
-            } else {
-              router.replace("/");
-            }
-          }, 100);
-
-          // window.location.pathname = "/console";
+          // setTimeout(() => {
+          // dispatch(UpdateUserRedux(response));
+          if (response.user.role != "student") {
+            // router.replace("/console");
+            window.location.pathname = "/console";
+          } else {
+            window.location.pathname = "/";
+            // router.replace("/");
+          }
+          // }, 100);
         }
       } catch (err) {
         console.log(err, "errrrr");

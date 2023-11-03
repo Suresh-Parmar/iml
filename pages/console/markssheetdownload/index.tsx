@@ -96,7 +96,6 @@ function Page() {
   };
 
   function readSchoolsData(isSchool: any = false) {
-    setLoader(true);
     let newPayload: any = {
       country: countryName || "India",
       competition_code: allData.competition || "",
@@ -108,7 +107,7 @@ function Page() {
     if (isSchool) {
       newPayload = { school_name: allData.schools };
     }
-
+    setLoader(true);
     admitCardCountData(newPayload).then((res) => {
       setLoader(false);
       if (isSchool) {
@@ -136,8 +135,8 @@ function Page() {
   }
 
   const getCohorts = () => {
-    setLoader(true);
     if (allData?.childSchoolData?.key == "select_cohort") {
+      setLoader(true);
       readApiData("cohorts")
         .then((res) => {
           setLoader(false);
@@ -151,8 +150,8 @@ function Page() {
   };
 
   const getGroups = () => {
-    setLoader(true);
     if (allData?.childSchoolData?.key == "select_group") {
+      setLoader(true);
       readApiData("groups")
         .then((res) => {
           setLoader(false);
@@ -176,7 +175,7 @@ function Page() {
   useEffect(() => {
     allData.city && allData.competition && getCohorts();
     allData.city && allData.competition && getGroups();
-  }, [allData.city, allData.competition, allData?.childSchoolData]);
+  }, [allData.city, allData.competition, allData?.childSchoolData?.key]);
 
   useEffect(() => {
     allData.state && readCitiesData("state", allData.state);
@@ -248,6 +247,18 @@ function Page() {
     // },
   ];
 
+  let dataObj: any = {
+    group: { data: groupsData, label: "Group", key: "select_group" },
+    cohort: { data: cohortsData, label: "Cohort", key: "select_cohort" },
+    school: { data: schoolsData, label: "School", key: "select_school" },
+  };
+
+  useEffect(() => {
+    let data = dataObj[allData.filterTypeStudent];
+    allData.childSchoolData = data;
+    setAllData({ ...allData });
+  }, [groupsData, cohortsData, schoolsData]);
+
   const studentFilters = [
     {
       label: "Competition",
@@ -292,18 +303,14 @@ function Page() {
         { label: "Cohort", value: "cohort", fetch: "" },
       ],
       onChange: (e: any) => {
-        let data: any = {
-          group: { data: groupsData, label: "Group", key: "select_group" },
-          cohort: { data: cohortsData, label: "Cohort", key: "select_cohort" },
-          school: { data: schoolsData, label: "School", key: "select_school" },
-        };
-        data = data[e];
+        let data = dataObj[e];
         allData.childSchoolData = data;
         handleDropDownChange(e, "filterTypeStudent");
       },
       value: allData.filterTypeStudent || "",
     },
     {
+      hideInput: !allData.filterTypeStudent,
       label: allData?.childSchoolData?.label || "Select School",
       key: "select_school",
       style: { maxWidth: "35%", width: "25%" },
@@ -343,9 +350,13 @@ function Page() {
     );
   };
 
-  const renderData = useCallback(() => {
+  const renderData = () => {
+    // const renderData = useCallback(() => {
     return filters.map((item: any, index) => {
-      let { type, data, label, placeholder, onchange, value, style } = item;
+      let { type, data, label, placeholder, onchange, value, style, hideInput } = item;
+      if (hideInput) {
+        return;
+      }
       if (type === "multiselect") {
         return (
           <div key={index} style={{ maxWidth: "15%", ...style }}>
@@ -380,7 +391,8 @@ function Page() {
         );
       }
     });
-  }, [filters]);
+  };
+  // }, [filters]);
 
   const handleCHeckBOxes = (e: any, item: any = "") => {
     let checked: any = e.target.checked;
