@@ -27,8 +27,8 @@ export default function ThirdForm({ form, setRecaptcha }: ThirdFormProps) {
     setCitiesData(cities);
   }
 
-  async function readSchoolsData(stateName: string) {
-    const schools = await readLandingData("schools", "find_many", "state", stateName);
+  async function readSchoolsData(cityName: string) {
+    const schools = await readLandingData("schools", "find_many", "city", cityName);
 
     setSchoolsData(schools);
   }
@@ -43,19 +43,22 @@ export default function ThirdForm({ form, setRecaptcha }: ThirdFormProps) {
 
   const onChangeState = async (event: any) => {
     form.setFieldValue("state", event || "");
+    form.setFieldValue("city", "");
     const state = statesData.find((state) => state.name === event);
     await readCitiesData(state?.name ?? "");
-    await readSchoolsData(state?.name ?? "");
   };
 
   const onChangeCities = async (event: any) => {
     form.setFieldValue("city", event || "");
+    form.setFieldValue("school_name", "");
+
+    await readSchoolsData(event ?? "");
   };
 
   return (
     <Flex direction={"column"} justify={"center"} align={"flex-start"} w={"100%"}>
       <TextInput
-        withAsterisk
+        // withAsterisk
         name="Section"
         label="Section"
         placeholder="Example: A"

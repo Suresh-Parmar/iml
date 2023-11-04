@@ -168,7 +168,7 @@ function AnnouncementsForm({
             popoverProps={{
               withinPortal: true,
             }}
-            valueFormat="ddd MMM DD YYYY"
+            valueFormat="DD-MM-YYYY"
             w={"100%"}
             mt={"md"}
             size="md"

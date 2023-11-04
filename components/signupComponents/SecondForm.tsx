@@ -6,9 +6,9 @@ import { getReduxState } from "@/redux/hooks";
 import { readLandingData } from "@/utilities/API";
 import { getInternationalDailingCode } from "@/utilities/countriesUtils";
 import { Flex, Select, TextInput } from "@mantine/core";
-import { DateInput } from "@mantine/dates";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { DateinputCustom } from "../utils";
 
 type SecondFormProps = {
   form: any;
@@ -20,7 +20,7 @@ export default function SecondForm({ form }: SecondFormProps) {
   let reduxData = useSelector((state: any) => state.data);
 
   async function readExamCentersData() {
-    const examCenters = await readLandingData("exam_centers", "find_many");
+    const examCenters = await readLandingData("exam_centers", "find_many", "mode", "Online");
     setExamCentersData(examCenters);
   }
 
@@ -37,6 +37,7 @@ export default function SecondForm({ form }: SecondFormProps) {
   };
 
   let selectedCountryLocal = setGetData("selectedCountry", "", true);
+  let examData = examCentersData.find((x) => x.name === form.values.exam_center_code);
 
   const getSelectedCountry = () => {
     return reduxData?.selectedCountry?.country_code || selectedCountryLocal?.country_code || "";
@@ -61,6 +62,11 @@ export default function SecondForm({ form }: SecondFormProps) {
         onChange={onChangeExamCenter}
         w={"100%"}
       />
+      {examData?.examdate && (
+        <span className="font12">
+          Exam Date : {examData?.examdate} and Time : {examData?.time}
+        </span>
+      )}
       <TextInput
         withAsterisk
         label="Name"
@@ -132,20 +138,21 @@ export default function SecondForm({ form }: SecondFormProps) {
         mt={"md"}
         size="md"
       />
-      <DateInput
-        popoverProps={{
-          withinPortal: true,
+      <DateinputCustom
+        inputProps={{
+          popoverProps: {
+            withinPortal: true,
+          },
+          withAsterisk: true,
+          name: "Date of Birth (DoB)",
+          label: "Date of Birth (DoB)",
+          // placeholder: `${new Date(Date.now()).toDateString()}`,
+          ...form.getInputProps("dob"),
+          w: "100%",
+          mt: "md",
+          size: "md",
+          maxDate: new Date(),
         }}
-        withAsterisk
-        valueFormat="ddd MMM DD YYYY"
-        name="Date of Birth (DoB)"
-        label="Date of Birth (DoB)"
-        placeholder={`${new Date(Date.now()).toDateString()}`}
-        {...form.getInputProps("dob")}
-        w={"100%"}
-        mt={"md"}
-        size="md"
-        maxDate={new Date()}
       />
       <Select
         searchable

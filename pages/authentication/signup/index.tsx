@@ -150,7 +150,7 @@ export default function SignUp() {
       if (active === 2) {
         return {
           school_name: values.school_name === "" ? "School must be selected" : null,
-          section: values.section.length < 1 ? "Section must have at least 1 letters" : null,
+          // section: values.section.length < 1 ? "Section must have at least 1 letters" : null,
           address: values.address.length < 2 ? "Section must have at least 2 letters" : null,
           state: values.state === "" ? "State must be selected" : null,
           city: values.city === "" ? "City must be selected" : null,
@@ -300,23 +300,18 @@ export default function SignUp() {
             <form onSubmit={form.onSubmit(onSubmitForm)}>
               <LoadingOverlay visible={oLoader} overlayBlur={2} />
               <Stepper active={active} onStepClick={setActive} breakpoint="sm">
-                <Stepper.Step label="Board & Class" description="Enter personal information" allowStepSelect={false}>
+                <Stepper.Step label="Select Product" description="" allowStepSelect={false}>
                   <FirstForm setInvoiceBreakdown={setInvoiceBreakdown} form={form} onClickNext={() => nextStep(true)} />
                 </Stepper.Step>
-                <Stepper.Step
-                  label="Personal Information"
-                  description="Enter personal information"
-                  allowStepSelect={false}
-                >
+                <Stepper.Step label="Personal Info" description="" allowStepSelect={false}>
                   <SecondForm form={form} />
                 </Stepper.Step>
-                <Stepper.Step
-                  label="Educational Information"
-                  description="Enter educational information"
-                  allowStepSelect={false}
-                >
+                <Stepper.Step label="Address" description="" allowStepSelect={false}>
                   <ThirdForm form={form} setRecaptcha={setRecaptcha} />
                 </Stepper.Step>
+                {/* <Stepper.Step label="Address" description="" allowStepSelect={false}>
+                  <ThirdForm form={form} setRecaptcha={setRecaptcha} />
+                </Stepper.Step> */}
                 <Stepper.Step label="Summary" description="" allowStepSelect={false}>
                   {status ? (
                     <Flex mt={"xl"} justify={"center"} align={"center"} direction={"column"}>

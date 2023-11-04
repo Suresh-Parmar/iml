@@ -7,6 +7,7 @@ import { MatrixDataType } from "@/components/Matrix";
 import { CardImageUrl } from "../../pageComponents/utils";
 import { filterDataSingle } from "@/helpers/dropDownData";
 import { useSelector } from "react-redux";
+import { filterData } from "@/helpers/filterData";
 
 type FirstFormProps = {
   form: any;
@@ -30,17 +31,20 @@ export default function FirstForm({ form, onClickNext, setInvoiceBreakdown }: Fi
   }, [selectedCountry?.value, form.values.board]);
 
   async function readClassesData() {
-    const classes = await readClassesLanding();
+    let classes: any = await readClassesLanding();
+    classes = filterData(classes, "label", "value", undefined, true, "code");
     setClassesData(classes);
   }
 
   async function readBoardsData() {
-    const boardsData = await readBoardsLanding();
+    let boardsData = await readBoardsLanding();
+    boardsData = filterData(boardsData, "label", "value");
     setBoards(boardsData);
   }
 
   async function readProductsLandingData(className: string, boardName: string) {
-    const productsData = await readProductsLanding(className, boardName);
+    let customData = { showfront: true };
+    const productsData = await readProductsLanding(className, boardName, customData);
     setProducts(productsData);
   }
 

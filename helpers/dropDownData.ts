@@ -63,9 +63,10 @@ export let filterDataSingle = (
       }
     });
   }
+  let tmpData: any = new Set(newData);
   if (sort) {
-    return newData.sort();
+    return [...tmpData].sort();
   } else {
-    return newData;
+    return [...tmpData];
   }
 };
