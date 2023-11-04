@@ -155,7 +155,7 @@ function Page() {
           downloadPdf(res.data);
         } else {
           let data = genrateDataFormDropDown(res.data);
-          setSchoolsDataDropDown(data);
+          // setSchoolsDataDropDown(data);
           setSchoolsData(res.data);
         }
       })
@@ -195,12 +195,42 @@ function Page() {
   };
 
   const getGroups = () => {
+    if (!isStudentFilters) {
+      return;
+    }
     if (allData?.childSchoolData?.key == "select_group") {
       setLoader(true);
       readApiData("groups")
         .then((res) => {
           setLoader(false);
           setGroupData(filterData(res, "label", "value"));
+        })
+        .catch((error) => {
+          console.error(error);
+          setLoader(false);
+        });
+    }
+  };
+
+  const readSchoolsDataDropDwon = () => {
+    if (!isStudentFilters) {
+      return;
+    }
+
+    let payload = {
+      collection_name: "schools",
+      op_name: "find_many",
+      filter_var: {
+        country: countryName || "India",
+        city: allData.city,
+      },
+    };
+    if (allData?.childSchoolData?.key == "select_school") {
+      setLoader(true);
+      readApiData("schools", payload)
+        .then((res) => {
+          setLoader(false);
+          setSchoolsDataDropDown(filterData(res, "label", "value"));
         })
         .catch((error) => {
           console.error(error);
@@ -220,6 +250,7 @@ function Page() {
   useEffect(() => {
     allData.city && allData.competition && getCohorts();
     allData.city && allData.competition && getGroups();
+    allData.city && allData.competition && readSchoolsDataDropDwon();
   }, [allData.city, allData.competition, allData?.childSchoolData?.key]);
 
   useEffect(() => {
@@ -233,14 +264,14 @@ function Page() {
   let dataObj: any = {
     group: { data: groupsData, label: "Group", key: "select_group" },
     cohort: { data: cohortsData, label: "Cohort", key: "select_cohort" },
-    school: { data: schoolsData, label: "School", key: "select_school" },
+    school: { data: schoolsDataDropDown, label: "School", key: "select_school" },
   };
 
   useEffect(() => {
     let data = dataObj[allData.filterTypeStudent];
     allData.childSchoolData = data;
     setAllData({ ...allData });
-  }, [groupsData, cohortsData, schoolsData]);
+  }, [groupsData, cohortsData, schoolsDataDropDown]);
 
   const handleDropDownChange = (e: any, key: any, clear?: any) => {
     if (clear) {
