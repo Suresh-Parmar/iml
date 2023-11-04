@@ -155,7 +155,7 @@ function Page() {
           downloadPdf(res.data);
         } else {
           let data = genrateDataFormDropDown(res.data);
-          setSchoolsDataDropDown(data);
+          // setSchoolsDataDropDown(data);
           setSchoolsData(res.data);
         }
       })
