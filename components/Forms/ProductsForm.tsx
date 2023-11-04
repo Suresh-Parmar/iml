@@ -62,9 +62,16 @@ function ProductForm({
   const [loader, setLoader] = useState<any>(false);
 
   const form = useForm({
-    initialValues: rowData,
+    initialValues: {
+      loginrequired: false,
+      showfront: false,
+      showinaccount: false,
+      associatedwithboard: false,
+      showtoeligible: false,
+      ...rowData,
+    },
     validate: {
-      name: (value) => (value?.length < 2 ? "Name must have at least 2 letters" : null),
+      name: (value: any) => (value?.length < 2 ? "Name must have at least 2 letters" : null),
     },
   });
 

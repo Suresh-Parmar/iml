@@ -225,7 +225,7 @@ const updateDataRes = async (
 export const readLandingData = async (
   tableName: string,
   operationType: "find" | "find_many",
-  filterBy?: "name" | "country_id" | "state" | "city" | "status" | "role" | "country" | "class",
+  filterBy?: "name" | "country_id" | "state" | "city" | "status" | "role" | "country" | "class" | "mode",
   filterQuery?: string | number | boolean
 ) => {
   let requestBody: RequestBodyType = {
@@ -564,7 +564,7 @@ export const readClassesLanding = async () => {
   return await readLandingData("classes", "find_many");
 };
 
-export const readProductsLanding = async (className: string, boardName: string) => {
+export const readProductsLanding = async (className: string, boardName: string, customData: any = "") => {
   let requestBody: RequestBodyType = {
     collection_name: "products",
     op_name: "find_many",
@@ -576,6 +576,13 @@ export const readProductsLanding = async (className: string, boardName: string) 
     board: boardName,
     country: countryVal || "India",
   };
+
+  if (customData) {
+    requestBody.filter_var = {
+      ...requestBody.filter_var,
+      ...customData,
+    };
+  }
 
   try {
     const response = await axios.post(`${LANDING_API}`, requestBody, {

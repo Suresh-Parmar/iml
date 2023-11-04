@@ -6,6 +6,7 @@ export default function Document() {
       <Head />
       <head>
         <link href="https://fonts.cdnfonts.com/css/c39hrp48dhtt" rel="stylesheet"></link>
+        <link href="https://fonts.cdnfonts.com/css/calibri-light" rel="stylesheet" />
         <title> IML </title>
       </head>
       <body>
