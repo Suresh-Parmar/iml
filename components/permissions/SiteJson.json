@@ -196,6 +196,34 @@
     }
   },
   {
+    "title": "Marksheet Upload",
+    "link": "marksheets",
+    "icon": "book_5",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  },
+  {
+    "title": "Warehouses",
+    "link": "warehouses",
+    "icon": "dispatch",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  },
+  {
     "title": "School",
     "link": "schools",
     "icon": "school",
@@ -420,6 +448,20 @@
     }
   },
   {
+    "title": "Attendnace Sheet",
+    "link": "attendance",
+    "icon": "supervisor_account",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  },
+  {
     "title": "Announcements",
     "link": "announcements",
     "icon": "supervisor_account",
@@ -518,6 +560,19 @@
   {
     "title": "Site Config",
     "link": "siteconfig",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false
+    }
+  },
+  {
+    "title": "Bulk Email",
+    "link": "bulkemail",
     "permissions": {
       "create": false,
       "update": false,
