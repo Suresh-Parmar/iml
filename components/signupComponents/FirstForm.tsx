@@ -8,6 +8,7 @@ import { CardImageUrl } from "../../pageComponents/utils";
 import { filterDataSingle } from "@/helpers/dropDownData";
 import { useSelector } from "react-redux";
 import { filterData } from "@/helpers/filterData";
+import { ProductView } from "../common";
 
 type FirstFormProps = {
   form: any;
@@ -50,9 +51,10 @@ export default function FirstForm({ form, onClickNext, setInvoiceBreakdown }: Fi
 
   const onClickSubmitCompetition = (comp: string, prod: any) => {
     setInvoiceBreakdown(prod);
-    form.setFieldValue("competition", comp || "");
-    const iComp = products.find((i) => i.name === comp);
-    form.setFieldValue("competition_code", iComp?.code ?? "");
+    const iComp: any = products.find((i) => i.name === comp);
+    form.setFieldValue("competition", iComp.competition || "");
+    form.setFieldValue("myproducts", [iComp.name]);
+    // form.setFieldValue("competition_code", iComp?.code ?? "");
     onClickNext();
   };
 
@@ -112,42 +114,9 @@ export default function FirstForm({ form, onClickNext, setInvoiceBreakdown }: Fi
         w={"100%"}
       />
       <Flex w={"100%"} mt="xs" gap={"xs"} wrap={"wrap"} direction={"row"} justify={"center"} align={"stretch"}>
-        {products.map((product: any) => {
+        {products.map((product: any, index: any) => {
           return (
-            <div
-              key={`product-${product._id}`}
-              className="rounded relative"
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: "10px",
-                border: "1px solid gray",
-                padding: "10px",
-              }}
-            >
-              <Card
-                shadow={form.values.competition === product ? "xl" : "none"}
-                padding="lg"
-                radius="md"
-                withBorder={form.values.competition === product.name}
-              >
-                {form.values.class_id === "" && <Overlay blur={15} center color="#ffffff" />}
-                <Card.Section>
-                  <img src={product?.imageuploadurl} height={262.5} width={350} alt="Norway" />
-                  <Flex direction={"row"} justify={"center"} align={"center"} w={"100%"}>
-                    <Text align={"center"} mx={"md"} my={"md"} fw={"bold"} fz={"md"}>
-                      {product.name}
-                    </Text>
-                  </Flex>
-                </Card.Section>
-                <Flex mt={"sm"} w={"100%"} justify={"center"}>
-                  <Button color="blue" variant="light" onClick={() => onClickSubmitCompetition(product.name, product)}>
-                    {`₹ ${Number(product.amount).toFixed(2)}`}
-                  </Button>
-                </Flex>
-              </Card>
-            </div>
+            <ProductView key={index} item={product} onClick={() => onClickSubmitCompetition(product.name, product)} />
           );
         })}
       </Flex>

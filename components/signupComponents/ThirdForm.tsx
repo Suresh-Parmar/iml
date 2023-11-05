@@ -29,13 +29,20 @@ export default function ThirdForm({ form, setRecaptcha }: ThirdFormProps) {
 
   async function readSchoolsData(cityName: string) {
     const schools = await readLandingData("schools", "find_many", "city", cityName);
-
     setSchoolsData(schools);
   }
 
   useEffect(() => {
     readStatesData();
   }, []);
+
+  useEffect(() => {
+    form.values.city && readSchoolsData(form.values.city || "");
+  }, [form?.values?.city]);
+
+  useEffect(() => {
+    form.values.state && readCitiesData(form.values.state || "");
+  }, [form?.values?.state]);
 
   const schoolNames = filterDataSingle(schoolsData || [], "name");
   const stateNames = filterDataSingle(statesData || [], "name");
@@ -44,15 +51,13 @@ export default function ThirdForm({ form, setRecaptcha }: ThirdFormProps) {
   const onChangeState = async (event: any) => {
     form.setFieldValue("state", event || "");
     form.setFieldValue("city", "");
-    const state = statesData.find((state) => state.name === event);
-    await readCitiesData(state?.name ?? "");
+    // const state = statesData.find((state) => state.name === event);
+    // await readCitiesData(state?.name ?? "");
   };
 
   const onChangeCities = async (event: any) => {
     form.setFieldValue("city", event || "");
     form.setFieldValue("school_name", "");
-
-    await readSchoolsData(event ?? "");
   };
 
   return (

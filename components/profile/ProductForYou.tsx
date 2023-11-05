@@ -21,7 +21,9 @@ function ProductForYou() {
 
     readProducts("class", userData?.class_id)
       .then((res: any) => {
-        setyourProducts(res);
+        if (Array.isArray(res)) {
+          setyourProducts(res);
+        }
       })
       .catch((err: any) => {
         console.log(err);

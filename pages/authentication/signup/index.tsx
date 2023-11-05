@@ -34,6 +34,7 @@ import { getInternationalDailingCode } from "@/utilities/countriesUtils";
 import { useDispatch, useSelector } from "react-redux";
 import { ControlApplicationShellComponents } from "@/redux/slice";
 import { setGetData } from "@/helpers/getLocalStorage";
+import SummaryForm from "@/components/signupComponents/SummaryForm";
 
 const useStyles = createStyles((theme, colorScheme: any) => ({
   wrapper: {
@@ -180,13 +181,13 @@ export default function SignUp() {
     } else {
       setActive((current) => {
         if (isSkipValidate) {
-          return current < 4 ? current + 1 : current;
+          return current < 5 ? current + 1 : current;
         }
 
         if (form.validate().hasErrors) {
           return current;
         }
-        return current < 4 ? current + 1 : current;
+        return current < 5 ? current + 1 : current;
       });
     }
   };
@@ -195,10 +196,17 @@ export default function SignUp() {
     setActive((current) => (current > 0 ? current - 1 : current));
   };
 
+  console.log(active);
   const onSubmitForm = async (values: any) => {
+    let windowConfirm = window.confirm("Hope you have verified details on summary?");
+
+    if (!windowConfirm) {
+      return;
+    }
+    nextStep();
     values = {
       ...values,
-      dob: new Date(values.dob || Date()).toDateString(),
+      // dob: new Date(values.dob || Date()).toDateString(),
     };
 
     values.password = values.mobile_1;
@@ -309,10 +317,13 @@ export default function SignUp() {
                 <Stepper.Step label="Address" description="" allowStepSelect={false}>
                   <ThirdForm form={form} setRecaptcha={setRecaptcha} />
                 </Stepper.Step>
+                <Stepper.Step label="Summary" description="" allowStepSelect={false}>
+                  <SummaryForm form={form} setRecaptcha={setRecaptcha} />
+                </Stepper.Step>
                 {/* <Stepper.Step label="Address" description="" allowStepSelect={false}>
                   <ThirdForm form={form} setRecaptcha={setRecaptcha} />
                 </Stepper.Step> */}
-                <Stepper.Step label="Summary" description="" allowStepSelect={false}>
+                <Stepper.Step label="Make Payment" description="" allowStepSelect={false}>
                   {status ? (
                     <Flex mt={"xl"} justify={"center"} align={"center"} direction={"column"}>
                       <Alert my={"xl"} icon={<IconAlertCircle size="1.5rem" />} title="Yayyy!" color="green">
@@ -353,13 +364,13 @@ export default function SignUp() {
               </Stepper>
 
               <Group position="center" mt="xl">
-                {active !== 0 && (
+                {active != 0 && active != 4 && (
                   <Button variant="default" onClick={prevStep}>
                     Back
                   </Button>
                 )}
-                {active !== 0 && (
-                  <Button type={active === 3 ? "submit" : "button"} onClick={() => nextStep()}>
+                {active != 0 && active != 4 && (
+                  <Button type={active == 3 ? "submit" : "button"} onClick={() => active != 3 && nextStep()}>
                     {"Next step"}
                   </Button>
                 )}
