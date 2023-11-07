@@ -675,7 +675,7 @@ export const readProductCategories = async (filterBy?: "country_id", filterQuery
   return productCategories;
 };
 
-export const readProducts = async (filterBy?: "country_id" | "class", filterQuery?: string | number) => {
+export const readProducts = async (filterBy?: "country_id" | "class", filterQuery?: string | number | any) => {
   let products: MatrixDataType;
   if (filterBy && filterQuery) {
     products = await readData("products", "find_many", filterBy, filterQuery);

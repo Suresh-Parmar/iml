@@ -8,7 +8,9 @@ import Loader from "@/components/common/Loader";
 import { setGetData } from "@/helpers/getLocalStorage";
 import { UpdateUserRedux } from "@/redux/slice";
 
-function Profile() {
+function Profile(props: any) {
+  const { onlyPassWord } = props;
+
   let [fieldsDataJson, setFieldsDataJson] = useState<any>({});
   let [resetPasswordFieldsJson, setResetPasswordFieldsJson] = useState<any>({});
   const [passwordVisible, setPasswordVisible] = useState<boolean[]>([]);
@@ -99,7 +101,6 @@ function Profile() {
               new_password: newPassword,
               password: password,
             };
-
             setLoading(true);
             forgotCreds(payload, true)
               .then((res) => {
@@ -321,6 +322,7 @@ function Profile() {
   return (
     <>
       <UserProfile
+        onlyPassWord={onlyPassWord}
         handleSave={handleSave}
         dataJson={dataJson}
         resetPassword={resetPasswordJson}

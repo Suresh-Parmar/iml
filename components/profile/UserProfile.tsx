@@ -8,9 +8,13 @@ import Loader from "../common/Loader";
 
 function UserProfile(props: any) {
   const dispatch = useDispatch();
-  const { handleSave } = props;
+  const { handleSave, onlyPassWord } = props;
   let [userImage, setuserImage] = useState<any>("https://cdn-icons-png.flaticon.com/512/149/149071.png");
-  const [activePage, setActivePage] = useState<any>({ title: "Profile", link: "profile", showImage: true });
+  const [activePage, setActivePage] = useState<any>(
+    onlyPassWord
+      ? { title: "Password", link: "password", showImage: false }
+      : { title: "Profile", link: "profile", showImage: true }
+  );
   let [loading, setLoading] = useState<any>(false);
 
   const userDataDetails: any = useSelector((state: any) => state?.data?.userData?.user);
@@ -108,10 +112,12 @@ function UserProfile(props: any) {
   return (
     <div className="m-3">
       <div className="row g-0">
-        <div className="col-3">
-          <ProfileSidebar setActive={setActivePage} />
-        </div>
-        <div className="col-9">
+        {!onlyPassWord && (
+          <div className="col-3">
+            <ProfileSidebar setActive={setActivePage} />
+          </div>
+        )}
+        <div className={!onlyPassWord ? "col-9" : ""}>
           <div className="row g-0">
             <div className={`${smlWidth} px-4`} style={{ height: "90vh", overflow: "auto" }}>
               <ProfileSection {...props} activePage={activePage} />
