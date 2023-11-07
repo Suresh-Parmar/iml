@@ -19,7 +19,7 @@ function ProductForYou() {
     //  const payload = { username: userData.username };
     //  studentAvailableproducts(payload);
 
-    readProducts("class", userData?.class_id)
+    readProducts("class", [userData?.class_id])
       .then((res: any) => {
         if (Array.isArray(res)) {
           setyourProducts(res);

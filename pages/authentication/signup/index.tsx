@@ -179,31 +179,28 @@ export default function SignUp() {
       });
       return;
     } else {
-      setActive((current) => {
-        if (isSkipValidate) {
-          return current < 5 ? current + 1 : current;
-        }
-
+      setActive(() => {
         if (form.validate().hasErrors) {
-          return current;
+          return active;
+        } else {
+          return active < 5 ? (active ? active + 1 : 1) : active;
         }
-        return current < 5 ? current + 1 : current;
       });
     }
   };
 
   const prevStep = () => {
-    setActive((current) => (current > 0 ? current - 1 : current));
+    setActive(active > 0 ? active - 1 : active);
   };
 
   console.log(active);
   const onSubmitForm = async (values: any) => {
     let windowConfirm = window.confirm("Hope you have verified details on summary?");
-
     if (!windowConfirm) {
       return;
     }
     nextStep();
+
     values = {
       ...values,
       // dob: new Date(values.dob || Date()).toDateString(),
@@ -305,11 +302,20 @@ export default function SignUp() {
       <Paper h={"100%"} className={classes.form} radius={0} p={30}>
         <ScrollArea w={"100%"} h={"100%"} type={"never"}>
           <Box maw={"75%"} mx="auto">
-            <form onSubmit={form.onSubmit(onSubmitForm)}>
+            <form
+            // onSubmit={form.onSubmit(onSubmitForm)}
+            >
               <LoadingOverlay visible={oLoader} overlayBlur={2} />
               <Stepper active={active} onStepClick={setActive} breakpoint="sm">
                 <Stepper.Step label="Select Product" description="" allowStepSelect={false}>
-                  <FirstForm setInvoiceBreakdown={setInvoiceBreakdown} form={form} onClickNext={() => nextStep(true)} />
+                  <FirstForm
+                    setInvoiceBreakdown={setInvoiceBreakdown}
+                    form={form}
+                    onClickNext={() => {
+                      setActive(+active + 1);
+                      // nextStep(true)
+                    }}
+                  />
                 </Stepper.Step>
                 <Stepper.Step label="Personal Info" description="" allowStepSelect={false}>
                   <SecondForm form={form} />
@@ -370,7 +376,15 @@ export default function SignUp() {
                   </Button>
                 )}
                 {active != 0 && active != 4 && (
-                  <Button type={active == 3 ? "submit" : "button"} onClick={() => active != 3 && nextStep()}>
+                  <Button
+                    onClick={() => {
+                      if (active != 3) {
+                        nextStep();
+                      } else {
+                        onSubmitForm(form.values);
+                      }
+                    }}
+                  >
                     {"Next step"}
                   </Button>
                 )}
