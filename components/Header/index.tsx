@@ -19,7 +19,15 @@ import {
   Menu,
   Avatar,
 } from "@mantine/core";
-import { IconChevronDown, IconHome, IconLogout, IconMoonStars, IconSun, IconUser } from "@tabler/icons-react";
+import {
+  IconChevronDown,
+  IconHome,
+  IconLogout,
+  IconMoonStars,
+  IconPassword,
+  IconSun,
+  IconUser,
+} from "@tabler/icons-react";
 import { Logo } from "./_logo";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
@@ -367,6 +375,9 @@ function Header() {
                   <Menu.Dropdown>
                     <Link prefetch={false} href={"/profile"}>
                       <Menu.Item icon={<IconUser size="1rem" />}>Profile</Menu.Item>
+                    </Link>
+                    <Link prefetch={false} href={"/changePassword"}>
+                      <Menu.Item icon={<IconPassword size="1rem" />}>Change Password</Menu.Item>
                     </Link>
                     {pathname === "/" ? (
                       <Menu.Item
