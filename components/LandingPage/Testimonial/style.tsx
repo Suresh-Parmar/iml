@@ -9,8 +9,8 @@ const useStyles = createStyles((theme) => ({
     backgroundSize: "cover",
     backgroundPosition: "center",
     height: "219px",
-    width: "390px",
-    backgroundColor: '#fff',
+    // width: "390px",
+    backgroundColor: "#fff",
   },
 
   title: {
@@ -58,9 +58,8 @@ const useStyles = createStyles((theme) => ({
   carouselCont: {
     height: "22rem",
   },
-  viewport:{
+  viewport: {
     height: "22rem",
-
   },
   indicator: {
     display: "none",
@@ -73,8 +72,8 @@ const useStyles = createStyles((theme) => ({
     padding: "0px",
     textAlign: "center",
   },
-  placeholder:{
-    backgroundColor:"transparent",
+  placeholder: {
+    backgroundColor: "transparent",
   },
   placeholderImage: {
     width: "85px",
