@@ -2,6 +2,7 @@ import { VerifyPaymentData, createOrder, loadPaymentScript, readProducts, verify
 import { notifications } from "@mantine/notifications";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { ProductView } from "../common";
 
 function ProductForYou() {
   const [product, setyourProducts] = useState<any>([]);
@@ -107,39 +108,14 @@ function ProductForYou() {
       <div style={{ marginBottom: "20px", fontSize: "30px" }}>Product For you</div>
       <div className="d-flex gap-3 flex-wrap mb-5">
         {product.map((item: any, index: any) => (
-          <div
+          <ProductView
+            item={item}
             key={index}
-            className="rounded relative"
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: "10px",
-              border: "1px solid gray",
-              padding: "10px",
-              width: "300px",
+            onClick={() => {
+              setBuyDetails(item);
+              makePayment(item);
             }}
-          >
-            <img
-              style={{ objectFit: "cover", width: "100%", borderRadius: "5px", height: "200px" }}
-              className="justify-align-item-center"
-              alt={item.name}
-              src={item.imageuploadurl}
-            />
-            <div className="productView">{item.name}</div>
-            <div
-              className="btn btn-outline-danger"
-              onClick={() => {
-                let windowconfirm = window.confirm("Are you sure you want to buy this product?");
-                if (windowconfirm) {
-                  setBuyDetails(item);
-                  makePayment(item);
-                }
-              }}
-            >
-              BUY {formatter.format(item.product_bundle_price)}
-            </div>
-          </div>
+          />
         ))}
       </div>
     </div>

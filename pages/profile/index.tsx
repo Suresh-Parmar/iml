@@ -211,7 +211,7 @@ function Profile(props: any) {
       placeholder: "dob",
       value: fieldsDataJson.dob || "",
       onChange: (e: any) => handleFieldsChange(fieldsDataJson, setFieldsDataJson, "dob", e),
-      type: "text",
+      type: "dob",
     },
     {
       disabled: true,
