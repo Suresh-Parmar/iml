@@ -20,7 +20,7 @@ function Wrapper() {
         <div className={styles.overlay}></div>
         <div className={styles.caption}>
           {/* <span className={styles.border}> */}
-          <Courses/>
+          <Courses />
           {/* </span> */}
         </div>
       </div>
@@ -53,7 +53,7 @@ function Wrapper() {
           </p>
         </div>
       </div> */}
-<Contactus/>
+      <Contactus />
       <div className={styles.bgimg1}>
         <div className={styles.caption}>
           <Footer {...data} />

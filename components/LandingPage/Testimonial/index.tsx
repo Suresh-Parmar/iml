@@ -107,7 +107,7 @@ type TestimonialResponse = {
 function StudentTestimonial() {
   const autoplay = useRef(Autoplay({ delay: 2000 }));
   const teacherTestimonailRef = useRef(Autoplay({ delay: 3000 }));
-    let isDarkThem = setGetData("colorScheme");
+  let isDarkThem = setGetData("colorScheme");
 
   const { classes } = useStyles(isDarkThem);
   const [StudentData, setStudentData] = useState<TestimonialResponse[]>([]);
@@ -154,7 +154,7 @@ function StudentTestimonial() {
         ) : null}
       </Center>
       {StudentData?.length ? (
-        <Box w={"80%"} m={"auto"}>
+        <Box w={"90%"} m={"auto"}>
           <Carousel
             withIndicators
             height={400}
@@ -189,7 +189,7 @@ function StudentTestimonial() {
             see what our teachers have to say
           </Text>
         </Center>
-        <Box w={"80%"} mt={"40px"} m={"auto"}>
+        <Box w={"90%"} mt={"40px"} m={"auto"}>
           <Carousel
             withIndicators
             height={400}

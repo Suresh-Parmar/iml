@@ -19,24 +19,12 @@ type TestimonialResponse = {
   created_at: string;
 };
 
-function StudentCard({
-  thumbnail,
-  description,
-  name,
-  school,
-}: TestimonialResponse) {
-    let isDarkThem = setGetData("colorScheme");
+function StudentCard({ thumbnail, description, name, school }: TestimonialResponse) {
+  let isDarkThem = setGetData("colorScheme");
 
   const { classes } = useStyles(isDarkThem);
   return (
-    <Paper
-      shadow="lg"
-      p="xl"
-      radius="md"
-      mt={52}
-      sx={{ color: "black" }}
-      className={classes.card}
-    >
+    <Paper shadow="lg" p="xl" radius="md" mt={52} sx={{ color: "black" }} className={classes.card}>
       <Image
         classNames={{
           imageWrapper: classes.imageWrapper,
@@ -57,7 +45,7 @@ function StudentCard({
                 width: "100%",
                 height: "68px",
                 strokeWidth: 1,
-                stroke:"#bababa",
+                stroke: "#bababa",
               }}
             />
           </Box>

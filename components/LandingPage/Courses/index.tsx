@@ -3,45 +3,48 @@ import SingleCard from "./SingleCard";
 import { Carousel } from "@mantine/carousel";
 import { Box, Center, Grid, Overlay, Title, createStyles } from "@mantine/core";
 import { readCompetitionsLanding } from "@/utilities/API";
+import { useLandingPageAPisQuery } from "@/redux/apiSlice";
+import { useSelector } from "react-redux";
+import { iterateData } from "@/helpers/getData";
 
 const data = [
   {
-    _id:1,
+    _id: 1,
     image:
       "https://images.unsplash.com/photo-1508193638397-1c4234db14d8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
     name: "Best forests to visit in North America",
     subject_id: "Maths",
   },
   {
-    _id:2,
+    _id: 2,
     image:
       "https://images.unsplash.com/photo-1559494007-9f5847c49d94?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
     name: "Hawaii beaches review: better than you think",
     subject_id: "Science",
   },
   {
-    _id:3,
+    _id: 3,
     image:
       "https://images.unsplash.com/photo-1608481337062-4093bf3ed404?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
     name: "Mountains at night: 12 best locations to enjoy the view",
     subject_id: "English",
   },
   {
-    _id:4,
+    _id: 4,
     image:
       "https://images.unsplash.com/photo-1507272931001-fc06c17e4f43?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
     name: "Aurora in Norway: when to visit for best experience",
     subject_id: "Science",
   },
   {
-    _id:5,
+    _id: 5,
     image:
       "https://images.unsplash.com/photo-1510798831971-661eb04b3739?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
     name: "Best places to visit this winter",
     subject_id: "Maths",
   },
   {
-    _id:6,
+    _id: 6,
     image:
       "https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80",
     name: "Mountains at night: 12 best locations to enjoy the view",
@@ -78,8 +81,25 @@ const useStyles = createStyles(() => ({
 }));
 
 function Courses() {
+  const [dataProducts, setDataProducts] = useState([]);
   const [competitionData, setcompetitionData] = useState<competitionType[]>([]);
+  const reduxData = useSelector((state: any) => state?.data);
+  let selectedCountry = reduxData.selectedCountry;
+
   const { classes } = useStyles();
+
+  let productsDataPayload = {
+    collection_name: "products",
+    op_name: "find_many",
+    filter_var: {
+      status: true,
+      country: selectedCountry.label || "India",
+    },
+  };
+
+  let productsData = useLandingPageAPisQuery(productsDataPayload);
+  productsData = iterateData(productsData);
+  console.log(productsData);
 
   const slides = data?.map((item) => (
     <Grid.Col span={12} md={4} lg={3} sm={6} key={item._id}>
@@ -98,12 +118,12 @@ function Courses() {
 
   return (
     <Box
-    id={"Courses"}
+      id={"Courses"}
       pt={60}
       pb={70}
       sx={{
         color: "#fff",
-        height:"inherit",
+        height: "inherit",
       }}
     >
       <Box w={"80%"} m={"auto"}>
@@ -149,7 +169,7 @@ function Courses() {
               <span style={{ color: "rgb(0, 0, 0)" }}>&nbsp;</span>
               <span
                 style={{
-                  color:"#E21D22",
+                  color: "#E21D22",
                   // background:
                   //   "linear-gradient(to bottom right, #E21D22, #1250A2)",
                   // WebkitBackgroundClip: "text",

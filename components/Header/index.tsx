@@ -121,6 +121,15 @@ const RenderProgress = () => {
 function Header() {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
   const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
+  const [selectedCountry, setSelectedCountry] = useState<string | null>("");
+  const [userMenuOpened, setUserMenuOpened] = useState(false);
+  const [countriesData, setCountriesData] = useState<
+    {
+      value: string;
+      label: string;
+    }[]
+  >([]);
+
   const dispatch = useDispatch();
   // const isloggedIn = IsLoggedIn();
   let authentication: any = setGetData("userData", "", true);
@@ -141,10 +150,15 @@ function Header() {
   const allReduxData = useSelector((state: any) => state.data);
 
   useEffect(() => {
-    if (!allReduxData?.selectedCountry?.value) {
+    if (!allReduxData?.selectedCountry?.value && countriesData) {
+      let countryFromApi = findFromJson(countriesData, apiCountryData.value, "value");
+      apiCountryData = {
+        ...countryFromApi,
+        ...apiCountryData,
+      };
       setGetData("selectedCountry", apiCountryData, true);
     }
-  }, [apiCountryData, allReduxData?.selectedCountry?.value]);
+  }, [apiCountryData, allReduxData?.selectedCountry?.value, countriesData]);
 
   let colorScheme = allReduxData.colorScheme;
   const { classes, theme, cx } = useStyles();
@@ -152,13 +166,6 @@ function Header() {
   let toggleColorScheme = () => {
     dispatch(changeColorTheme(""));
   };
-
-  const [countriesData, setCountriesData] = useState<
-    {
-      value: string;
-      label: string;
-    }[]
-  >([]);
 
   let userCountry: any = getUserData("country");
 
@@ -190,6 +197,7 @@ function Header() {
     if (Array.isArray(countryApiData)) {
       const countriesWithFlags = countryApiData.map((country) => {
         return {
+          ...country,
           value: country["ISO Alpha-2 Code"],
           label: country.name,
           country_code: country["ISD Code"],
@@ -217,9 +225,6 @@ function Header() {
       </Group>
     </UnstyledButton>
   ));
-
-  const [selectedCountry, setSelectedCountry] = useState<string | null>("");
-  const [userMenuOpened, setUserMenuOpened] = useState(false);
 
   const router = useRouter();
   const pathname = usePathname();

@@ -33,6 +33,7 @@ import { filterDataSingle } from "@/helpers/dropDownData";
 import { validatePhone } from "@/helpers/validations";
 import Loader from "../common/Loader";
 import Editor from "../editor/editor";
+import { useSelector } from "react-redux";
 
 function ProductForm({
   open,
@@ -60,6 +61,10 @@ function ProductForm({
   const [products, setProducts] = useState<MatrixDataType>([]);
   const [selectedRecords, setSelectedRecords] = useState<ProductsType[]>(rowData?.products ?? []);
   const [loader, setLoader] = useState<any>(false);
+
+  const redux = useSelector((state: any) => state.data);
+  const country: any = redux?.selectedCountry;
+  let taxCodes = country?.tax_code;
 
   const form = useForm({
     initialValues: {
@@ -275,6 +280,52 @@ function ProductForm({
     );
   };
 
+  const renderTaxPercent = () => {
+    let valuesLocal = formValues?.tax_code || [];
+    if (taxCodes) {
+      return taxCodes.split(",").map((item: any, index: any) => {
+        let valObj: any = {};
+        let ind: any;
+        valuesLocal.map((value: any, i: any) => {
+          if (Object.keys(value).includes(item)) {
+            valObj = value;
+            ind = i;
+          }
+        });
+
+        if (!valuesLocal[ind] && !ind) {
+          valuesLocal[index] = { [item]: "" };
+          form.setFieldValue("tax_code", valuesLocal ?? []);
+        }
+
+        return (
+          <TextInput
+            key={index}
+            disabled={readonly}
+            withAsterisk
+            label={item}
+            placeholder={item}
+            w={"100%"}
+            mt={"md"}
+            size="md"
+            value={valObj[item] || ""}
+            onChange={(event: any) => {
+              let val = validatePhone(event.currentTarget.value, 3, 100);
+              valObj[item] = val;
+              if (valuesLocal[ind] && ind) {
+                valuesLocal.splice(ind, 1, valObj);
+              } else {
+                valuesLocal[index] = valObj;
+              }
+              form.setFieldValue("tax_code", valuesLocal ?? []);
+            }}
+          />
+        );
+      });
+    }
+    return <></>;
+  };
+
   return (
     <Box maw={"100%"} mx="auto">
       <LoadingOverlay visible={visible} overlayBlur={2} />
@@ -434,7 +485,6 @@ function ProductForm({
             }}
             w={"100%"}
           />
-
           <TextInput
             disabled={readonly}
             withAsterisk
@@ -491,7 +541,8 @@ function ProductForm({
               form.setFieldValue("product_bundle_price", val);
             }}
           />
-          <TextInput
+          {renderTaxPercent()}
+          {/* <TextInput
             disabled={readonly || form.values.bundle}
             label="Tax Name"
             placeholder="Tax Name"
@@ -502,8 +553,8 @@ function ProductForm({
             onChange={(event) => {
               form.setFieldValue("taxname", event.currentTarget.value);
             }}
-          />
-          <TextInput
+          /> */}
+          {/* <TextInput
             disabled={readonly || form.values.bundle}
             label="Tax Percent"
             placeholder="Tax Percent"
@@ -515,7 +566,7 @@ function ProductForm({
               let val = validatePhone(event.currentTarget.value, 3, 100);
               form.setFieldValue("taxpercent", val);
             }}
-          />
+          /> */}
           <TextInput
             type="date"
             disabled={readonly}
@@ -576,7 +627,6 @@ function ProductForm({
           <span style={{ fontSize: "12px" }}>
             {typeof formValues?.resourcefileurl == "string" ? formValues?.resourcefileurl : ""}
           </span>
-
           {/* {formValues?.resourcefileurl && (
             <div className="m-3">
               {typeof formValues?.resourcefileurl === "object" ? (
@@ -600,7 +650,6 @@ function ProductForm({
               form.setFieldValue("imageuploadurl", event);
             }}
           />
-
           {formValues?.imageuploadurl && (
             <div className="m-3">
               {typeof formValues?.imageuploadurl === "object" ? (
@@ -610,7 +659,6 @@ function ProductForm({
               )}
             </div>
           )}
-
           <Checkbox
             checked={!!formValues?.showfront}
             disabled={readonly}
