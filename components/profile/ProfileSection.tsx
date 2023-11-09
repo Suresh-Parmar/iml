@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import DownLoadProduct from "./DownLoadProduct";
 import ProductForYou from "./ProductForYou";
 import YourProduct from "./YourProduct";
+import { DateinputCustom } from "../utils";
 
 function ProfileSection(props: any) {
   const { dataJson, resetPassword, activePage, passwordVisible, setPasswordVisible } = props;
@@ -27,18 +28,28 @@ function ProfileSection(props: any) {
     }
     return dataJsonToRender.map((item: any, index: any) => {
       let newItem = { ...item };
-      delete newItem.label;
+
       if (newItem.inputType === "textArea") {
         return (
-          <div className="mb-3 row" key={index}>
-            <label className="col-form-label capitalize">{item.label}</label>
+          <div className="mb-1 row" key={index}>
+            <label className="col-form-label p-0 capitalize">{item.label}</label>
             <textarea className="form-control" {...newItem} />
           </div>
         );
+      } else if (newItem.type == "dob") {
+        return (
+          <DateinputCustom
+            inputBox="form-control"
+            key={index}
+            inputProps={{
+              ...newItem,
+            }}
+          />
+        );
       } else if (newItem.inputType === "password") {
         return (
-          <div className="mb-3 row" key={index}>
-            <label className="col-form-label capitalize">{item.label}</label>
+          <div className="mb-1 row" key={index}>
+            <label className="col-form-label p-0 capitalize">{item.label}</label>
             <div className="input-group">
               <input className="form-control" {...newItem} />
               <div className=" ">
@@ -59,8 +70,8 @@ function ProfileSection(props: any) {
         );
       } else {
         return (
-          <div className="mb-3 row" key={index}>
-            <label className="col-form-label capitalize">{item.label}</label>
+          <div className="mb-1 row" key={index}>
+            <label className="col-form-label p-0 capitalize">{item.label}</label>
             <input
               checked={newItem.inputType}
               className={`${newItem.inputType ? "form-check-input" : "form-control"}`}
