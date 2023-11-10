@@ -17,6 +17,13 @@ export const allTypes: any = {
       sortingFn: fuzzySort,
     },
     {
+      id: "Tax Code",
+      key: "tax_code",
+      defaultShow: true,
+      filterFn: "equals",
+      sortingFn: fuzzySort,
+    },
+    {
       id: "ISD Code",
       key: "ISD Code",
       defaultShow: true,
@@ -77,7 +84,7 @@ export const allTypes: any = {
       defaultShow: true,
       filterFn: "equals",
       sortingFn: fuzzySort,
-    },
+    },    
     {
       id: "What's New",
       key: "whatsnew",
