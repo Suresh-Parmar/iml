@@ -126,10 +126,12 @@ function RenderFormTypes(
           let showData = row[item.key];
           if (!showData || showData == "nan") {
             if (showData === false) {
-              showData = "false";
+              showData = "Inactive";
             } else {
               showData = "";
             }
+          } else if (showData === true) {
+            showData = "Active";
           }
 
           return String(showData);

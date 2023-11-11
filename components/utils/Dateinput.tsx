@@ -1,3 +1,4 @@
+import { dateInputHandler } from "@/helpers/dateHelpers";
 import { DateInput } from "@mantine/dates";
 import React from "react";
 
@@ -15,19 +16,7 @@ function DateinputCustom(props: { inputProps: any; inputBox?: any }) {
     return date1.toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit", year: "numeric" }).replace(/\//g, "-");
   };
 
-  let parts = value;
-  let day: any, month: any, year: any, valueSet: any;
-
-  if (value && String(value).includes("-")) {
-    value = String(value);
-    parts = value.split("-");
-    day = parseInt(parts[0]);
-    month = parseInt(parts[1]) - 1;
-    year = parseInt(parts[2]);
-    valueSet = new Date(year, month, day);
-  } else {
-    valueSet = parts ? new Date(parts) : null;
-  }
+  let valueSet = dateInputHandler(value);
 
   if (valueSet == "Invalid Date") {
     valueSet = null;
