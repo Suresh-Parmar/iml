@@ -314,7 +314,7 @@ function UserForm({
           });
         });
     }
-    // close();
+    close();
   };
 
   const onChangeCityName = async (event: string) => {
@@ -548,7 +548,25 @@ function UserForm({
                 mt={"md"}
                 size="md"
               />
-              <TextInput
+              <Select
+                disabled={readonly}
+                searchable
+                name="Designation"
+                nothingFound="No options"
+                mt={"md"}
+                size="md"
+                withAsterisk
+                {...form.getInputProps("designation")}
+                w={"100%"}
+                label="Designation"
+                placeholder="Select Designation"
+                data={[
+                  { value: "teacher", label: "Teacher" },
+                  { value: "rm", label: "Relationship Manager" },
+                  { value: "principal", label: "Principal" },
+                ]}
+              />
+              {/* <TextInput
                 disabled={readonly}
                 // withAsterisk
                 label="Designation"
@@ -558,7 +576,7 @@ function UserForm({
                 w={"100%"}
                 mt={"md"}
                 size="md"
-              />
+              /> */}
             </Flex>
             <Flex direction={"column"} justify={"center"} align={"flex-start"} w={"100%"}>
               <Select

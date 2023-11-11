@@ -316,6 +316,8 @@ function Page() {
             <td>{item["_id"]}</td>
             <td>{item["mode"]}</td>
             <td>{item["paper_code"]}</td>
+            <td>{item["state"]}</td>
+            <td>{item["city"]}</td>
             <td className="text-center">
               {item?.OMR_url ? (
                 <a href={item.OMR_url} target="_blank">
@@ -353,6 +355,8 @@ function Page() {
               <th scope="col">Center Code</th>
               <th scope="col">Exam Type</th>
               <th scope="col">Paper Type</th>
+              <th scope="col">State</th>
+              <th scope="col">City</th>
               <th scope="col" className="text-center">
                 download
               </th>

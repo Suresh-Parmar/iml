@@ -22,6 +22,7 @@ const { NEXT_API, LANDING_API } = endpoints;
 
 export const apiSlice: any = createApi({
   reducerPath: "apiData",
+  refetchOnReconnect: true,
   baseQuery: axiosBaseQuery({
     baseUrl: BASE_URL,
   }),
