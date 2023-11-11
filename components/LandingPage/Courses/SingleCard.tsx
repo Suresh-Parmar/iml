@@ -16,38 +16,52 @@ interface competitionType {
   _id: string;
 }
 
-interface data {
-  _id: number;
-  subject_id: string;
-  name: string;
-  // message:string,
-}
+function SingleCard(props: any) {
+  console.log(props);
+  const { item } = props;
+  let { subject_id, name, imageuploadurl } = item;
+  console.log(imageuploadurl);
 
-function SingleCard({ name, subject_id }: data) {
   return (
-    <Card shadow="sm" padding="lg" radius="md" h={"100%"} withBorder>
-      <Card.Section component="a" href="">
-        <Image src={"image"} height={160} alt="Norway" />
-      </Card.Section>
+    <Card
+      shadow="sm"
+      padding="0"
+      radius="md"
+      h={"100%"}
+      className="d-flex flex-column justify-content-between"
+      withBorder
+    >
+      <div>
+        <Card.Section component="a" href="">
+          <img
+            src={imageuploadurl}
+            alt={"Norway" + name}
+            style={{
+              width: "100%",
+            }}
+          />
+        </Card.Section>
 
-      <Group position="apart" display={"grid"} mt="md" mb="xs">
-        <Badge
-          w={"fit-content"}
-          color={subject_id === "Maths" ? "pink" : subject_id === "Science" ? "orange" : "yellow"}
-          variant="light"
-        >
-          {subject_id}
-        </Badge>
-        <Text weight={600}>{name}</Text>
-      </Group>
-
+        <Group position="apart" display={"grid"} mt="md" style={{ padding: "0 15px" }} mb="xs">
+          <Badge
+            w={"fit-content"}
+            color={subject_id === "Maths" ? "pink" : subject_id === "Science" ? "orange" : "yellow"}
+            variant="light"
+          >
+            {subject_id}
+          </Badge>
+          <Text weight={600}>{name}</Text>
+        </Group>
+      </div>
       {/* <Group position="apart" display={"flex"} color="lightgrey" fz={"sm"} mt="md" mb="xs">
         <Text weight={400}>12 Lessons</Text>
         <Text weight={400}>2 hr 30 min</Text>
       </Group> */}
-      <Button variant="light" color="blue" fullWidth mt="md" radius="md">
-        Buy Online
-      </Button>
+      <div style={{ margin: "15px" }}>
+        <Button variant="light" color="blue" fullWidth mt="md" radius="md">
+          Buy Online
+        </Button>
+      </div>
     </Card>
   );
 }
