@@ -33,18 +33,9 @@ function TestimonialsForm({
   }, []);
 
   const form = useForm({
-    initialValues: {
-      name: rowData?.name ?? "",
-      school: rowData?.school ?? "",
-      description: rowData?.description ?? "",
-      country: rowData?.country ?? "",
-      startdate: rowData?.startdate ?? "",
-      enddate: rowData?.enddate ?? "",
-      thumbnail: rowData?.thumbnail ?? "",
-      role: rowData?.role ?? "",
-    },
+    initialValues: { ...rowData },
     validate: {
-      name: (value) => (value.length < 2 ? "Name must have at least 2 letters" : null),
+      name: (value: any) => (value.length < 2 ? "Name must have at least 2 letters" : null),
     },
   });
 
@@ -135,7 +126,10 @@ function TestimonialsForm({
         ...form.getInputProps("thumbnail"),
       },
       {
-        data: ["Student", "Teacher"],
+        data: [
+          { label: "Student", value: "student" },
+          { label: "Teacher", value: "teacher" },
+        ],
         inputType: "dropdown",
         disabled: readonly,
         withAsterisk: true,

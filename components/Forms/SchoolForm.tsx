@@ -51,7 +51,7 @@ function SchoolForm({
   let selectedCountryLocal = setGetData("selectedCountry", "", true);
 
   const getSelectedCountry = () => {
-    return reduxData?.selectedCountry?.country_code || selectedCountryLocal?.country_code || "";
+    return reduxData?.selectedCountry?.label || selectedCountryLocal?.label || "";
   };
 
   useEffect(() => {
@@ -134,7 +134,7 @@ function SchoolForm({
   }, []);
 
   const getMobileCode = () => {
-    return `+${getSelectedCountry()}`;
+    return "+" + reduxData?.selectedCountry?.country_code || selectedCountryLocal?.country_code || "";
   };
 
   const form = useForm({
@@ -268,7 +268,7 @@ function SchoolForm({
         <Flex gap={"md"} direction={"row"} justify={"center"} align={"flex-start"} w={"100%"}>
           <div style={{ display: "grid", gridTemplateColumns: "auto auto", gap: "10px", width: "100%" }}>
             <TextInput
-              disabled={readonly }
+              disabled={readonly}
               withAsterisk
               label="Name"
               placeholder="John Doe"
