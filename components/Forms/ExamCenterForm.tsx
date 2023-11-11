@@ -18,6 +18,8 @@ import Editor from "../editor/editor";
 import { filterDataMulti, filterDataSingle } from "@/helpers/dropDownData";
 import { filterData, formatedDate } from "@/helpers/filterData";
 import { findFromJson } from "@/helpers/filterFromJson";
+import { DateinputCustom } from "../utils";
+import { dateInputHandler } from "@/helpers/dateHelpers";
 
 function ExamCenterForm({
   readonly,
@@ -98,25 +100,7 @@ function ExamCenterForm({
 
   const form = useForm({
     initialValues: {
-      name: rowData?.name ?? "",
-      competition: rowData?.competition,
-      status: rowData?.status ?? "",
-      examdate: rowData?.examdate ? new Date(rowData?.examdate) : new Date(),
-      time: rowData?.time ?? "",
-      result_date: rowData?.result_date ? new Date(rowData?.result_date) : new Date(),
-      verification_start_date: rowData?.verification_start_date
-        ? new Date(rowData?.verification_start_date)
-        : new Date(),
-      verification_end_date: rowData?.verification_end_date ? new Date(rowData?.verification_end_date) : new Date(),
-      paper_code: rowData?.paper_code ?? "",
-      mode: rowData?.mode ?? "",
-      address: rowData?.address ?? "",
-      state: rowData?.state ?? "",
-      city: rowData?.city ?? "",
-      max_number: rowData?.max_number ?? "",
-      instructions: rowData?.instructions ?? "",
-      instructions_template: rowData?.instructions_template ?? "",
-      imladdress: rowData?.imladdress ?? "",
+      ...rowData,
     },
     validate: {
       name: (value) => (value.length < 2 ? "Name must have at least 2 letters" : null),
@@ -146,10 +130,10 @@ function ExamCenterForm({
     if (rowData !== undefined) {
       const formValues = {
         ...values,
-        examdate: formatedDate(checkValidDate(new Date(values.examdate || Date()))),
-        result_date: formatedDate(checkValidDate(new Date(values.result_date || Date()))),
-        verification_start_date: formatedDate(checkValidDate(new Date(values.verification_start_date || Date()))),
-        verification_end_date: formatedDate(checkValidDate(new Date(values.verification_end_date || Date()))),
+        // examdate: formatedDate(checkValidDate(new Date(values.examdate || Date()))),
+        // result_date: formatedDate(checkValidDate(new Date(values.result_date || Date()))),
+        // verification_start_date: formatedDate(checkValidDate(new Date(values.verification_start_date || Date()))),
+        // verification_end_date: formatedDate(checkValidDate(new Date(values.verification_end_date || Date()))),
       };
       const isExamCenterUpdated = await updateExamCenter(rowData._id, formValues);
       if (isExamCenterUpdated.toUpperCase() === "DOCUMENT UPDATED") {
@@ -168,10 +152,10 @@ function ExamCenterForm({
     } else {
       const formValues = {
         ...values,
-        examdate: formatedDate(values.examdate),
-        result_date: formatedDate(values.result_date),
-        verification_start_date: formatedDate(values.verification_start_date),
-        verification_end_date: formatedDate(values.verification_end_date),
+        // examdate: formatedDate(values.examdate),
+        // result_date: formatedDate(values.result_date),
+        // verification_start_date: formatedDate(values.verification_start_date),
+        // verification_end_date: formatedDate(values.verification_end_date),
       };
 
       const isExamCenterCreated = await createExamCenter(formValues as MatrixRowType);
@@ -224,7 +208,7 @@ function ExamCenterForm({
   const setDatesExtra = (e: any, keyArr: any[]) => {
     keyArr.map((key: any) => {
       let values: any = { ...form.values };
-      if (e > values[key]) {
+      if (dateInputHandler(e) > dateInputHandler(values[key])) {
         form.setFieldValue(key, e);
       }
     });
@@ -334,24 +318,24 @@ function ExamCenterForm({
             w={"100%"}
           />
 
-          <DatePickerInput
-            popoverProps={{
-              withinPortal: true,
-            }}
-            disabled={readonly}
-            withAsterisk
-            valueFormat="ddd MMM DD YYYY"
-            name="Exam Date"
-            label="Exam Date"
-            placeholder={`${new Date(Date.now()).toDateString()}`}
-            {...form.getInputProps("examdate")}
-            w={"100%"}
-            mt={"md"}
-            size="md"
-            minDate={new Date()}
-            onChange={(e: any) => {
-              form.setFieldValue("examdate", e);
-              setDatesExtra(e, ["verification_end_date", "verification_start_date", "result_date"]);
+          <DateinputCustom
+            inputProps={{
+              popoverProps: {
+                withinPortal: true,
+              },
+              disabled: readonly,
+              withAsterisk: true,
+              name: "Exam Date",
+              label: "Exam Date",
+              ...form.getInputProps("examdate"),
+              w: "100%",
+              mt: "md",
+              size: "md",
+              minDate: new Date(),
+              onChange: (e: any) => {
+                form.setFieldValue("examdate", e);
+                setDatesExtra(e, ["verification_end_date", "verification_start_date", "result_date"]);
+              },
             }}
           />
           <TextInput
@@ -364,61 +348,61 @@ function ExamCenterForm({
             mt={"md"}
             size="md"
           />
-          <DatePickerInput
-            popoverProps={{
-              withinPortal: true,
+          <DateinputCustom
+            inputProps={{
+              popoverProps: {
+                withinPortal: true,
+              },
+              disabled: readonly || !Boolean(form.values.examdate),
+              withAsterisk: true,
+              name: "Result Date",
+              label: "Result Date",
+              ...form.getInputProps("result_date"),
+              onChange: (e: any) => {
+                form.setFieldValue("result_date", e);
+                setDatesExtra(e, ["verification_end_date", "verification_start_date"]);
+              },
+              w: "100%",
+              mt: "md",
+              size: "md",
+              minDate: dateInputHandler(form.values.examdate),
             }}
-            disabled={readonly || !Boolean(form.values.examdate)}
-            withAsterisk
-            valueFormat="ddd MMM DD YYYY"
-            name="Result Date"
-            label="Result Date"
-            placeholder={`${new Date(Date.now()).toDateString()}`}
-            {...form.getInputProps("result_date")}
-            onChange={(e: any) => {
-              form.setFieldValue("result_date", e);
-              setDatesExtra(e, ["verification_end_date", "verification_start_date"]);
-            }}
-            w={"100%"}
-            mt={"md"}
-            size="md"
-            minDate={form.values.examdate}
           />
-          <DatePickerInput
-            popoverProps={{
-              withinPortal: true,
+          <DateinputCustom
+            inputProps={{
+              popoverProps: {
+                withinPortal: true,
+              },
+              disabled: readonly || !Boolean(form.values.result_date),
+              withAsterisk: true,
+              name: "Verification Start Date",
+              label: "Verification Start Date",
+              ...form.getInputProps("verification_start_date"),
+              onChange: (e: any) => {
+                form.setFieldValue("verification_start_date", e);
+                setDatesExtra(e, ["verification_end_date"]);
+              },
+              w: "100%",
+              mt: "md",
+              size: "md",
+              minDate: dateInputHandler(form.values.result_date),
             }}
-            disabled={readonly || !Boolean(form.values.result_date)}
-            withAsterisk
-            valueFormat="ddd MMM DD YYYY"
-            name="Verification Start Date"
-            label="Verification Start Date"
-            placeholder={`${new Date(Date.now()).toDateString()}`}
-            {...form.getInputProps("verification_start_date")}
-            onChange={(e: any) => {
-              form.setFieldValue("verification_start_date", e);
-              setDatesExtra(e, ["verification_end_date"]);
-            }}
-            w={"100%"}
-            mt={"md"}
-            size="md"
-            minDate={form.values.result_date}
           />
-          <DatePickerInput
-            popoverProps={{
-              withinPortal: true,
+          <DateinputCustom
+            inputProps={{
+              popoverProps: {
+                withinPortal: true,
+              },
+              disabled: readonly || !Boolean(form.values.verification_start_date),
+              withAsterisk: true,
+              name: "Verification End Date",
+              label: "Verification End Date",
+              ...form.getInputProps("verification_end_date"),
+              w: "100%",
+              mt: "md",
+              size: "md",
+              minDate: dateInputHandler(form.values.verification_start_date),
             }}
-            disabled={readonly || !Boolean(form.values.verification_start_date)}
-            withAsterisk
-            valueFormat="ddd MMM DD YYYY"
-            name="Verification End Date"
-            label="Verification End Date"
-            placeholder={`${new Date(Date.now()).toDateString()}`}
-            {...form.getInputProps("verification_end_date")}
-            w={"100%"}
-            mt={"md"}
-            size="md"
-            minDate={form.values.verification_start_date}
           />
           <TextInput
             disabled={readonly}
