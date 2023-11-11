@@ -25,19 +25,17 @@ import {
   readStates,
   updateDataRes,
 } from "@/utilities/API";
-import { DateInput } from "@mantine/dates";
 import { notifications } from "@mantine/notifications";
 import { FormType } from "../Matrix/types";
 import { UserRoleFormMapping } from "@/utilities/users";
-import { getReduxState } from "@/redux/hooks";
-import { getInternationalDailingCode } from "@/utilities/countriesUtils";
-import { RoleMatrix } from "../permissions";
 import { checkValidDate, maxLength, selectMinDate } from "@/helpers/validations";
 import { useSelector } from "react-redux";
 import { formTypeToFetcherMapper } from "@/helpers/dataFetcher";
 import { findFromJson } from "@/helpers/filterFromJson";
 import { filterDataMulti, filterDataSingle } from "@/helpers/dropDownData";
 import { setGetData } from "@/helpers/getLocalStorage";
+import { DateinputCustom } from "../utils";
+import { filterData } from "@/helpers/filterData";
 
 function Studentsform({
   readonly,
@@ -65,7 +63,6 @@ function Studentsform({
   const [examCentersData, setExamCentersData] = useState<MatrixDataType>([]);
   const [comeptitionsData, setCompetitionsData] = useState<MatrixDataType>([]);
   const [classesData, setClassesData] = useState<MatrixDataType>([]);
-  const [countriesData, setCountriesData] = useState<MatrixDataType>([]);
   const [groupsData, setGroupData] = useState<any>([]);
   const [cohortsData, setCohortsData] = useState<any>([]);
   const [showRoles, setshowRoles] = useState<any>(false);
@@ -157,7 +154,8 @@ function Studentsform({
   }
 
   async function readClassesData(filterBy?: "name" | "status", filterQuery?: string | number) {
-    const classes = await readClasses();
+    let classes = await readClasses();
+    classes = filterData(classes, "label", "value", "code", true, "code");
     setClassesData(classes);
   }
 
@@ -208,48 +206,31 @@ function Studentsform({
 
   const form = useForm({
     initialValues: {
-      competition_code: rowData?.competition_code,
-      competition: rowData?.competition,
-      class_code: rowData?.class_code,
-      class_id: rowData?.class_id,
-      section: rowData?.section ?? "",
-      name: rowData?.name ?? "",
+      ...rowData,
+      role: UserRoleFormMapping[formType],
+      // dob: checkValidDate(rowData?.dob, null),
+      country: rowData?.country || globalCountry,
+      consented: rowData?.consented ?? true,
       mobile_1: rowData?.mobile_1?.replace(getMobileCode(), "").trim() ?? "",
       mobile_2: rowData?.mobile_2?.replace(getMobileCode(), "").trim() ?? "",
-      email_1: rowData?.email_1 ?? "",
-      email_2: rowData?.email_2 ?? "",
-      dob: checkValidDate(rowData?.dob, null),
-      gender: rowData?.gender ?? "",
-      school_name: rowData?.school_name ?? "",
-      exam_center_id: rowData?.exam_center_id ?? "",
-      address: rowData?.address ?? "",
-      country: rowData?.country || globalCountry,
-      state: rowData?.state ?? "",
-      city: rowData?.city ?? "",
-      pincode: rowData?.pincode ?? "",
-      role: UserRoleFormMapping[formType],
-      consented: rowData?.consented ?? true,
-      cohort_code: rowData?.cohort_code,
-      group_code: rowData?.group_code,
-      status: rowData?.status,
     },
 
     validate: {
-      name: (value) => (value.length < 2 ? "Name must have at least 2 letters" : null),
+      name: (value: any) => (value.length < 2 ? "Name must have at least 2 letters" : null),
       // address: (value) => (value.length < 2 ? 'Address must have at least 50 letters' : null),
       // pincode: (value) => (/^[1-9][0-9]{5}$/.test(value) ? null : "Invalid pin-code"), // ^[1-9][0-9]{5}$ // ^[1-9]{1}[0-9]{2}\\s{0, 1}[0-9]{3}$
       // email_1: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
       // mobile_1: (value) => (/^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/.test(value) ? null : "Invalid mobile number"),
       // gender: (value) =>
       //   ["Female", "Male", "Other", "Prefer Not To Say"].includes(value) ? null : "Gender must be selected",
-      school_name: (value) => (value.length === 0 ? "School must be selected" : null),
-      // section: (value) => (value.length === 0 ? "Section must be selected" : null),
-      class_code: (value) => (!value ? "Class must be selected" : null),
-      competition_code: (value) => (value?.length === 0 ? "Competition must be selected" : null),
-      state: (value) => (value.length === 0 ? "State must be selected" : null),
-      city: (value) => (value.length === 0 ? "City must be selected" : null),
-      exam_center_id: (value) => (value.length === 0 ? "Exam center must be selected" : null),
-      consented: (value) => (value === true || value === false ? null : "Communication consent must be set"),
+      school_name: (value: any) => (value.length === 0 ? "School must be selected" : null),
+      // section: (value:any) => (value.length === 0 ? "Section must be selected" : null),
+      class_code: (value: any) => (!value ? "Class must be selected" : null),
+      competition_code: (value: any) => (value?.length === 0 ? "Competition must be selected" : null),
+      state: (value: any) => (value.length === 0 ? "State must be selected" : null),
+      city: (value: any) => (value.length === 0 ? "City must be selected" : null),
+      exam_center_id: (value: any) => (value.length === 0 ? "Exam center must be selected" : null),
+      consented: (value: any) => (value === true || value === false ? null : "Communication consent must be set"),
     },
   });
   // email_2: (value) => (value.length > 0 ? /^\S+@\S+$/.test(value) ? null : 'Invalid alternate email' : 'Invalid alternate email'),
@@ -260,7 +241,6 @@ function Studentsform({
     values = {
       ...values,
       role: UserRoleFormMapping[formType],
-      dob: new Date(values.dob || Date()).toDateString(),
     };
 
     if (!!values.mobile_1) values.mobile_1 = getMobileCode() + values.mobile_1;
@@ -497,21 +477,21 @@ function Studentsform({
               mt={"md"}
               size="md"
             />
-            <DateInput
-              popoverProps={{
-                withinPortal: true,
+            <DateinputCustom
+              inputProps={{
+                popoverProps: {
+                  withinPortal: true,
+                },
+                disabled: readonly,
+                name: "Date of Birth (DoB)",
+                label: "Date of Birth (DoB)",
+                // placeholder: `${new Date(Date.now()).toDateString()}`,
+                ...form.getInputProps("dob"),
+                w: "100%",
+                mt: "md",
+                size: "md",
+                maxDate: selectMinDate(0),
               }}
-              disabled={readonly}
-              // withAsterisk
-              valueFormat="ddd MMM DD YYYY"
-              name="Date of Birth (DoB)"
-              label="Date of Birth (DoB)"
-              placeholder={`${new Date(Date.now()).toDateString()}`}
-              {...form.getInputProps("dob")}
-              w={"100%"}
-              mt={"md"}
-              size="md"
-              maxDate={selectMinDate(0)}
             />
 
             <Select

@@ -72,7 +72,7 @@ function RenderFormTypes(
   }, [pathname, siteJson]);
 
   useEffect(() => {
-    activeUserID && fetchData();
+    activeUserID && !isSuperAdmin && fetchData();
   }, [activeUserID]);
 
   const renderTypes = () => {
