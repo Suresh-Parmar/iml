@@ -4,7 +4,7 @@ import ModalBox from "./Modal";
 
 function ProductView(props: any) {
   const [showDescription, setShowDescription] = useState<any>(false);
-  let { item, onClick } = props;
+  let { item, onClick, className } = props;
 
   let userData = useSelector((state: any) => state?.data?.userData?.user);
   let country = useSelector((state: any) => state?.data.selectedCountry);
@@ -33,7 +33,7 @@ function ProductView(props: any) {
 
   return (
     <div
-      className="rounded relative"
+      className={`rounded relative ${className}`}
       style={{
         display: "flex",
         flexDirection: "column",
@@ -41,7 +41,9 @@ function ProductView(props: any) {
         gap: "10px",
         border: "1px solid gray",
         padding: "10px",
-        width: "300px",
+        minWidth: "265px",
+        maxWidth: "300px",
+        width: "100%",
       }}
     >
       <img
