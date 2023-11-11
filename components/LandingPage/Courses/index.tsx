@@ -207,7 +207,7 @@ function Courses() {
     productsData.map((item: any, index: any) => {
       return (
         <ProductView
-          className="bg-light"
+          className="bg-light text-dark"
           key={index}
           onClick={() => {
             handleClick(item);
@@ -312,8 +312,8 @@ function Courses() {
         </Box>
         <div
           style={{
-            display: "flex",
-            flexWrap: "wrap",
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
             gap: "20px",
           }}
         >

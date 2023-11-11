@@ -41,7 +41,6 @@ function ProductView(props: any) {
         gap: "10px",
         border: "1px solid gray",
         padding: "10px",
-        minWidth: "265px",
         maxWidth: "300px",
         width: "100%",
       }}

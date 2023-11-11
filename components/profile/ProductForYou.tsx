@@ -106,7 +106,14 @@ function ProductForYou() {
   return (
     <div>
       <div style={{ marginBottom: "20px", fontSize: "30px" }}>Product For you</div>
-      <div className="d-flex gap-3 flex-wrap mb-5">
+      <div
+        className="mb-5"
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+          gap: "15px",
+        }}
+      >
         {product.map((item: any, index: any) => (
           <ProductView
             item={item}

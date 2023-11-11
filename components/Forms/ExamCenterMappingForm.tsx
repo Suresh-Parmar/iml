@@ -160,8 +160,8 @@ function ExamCenterMappingForm({
     // setSelectedCountry(countriesWithFlags.at(0) || "🇮🇳 India");
   }
   useEffect(() => {
-    readCountriesData();
-    readCitiesData();
+    // readCountriesData();
+    // readCitiesData();
     readSchoolsData();
     readExamCentersData();
     readCompetitionsData();
