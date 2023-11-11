@@ -139,18 +139,27 @@ function UploadButton(props: any) {
     students: {
       collection_name: "users",
       filter_type: "student",
+      role: "student",
     },
     teachers: {
       collection_name: "users",
       filter_type: "teacher",
+      role: "teacher",
     },
     "relationship managers": {
       collection_name: "users",
       filter_type: "rm",
+      role: "rm",
     },
     admin: {
       collection_name: "users",
       filter_type: "admin",
+      role: "admin",
+    },
+    admins: {
+      collection_name: "users",
+      filter_type: "admin",
+      role: "admin",
     },
     classes: {
       collection_name: "classes",
@@ -187,17 +196,17 @@ function UploadButton(props: any) {
     },
   };
 
-  let collection = {};
+  let collection: any = { country: selectedCountry };
 
   if (json[lowercaseType]) {
-    collection = json[lowercaseType];
+    collection = { ...collection, ...json[lowercaseType] };
   } else {
     if (!lowercaseType.endsWith("s")) {
       lowercaseType += "s";
     } else if (lowercaseType.endsWith("ss")) {
       lowercaseType += "es";
     }
-    collection = { collection_name: lowercaseType };
+    collection = { ...collection, collection_name: lowercaseType };
   }
 
   let apiCall = (isUpdate: boolean) => {
@@ -229,6 +238,8 @@ function UploadButton(props: any) {
     setLoader(true);
     let file = isUpdate ? form.values.updateSpreadSheetFile : form.values.spreadSheetFile;
     let meta_data: any = JSON.stringify(collection);
+    console.log(meta_data);
+
     if (formType && file) {
       const tableName = formTypeToTableMapper(formType);
       apiCall(isUpdate)(file, tableName, meta_data)
