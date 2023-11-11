@@ -52,9 +52,7 @@ function SingleCard({ image, name, whatsnew, enddate }: AnnoucementType) {
         <Title order={3} className={classes.title}>
           {name}
         </Title>
-        <Text color="#5a5858" fz={"14px"}>
-          {whatsnew}
-        </Text>
+        <Text color="#5a5858" fz={"14px"} dangerouslySetInnerHTML={{ __html: whatsnew }} />
       </Box>
     </Paper>
   );

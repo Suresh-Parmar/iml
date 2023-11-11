@@ -113,11 +113,11 @@ function UserProfile(props: any) {
     <div className="m-3">
       <div className="row g-0">
         {!onlyPassWord && (
-          <div className="col-3">
+          <div className="col-2">
             <ProfileSidebar setActive={setActivePage} />
           </div>
         )}
-        <div className={!onlyPassWord ? "col-9" : ""}>
+        <div className={!onlyPassWord ? "col-10" : ""}>
           <div className="row g-0">
             <div className={`${smlWidth} px-4`} style={{ height: "90vh", overflow: "auto" }}>
               <ProfileSection {...props} activePage={activePage} />

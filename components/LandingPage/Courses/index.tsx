@@ -11,51 +11,6 @@ import { useRouter } from "next/navigation";
 import { setGetData } from "@/helpers/getLocalStorage";
 import { notifications } from "@mantine/notifications";
 
-const data = [
-  {
-    _id: 1,
-    image:
-      "https://images.unsplash.com/photo-1508193638397-1c4234db14d8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
-    name: "Best forests to visit in North America",
-    subject_id: "Maths",
-  },
-  {
-    _id: 2,
-    image:
-      "https://images.unsplash.com/photo-1559494007-9f5847c49d94?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
-    name: "Hawaii beaches review: better than you think",
-    subject_id: "Science",
-  },
-  {
-    _id: 3,
-    image:
-      "https://images.unsplash.com/photo-1608481337062-4093bf3ed404?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
-    name: "Mountains at night: 12 best locations to enjoy the view",
-    subject_id: "English",
-  },
-  {
-    _id: 4,
-    image:
-      "https://images.unsplash.com/photo-1507272931001-fc06c17e4f43?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
-    name: "Aurora in Norway: when to visit for best experience",
-    subject_id: "Science",
-  },
-  {
-    _id: 5,
-    image:
-      "https://images.unsplash.com/photo-1510798831971-661eb04b3739?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
-    name: "Best places to visit this winter",
-    subject_id: "Maths",
-  },
-  {
-    _id: 6,
-    image:
-      "https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80",
-    name: "Mountains at night: 12 best locations to enjoy the view",
-    subject_id: "Maths",
-  },
-];
-
 type competitionType = {
   code: string;
   country: string;
@@ -207,7 +162,7 @@ function Courses() {
     productsData.map((item: any, index: any) => {
       return (
         <ProductView
-          className="bg-light"
+          className="bg-light text-dark"
           key={index}
           onClick={() => {
             handleClick(item);
@@ -228,7 +183,7 @@ function Courses() {
   };
 
   useEffect(() => {
-    getCompetitionData();
+    // getCompetitionData();
   }, []);
 
   return (
@@ -312,8 +267,8 @@ function Courses() {
         </Box>
         <div
           style={{
-            display: "flex",
-            flexWrap: "wrap",
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
             gap: "20px",
           }}
         >
