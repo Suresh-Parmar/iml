@@ -314,7 +314,7 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
   }
 
   useEffect(() => {
-    readExamCentersData();
+    formType === "Exam Center Mappings" && readExamCentersData();
     if (table.getState().columnFilters[0]?.id === "Name") {
       if (table.getState().sorting[0]?.id !== "Name") {
         table.setSorting([{ id: "Name", desc: false }]);
