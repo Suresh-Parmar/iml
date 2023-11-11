@@ -23,6 +23,7 @@ import { filterDataSingle } from "@/helpers/dropDownData";
 import { checkValidDate } from "@/helpers/validations";
 import { useSelector } from "react-redux";
 import { setGetData } from "@/helpers/getLocalStorage";
+import { DateinputCustom } from "../utils";
 
 function UserForm({
   readonly,
@@ -533,20 +534,20 @@ function UserForm({
                 mt={"md"}
                 size="md"
               />
-              <DateInput
-                popoverProps={{
-                  withinPortal: true,
+              <DateinputCustom
+                inputProps={{
+                  popoverProps: {
+                    withinPortal: true,
+                  },
+                  disabled: readonly,
+                  // withAsterisk
+                  name: "Date of Birth (DoB)",
+                  label: "Date of Birth (DoB)",
+                  ...form.getInputProps("dob"),
+                  w: "100%",
+                  mt: "md",
+                  size: "md",
                 }}
-                disabled={readonly}
-                // withAsterisk
-                valueFormat="ddd MMM DD YYYY"
-                name="Date of Birth (DoB)"
-                label="Date of Birth (DoB)"
-                placeholder={`${new Date(Date.now()).toDateString()}`}
-                {...form.getInputProps("dob")}
-                w={"100%"}
-                mt={"md"}
-                size="md"
               />
               <Select
                 disabled={readonly}
