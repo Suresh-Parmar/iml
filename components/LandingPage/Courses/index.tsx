@@ -93,19 +93,25 @@ function Courses() {
     op_name: "find_many",
     filter_var: {
       status: true,
+      showfront: true,
       country: selectedCountry.label || "India",
     },
   };
 
   let productsData = useLandingPageAPisQuery(productsDataPayload);
   productsData = iterateData(productsData);
-  console.log(productsData);
 
-  const slides = data?.map((item) => (
-    <Grid.Col span={12} md={4} lg={3} sm={6} key={item._id}>
-      <SingleCard {...item} />
-    </Grid.Col>
-  ));
+  const slides =
+    productsData &&
+    Array.isArray(productsData) &&
+    productsData.map((item: any, index: any) => {
+      console.log(item);
+      return (
+        <Grid.Col span={12} md={4} lg={3} sm={6} key={index}>
+          <SingleCard item={item} />
+        </Grid.Col>
+      );
+    });
 
   const getCompetitionData = async () => {
     let competitions: any = await readCompetitionsLanding();
