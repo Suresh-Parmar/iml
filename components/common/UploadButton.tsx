@@ -3,6 +3,7 @@ import { Box, Button, FileInput } from "@mantine/core";
 import { IconDownload, IconFileSpreadsheet, IconUpload } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
 import {
+  buldUserCreate,
   downloadSample,
   updateDataRes,
   updateSpreadsheet,
@@ -210,6 +211,8 @@ function UploadButton(props: any) {
   }
 
   let apiCall = (isUpdate: boolean) => {
+    let types = ["Admins", "Relationship Managers", "Teachers"];
+
     if (isUpdate) {
       if (formType == "Students") {
         return updateSpreadsheetStudent;
@@ -222,6 +225,8 @@ function UploadButton(props: any) {
           let newMetaData = JSON.stringify({ country: selectedCountry });
           return uploadSpreadsheetStudent(file, collection, newMetaData);
         };
+      } else if (formType && types.includes(formType)) {
+        return buldUserCreate;
       } else {
         return uploadSpreadsheet;
       }
