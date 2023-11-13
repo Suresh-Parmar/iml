@@ -280,8 +280,29 @@ function ProductForm({
     );
   };
 
+  const calculateTotalTax = (taxData: any) => {
+    let taxpercent: any = 0;
+    taxCodes.split(",").map((item: any, index: any) => {
+      let ind: any;
+      taxData.map((value: any, i: any) => {
+        if (Object.keys(value).includes(item)) {
+          if (value[item] && !isNaN(value[item])) {
+            taxpercent += +value[item];
+          }
+        }
+      });
+    });
+
+    if (taxpercent) {
+      if (taxpercent != formValues?.taxpercent) {
+        form.setFieldValue("taxpercent", taxpercent ?? []);
+      }
+    }
+  };
+
   const renderTaxPercent = () => {
     let valuesLocal = formValues?.tax_code || [];
+
     if (taxCodes) {
       return taxCodes.split(",").map((item: any, index: any) => {
         let valObj: any = {};
@@ -318,6 +339,7 @@ function ProductForm({
                 valuesLocal[index] = valObj;
               }
               form.setFieldValue("tax_code", valuesLocal ?? []);
+              calculateTotalTax(valuesLocal);
             }}
           />
         );
