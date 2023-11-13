@@ -1,16 +1,28 @@
-import { Navbar } from '@mantine/core';
-import { NavigationBarPropsType } from './types';
-import { NavigationBarFooter, NavigationBarHeader, NavigationBarMain } from './components';
-import { useHover } from '@mantine/hooks';
+import { useState } from "react";
+
+import { Navbar } from "@mantine/core";
+import { NavigationBarPropsType } from "./types";
+import { NavigationBarMain } from "./components";
+
+import { IconArrowBigLeftLines, IconArrowBigRightLine } from "@tabler/icons-react";
 
 function NavigationBar(props: NavigationBarPropsType) {
-  const { opened, setOpened } = props;
-  const { hovered, ref } = useHover();
+  const [opened, setOpened] = useState(false);
+
   return (
-    <Navbar ref={ref} px={"xs"} py="md" width={{ sm: 200, lg: !hovered && opened ? 80 : 220 }}>
+    <Navbar px={"xs"} py="md" width={{ sm: 200, lg: opened ? 80 : 220 }}>
       {/* <NavigationBarHeader /> */}
-      <NavigationBarMain opened={!hovered && opened} />
+      <NavigationBarMain opened={opened} />
       {/* <NavigationBarFooter /> */}
+
+      <div
+        className="d-flex justify-content-end mt-2 bg-light pointer"
+        onClick={(event) => {
+          setOpened(!opened);
+        }}
+      >
+        {opened ? <IconArrowBigRightLine stroke={1.5} /> : <IconArrowBigLeftLines stroke={1.5} />}
+      </div>
     </Navbar>
   );
 }
