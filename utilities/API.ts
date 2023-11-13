@@ -33,6 +33,7 @@ export const UPLOAMEDIA = `${BASE_URL}/data_to_bucket`;
 export const STUDENTAVAILABLEPRODUCTS = `${BASE_URL}/student_available_products`;
 export const OMRSTUDENT = `${BASE_URL}/OMRStudents`;
 export const BULD_USER_CREATION = `${BASE_URL}/bulkcreation_other_user`;
+export const ATTENDENCESHEET = `${BASE_URL}/attendence_sheets`;
 
 let userData: any = setGetData("userData", false, true);
 
@@ -314,6 +315,10 @@ const admitCardCountData = async (data: any) => {
 
 const omrSheetDownload = async (data: any) => {
   return await axios.post(OMRSTUDENT, data, { headers: getAPIHeaders() });
+};
+
+const attendenceSheetDownload = async (data: any) => {
+  return await axios.post(ATTENDENCESHEET, data, { headers: getAPIHeaders() });
 };
 
 const omrSheetDownloadStudent = async (data: any) => {
@@ -1146,6 +1151,7 @@ export {
   admitCardCountData,
   studentDetails,
   omrSheetDownload,
+  attendenceSheetDownload,
   omrSheetDownloadStudent,
   certificateDownload,
   dispatchRequest,

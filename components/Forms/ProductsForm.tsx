@@ -34,6 +34,7 @@ import { validatePhone } from "@/helpers/validations";
 import Loader from "../common/Loader";
 import Editor from "../editor/editor";
 import { useSelector } from "react-redux";
+import { DateinputCustom } from "../utils";
 
 function ProductForm({
   open,
@@ -589,32 +590,34 @@ function ProductForm({
               form.setFieldValue("taxpercent", val);
             }}
           /> */}
-          <TextInput
-            type="date"
-            disabled={readonly}
-            withAsterisk
-            label="Last Buying Date"
-            placeholder="Last Buying Date"
-            {...form.getInputProps("lastbuyingdate")}
-            w={"100%"}
-            mt={"md"}
-            size="md"
-            onChange={(event) => {
-              form.setFieldValue("lastbuyingdate", event.currentTarget.value);
+          <DateinputCustom
+            inputProps={{
+              disabled: readonly,
+              withAsterisk: true,
+              label: "Last Buying Date",
+              placeholder: "Last Buying Date",
+              ...form.getInputProps("lastbuyingdate"),
+              w: "100%",
+              mt: "md",
+              size: "md",
+              onChange: (val: any) => {
+                form.setFieldValue("lastbuyingdate", val);
+              },
             }}
           />
-          <TextInput
-            type="date"
-            disabled={readonly}
-            withAsterisk
-            label="Last Access Date"
-            placeholder="Last Access Date"
-            {...form.getInputProps("lastaccessdate")}
-            w={"100%"}
-            mt={"md"}
-            size="md"
-            onChange={(event) => {
-              form.setFieldValue("lastaccessdate", event.currentTarget.value);
+          <DateinputCustom
+            inputProps={{
+              disabled: readonly,
+              withAsterisk: true,
+              label: "Last Access Date",
+              placeholder: "Last Access Date",
+              ...form.getInputProps("lastaccessdate"),
+              w: "100%",
+              mt: "md",
+              size: "md",
+              onChange: (val: any) => {
+                form.setFieldValue("lastaccessdate", val);
+              },
             }}
           />
           {/* <TextInput
