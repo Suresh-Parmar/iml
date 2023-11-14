@@ -32,6 +32,8 @@ export const UPDATEREQUEST = `${BASE_URL}/update_request_student`;
 export const UPLOAMEDIA = `${BASE_URL}/data_to_bucket`;
 export const STUDENTAVAILABLEPRODUCTS = `${BASE_URL}/student_available_products`;
 export const OMRSTUDENT = `${BASE_URL}/OMRStudents`;
+export const BULD_USER_CREATION = `${BASE_URL}/bulkcreation_other_user`;
+export const ATTENDENCESHEET = `${BASE_URL}/attendence_sheets`;
 
 let userData: any = setGetData("userData", false, true);
 
@@ -313,6 +315,10 @@ const admitCardCountData = async (data: any) => {
 
 const omrSheetDownload = async (data: any) => {
   return await axios.post(OMRSTUDENT, data, { headers: getAPIHeaders() });
+};
+
+const attendenceSheetDownload = async (data: any) => {
+  return await axios.post(ATTENDENCESHEET, data, { headers: getAPIHeaders() });
 };
 
 const omrSheetDownloadStudent = async (data: any) => {
@@ -1008,6 +1014,17 @@ const updateSpreadsheet = async (spreadsheetFile: File, tableName: string, metad
   return responseJSON;
 };
 
+const buldUserCreate = async (spreadsheetFile: File, tableName: string, metadata: any) => {
+  let formData = new FormData();
+  formData.append("file", spreadsheetFile);
+  formData.append("meta_data", metadata);
+  const response = await axios.post(`${BULD_USER_CREATION}`, formData, {
+    headers: getAPIHeaders(),
+  });
+  const responseJSON = await response.data;
+  return responseJSON;
+};
+
 const updateSpreadsheetStudent = async (spreadsheetFile: File, tableName: string, meta_data: any) => {
   let formData = new FormData();
   formData.append("file", spreadsheetFile);
@@ -1074,6 +1091,7 @@ export {
   downloadSample,
   updateSpreadsheetStudent,
   updateSpreadsheet,
+  buldUserCreate,
   createState,
   createCity,
   createCountry,
@@ -1133,6 +1151,7 @@ export {
   admitCardCountData,
   studentDetails,
   omrSheetDownload,
+  attendenceSheetDownload,
   omrSheetDownloadStudent,
   certificateDownload,
   dispatchRequest,

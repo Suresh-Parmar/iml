@@ -3,10 +3,10 @@ import { useForm } from "@mantine/form";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { MatrixDataType, MatrixRowType } from "../Matrix";
 import { dynamicCreate, dynamicDataUpdate, readAnnoucements, readApiData } from "@/utilities/API";
-import { DateInput } from "@mantine/dates";
 import { notifications } from "@mantine/notifications";
 import Editor from "../editor/editor";
 import { checkValidDate } from "@/helpers/validations";
+import { DateinputCustom } from "../utils";
 
 function AnnouncementsForm({
   open,
@@ -140,7 +140,6 @@ function AnnouncementsForm({
         inputType: "date",
         disabled: readonly,
         label: "End Date",
-        placeholder: new Date(Date.now()).toDateString(),
         w: "100%",
         mt: "md",
         size: "md",
@@ -150,7 +149,6 @@ function AnnouncementsForm({
         inputType: "date",
         disabled: readonly,
         label: "News Date",
-        placeholder: new Date(Date.now()).toDateString(),
         w: "100%",
         mt: "md",
         size: "md",
@@ -163,16 +161,17 @@ function AnnouncementsForm({
         return <Editor key={index} {...item} />;
       } else if (item.inputType == "date") {
         return (
-          <DateInput
+          <DateinputCustom
             key={index}
-            popoverProps={{
-              withinPortal: true,
+            inputProps={{
+              popoverProps: {
+                withinPortal: true,
+              },
+              w: "100%",
+              mt: "md",
+              size: "md",
+              ...item,
             }}
-            valueFormat="DD-MM-YYYY"
-            w={"100%"}
-            mt={"md"}
-            size="md"
-            {...item}
           />
         );
       } else {

@@ -34,6 +34,7 @@ import { validatePhone } from "@/helpers/validations";
 import Loader from "../common/Loader";
 import Editor from "../editor/editor";
 import { useSelector } from "react-redux";
+import { DateinputCustom } from "../utils";
 
 function ProductForm({
   open,
@@ -280,8 +281,29 @@ function ProductForm({
     );
   };
 
+  const calculateTotalTax = (taxData: any) => {
+    let taxpercent: any = 0;
+    taxCodes.split(",").map((item: any, index: any) => {
+      let ind: any;
+      taxData.map((value: any, i: any) => {
+        if (Object.keys(value).includes(item)) {
+          if (value[item] && !isNaN(value[item])) {
+            taxpercent += +value[item];
+          }
+        }
+      });
+    });
+
+    if (taxpercent) {
+      if (taxpercent != formValues?.taxpercent) {
+        form.setFieldValue("taxpercent", taxpercent ?? []);
+      }
+    }
+  };
+
   const renderTaxPercent = () => {
     let valuesLocal = formValues?.tax_code || [];
+
     if (taxCodes) {
       return taxCodes.split(",").map((item: any, index: any) => {
         let valObj: any = {};
@@ -318,6 +340,7 @@ function ProductForm({
                 valuesLocal[index] = valObj;
               }
               form.setFieldValue("tax_code", valuesLocal ?? []);
+              calculateTotalTax(valuesLocal);
             }}
           />
         );
@@ -567,32 +590,34 @@ function ProductForm({
               form.setFieldValue("taxpercent", val);
             }}
           /> */}
-          <TextInput
-            type="date"
-            disabled={readonly}
-            withAsterisk
-            label="Last Buying Date"
-            placeholder="Last Buying Date"
-            {...form.getInputProps("lastbuyingdate")}
-            w={"100%"}
-            mt={"md"}
-            size="md"
-            onChange={(event) => {
-              form.setFieldValue("lastbuyingdate", event.currentTarget.value);
+          <DateinputCustom
+            inputProps={{
+              disabled: readonly,
+              withAsterisk: true,
+              label: "Last Buying Date",
+              placeholder: "Last Buying Date",
+              ...form.getInputProps("lastbuyingdate"),
+              w: "100%",
+              mt: "md",
+              size: "md",
+              onChange: (val: any) => {
+                form.setFieldValue("lastbuyingdate", val);
+              },
             }}
           />
-          <TextInput
-            type="date"
-            disabled={readonly}
-            withAsterisk
-            label="Last Access Date"
-            placeholder="Last Access Date"
-            {...form.getInputProps("lastaccessdate")}
-            w={"100%"}
-            mt={"md"}
-            size="md"
-            onChange={(event) => {
-              form.setFieldValue("lastaccessdate", event.currentTarget.value);
+          <DateinputCustom
+            inputProps={{
+              disabled: readonly,
+              withAsterisk: true,
+              label: "Last Access Date",
+              placeholder: "Last Access Date",
+              ...form.getInputProps("lastaccessdate"),
+              w: "100%",
+              mt: "md",
+              size: "md",
+              onChange: (val: any) => {
+                form.setFieldValue("lastaccessdate", val);
+              },
             }}
           />
           {/* <TextInput
