@@ -155,9 +155,18 @@ function Page() {
     setCompetitionsData(competitions);
   }
 
+  async function readClassesData(filterBy?: "name" | "status", filterQuery?: string | number) {
+    setLoader(true);
+    let classes: any = await readClasses();
+    setLoader(false);
+    classes = filterData(classes, "label", "value", "", true, "code");
+    classes.unshift("all");
+    setClassesData(classes);
+  }
+
   useEffect(() => {
     countryName && readStatesData();
-    // countryName && readClassesData();
+    countryName && readClassesData();
     readExamCentersData();
     readCompetitionsData();
   }, [countryName]);
@@ -207,20 +216,6 @@ function Page() {
       },
     },
     {
-      label: "Series",
-      placeholder: "A",
-      key: "series",
-      type: "input",
-      data: comeptitionsData,
-      onChange: (e: any) => {
-        let val = validateAlpha(e.target.value, true, 1);
-        val = val.toUpperCase();
-        handleDropDownChange(val, "series");
-      },
-      value: allData.series,
-    },
-
-    {
       label: "State",
       placeholder: "State",
       key: "state",
@@ -241,6 +236,29 @@ function Page() {
         handleDropDownChange(e, "city", "exam_center");
       },
       value: allData.city,
+    },
+    {
+      label: "Select Class",
+      key: "select_class",
+      type: "select",
+      data: classesData,
+      onChange: (e: any) => {
+        handleDropDownChange(e, "select_class");
+      },
+      value: allData.select_class,
+    },
+    {
+      label: "Series",
+      placeholder: "A",
+      key: "series",
+      type: "input",
+      data: comeptitionsData,
+      onChange: (e: any) => {
+        let val = validateAlpha(e.target.value, true, 1);
+        val = val.toUpperCase();
+        handleDropDownChange(val, "series");
+      },
+      value: allData.series,
     },
   ];
 
@@ -385,15 +403,22 @@ function Page() {
   };
 
   const genrateStudentPdf = () => {
+    let singleCompetition = findFromJson(comeptitionsData, allData.competition, "value");
+
     let newPayload: any = {
       country: countryName || "India",
       competition_code: allData.competition || "",
+      competition: singleCompetition?.name || "",
       state: allData.state,
       city: allData.city,
       exam_date: allData.exam_date,
       exam_center: allData.exam_center,
       series: allData.series,
     };
+
+    if (allData.select_class && allData.select_class != "all") {
+      newPayload.class = allData.select_class;
+    }
 
     setLoader(true);
     omrSheetDownload(newPayload)
