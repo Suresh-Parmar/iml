@@ -1,3 +1,4 @@
 import DateinputCustom from "./Dateinput";
+import FileInput from "./FileInput";
 
-export { DateinputCustom };
+export { DateinputCustom, FileInput };

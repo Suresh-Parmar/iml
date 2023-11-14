@@ -2,9 +2,10 @@ import { TextInput, Button, Group, Box, Flex, LoadingOverlay, Select } from "@ma
 import { useForm } from "@mantine/form";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { MatrixDataType, MatrixRowType } from "../Matrix";
-import { dynamicCreate, dynamicDataUpdate, readApiData } from "@/utilities/API";
+import { dynamicCreate, dynamicDataUpdate, readApiData, uploadMedia } from "@/utilities/API";
 import { notifications } from "@mantine/notifications";
 import Editor from "../editor/editor";
+import { FileInput } from "../utils";
 
 function TestimonialsForm({
   open,
@@ -41,7 +42,36 @@ function TestimonialsForm({
 
   const [oLoader, setOLoader] = useState<boolean>(false);
 
+  const submitImage = async (values: any) => {
+    const payload: any = new FormData();
+    payload.append("file", form.values.thumbnail);
+    setOLoader(true);
+    await uploadMedia(payload)
+      .then((res) => {
+        setOLoader(false);
+        if (res.data.actual_url) {
+          form.setFieldValue("thumbnail", res.data.actual_url ?? "");
+          values.thumbnail = res.data.actual_url;
+          onHandleSubmit(values);
+        } else {
+          notifications.show({
+            message: "Unable to process.",
+            autoClose: 8000,
+          });
+        }
+      })
+      .catch((err) => {
+        setOLoader(false);
+        console.log(err);
+      });
+  };
+
   const onHandleSubmit = async (values: any) => {
+    if (typeof values.thumbnail == "object") {
+      submitImage(values);
+      return;
+    }
+
     setOLoader(true);
     if (rowData !== undefined) {
       const isBoardUpdated = await dynamicDataUpdate("testimonials", rowData._id, values);
@@ -114,8 +144,9 @@ function TestimonialsForm({
         size: "md",
         ...form.getInputProps("school"),
       },
-
       {
+        inputType: "file",
+        accept: "image/*",
         disabled: readonly,
         withAsterisk: true,
         label: "Thumbnail",
@@ -156,6 +187,8 @@ function TestimonialsForm({
     return formData.map((item: any, index) => {
       if (item.inputType == "editor") {
         return <Editor key={index} {...item} />;
+      } else if (item.inputType == "file") {
+        return <FileInput key={index} {...item} />;
       } else if (item.inputType == "dropdown") {
         return (
           <Select
