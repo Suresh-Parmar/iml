@@ -16,6 +16,8 @@ import { findFromJson } from "@/helpers/filterFromJson";
 import { setGetData } from "@/helpers/getLocalStorage";
 import { useRoleCrudOpsgetQuery } from "@/redux/apiSlice";
 import { iterateData } from "@/helpers/getData";
+import { useDispatch } from "react-redux";
+import { selectedTabUpdate } from "@/redux/slice";
 
 function NavigationBarMain({ opened }: { opened: boolean }) {
   const consoleBaseURL = "/console";
@@ -29,8 +31,14 @@ function NavigationBarMain({ opened }: { opened: boolean }) {
 
   let excludePaths = ["profile"];
 
+  const dispatch = useDispatch();
+
   let rolesData = useRoleCrudOpsgetQuery(activeUserID);
   rolesData = iterateData(rolesData);
+
+  const changeTab = (tab: string) => {
+    dispatch(selectedTabUpdate(tab));
+  };
 
   // const fetchData = () => {
   //   updateDataRes("rolemappings", "", "name", activeUserID, "find_many")
@@ -480,6 +488,7 @@ function NavigationBarMain({ opened }: { opened: boolean }) {
                 return;
               } else {
                 if (pathname != navigationBarLink.href) {
+                  navigationBarLink.label && changeTab(navigationBarLink.label);
                   router.replace(navigationBarLink.href);
                 }
               }
@@ -500,6 +509,7 @@ function NavigationBarMain({ opened }: { opened: boolean }) {
                   icon={NavLinkIcon(navLink)}
                   onClick={() => {
                     if (pathname != navLink.href) {
+                      navLink.label && changeTab(navLink.label);
                       router.replace(navLink.href);
                     }
                   }}

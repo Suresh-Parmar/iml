@@ -57,7 +57,6 @@ export default function SecondForm({ form }: SecondFormProps) {
         name="Exam Center"
         mt={"md"}
         size="md"
-        withAsterisk
         {...form.getInputProps("exam_center_code")}
         onChange={onChangeExamCenter}
         w={"100%"}
