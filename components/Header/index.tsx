@@ -148,6 +148,7 @@ function Header() {
   };
 
   const allReduxData = useSelector((state: any) => state.data);
+  let titleHeader = allReduxData?.selectedTab;
 
   useEffect(() => {
     if (!allReduxData?.selectedCountry?.value && countriesData) {
@@ -273,6 +274,7 @@ function Header() {
             // colorScheme={colorScheme}
             colorScheme={"light"}
           />
+          {isloggedIn && titleHeader && <div className="me-auto">{titleHeader}</div>}
           <Box className={classes.flex}>
             {!isloggedIn ? (
               <Group sx={{ height: "100%" }} spacing={0} className={classes.hiddenMobile}>

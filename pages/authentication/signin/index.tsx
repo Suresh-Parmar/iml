@@ -84,7 +84,7 @@ export default function SignIn() {
   const [error, setError] = useState("");
   const [visible, setVisible] = useState(false);
   const [value, setValue] = useState<"super_admin" | "users">("users");
-  const [recaptcha, setRecaptcha] = useState("bypass");
+  const [recaptcha, setRecaptcha] = useState("");
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [registrationNo, setRegistrationNo] = useState<string>("");
 

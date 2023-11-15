@@ -137,7 +137,7 @@ export default function SignUp() {
 
       if (active === 1) {
         return {
-          exam_center_code: values.exam_center_code === "" ? "Exam center must be selected" : null,
+          // exam_center_code: values.exam_center_code === "" ? "Exam center must be selected" : null,
           name: values.name.length < 2 ? "Name must have at least 2 letters" : null,
           mobile_1: /^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/.test(values.mobile_1)
             ? null

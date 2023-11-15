@@ -1,10 +1,11 @@
-import { setGetData } from "@/helpers/getLocalStorage";
+import { setGetData, setGetDataSession } from "@/helpers/getLocalStorage";
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 let color = setGetData("colorScheme");
 let countryData = setGetData("selectedCountry", "", true) || {};
 let userData = setGetData("userData", "", true) || {};
+let selectedTabData = setGetDataSession("selectedTab");
 
 const initialState: any = {
   showHeader: true,
@@ -17,6 +18,7 @@ const initialState: any = {
   selectedCountry: countryData,
   colorScheme: color || "light",
   userData: userData,
+  selectedTab: selectedTabData || "",
 };
 
 export const counterSlice = createSlice({
@@ -39,6 +41,11 @@ export const counterSlice = createSlice({
       state.userData = action.payload;
     },
 
+    selectedTabUpdate: (state, action) => {
+      state.selectedTab = action.payload;
+      setGetDataSession("selectedTab", state.selectedTab);
+    },
+
     ControlApplicationShellComponents: (state, action) => {
       state.showAsideBar = action.payload.showAsideBar;
       state.showFooter = action.payload.showFooter;
@@ -59,6 +66,7 @@ export const {
   changeColorTheme,
   UpdateCountry,
   ControlApplicationShellComponents,
+  selectedTabUpdate,
 } = counterSlice.actions;
 
 export default counterSlice.reducer;
