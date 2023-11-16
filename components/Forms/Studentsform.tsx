@@ -155,7 +155,7 @@ function Studentsform({
 
   async function readClassesData(filterBy?: "name" | "status", filterQuery?: string | number) {
     let classes = await readClasses();
-    classes = filterData(classes, "label", "value", "code", true, "code");
+    classes = filterData(classes, "label", "value", "", true, "code");
     setClassesData(classes);
   }
 

@@ -166,7 +166,7 @@ function Page() {
 
   async function readClassesData(filterBy?: "name" | "status", filterQuery?: string | number) {
     let classes: any = await readClasses();
-    classes = filterData(classes, "label", "value", "", false);
+    classes = filterData(classes, "label", "value", "", true, "code");
     classes.unshift("all");
     setClassesData(classes);
   }

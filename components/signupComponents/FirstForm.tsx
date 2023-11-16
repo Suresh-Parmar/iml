@@ -33,7 +33,7 @@ export default function FirstForm({ form, onClickNext, setInvoiceBreakdown }: Fi
 
   async function readClassesData() {
     let classes: any = await readClassesLanding();
-    classes = filterData(classes, "label", "value", undefined, true, "code");
+    classes = filterData(classes, "label", "value", "", true, "code");
     setClassesData(classes);
   }
 

@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import { checkIsAllChecked, selectCheckBOxData } from "@/helpers/selectCheckBox";
 import { SingleStudent } from "@/components/admitCard";
 import Loader from "@/components/common/Loader";
+import { filterData as filterHelper } from "@/helpers/filterData";
 
 function Page() {
   const [allData, setAllData] = useState<any>({});
@@ -122,7 +123,7 @@ function Page() {
 
   async function readClassesData(filterBy?: "name" | "status", filterQuery?: string | number) {
     let classes = await readClasses();
-    classes = filterData(classes, "label", "value");
+    classes = filterHelper(classes, "label", "value", "", true, "code");
     setClassesData(classes);
   }
 
