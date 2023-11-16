@@ -297,11 +297,10 @@ function SchoolForm({
               label="Contact Number"
               placeholder="9876320145"
               {...form.getInputProps("contact_number")}
-              type={"number"}
               w={"100%"}
               mt={"md"}
               size="md"
-              icon={<div style={{ color: "black" }}>{getMobileCode()}</div>}
+              // icon={<div style={{ color: "black" }}>{getMobileCode()}</div>}
             />
             <Select
               disabled={readonly}
