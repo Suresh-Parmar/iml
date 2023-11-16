@@ -259,8 +259,8 @@ function Page() {
   }, [allData.state]);
 
   useEffect(() => {
-    allData.city && allData.competition && readSchoolsData();
-  }, [allData.city, allData.competition]);
+    allData.city && allData.competition && !isStudentFilters && readSchoolsData();
+  }, [allData.city, allData.competition, !!isStudentFilters]);
 
   let dataObj: any = {
     group: { data: groupsData, label: "Group", key: "select_group" },
