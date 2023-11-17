@@ -83,17 +83,6 @@ function Page() {
     return obj;
   };
 
-  let getStudentDetailsApi = () => {
-    let payload = genratePayloadStudentWise();
-    studentDetails(payload)
-      .then((res) => {
-        setStudentGridData(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
   async function readExamCentersData() {
     let payload: any = {
       collection_name: "exam_centers",
@@ -127,10 +116,6 @@ function Page() {
     setDataExamCenters(examCenters);
     setFilteredDataExamCenter(examCenters);
   }
-
-  useEffect(() => {
-    allData.city && allData.filterTypeStudent && allData.select_class && getStudentDetailsApi();
-  }, [allData]);
 
   // fetch data
 
@@ -224,7 +209,7 @@ function Page() {
       onChange: (e: any) => {
         handleDropDownChange(e, "state", "city");
       },
-      value: allData.state,
+      value: allData.state || null,
     },
     {
       label: "City",
@@ -235,7 +220,7 @@ function Page() {
       onChange: (e: any) => {
         handleDropDownChange(e, "city", "exam_center");
       },
-      value: allData.city,
+      value: allData.city || null,
     },
     {
       label: "Select Class",
@@ -245,7 +230,8 @@ function Page() {
       onChange: (e: any) => {
         handleDropDownChange(e, "select_class");
       },
-      value: allData.select_class,
+      placeholder: "Class",
+      value: allData.select_class || null,
     },
     {
       label: "Series",
@@ -258,7 +244,7 @@ function Page() {
         val = val.toUpperCase();
         handleDropDownChange(val, "series");
       },
-      value: allData.series,
+      value: allData.series || "",
     },
   ];
 
@@ -384,7 +370,7 @@ function Page() {
         </table>
       </div>
     );
-  }, [allData.studentsData, dataExamCenters, checkIsAllChecked(allData.exam_center, dataExamCenters), themeColor]);
+  }, [allData, dataExamCenters, checkIsAllChecked(allData.exam_center, dataExamCenters), themeColor]);
 
   let migrateData = (data: any[], data1: any[], by: string, mainKey: any = "") => {
     let newData: any[] = [];
