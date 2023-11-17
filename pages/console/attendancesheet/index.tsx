@@ -216,10 +216,11 @@ function Page() {
       key: "select_class",
       type: "select",
       data: classesData,
+      placeholder: "Class",
       onChange: (e: any) => {
         handleDropDownChange(e, "select_class");
       },
-      value: allData.select_class,
+      value: allData.select_class || "",
     },
 
     {
@@ -231,7 +232,7 @@ function Page() {
       onChange: (e: any) => {
         handleDropDownChange(e, "state", "city");
       },
-      value: allData.state,
+      value: allData.state || "",
     },
     {
       label: "City",
@@ -255,7 +256,7 @@ function Page() {
         val = val.toUpperCase();
         handleDropDownChange(val, "series");
       },
-      value: allData.series,
+      value: allData.series || "",
     },
   ];
 
@@ -389,7 +390,7 @@ function Page() {
         </table>
       </div>
     );
-  }, [allData.studentsData, dataExamCenters, checkIsAllChecked(allData.exam_center, dataExamCenters), themeColor]);
+  }, [allData, dataExamCenters, checkIsAllChecked(allData.exam_center, dataExamCenters), themeColor]);
 
   let migrateData = (data: any[], data1: any[], by: string, mainKey: any = "") => {
     let newData: any[] = [];
