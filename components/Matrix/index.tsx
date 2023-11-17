@@ -251,7 +251,7 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
 
   const [{ pageIndex, pageSize }, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 20,
+    pageSize: 25,
   });
 
   const pagination = React.useMemo(
