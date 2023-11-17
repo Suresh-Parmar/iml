@@ -291,6 +291,7 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
     onPaginationChange: setPagination,
     getPaginationRowModel: getPaginationRowModel(),
     columnResizeMode,
+    autoResetPageIndex: false,
     onExpandedChange: setExpanded,
     onColumnOrderChange: setColumnOrder,
     onColumnVisibilityChange: setColumnVisibility,
@@ -497,7 +498,7 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
               onChange={(e) => {
                 table.setPageSize(Number(e));
               }}
-              data={[10, 20, 30, 40, 50].map((pageSize) => `${pageSize}`)}
+              data={[10, 25, 50, 100, 250].map((pageSize) => `${pageSize}`)}
             />
 
             {/* Table No of Rows */}
