@@ -409,7 +409,6 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
     if (!confirm) {
       return;
     }
-    return;
 
     let collection_name = collectionNameGenrate(formType);
     let dataPayload = {
@@ -426,6 +425,7 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
         setCheckboxData([]);
       })
       .catch((err: any) => {
+        notifications.show({ title: "Failed To delete", message: "" });
         console.log(err);
       });
   };
