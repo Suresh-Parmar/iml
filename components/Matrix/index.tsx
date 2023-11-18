@@ -401,10 +401,15 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
   };
 
   const deleteData = async () => {
+    if (!permissionsData?.permissions?.remove && !defaultShow) {
+      return;
+    }
+
     let confirm = window.confirm("Are you sure you want to delete Selected " + formType);
     if (!confirm) {
       return;
     }
+    return;
 
     let collection_name = collectionNameGenrate(formType);
     let dataPayload = {
