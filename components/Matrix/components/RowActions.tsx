@@ -268,7 +268,7 @@ const RowActions = ({
           </ActionIcon>
         </Tooltip>
       )}
-      {showCreateForm && (
+      {(permissionsData?.permissions?.remove || defaultShow) && (
         <Tooltip label="Select">
           <input
             type="checkbox"
