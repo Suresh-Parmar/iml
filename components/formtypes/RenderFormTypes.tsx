@@ -4,10 +4,10 @@ import { IconTableOptions } from "@tabler/icons-react";
 import { RowActions } from "../Matrix/components/RowActions";
 import { allTypes } from "./renderTypesJson";
 import { useSelector } from "react-redux";
-import { updateDataRes } from "@/utilities/API";
+import { readApiData, updateDataRes } from "@/utilities/API";
 import { siteJson as siteJsonData } from "@/components/permissions";
 import { usePathname } from "next/navigation";
-import { findFromJson } from "@/helpers/filterFromJson";
+import { collectionNameGenrate, findFromJson } from "@/helpers/filterFromJson";
 import { formTypeToTableMapper } from "@/helpers/formTypeMapper";
 import { setGetData } from "@/helpers/getLocalStorage";
 
@@ -22,7 +22,8 @@ function RenderFormTypes(
   setRowData: any,
   setOLoader: any,
   extra?: any,
-  showCreateForm?: any
+  showCreateForm?: any,
+  checkboxData?: any
 ) {
   const [siteJson, setSiteJson] = useState<any>(siteJsonData);
   const [permissionsData, setPermissionsData] = useState<any>({});
@@ -81,7 +82,6 @@ function RenderFormTypes(
     if (allTypes[formType]) {
       data = allTypes[formType];
     }
-
     let allDataReturn: any[] = [];
 
     let actionsData = {
@@ -106,6 +106,7 @@ function RenderFormTypes(
           permissionsData={permissionsData}
           showResetPassword={showResetPassword}
           showCreateForm={showCreateForm}
+          checkboxData={checkboxData}
         />
       ),
       header: () => (

@@ -49,6 +49,7 @@ import {
   IconChevronsRight,
   IconColumns,
   IconSearch,
+  IconTrash,
 } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 
@@ -59,7 +60,7 @@ import ColumnHeader from "./components/ColumnHeader";
 import { UserForm } from "../Forms/UserForm";
 import { Studentsform } from "../Forms/Studentsform";
 import { SchoolForm } from "../Forms/SchoolForm";
-import { readExamCenters, updateDataRes } from "@/utilities/API";
+import { readApiData, readExamCenters, updateDataRes } from "@/utilities/API";
 import { CompetitionForm } from "../Forms/CompetitionForm";
 import { ClassForm } from "../Forms/ClassForm";
 import { BoardForm } from "../Forms/BoardForm";
@@ -82,13 +83,15 @@ import { AnnouncementsForm, CohortsForm, GroupsForm, TestimonialsForm, DispatchF
 import { RenderFormTypes } from "../formtypes";
 import { allTypes } from "../formtypes/renderTypesJson";
 import { usePathname } from "next/navigation";
-import { findFromJson } from "@/helpers/filterFromJson";
+import { collectionNameGenrate, findFromJson } from "@/helpers/filterFromJson";
 import { siteJson as allJsonData } from "../permissions";
 import { useSelector } from "react-redux";
 import { setGetData } from "@/helpers/getLocalStorage";
 import { useRoleCrudOpsgetQuery } from "@/redux/apiSlice";
 import { iterateData } from "@/helpers/getData";
 import { WarehouseForm } from "../Forms/WarehouseForm";
+import { formTypeToFetcherMapper } from "@/helpers/dataFetcher";
+import { notifications } from "@mantine/notifications";
 declare module "@tanstack/table-core" {
   interface FilterFns {
     fuzzy: FilterFn<unknown>;
@@ -232,6 +235,7 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
   const [opened, { open, close }] = useDisclosure(false);
   const [readOnly, setReadOnly] = useState<boolean>(false);
   const [isExtra, setIsExtra] = useState<any>(false);
+  const [checkboxData, setCheckboxData] = useState<any>([]);
 
   const columns = RenderFormTypes(
     formType,
@@ -244,14 +248,15 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
     setRowData,
     setOLoader,
     setIsExtra,
-    showCreateForm
+    showCreateForm,
+    { checked: checkboxData, setChecked: setCheckboxData }
   );
 
   const [columnOrder, setColumnOrder] = useState<ColumnOrderState>(columns.map((column) => column.id as string));
 
   const [{ pageIndex, pageSize }, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 20,
+    pageSize: 25,
   });
 
   const pagination = React.useMemo(
@@ -385,6 +390,45 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
   };
 
   const addForm = getAddFormType(formType);
+
+  const setCheckALLData = () => {
+    let ids: any = [];
+    data.map((item: any) => {
+      ids.push(item._id);
+    });
+
+    setCheckboxData(ids);
+  };
+
+  const deleteData = async () => {
+    if (!permissionsData?.permissions?.remove && !defaultShow) {
+      return;
+    }
+
+    let confirm = window.confirm("Are you sure you want to delete Selected " + formType);
+    if (!confirm) {
+      return;
+    }
+    return;
+
+    let collection_name = collectionNameGenrate(formType);
+    let dataPayload = {
+      collection_name: collection_name,
+      op_name: "delete",
+      delete_records: checkboxData,
+    };
+
+    readApiData("", dataPayload)
+      .then(async (res: any) => {
+        notifications.show({ title: "Records deleted successfully", message: "" });
+        const dataNew = await formTypeToFetcherMapper(formType)();
+        setData([...dataNew]);
+        setCheckboxData([]);
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
+  };
 
   return (
     <Container
@@ -613,7 +657,25 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
                         className="d-flex justify-content-center align-items-center bold h-100"
                         style={{ background: "white" }}
                       >
-                        Actions
+                        <span>Actions</span>
+                        {data.length && (permissionsData?.permissions?.remove || defaultShow) ? (
+                          <input
+                            className="mx-3"
+                            checked={checkboxData.length == data.length}
+                            onClick={() => {
+                              if (checkboxData.length > 0) {
+                                setCheckboxData([]);
+                              } else {
+                                setCheckALLData();
+                              }
+                            }}
+                            type="checkbox"
+                            style={{ minHeight: "40px", minWidth: "15px" }}
+                          />
+                        ) : (
+                          ""
+                        )}
+                        {checkboxData.length ? <IconTrash className="pointer" onClick={deleteData} /> : ""}
                       </div>
                     );
                   })}
