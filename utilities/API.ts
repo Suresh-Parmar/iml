@@ -155,6 +155,11 @@ export const readData = async (
   if (data) {
     requestBody = data;
   }
+
+  console.log(requestBody);
+
+  // return;
+
   try {
     const response = await axios.post(`${NEXT_API}`, requestBody, {
       headers: getAPIHeaders(),

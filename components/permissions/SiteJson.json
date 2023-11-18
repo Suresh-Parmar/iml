@@ -248,7 +248,8 @@
       "view": true,
       "uploadFile": true,
       "updateFile": true,
-      "export": true
+      "export": true,
+      "remove": true
     }
   },
   {
