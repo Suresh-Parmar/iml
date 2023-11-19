@@ -1,6 +1,7 @@
 import { handleDropDownChange } from "@/helpers/dateHelpers";
 import { filterData } from "@/helpers/filterData";
 import { iterateData } from "@/helpers/getData";
+import { checkIsAllChecked, selectCheckBOxData } from "@/helpers/selectCheckBox";
 import { useTableDataMatrixQuery } from "@/redux/apiSlice";
 import { Group, MultiSelect, Radio, Select } from "@mantine/core";
 import React, { useState } from "react";
@@ -10,6 +11,7 @@ function Assignadmitcard() {
   const [allData, setAllData] = useState<any>({});
   const state: any = useSelector((state: any) => state.data);
   const countryName = state?.selectedCountry?.label;
+  let themeColor = state?.colorScheme;
 
   const genratePayload = (collection: string, filter?: any, required?: string) => {
     if (required) {
@@ -65,6 +67,7 @@ function Assignadmitcard() {
   classApiData = iterateData(classApiData);
   classApiData = handleApiData(classApiData);
   classApiData = filterData(classApiData, "label", "value", undefined, true, "code");
+  classApiData = [{ value: undefined, label: "Select" }, ...classApiData];
 
   let schoolsData = useTableDataMatrixQuery(genratePayload("schools"));
   schoolsData = iterateData(schoolsData);
@@ -85,6 +88,20 @@ function Assignadmitcard() {
   boartTypeApiData = iterateData(boartTypeApiData);
   boartTypeApiData = handleApiData(boartTypeApiData);
   boartTypeApiData = filterData(boartTypeApiData, "label", "value", "board_type", true, "board_type", "board_type");
+
+  let getStudentsList = useTableDataMatrixQuery(
+    genratePayload("users", {
+      role: "student",
+      city: allData.city,
+      school_name: allData.select_school,
+      class_id: allData.class,
+      competition_code: allData.competition,
+      seat_number: null,
+    })
+  );
+  getStudentsList = iterateData(getStudentsList);
+  getStudentsList = handleApiData(getStudentsList);
+  getStudentsList = filterData(getStudentsList, "label", "value");
 
   let examCentersData = useTableDataMatrixQuery(
     genratePayload("exam_centers", { examdate: allData.exam_date }, "examdate")
@@ -256,9 +273,133 @@ function Assignadmitcard() {
     });
   };
 
+  const handleCHeckBOxesStudents = (
+    e: any,
+    item: any = "",
+    selectedData: any,
+    allDatatoFilter: any,
+    key: any,
+    setKey: any
+  ) => {
+    let checked: any = e.target.checked;
+    let data: any = [];
+    if (!!item) {
+      data = selectCheckBOxData(selectedData, checked, item[key], allDatatoFilter, key);
+    } else {
+      data = selectCheckBOxData(selectedData, checked, "", allDatatoFilter, key);
+    }
+
+    allData[setKey] = data;
+    setAllData({ ...allData });
+  };
+
+  const assignNewAdmitCard = () => {
+    let data: any = {
+      group: allData.select_group,
+      cohort: allData.select_cohort,
+      school: allData.select_school,
+    };
+
+    let payload: any = {
+      competition_code: allData.competition,
+      examcenter: allData.examcenter,
+      exam_date: allData.exam_date,
+      city: allData.city,
+      state: allData.state,
+      boardtype: allData.boardtype,
+      class: allData.class,
+      students: allData.studentsList,
+    };
+
+    if (data[allData?.filterTypeStudent]) {
+      payload[allData.filterTypeStudent] = data[allData.filterTypeStudent];
+    }
+
+    console.log(payload);
+  };
+
+  const renderUsersTable = () => {
+    if (!getStudentsList.length) {
+      return <></>;
+    }
+
+    const renderTableData = () => {
+      return getStudentsList.map((item: any, index: any) => {
+        return (
+          <tr className="capitalize" key={index}>
+            <td scope="row">
+              <input
+                type="checkbox"
+                checked={Array.isArray(allData.studentsList) && allData.studentsList.includes(item["_id"])}
+                onChange={(e: any) => {
+                  handleCHeckBOxesStudents(e, item, allData.studentsList, getStudentsList, "_id", "studentsList");
+                }}
+              />
+            </td>
+            <td>{item["name"]}</td>
+            <td>{item["_id"]}</td>
+            <td>{item["class_id"]}</td>
+            <td>{item["state"]}</td>
+            <td>{item["city"]}</td>
+          </tr>
+        );
+      });
+    };
+
+    return (
+      <div className="my-4 table-responsive" style={{ maxHeight: "350px", overflow: "auto" }}>
+        {/* <div className="d-flex justify-content-between px-4">
+          <span></span>
+          {zipUrl && (
+            <a href={zipUrl} target="_blank">
+              <span className="material-symbols-outlined text-success">folder_zip</span>
+            </a>
+          )}
+        </div> */}
+        <table className={`table table-striped table-${themeColor}`}>
+          <thead
+            style={{
+              position: "sticky",
+              top: 0,
+            }}
+          >
+            <tr>
+              <th scope="col">
+                <input
+                  type="checkbox"
+                  checked={checkIsAllChecked(allData.studentsList, getStudentsList)}
+                  onChange={(e: any) => {
+                    handleCHeckBOxesStudents(e, false, allData.studentsList, getStudentsList, "_id", "studentsList");
+                  }}
+                />
+              </th>
+              <th scope="col">Name</th>
+              <th scope="col">User Id</th>
+              <th scope="col">Class</th>
+              <th scope="col">State</th>
+              <th scope="col">City</th>
+              {/* <th scope="col" className="text-center">
+                download
+              </th> */}
+            </tr>
+          </thead>
+          <tbody>{renderTableData()}</tbody>
+        </table>
+      </div>
+    );
+  };
+
   return (
     <div className="m-4">
       <div className="d-flex flex-wrap gap-4">{renderData()}</div>
+      <div>{renderUsersTable()}</div>
+      {allData?.studentsList?.length ? (
+        <div className="btn btn-primary form-control" onClick={() => assignNewAdmitCard()}>
+          Assign Admit Card
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 }

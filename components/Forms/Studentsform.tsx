@@ -223,13 +223,13 @@ function Studentsform({
       // mobile_1: (value) => (/^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/.test(value) ? null : "Invalid mobile number"),
       // gender: (value) =>
       //   ["Female", "Male", "Other", "Prefer Not To Say"].includes(value) ? null : "Gender must be selected",
-      school_name: (value: any) => (value.length === 0 ? "School must be selected" : null),
+      school_name: (value: any) => (value?.length === 0 ? "School must be selected" : null),
       // section: (value:any) => (value.length === 0 ? "Section must be selected" : null),
       class_code: (value: any) => (!value ? "Class must be selected" : null),
       competition_code: (value: any) => (value?.length === 0 ? "Competition must be selected" : null),
-      state: (value: any) => (value.length === 0 ? "State must be selected" : null),
-      city: (value: any) => (value.length === 0 ? "City must be selected" : null),
-      exam_center_id: (value: any) => (value.length === 0 ? "Exam center must be selected" : null),
+      state: (value: any) => (value?.length === 0 ? "State must be selected" : null),
+      city: (value: any) => (value?.length === 0 ? "City must be selected" : null),
+      exam_center_id: (value: any) => (value?.length === 0 ? "Exam center must be selected" : null),
       consented: (value: any) => (value === true || value === false ? null : "Communication consent must be set"),
     },
   });
