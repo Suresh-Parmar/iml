@@ -62,9 +62,13 @@ function Page() {
       city: allData.city,
       role: "student",
       [allData.filterTypeStudent]: allData[newKey],
-      class: singleClassData.code || allData.select_class || "",
+
       // class_code: singleClassData.code || allData.select_class || "",
     };
+
+    if (singleClassData.code || (allData.select_class && allData.select_class != "all")) {
+      obj.class = singleClassData.code || allData.select_class || "";
+    }
 
     return obj;
   };
@@ -382,7 +386,7 @@ function Page() {
       onChange: (e: any) => {
         let data = dataObj[e];
         allData.childSchoolData = data;
-        handleDropDownChange(e, "filterTypeStudent");
+        handleDropDownChange(e, "filterTypeStudent", "studentsData");
       },
       value: allData.filterTypeStudent || "",
     },
@@ -506,8 +510,12 @@ function Page() {
 
   const renderSchoolsTable = useCallback(() => {
     // const renderSchoolsTable = () => {
-    if (!schoolsData.length || isStudentFilters) {
+    if (isStudentFilters) {
       return <></>;
+    }
+
+    if (!schoolsData.length) {
+      return <> No Record Found</>;
     }
 
     const renderTableData = () => {
@@ -583,8 +591,12 @@ function Page() {
 
   const renderUsersTable = useCallback(() => {
     // const renderSchoolsTable = () => {
-    if (!studentGridData.length || !isStudentFilters) {
+    if (!isStudentFilters) {
       return <></>;
+    }
+
+    if (!studentGridData.length) {
+      return <> No Record Found</>;
     }
 
     const renderTableData = () => {
