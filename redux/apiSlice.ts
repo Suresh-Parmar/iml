@@ -54,6 +54,7 @@ export const apiSlice: any = createApi({
 
     tableDataMatrix: builder.query({
       query: (data) => {
+        if (!data) return;
         return {
           url: NEXT_API,
           method: "POST",
