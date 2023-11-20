@@ -683,8 +683,23 @@ function Page() {
   // };
 
   const genrateStudentPdf = () => {
+    let data: any = {
+      school: allData.select_school,
+      group: allData.select_group,
+      cohort: allData.select_cohort,
+    };
+
+    let newPayload: any = {
+      country: countryName || "India",
+      competition_code: allData.competition || "",
+      state: allData.state,
+      city: allData.city,
+      username: allData.studentsData,
+      [allData.filterTypeStudent]: data[allData.filterTypeStudent],
+    };
+
     setLoader(true);
-    admitCardCountData({ username: allData.studentsData })
+    admitCardCountData(newPayload)
       .then((res) => {
         setLoader(false);
         // console.log(res.data);
