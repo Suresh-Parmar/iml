@@ -108,7 +108,8 @@ function Assignadmitcard() {
   );
   examCentersData = iterateData(examCentersData);
   examCentersData = handleApiData(examCentersData);
-  examCentersData = filterData(examCentersData, "label", "value");
+
+  examCentersData = filterData(examCentersData, "label", "value", "_id");
 
   let dataObj: any = {
     group: { data: groupsapiData, label: "Group", key: "select_group" },
