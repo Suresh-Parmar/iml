@@ -144,7 +144,7 @@ function CityForm({
         <LoadingOverlay visible={oLoader} overlayBlur={2} />
         <Flex direction={"column"} justify={"center"} align={"flex-start"} w={"100%"}>
           <TextInput
-            disabled={readonly || rowData != undefined}
+            disabled={readonly}
             withAsterisk
             label="Name"
             placeholder="John Doe"
