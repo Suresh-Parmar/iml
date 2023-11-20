@@ -30,13 +30,13 @@ function Page() {
   const [studentGridData, setStudentGridData] = useState<any>([]);
   const [zipUrl, setZipUrl] = useState<any>("");
 
-  useEffect(() => {
-    if (loader) {
-      setTimeout(() => {
-        setLoader(false);
-      }, 4000);
-    }
-  }, [loader]);
+  // useEffect(() => {
+  //   if (loader) {
+  //     setTimeout(() => {
+  //       setLoader(false);
+  //     }, 4000);
+  //   }
+  // }, [loader]);
 
   const state: any = useSelector((state: any) => state.data);
   const countryName = state?.selectedCountry?.label;
