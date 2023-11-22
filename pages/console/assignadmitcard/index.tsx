@@ -74,12 +74,14 @@ function Assignadmitcard() {
   schoolsData = handleApiData(schoolsData);
   schoolsData = filterData(schoolsData, "label", "value");
 
-  let groupsapiData = useTableDataMatrixQuery(genratePayload("groups", { city: allData.second_city }, "city"));
+  let groupsapiData = useTableDataMatrixQuery(genratePayload("groups"));
+  // let groupsapiData = useTableDataMatrixQuery(genratePayload("groups", { city: allData.second_city }, "city"));
   groupsapiData = iterateData(groupsapiData);
   groupsapiData = handleApiData(groupsapiData);
   groupsapiData = filterData(groupsapiData, "label", "value");
 
-  let cohortsapiData = useTableDataMatrixQuery(genratePayload("cohorts", { city: allData.second_city }, "city"));
+  let cohortsapiData = useTableDataMatrixQuery(genratePayload("cohorts"));
+  // let cohortsapiData = useTableDataMatrixQuery(genratePayload("cohorts", { city: allData.second_city }, "city"));
   cohortsapiData = iterateData(cohortsapiData);
   cohortsapiData = handleApiData(cohortsapiData);
   cohortsapiData = filterData(cohortsapiData, "label", "value");
@@ -210,7 +212,7 @@ function Assignadmitcard() {
       hideInput: !allData.filterTypeStudent,
       label: allData?.childSchoolData?.label || "Select School",
       style: { maxWidth: "35%", width: "25%" },
-      type: "select",
+      type: "multiselect",
       selectDataFrom: dataObj,
       data: allData?.childSchoolData?.data || ["schoolsDataDropDown"],
       onchange: (e: any) => {
