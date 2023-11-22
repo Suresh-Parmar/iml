@@ -69,17 +69,19 @@ function Assignadmitcard() {
   classApiData = filterData(classApiData, "label", "value", undefined, true, "code");
   classApiData = [{ value: undefined, label: "Select" }, ...classApiData];
 
-  let schoolsData = useTableDataMatrixQuery(genratePayload("schools"));
+  let schoolsData = useTableDataMatrixQuery(genratePayload("schools", { city: allData.second_city }, "city"));
   schoolsData = iterateData(schoolsData);
   schoolsData = handleApiData(schoolsData);
   schoolsData = filterData(schoolsData, "label", "value");
 
   let groupsapiData = useTableDataMatrixQuery(genratePayload("groups"));
+  // let groupsapiData = useTableDataMatrixQuery(genratePayload("groups", { city: allData.second_city }, "city"));
   groupsapiData = iterateData(groupsapiData);
   groupsapiData = handleApiData(groupsapiData);
   groupsapiData = filterData(groupsapiData, "label", "value");
 
   let cohortsapiData = useTableDataMatrixQuery(genratePayload("cohorts"));
+  // let cohortsapiData = useTableDataMatrixQuery(genratePayload("cohorts", { city: allData.second_city }, "city"));
   cohortsapiData = iterateData(cohortsapiData);
   cohortsapiData = handleApiData(cohortsapiData);
   cohortsapiData = filterData(cohortsapiData, "label", "value");
@@ -112,9 +114,9 @@ function Assignadmitcard() {
   examCentersData = filterData(examCentersData, "label", "value", "_id");
 
   let dataObj: any = {
-    group: { data: groupsapiData, label: "Group", key: "select_group" },
-    cohort: { data: cohortsapiData, label: "Cohort", key: "select_cohort" },
-    school: { data: schoolsData, label: "School", key: "select_school" },
+    group: { objKey: "group", data: groupsapiData, label: "Group", key: "select_group" },
+    cohort: { objKey: "cohort", data: cohortsapiData, label: "Cohort", key: "select_cohort" },
+    school: { objKey: "school", data: schoolsData, label: "School", key: "select_school" },
   };
 
   let filters = [
@@ -168,6 +170,7 @@ function Assignadmitcard() {
       },
       value: allData.examcenter || "",
     },
+    { type: "sec" },
     {
       label: "School / Group / Cohort",
       type: "radio",
@@ -179,20 +182,21 @@ function Assignadmitcard() {
       onChange: (e: any) => {
         let data = dataObj[e];
         allData.childSchoolData = data;
-        handleDropDownChange(e, "filterTypeStudent", allData, setAllData);
+        allData[data.key] = null;
+        handleDropDownChange(e, "filterTypeStudent", allData, setAllData, data.key, []);
       },
       value: allData.filterTypeStudent || "",
     },
     {
       hideInput: !allData.filterTypeStudent,
-      label: allData?.childSchoolData?.label || "Select School",
+      label: "City",
       style: { maxWidth: "35%", width: "25%" },
       type: "select",
-      data: allData?.childSchoolData?.data || ["schoolsDataDropDown"],
+      data: cityApiData,
       onchange: (e: any) => {
-        handleDropDownChange(e, allData?.childSchoolData?.key || "select_school", allData, setAllData);
+        handleDropDownChange(e, "second_city", allData, setAllData);
       },
-      value: allData[allData?.childSchoolData?.key || "select_school"],
+      value: allData.second_city || "",
     },
     {
       hideInput: allData?.childSchoolData?.key != "select_school",
@@ -206,6 +210,19 @@ function Assignadmitcard() {
       value: allData?.boardtype,
     },
     {
+      hideInput: !allData.filterTypeStudent,
+      label: allData?.childSchoolData?.label || "",
+      style: { maxWidth: "35%", width: "25%" },
+      type: "multiselect",
+      selectDataFrom: dataObj,
+      data: allData?.childSchoolData?.data || [],
+      onchange: (e: any) => {
+        handleDropDownChange(e, allData?.childSchoolData?.key, allData, setAllData);
+      },
+      value: allData[allData?.childSchoolData?.key] || null,
+    },
+    {
+      hideInput: !allData.filterTypeStudent,
       label: "Class",
       style: { maxWidth: "35%", width: "25%" },
       type: "select",
@@ -232,12 +249,21 @@ function Assignadmitcard() {
   };
 
   // const renderData = useCallback(() => {
+
+  // console.log(dataObj[allData?.childSchoolData?.objKey].data);
+
   const renderData = () => {
     return filters.map((item: any, index) => {
       if (item.hideInput) {
         return;
       }
-      let { type, data, label, placeholder, onchange, value, style } = item;
+      let { type, data, label, placeholder, onchange, value, style, selectDataFrom } = item;
+
+      if (selectDataFrom) {
+        let objKey = allData?.childSchoolData?.objKey;
+        data = selectDataFrom[objKey].data;
+      }
+
       if (type === "multiselect") {
         return (
           <div key={index} style={{ maxWidth: "15%", ...style }}>
@@ -253,6 +279,8 @@ function Assignadmitcard() {
             />
           </div>
         );
+      } else if (type == "sec") {
+        return <div key={index} style={{ width: "100%", background: "black", height: "2px" }} />;
       } else if (type == "radio") {
         return <div key={index}>{renderRadio(item)}</div>;
       } else {
@@ -337,9 +365,10 @@ function Assignadmitcard() {
                 }}
               />
             </td>
-            <td>{item["name"]}</td>
             <td>{item["_id"]}</td>
-            <td>{item["class_id"]}</td>
+            <td>{item["name"]}</td>
+            <td>{item["school_name"]}</td>
+            <td className="text-center">{item["class_code"]}</td>
             <td>{item["state"]}</td>
             <td>{item["city"]}</td>
           </tr>
@@ -349,14 +378,6 @@ function Assignadmitcard() {
 
     return (
       <div className="my-4 table-responsive" style={{ maxHeight: "350px", overflow: "auto" }}>
-        {/* <div className="d-flex justify-content-between px-4">
-          <span></span>
-          {zipUrl && (
-            <a href={zipUrl} target="_blank">
-              <span className="material-symbols-outlined text-success">folder_zip</span>
-            </a>
-          )}
-        </div> */}
         <table className={`table table-striped table-${themeColor}`}>
           <thead
             style={{
@@ -374,9 +395,12 @@ function Assignadmitcard() {
                   }}
                 />
               </th>
+              <th scope="col">Reg No.</th>
               <th scope="col">Name</th>
-              <th scope="col">User Id</th>
-              <th scope="col">Class</th>
+              <th scope="col">School</th>
+              <th scope="col" className="text-center">
+                Class
+              </th>
               <th scope="col">State</th>
               <th scope="col">City</th>
               {/* <th scope="col" className="text-center">
