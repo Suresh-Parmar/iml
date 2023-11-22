@@ -182,7 +182,8 @@ function Assignadmitcard() {
       onChange: (e: any) => {
         let data = dataObj[e];
         allData.childSchoolData = data;
-        handleDropDownChange(e, "filterTypeStudent", allData, setAllData);
+        allData[data.key] = null;
+        handleDropDownChange(e, "filterTypeStudent", allData, setAllData, data.key, []);
       },
       value: allData.filterTypeStudent || "",
     },
@@ -210,15 +211,15 @@ function Assignadmitcard() {
     },
     {
       hideInput: !allData.filterTypeStudent,
-      label: allData?.childSchoolData?.label || "Select School",
+      label: allData?.childSchoolData?.label || "",
       style: { maxWidth: "35%", width: "25%" },
       type: "multiselect",
       selectDataFrom: dataObj,
-      data: allData?.childSchoolData?.data || ["schoolsDataDropDown"],
+      data: allData?.childSchoolData?.data || [],
       onchange: (e: any) => {
-        handleDropDownChange(e, allData?.childSchoolData?.key || "select_school", allData, setAllData);
+        handleDropDownChange(e, allData?.childSchoolData?.key, allData, setAllData);
       },
-      value: allData[allData?.childSchoolData?.key || "select_school"],
+      value: allData[allData?.childSchoolData?.key] || null,
     },
     {
       hideInput: !allData.filterTypeStudent,

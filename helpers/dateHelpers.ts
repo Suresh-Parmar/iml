@@ -23,12 +23,12 @@ export const dateInputHandler = (value: any) => {
   return valueSet;
 };
 
-export const handleDropDownChange = (e: any, key: any, allData: any, setAllData: any, clear?: any) => {
+export const handleDropDownChange = (e: any, key: any, allData: any, setAllData: any, clear?: any, val: any = "") => {
   if (clear) {
     if (clear == "all") {
       setAllData({ [key]: e });
     } else {
-      setAllData({ ...allData, [clear]: "", [key]: e });
+      setAllData({ ...allData, [clear]: val, [key]: e });
     }
   } else {
     setAllData({ ...allData, [key]: e });
