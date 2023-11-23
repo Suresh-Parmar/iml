@@ -9,14 +9,27 @@ import { useSelector } from "react-redux";
 
 function Assignadmitcard() {
   const [allData, setAllData] = useState<any>({});
+  const [userPayload, setUserPayload] = useState<any>({
+    role: "student",
+    seat_number: null,
+  });
   const state: any = useSelector((state: any) => state.data);
   const countryName = state?.selectedCountry?.label;
   let themeColor = state?.colorScheme;
 
-  const genratePayload = (collection: string, filter?: any, required?: string) => {
+  const genratePayload = (collection: string, filter?: any, required?: any) => {
     if (required) {
-      if (!filter[required]) {
-        return "";
+      if (Array.isArray(required)) {
+        for (let index = 0; index < required.length; index++) {
+          const element = required[index];
+          if (!filter[element]) {
+            return "";
+          }
+        }
+      } else {
+        if (!filter[required]) {
+          return "";
+        }
       }
     }
 
@@ -69,7 +82,7 @@ function Assignadmitcard() {
   classApiData = filterData(classApiData, "label", "value", undefined, true, "code");
   classApiData = [{ value: undefined, label: "Select" }, ...classApiData];
 
-  let schoolsData = useTableDataMatrixQuery(genratePayload("schools", { city: allData.second_city }, "city"));
+  let schoolsData = useTableDataMatrixQuery(genratePayload("schools", { city: allData.second_city }));
   schoolsData = iterateData(schoolsData);
   schoolsData = handleApiData(schoolsData);
   schoolsData = filterData(schoolsData, "label", "value");
@@ -91,22 +104,15 @@ function Assignadmitcard() {
   boartTypeApiData = handleApiData(boartTypeApiData);
   boartTypeApiData = filterData(boartTypeApiData, "label", "value", "board_type", true, "board_type", "board_type");
 
-  let getStudentsList = useTableDataMatrixQuery(
-    genratePayload("users", {
-      role: "student",
-      city: allData.city,
-      school_name: allData.select_school,
-      class_id: allData.class,
-      competition_code: allData.competition,
-      seat_number: null,
-    })
-  );
+  console.log(userPayload);
+
+  let getStudentsList = useTableDataMatrixQuery(genratePayload("users", userPayload));
   getStudentsList = iterateData(getStudentsList);
   getStudentsList = handleApiData(getStudentsList);
   getStudentsList = filterData(getStudentsList, "label", "value");
 
   let examCentersData = useTableDataMatrixQuery(
-    genratePayload("exam_centers", { examdate: allData.exam_date }, "examdate")
+    genratePayload("exam_centers", { examdate: allData.exam_date, city: allData.city })
   );
   examCentersData = iterateData(examCentersData);
   examCentersData = handleApiData(examCentersData);
@@ -117,6 +123,18 @@ function Assignadmitcard() {
     group: { objKey: "group", data: groupsapiData, label: "Group", key: "select_group" },
     cohort: { objKey: "cohort", data: cohortsapiData, label: "Cohort", key: "select_cohort" },
     school: { objKey: "school", data: schoolsData, label: "School", key: "select_school" },
+  };
+
+  const fetchUsers = () => {
+    let obj = {
+      role: "student",
+      seat_number: null,
+      city: allData.second_city,
+      school_name: allData.select_school,
+      class_id: allData.class,
+      competition_code: allData.competition,
+    };
+    setUserPayload({ ...obj });
   };
 
   let filters = [
@@ -232,6 +250,7 @@ function Assignadmitcard() {
       },
       value: allData.class || "",
     },
+    { type: "sec" },
   ];
 
   const renderRadio = (item: any) => {
@@ -417,6 +436,9 @@ function Assignadmitcard() {
   return (
     <div className="m-4">
       <div className="d-flex flex-wrap gap-4">{renderData()}</div>
+      <div className="my-3 btn btn-outline-primary" onClick={fetchUsers}>
+        fetch Students
+      </div>
       <div>{renderUsersTable()}</div>
       {allData?.studentsList?.length ? (
         <div className="btn btn-primary form-control" onClick={() => assignNewAdmitCard()}>
