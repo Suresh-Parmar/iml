@@ -1,9 +1,12 @@
+import Loader from "@/components/common/Loader";
 import { handleDropDownChange } from "@/helpers/dateHelpers";
 import { filterData } from "@/helpers/filterData";
 import { iterateData } from "@/helpers/getData";
 import { checkIsAllChecked, selectCheckBOxData } from "@/helpers/selectCheckBox";
 import { useTableDataMatrixQuery } from "@/redux/apiSlice";
+import { admitCardCountData, genrateSeatNumber } from "@/utilities/API";
 import { Group, MultiSelect, Radio, Select } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
@@ -13,6 +16,7 @@ function Assignadmitcard() {
     role: "student",
     seat_number: null,
   });
+  const [loader, setLoader] = useState<any>(false);
   const state: any = useSelector((state: any) => state.data);
   const countryName = state?.selectedCountry?.label;
   let themeColor = state?.colorScheme;
@@ -104,10 +108,8 @@ function Assignadmitcard() {
   boartTypeApiData = handleApiData(boartTypeApiData);
   boartTypeApiData = filterData(boartTypeApiData, "label", "value", "board_type", true, "board_type", "board_type");
 
-  console.log(userPayload);
-
-  let getStudentsList = useTableDataMatrixQuery(genratePayload("users", userPayload));
-  getStudentsList = iterateData(getStudentsList);
+  let getStudentsListApiData = useTableDataMatrixQuery(genratePayload("users", userPayload));
+  let getStudentsList = iterateData(getStudentsListApiData);
   getStudentsList = handleApiData(getStudentsList);
   getStudentsList = filterData(getStudentsList, "label", "value");
 
@@ -126,6 +128,11 @@ function Assignadmitcard() {
   };
 
   const fetchUsers = () => {
+    setLoader(true);
+    setTimeout(() => {
+      setLoader(false);
+    }, 2500);
+
     let obj = {
       role: "student",
       seat_number: null,
@@ -341,6 +348,43 @@ function Assignadmitcard() {
     setAllData({ ...allData });
   };
 
+  const genrateStudentAdmitCardPdf = () => {
+    let data: any = {
+      school: allData.select_school,
+      group: allData.select_group,
+      cohort: allData.select_cohort,
+    };
+
+    let newPayload: any = {
+      country: countryName || "India",
+      competition_code: allData.competition || "",
+      state: allData.state,
+      city: allData.city,
+      username: allData.studentsList,
+      [allData.filterTypeStudent]: data[allData.filterTypeStudent],
+    };
+
+    setLoader(true);
+    admitCardCountData(newPayload)
+      .then((res) => {
+        setAllData({ ...allData, studentsList: [] });
+        setLoader(false);
+        // console.log(res.data);
+        if (res.data.admit_card_url) {
+          var link = document.createElement("a");
+          link.href = res.data.admit_card_url;
+          link.setAttribute("target", "_blank");
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+      })
+      .catch((errors) => {
+        setAllData({ ...allData, studentsList: [] });
+        setLoader(false);
+      });
+  };
+
   const assignNewAdmitCard = () => {
     let data: any = {
       group: allData.select_group,
@@ -349,26 +393,41 @@ function Assignadmitcard() {
     };
 
     let payload: any = {
+      registration_number: allData.studentsList,
+      country: countryName,
+      exam_center_id: allData.examcenter,
+
       competition_code: allData.competition,
-      examcenter: allData.examcenter,
       exam_date: allData.exam_date,
       city: allData.city,
       state: allData.state,
       boardtype: allData.boardtype,
       class: allData.class,
-      students: allData.studentsList,
     };
 
     if (data[allData?.filterTypeStudent]) {
       payload[allData.filterTypeStudent] = data[allData.filterTypeStudent];
     }
 
-    console.log(payload);
+    genrateSeatNumber(payload)
+      .then((res) => {
+        notifications.show({
+          title: "Seat Number Generated Successfully",
+          message: "",
+          variant: "success",
+          autoClose: 10000,
+        });
+        getStudentsListApiData.refetch();
+        genrateStudentAdmitCardPdf();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const renderUsersTable = () => {
     if (!getStudentsList.length) {
-      return <></>;
+      return <div>No records found</div>;
     }
 
     const renderTableData = () => {
@@ -447,6 +506,7 @@ function Assignadmitcard() {
       ) : (
         ""
       )}
+      <Loader show={loader} />
     </div>
   );
 }

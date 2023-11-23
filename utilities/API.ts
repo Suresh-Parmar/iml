@@ -34,6 +34,7 @@ export const STUDENTAVAILABLEPRODUCTS = `${BASE_URL}/student_available_products`
 export const OMRSTUDENT = `${BASE_URL}/OMRStudents`;
 export const BULD_USER_CREATION = `${BASE_URL}/bulkcreation_other_user`;
 export const ATTENDENCESHEET = `${BASE_URL}/attendence_sheets`;
+export const GENRATESEAT = `${BASE_URL}/generate_seat`;
 
 let userData: any = setGetData("userData", false, true);
 
@@ -324,6 +325,10 @@ const omrSheetDownload = async (data: any) => {
 
 const attendenceSheetDownload = async (data: any) => {
   return await axios.post(ATTENDENCESHEET, data, { headers: getAPIHeaders() });
+};
+
+const genrateSeatNumber = async (data: any) => {
+  return await axios.post(GENRATESEAT, data, { headers: getAPIHeaders() });
 };
 
 const omrSheetDownloadStudent = async (data: any) => {
@@ -1164,4 +1169,5 @@ export {
   trackShipment,
   readApiData,
   updateDataRes,
+  genrateSeatNumber,
 };
