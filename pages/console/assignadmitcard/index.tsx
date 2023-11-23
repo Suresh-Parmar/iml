@@ -1,22 +1,39 @@
+import Loader from "@/components/common/Loader";
 import { handleDropDownChange } from "@/helpers/dateHelpers";
 import { filterData } from "@/helpers/filterData";
 import { iterateData } from "@/helpers/getData";
 import { checkIsAllChecked, selectCheckBOxData } from "@/helpers/selectCheckBox";
 import { useTableDataMatrixQuery } from "@/redux/apiSlice";
+import { admitCardCountData, genrateSeatNumber } from "@/utilities/API";
 import { Group, MultiSelect, Radio, Select } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
 function Assignadmitcard() {
   const [allData, setAllData] = useState<any>({});
+  const [userPayload, setUserPayload] = useState<any>({
+    role: "student",
+    seat_number: null,
+  });
+  const [loader, setLoader] = useState<any>(false);
   const state: any = useSelector((state: any) => state.data);
   const countryName = state?.selectedCountry?.label;
   let themeColor = state?.colorScheme;
 
-  const genratePayload = (collection: string, filter?: any, required?: string) => {
+  const genratePayload = (collection: string, filter?: any, required?: any) => {
     if (required) {
-      if (!filter[required]) {
-        return "";
+      if (Array.isArray(required)) {
+        for (let index = 0; index < required.length; index++) {
+          const element = required[index];
+          if (!filter[element]) {
+            return "";
+          }
+        }
+      } else {
+        if (!filter[required]) {
+          return "";
+        }
       }
     }
 
@@ -69,7 +86,7 @@ function Assignadmitcard() {
   classApiData = filterData(classApiData, "label", "value", undefined, true, "code");
   classApiData = [{ value: undefined, label: "Select" }, ...classApiData];
 
-  let schoolsData = useTableDataMatrixQuery(genratePayload("schools", { city: allData.second_city }, "city"));
+  let schoolsData = useTableDataMatrixQuery(genratePayload("schools", { city: allData.second_city }));
   schoolsData = iterateData(schoolsData);
   schoolsData = handleApiData(schoolsData);
   schoolsData = filterData(schoolsData, "label", "value");
@@ -91,22 +108,13 @@ function Assignadmitcard() {
   boartTypeApiData = handleApiData(boartTypeApiData);
   boartTypeApiData = filterData(boartTypeApiData, "label", "value", "board_type", true, "board_type", "board_type");
 
-  let getStudentsList = useTableDataMatrixQuery(
-    genratePayload("users", {
-      role: "student",
-      city: allData.city,
-      school_name: allData.select_school,
-      class_id: allData.class,
-      competition_code: allData.competition,
-      seat_number: null,
-    })
-  );
-  getStudentsList = iterateData(getStudentsList);
+  let getStudentsListApiData = useTableDataMatrixQuery(genratePayload("users", userPayload));
+  let getStudentsList = iterateData(getStudentsListApiData);
   getStudentsList = handleApiData(getStudentsList);
   getStudentsList = filterData(getStudentsList, "label", "value");
 
   let examCentersData = useTableDataMatrixQuery(
-    genratePayload("exam_centers", { examdate: allData.exam_date }, "examdate")
+    genratePayload("exam_centers", { examdate: allData.exam_date, city: allData.city })
   );
   examCentersData = iterateData(examCentersData);
   examCentersData = handleApiData(examCentersData);
@@ -117,6 +125,23 @@ function Assignadmitcard() {
     group: { objKey: "group", data: groupsapiData, label: "Group", key: "select_group" },
     cohort: { objKey: "cohort", data: cohortsapiData, label: "Cohort", key: "select_cohort" },
     school: { objKey: "school", data: schoolsData, label: "School", key: "select_school" },
+  };
+
+  const fetchUsers = () => {
+    setLoader(true);
+    setTimeout(() => {
+      setLoader(false);
+    }, 2500);
+
+    let obj = {
+      role: "student",
+      seat_number: null,
+      city: allData.second_city,
+      school_name: allData.select_school,
+      class_id: allData.class,
+      competition_code: allData.competition,
+    };
+    setUserPayload({ ...obj });
   };
 
   let filters = [
@@ -232,6 +257,7 @@ function Assignadmitcard() {
       },
       value: allData.class || "",
     },
+    { type: "sec" },
   ];
 
   const renderRadio = (item: any) => {
@@ -322,6 +348,43 @@ function Assignadmitcard() {
     setAllData({ ...allData });
   };
 
+  const genrateStudentAdmitCardPdf = () => {
+    let data: any = {
+      school: allData.select_school,
+      group: allData.select_group,
+      cohort: allData.select_cohort,
+    };
+
+    let newPayload: any = {
+      country: countryName || "India",
+      competition_code: allData.competition || "",
+      state: allData.state,
+      city: allData.city,
+      username: allData.studentsList,
+      [allData.filterTypeStudent]: data[allData.filterTypeStudent],
+    };
+
+    setLoader(true);
+    admitCardCountData(newPayload)
+      .then((res) => {
+        setAllData({ ...allData, studentsList: [] });
+        setLoader(false);
+        // console.log(res.data);
+        if (res.data.admit_card_url) {
+          var link = document.createElement("a");
+          link.href = res.data.admit_card_url;
+          link.setAttribute("target", "_blank");
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+      })
+      .catch((errors) => {
+        setAllData({ ...allData, studentsList: [] });
+        setLoader(false);
+      });
+  };
+
   const assignNewAdmitCard = () => {
     let data: any = {
       group: allData.select_group,
@@ -330,26 +393,41 @@ function Assignadmitcard() {
     };
 
     let payload: any = {
+      registration_number: allData.studentsList,
+      country: countryName,
+      exam_center_id: allData.examcenter,
+
       competition_code: allData.competition,
-      examcenter: allData.examcenter,
       exam_date: allData.exam_date,
       city: allData.city,
       state: allData.state,
       boardtype: allData.boardtype,
       class: allData.class,
-      students: allData.studentsList,
     };
 
     if (data[allData?.filterTypeStudent]) {
       payload[allData.filterTypeStudent] = data[allData.filterTypeStudent];
     }
 
-    console.log(payload);
+    genrateSeatNumber(payload)
+      .then((res) => {
+        notifications.show({
+          title: "Seat Number Generated Successfully",
+          message: "",
+          variant: "success",
+          autoClose: 10000,
+        });
+        getStudentsListApiData.refetch();
+        genrateStudentAdmitCardPdf();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const renderUsersTable = () => {
     if (!getStudentsList.length) {
-      return <></>;
+      return <div>No records found</div>;
     }
 
     const renderTableData = () => {
@@ -417,6 +495,9 @@ function Assignadmitcard() {
   return (
     <div className="m-4">
       <div className="d-flex flex-wrap gap-4">{renderData()}</div>
+      <div className="my-3 btn btn-outline-primary" onClick={fetchUsers}>
+        fetch Students
+      </div>
       <div>{renderUsersTable()}</div>
       {allData?.studentsList?.length ? (
         <div className="btn btn-primary form-control" onClick={() => assignNewAdmitCard()}>
@@ -425,6 +506,7 @@ function Assignadmitcard() {
       ) : (
         ""
       )}
+      <Loader show={loader} />
     </div>
   );
 }
