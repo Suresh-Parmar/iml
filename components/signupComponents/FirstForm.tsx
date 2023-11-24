@@ -54,6 +54,8 @@ export default function FirstForm({ form, onClickNext, setInvoiceBreakdown }: Fi
     const iComp: any = products.find((i) => i.name === comp);
     form.setFieldValue("competition", iComp.competition || "");
     form.setFieldValue("myproducts", [iComp.name]);
+    form.setFieldValue("product_name", iComp.name);
+
     // form.setFieldValue("competition_code", iComp?.code ?? "");
     onClickNext();
   };
