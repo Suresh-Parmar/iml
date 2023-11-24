@@ -155,7 +155,7 @@ function ExamCenterMappingForm({
       };
     });
     // const classesNames = classes.map((c) => c.name);
-    const classesNames = filterData(classes, "label", "value", "", true, "code");
+    const classesNames = filterData(classes, "label", "value", "", true, "order_code", undefined, true);
     setClassesData(classesNames);
     // setSelectedCountry(countriesWithFlags.at(0) || "🇮🇳 India");
   }

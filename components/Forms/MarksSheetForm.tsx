@@ -57,7 +57,7 @@ function MarksSheetForm({
 
   async function readClassesData(filterBy?: "name" | "status", filterQuery?: string | number) {
     let classes: any = await readClasses();
-    classes = filterData(classes, "label", "value", "code", true, "code");
+    classes = filterData(classes, "label", "value", "code", true, "order_code", undefined, true);
     setClassesData(classes);
   }
 

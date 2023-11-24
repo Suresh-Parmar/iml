@@ -5,7 +5,8 @@ export const filterData = (
   findkey: any = "",
   sort: any = true,
   sortKey: any = "",
-  setLabelKey: any = "name"
+  setLabelKey: any = "name",
+  isSortByNumeric?: any
 ) => {
   let newData: any[] = [];
   if (Array.isArray(data)) {
@@ -34,6 +35,11 @@ export const filterData = (
       if (sortKey) {
         fa = a[sortKey].toLowerCase();
         fb = b[sortKey].toLowerCase();
+      }
+
+      if (isSortByNumeric) {
+        fa = +fa;
+        fb = +fb;
       }
 
       if (fa < fb) {

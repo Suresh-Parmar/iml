@@ -83,7 +83,7 @@ function Assignadmitcard() {
   let classApiData = useTableDataMatrixQuery(genratePayload("classes"));
   classApiData = iterateData(classApiData);
   classApiData = handleApiData(classApiData);
-  classApiData = filterData(classApiData, "label", "value", undefined, true, "code");
+  classApiData = filterData(classApiData, "label", "value", undefined, true, "order_code", undefined, true);
   classApiData = [{ value: undefined, label: "Select" }, ...classApiData];
 
   let schoolsData = useTableDataMatrixQuery(genratePayload("schools", { city: allData.second_city }));
@@ -496,7 +496,7 @@ function Assignadmitcard() {
     <div className="m-4">
       <div className="d-flex flex-wrap gap-4">{renderData()}</div>
       <div className="my-3 btn btn-outline-primary" onClick={fetchUsers}>
-        fetch Students
+        Fetch Students
       </div>
       <div>{renderUsersTable()}</div>
       {allData?.studentsList?.length ? (
