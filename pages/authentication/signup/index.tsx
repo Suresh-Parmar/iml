@@ -127,6 +127,7 @@ export default function SignUp() {
       country_code: getSelectedCountry(),
       password: "",
     },
+
     validate: (values) => {
       if (active === 0) {
         return {
@@ -162,13 +163,16 @@ export default function SignUp() {
       return {};
     },
   });
+
   const [oLoader, setOLoader] = useState<boolean>(false);
   const [status, setStatus] = useState<boolean>(false);
   const [userName, setUserName] = useState("");
   const [active, setActive] = useState(0);
   const [recaptcha, setRecaptcha] = useState<string>("");
 
-  console.log(form.values, "form.values");
+  let formValues: any = form.values;
+
+  console.log(formValues, "form.values");
 
   const nextStep = (isSkipValidate = false) => {
     if (active == 2 && !recaptcha) {
@@ -241,6 +245,7 @@ export default function SignUp() {
           title: res?.message || `Payment Paid Succesfully`,
           message: `Redirecting ...`,
           color: "green",
+          autoClose: 10000,
         });
         router.replace("/authentication/signin");
       })
@@ -258,7 +263,7 @@ export default function SignUp() {
       return;
     }
 
-    const paymentData = await createOrder(form.values.competition, userName);
+    const paymentData = await createOrder(formValues.product_name, userName);
 
     const { id, amount, currency, receipt, notes } = paymentData;
 
