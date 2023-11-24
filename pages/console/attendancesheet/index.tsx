@@ -155,7 +155,7 @@ function Page() {
     setLoader(true);
     let classes: any = await readClasses();
     setLoader(false);
-    classes = filterData(classes, "label", "value", "", true, "code");
+    classes = filterData(classes, "label", "value", "", true, "order_code", undefined, true);
     classes.unshift("all");
     setClassesData(classes);
   }
