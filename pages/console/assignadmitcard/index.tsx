@@ -418,7 +418,7 @@ function Assignadmitcard() {
           autoClose: 10000,
         });
         getStudentsListApiData.refetch();
-        genrateStudentAdmitCardPdf();
+        // genrateStudentAdmitCardPdf();
       })
       .catch((err) => {
         console.log(err);
