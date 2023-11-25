@@ -157,6 +157,7 @@ export default function SignIn() {
         setError("Invalid email id or registration number");
         return;
       }
+
       toggleOverlay();
       let data = { registration_details: registrationNo };
       forgotCreds(data)
@@ -180,6 +181,11 @@ export default function SignIn() {
           console.log(err);
         });
     } else {
+      if (emailInput.trim().length < 3 || passwordInput.trim().length < 3) {
+        setError("Invalid credentials");
+        return;
+      }
+
       toggleOverlay();
       try {
         const response = await signInWithEMail(value, emailInput, passwordInput, gioLocationData);
