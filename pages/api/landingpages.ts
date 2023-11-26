@@ -27,9 +27,8 @@ export default async function handler(req: any, res: NextApiResponse) {
   }
 
   if (req.method.toLowerCase() === "post") {
+    const cachedData = await db.get("SELECT * FROM cached_data WHERE collection_name = ?", datareq.collection_name);
     try {
-      const cachedData = await db.get("SELECT * FROM cached_data WHERE collection_name = ?", datareq.collection_name);
-
       const currentTime: any = new Date();
       const savedTime: any = cachedData ? new Date(cachedData.last_modified) : null;
 
@@ -38,8 +37,6 @@ export default async function handler(req: any, res: NextApiResponse) {
         : Number.MAX_SAFE_INTEGER;
 
       timeDifference = Math.floor(timeDifference / 1000 / 60);
-
-      console.log(timeDifference, "timeDifference");
 
       if (!cachedData || timeDifference > time) {
         const data = await fetchData(datareq);
@@ -71,7 +68,7 @@ export default async function handler(req: any, res: NextApiResponse) {
       }
     } catch (err) {
       console.error("Error querying or updating cache:", err);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(200).json(JSON.parse(cachedData?.data));
     }
   }
 }
