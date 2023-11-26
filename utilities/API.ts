@@ -35,6 +35,7 @@ export const OMRSTUDENT = `${BASE_URL}/OMRStudents`;
 export const BULD_USER_CREATION = `${BASE_URL}/bulkcreation_other_user`;
 export const ATTENDENCESHEET = `${BASE_URL}/attendence_sheets`;
 export const GENRATESEAT = `${BASE_URL}/generate_seat`;
+export const SELFGETAPI = "/api/landingpages";
 
 let userData: any = setGetData("userData", false, true);
 
@@ -317,6 +318,10 @@ const forgotCreds = async (data: any, useToken: any = false) => {
 
 const admitCardCountData = async (data: any) => {
   return await axios.post(ADMITCARDCOUNT, data, { headers: getAPIHeaders() });
+};
+
+const readDataFromNEXT = async (data: any) => {
+  return await axios.post(SELFGETAPI, data, { headers: getAPIHeaders() });
 };
 
 const omrSheetDownload = async (data: any) => {
@@ -1170,4 +1175,5 @@ export {
   readApiData,
   updateDataRes,
   genrateSeatNumber,
+  readDataFromNEXT,
 };

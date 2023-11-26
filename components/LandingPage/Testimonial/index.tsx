@@ -5,7 +5,7 @@ import { Carousel } from "@mantine/carousel";
 import { useStyles } from "./style";
 import Autoplay from "embla-carousel-autoplay";
 import { TeacherCard } from "./TeacherCard";
-import { readTestimonial } from "@/utilities/API";
+import { readDataFromNEXT } from "@/utilities/API";
 import { setGetData } from "@/helpers/getLocalStorage";
 // import Matrix, { MatrixDataType } from '@/components/Matrix';
 const data = [
@@ -126,7 +126,10 @@ function StudentTestimonial() {
   ));
 
   const getData = async () => {
-    const testimonial: any = await readTestimonial();
+    let data = { collection_name: `testimonials`, op_name: `find_many` };
+    let testimonial: any = await readDataFromNEXT(data);
+    testimonial = testimonial?.data;
+
     let teacherArr = testimonial?.filter((item: any) => {
       return item?.role === "teacher" && item;
     });
