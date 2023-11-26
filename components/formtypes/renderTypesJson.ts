@@ -84,7 +84,7 @@ export const allTypes: any = {
       defaultShow: true,
       filterFn: "equals",
       sortingFn: fuzzySort,
-    },    
+    },
     {
       id: "What's New",
       key: "whatsnew",
@@ -1255,7 +1255,7 @@ export const allTypes: any = {
       id: "Code",
       key: "code",
       defaultShow: true,
-    },    
+    },
     {
       id: "status",
       key: "status",
@@ -1339,7 +1339,7 @@ export const allTypes: any = {
     },
     {
       id: "Class",
-      key: "class_id",
+      key: "class_code",
       defaultShow: true,
     },
     {
