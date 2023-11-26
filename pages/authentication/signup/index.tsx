@@ -167,11 +167,14 @@ export default function SignUp() {
   const [oLoader, setOLoader] = useState<boolean>(false);
   const [status, setStatus] = useState<boolean>(false);
   const [userName, setUserName] = useState("");
+  const [userData, setUserData] = useState<any>({});
+  const [isPaid, setisPaid] = useState<any>(false);
   const [active, setActive] = useState(0);
   const [recaptcha, setRecaptcha] = useState<string>("");
 
   let formValues: any = form.values;
 
+  console.log(userData, "form.values");
   console.log(formValues, "form.values");
 
   const nextStep = (isSkipValidate = false) => {
@@ -221,6 +224,7 @@ export default function SignUp() {
         setOLoader(false);
         close();
         setUserName(res?.data?.username || "");
+        setUserData(res?.data);
       })
       .catch((error) => {
         setStatus(false);
@@ -247,7 +251,8 @@ export default function SignUp() {
           color: "green",
           autoClose: 10000,
         });
-        router.replace("/authentication/signin");
+        setisPaid(true);
+        // router.replace("/authentication/signin");
       })
       .catch(() => {});
   };
@@ -302,6 +307,10 @@ export default function SignUp() {
     paymentObject.open();
   };
 
+  const goTologin = () => {
+    router.replace("/authentication/signin");
+  };
+
   return (
     <div className={classes.wrapper}>
       <Paper h={"100%"} className={classes.form} radius={0} p={30}>
@@ -340,9 +349,29 @@ export default function SignUp() {
                       <Alert my={"xl"} icon={<IconAlertCircle size="1.5rem" />} title="Yayyy!" color="green">
                         Successfully signed-up! Please check your inbox for further instructions!
                       </Alert>
-                      <Button onClick={makePayment}>
-                        <IconCreditCard size={"1.5rem"} />
-                        <Text mx={"xs"}>Pay</Text>
+
+                      {isPaid ? (
+                        <div className="mb-3">
+                          {userData?.username ? (
+                            <div>
+                              Username : {userData?.username} <br />
+                            </div>
+                          ) : (
+                            ""
+                          )}
+                          {userData?.password ?? formValues.mobile_1 ? (
+                            <div>Password : {userData?.password ?? formValues.mobile_1}</div>
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                      ) : (
+                        ""
+                      )}
+
+                      <Button onClick={isPaid ? goTologin : makePayment}>
+                        {!isPaid && <IconCreditCard size={"1.5rem"} />}{" "}
+                        <Text mx={"xs"}> {isPaid ? "Login" : "Pay"}</Text>
                       </Button>
                     </Flex>
                   ) : (
