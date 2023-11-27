@@ -312,7 +312,7 @@ function Page() {
 
   const renderUsersTable = useCallback(() => {
     if (!dataExamCenters.length) {
-      return <></>;
+      return <>No Record Found</>;
     }
 
     const renderTableData = () => {
