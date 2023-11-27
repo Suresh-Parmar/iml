@@ -108,17 +108,17 @@ function Page() {
     if (isSchool) {
       newPayload = { school_name: allData.schools };
     }
-    setLoader(true);
-    admitCardCountData(newPayload).then((res) => {
-      setLoader(false);
-      if (isSchool) {
-        downloadPdf(res.data);
-      } else {
-        // let data = genrateDataFormDropDown(res.data);
-        // setSchoolsDataDropDown(data);
-        setSchoolsData(res.data);
-      }
-    });
+    // setLoader(true);
+    // admitCardCountData(newPayload).then((res) => {
+    //   setLoader(false);
+    //   if (isSchool) {
+    //     downloadPdf(res.data);
+    //   } else {
+    //     // let data = genrateDataFormDropDown(res.data);
+    //     // setSchoolsDataDropDown(data);
+    //     setSchoolsData(res.data);
+    //   }
+    // });
   }
 
   async function readClassesData(filterBy?: "name" | "status", filterQuery?: string | number) {
@@ -324,7 +324,7 @@ function Page() {
       type: "select",
       data: citiesData,
       onchange: (e: any) => {
-        handleDropDownChange(e, "city");
+        handleDropDownChange(e, "city", "schools");
       },
       value: allData.city,
     },
@@ -444,8 +444,11 @@ function Page() {
 
   const renderSchoolsTable = useCallback(() => {
     // const renderSchoolsTable = () => {
-    if (!schoolsData.length || isStudentFilters) {
-      return <></>;
+    if (isStudentFilters) {
+      return <> </>;
+    }
+    if (!schoolsData.length) {
+      return <>No Record Found</>;
     }
 
     const renderTableData = () => {
