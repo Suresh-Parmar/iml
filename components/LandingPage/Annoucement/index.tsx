@@ -81,7 +81,7 @@ function Annoucement() {
           Annoucements
         </Title>
       </Center> */}
-      <Box w={"80%"} m={"auto"}>
+      <Box w={"90%"} m={"auto"}>
         <Carousel
           withIndicators
           height={400}
