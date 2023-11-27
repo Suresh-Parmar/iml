@@ -5,7 +5,7 @@ import { Carousel } from "@mantine/carousel";
 import { useStyles } from "./style";
 import Autoplay from "embla-carousel-autoplay";
 import { TeacherCard } from "./TeacherCard";
-import { readTestimonial } from "@/utilities/API";
+import { readDataFromNEXT, readTestimonial } from "@/utilities/API";
 import { setGetData } from "@/helpers/getLocalStorage";
 // import Matrix, { MatrixDataType } from '@/components/Matrix';
 const data = [
@@ -112,6 +112,7 @@ function StudentTestimonial() {
   const { classes } = useStyles(isDarkThem);
   const [StudentData, setStudentData] = useState<TestimonialResponse[]>([]);
   const [teacherData, setteacherData] = useState<TestimonialResponse[]>([]);
+  const [apiRes, setapiRes] = useState<any>(false);
 
   const studentSlides = StudentData?.map((item) => (
     <Carousel.Slide key={item._id} ta={"center"} display={"flex"}>
@@ -126,7 +127,10 @@ function StudentTestimonial() {
   ));
 
   const getData = async () => {
-    const testimonial: any = await readTestimonial();
+    let data = { collection_name: `testimonials`, op_name: `find_many` };
+    let testimonial: any = await readDataFromNEXT(data);
+    testimonial = testimonial?.data;
+
     let teacherArr = testimonial?.filter((item: any) => {
       return item?.role === "teacher" && item;
     });
@@ -137,8 +141,28 @@ function StudentTestimonial() {
     setStudentData(studentArr);
   };
 
+  const getDataServer = async () => {
+    const testimonial: any = await readTestimonial();
+
+    let teacherArr = testimonial?.filter((item: any) => {
+      return item?.role === "teacher" && item;
+    });
+    setteacherData(teacherArr);
+    let studentArr = testimonial?.filter((item: any) => {
+      return item?.role !== "teacher" && item;
+    });
+    setStudentData(studentArr);
+    setapiRes(true);
+  };
+
   useEffect(() => {
-    getData();
+    if ((!StudentData.length || !teacherData.length) && apiRes) {
+      getData();
+    }
+  }, [StudentData, teacherData]);
+
+  useEffect(() => {
+    getDataServer();
   }, []);
 
   return (
