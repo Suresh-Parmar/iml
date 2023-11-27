@@ -60,9 +60,7 @@ function StudentCard({ thumbnail, description, name, school }: TestimonialRespon
         h={"100%"}
       >
         <Blockquote color="#E01E22" mt={"-5px"}>
-          <Title order={3} className={classes.title}>
-            {description}
-          </Title>
+          <Title order={3} className={classes.title} dangerouslySetInnerHTML={{ __html: description }} />
         </Blockquote>
       </Box>
     </Paper>
