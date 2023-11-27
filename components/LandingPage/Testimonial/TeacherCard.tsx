@@ -95,9 +95,8 @@ export function TeacherCard({ thumbnail, name, description, startdate, school }:
           <Text transform="uppercase" w={"70%"} weight={700} size="xs">
             {school}
           </Text>
-          <Text className={classes.desc} mt="1.4rem" mb="md">
-            {description}
-          </Text>
+          <Text className={classes.desc} mt="1.4rem" mb="md" dangerouslySetInnerHTML={{ __html: description }} />
+
           <Group noWrap spacing="xs">
             <Group spacing="xs" noWrap>
               {/* <Avatar size={20} src={"author.avatar"} /> */}~<Text size="xs">{name}</Text>
