@@ -80,22 +80,22 @@ export function TeacherCard({ thumbnail, name, description, startdate, school }:
       <Group noWrap className={classes.group} spacing={0}>
         {/* <Image classNames={{root: classes.teacherImage, image:classes.image}} src={thumbnail} alt="" height={140} width={140} /> */}
         <Avatar
-          src={null}
+          src={thumbnail}
           radius={"50%"}
           classNames={{
             root: classes.teacherImage,
-            image: classes.image,
+            // image: classes.image,
             placeholder: classes.placeholder,
             placeholderIcon: classes.placeholderIcon,
           }}
           alt="no image here"
           color="#b5b7bc"
         />
-        <div className={classes.body}>
+        <div className={`${classes.body} d-flex flex-column justify-content-between`} style={{ minHeight: "270px" }}>
           <Text transform="uppercase" w={"70%"} weight={700} size="xs">
             {school}
           </Text>
-          <Text className={classes.desc} mt="1.4rem" mb="md" dangerouslySetInnerHTML={{ __html: description }} />
+          <Text className={classes.desc} mt="2rem" mb="md" dangerouslySetInnerHTML={{ __html: description }} />
 
           <Group noWrap spacing="xs">
             <Group spacing="xs" noWrap>
