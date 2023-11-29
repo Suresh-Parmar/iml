@@ -30,7 +30,7 @@ function AnnouncementsForm({
       if (readonly) setFormTitle(`View ${rowData.name}`);
       else setFormTitle(`Update ${rowData.name}`);
     } else {
-      setFormTitle(`Add Board`);
+      setFormTitle(`Add Announcement`);
     }
   }, []);
 
@@ -39,8 +39,8 @@ function AnnouncementsForm({
       name: rowData?.name ?? "",
       whatsnew: rowData?.whatsnew ?? "",
       status: rowData?.status ?? "",
-      newsdate: checkValidDate(rowData?.newsdate, null),
-      enddate: checkValidDate(rowData?.enddate, null),
+      newsdate: rowData?.newsdate,
+      enddate: rowData?.enddate,
       summary: rowData?.summary || "",
       //
       // capital: rowData?.capital ?? "",

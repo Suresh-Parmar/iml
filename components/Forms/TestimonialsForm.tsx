@@ -29,7 +29,7 @@ function TestimonialsForm({
       if (readonly) setFormTitle(`View ${rowData.name}`);
       else setFormTitle(`Update ${rowData.name}`);
     } else {
-      setFormTitle(`Add Board`);
+      setFormTitle(`Add Testimonial`);
     }
   }, []);
 
