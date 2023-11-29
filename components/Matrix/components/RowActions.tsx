@@ -216,7 +216,7 @@ const RowActions = ({
         )
       ) : (permissionsData?.permissions?.delete && showStatus) || defaultShow ? (
         <div style={{ position: "relative" }}>
-          <Tooltip label={status ? "Disable the user" : "Enable the user"}>
+          <Tooltip label={status ? "Disable" : "Enable"}>
             <div>
               <Switch
                 checked={status ? true : false}

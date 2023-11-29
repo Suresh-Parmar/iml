@@ -79,19 +79,20 @@ export const allTypes: any = {
       sortingFn: fuzzySort,
     },
     {
-      id: "Capital",
-      key: "capital",
-      defaultShow: true,
-      filterFn: "equals",
-      sortingFn: fuzzySort,
-    },
-    {
       id: "What's New",
       key: "whatsnew",
       defaultShow: true,
       filterFn: "equals",
       sortingFn: fuzzySort,
     },
+    {
+      id: "Summary",
+      key: "summary",
+      defaultShow: true,
+      filterFn: "equals",
+      sortingFn: fuzzySort,
+    },
+
     {
       id: "End Date",
       key: "enddate",
@@ -100,8 +101,8 @@ export const allTypes: any = {
       sortingFn: fuzzySort,
     },
     {
-      id: "Role",
-      key: "role",
+      id: "News Date",
+      key: "newsdate",
       defaultShow: true,
       filterFn: "equals",
       sortingFn: fuzzySort,

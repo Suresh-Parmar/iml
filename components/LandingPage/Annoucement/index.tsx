@@ -85,7 +85,7 @@ function Annoucement() {
         <Carousel
           withIndicators
           height={400}
-          slideSize="24%"
+          slideSize="33.3%"
           slideGap="md"
           loop
           align="start"

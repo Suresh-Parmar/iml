@@ -48,7 +48,7 @@ function SingleCard({ image, name, whatsnew, enddate }: AnnoucementType) {
         src={image}
         alt=""
       />
-      <Box mt={34} ta={"center"} h={"100%"} className={classes.textCont}>
+      <Box mt={34} ta={"center"} h={"100%"} className={""}>
         <Title order={3} className={classes.title}>
           {name}
         </Title>
