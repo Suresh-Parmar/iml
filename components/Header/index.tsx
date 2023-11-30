@@ -31,6 +31,7 @@ import {
 import { Logo } from "./_logo";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
+import { useRouter as useRouterNext } from "next/router";
 
 import { forwardRef, useEffect, useMemo, useState } from "react";
 import ReactCountryFlag from "react-country-flag";
@@ -119,9 +120,18 @@ const RenderProgress = () => {
 };
 
 function Header() {
+  const router = useRouter();
+  const pathname = usePathname();
+  let nextRouter = useRouterNext();
+  let countryFromurl = nextRouter?.query?.country || "";
+  let upcaseCountryFromurl = "";
+  if (countryFromurl) {
+    upcaseCountryFromurl = String(countryFromurl).toUpperCase();
+  }
+
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
   const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
-  const [selectedCountry, setSelectedCountry] = useState<string | null>("");
+  const [selectedCountry, setSelectedCountry] = useState<string | null>(upcaseCountryFromurl);
   const [userMenuOpened, setUserMenuOpened] = useState(false);
   const [countriesData, setCountriesData] = useState<
     {
@@ -149,6 +159,17 @@ function Header() {
 
   const allReduxData = useSelector((state: any) => state.data);
   let titleHeader = allReduxData?.selectedTab;
+
+  useEffect(() => {
+    if (locationData?.country_code && countryFromurl) {
+      if (countriesData?.length) {
+        let countryFromApi = findFromJson(countriesData, upcaseCountryFromurl, "value");
+        if (!countryFromApi.value) {
+          router.replace("/in/authentication/signup");
+        }
+      }
+    }
+  }, [locationData, selectedCountry, countriesData]);
 
   useEffect(() => {
     if (!allReduxData?.selectedCountry?.value && countriesData) {
@@ -227,17 +248,18 @@ function Header() {
     </UnstyledButton>
   ));
 
-  const router = useRouter();
-  const pathname = usePathname();
-
   useEffect(() => {
-    if (localCountry) {
-      setSelectedCountry(localCountry.value);
-    } else if (!userCountry) {
-      setSelectedCountry(locationData?.country_code);
+    if (upcaseCountryFromurl) {
+      setSelectedCountry(upcaseCountryFromurl);
     } else {
-      let key = findFromJson(countriesData, userCountry, "label");
-      setSelectedCountry(key?.value);
+      if (localCountry) {
+        setSelectedCountry(localCountry.value);
+      } else if (!userCountry) {
+        setSelectedCountry(locationData?.country_code);
+      } else {
+        let key = findFromJson(countriesData, userCountry, "label");
+        setSelectedCountry(key?.value);
+      }
     }
   }, [locationData, userCountry, countriesData]);
 
@@ -304,6 +326,7 @@ function Header() {
 
                 <Group>
                   <Select
+                    disabled={!!countryFromurl}
                     itemComponent={CountryComponent}
                     style={{ width: "140px" }}
                     icon={<ReactCountryFlag countryCode={selectedCountry || ""} svg />}
@@ -318,7 +341,7 @@ function Header() {
                   <Link href={"/authentication/signin"}>
                     <Button variant="default">Log in</Button>
                   </Link>
-                  <Link href={"/authentication/signup"}>
+                  <Link href={`/${countryFromurl}/authentication/signup`}>
                     <Button>Buy Online</Button>
                   </Link>
                   <ActionIcon
@@ -460,7 +483,11 @@ function Header() {
           <Group position="center" grow pb="xl" px="md">
             <Button
               onClick={() => {
-                router.replace("/authentication/signup");
+                if (countryFromurl) {
+                  router.replace(`/${countryFromurl}/authentication/signup`);
+                } else {
+                  router.replace("/authentication/signup");
+                }
               }}
               variant={"light"}
             >
