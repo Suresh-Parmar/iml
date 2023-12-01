@@ -7,6 +7,7 @@ import Autoplay from "embla-carousel-autoplay";
 import { TeacherCard } from "./TeacherCard";
 import { readDataFromNEXT, readTestimonial } from "@/utilities/API";
 import { setGetData } from "@/helpers/getLocalStorage";
+import { useSelector } from "react-redux";
 // import Matrix, { MatrixDataType } from '@/components/Matrix';
 const data = [
   {
@@ -105,6 +106,9 @@ type TestimonialResponse = {
 };
 
 function StudentTestimonial() {
+  const allReduxData = useSelector((state: any) => state?.data);
+  let countryredux = allReduxData?.selectedCountry?.value;
+
   const autoplay = useRef(Autoplay({ delay: 2000 }));
   const teacherTestimonailRef = useRef(Autoplay({ delay: 3000 }));
   let isDarkThem = setGetData("colorScheme");
@@ -163,7 +167,7 @@ function StudentTestimonial() {
 
   useEffect(() => {
     getDataServer();
-  }, []);
+  }, [countryredux]);
 
   return (
     <Box py={80} sx={{ backgroundColor: "rgb(243 241 254)" }}>

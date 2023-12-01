@@ -7,6 +7,7 @@ import SingleCard from "./SingleCard";
 import { useStyles } from "./style";
 import { readAnnoucements } from "@/utilities/API";
 import { setGetData } from "@/helpers/getLocalStorage";
+import { useSelector } from "react-redux";
 
 const data = [
   {
@@ -59,6 +60,9 @@ function Annoucement() {
   const theme = useMantineTheme();
   const mobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`);
 
+  const allReduxData = useSelector((state: any) => state?.data);
+  let countryredux = allReduxData?.selectedCountry?.value;
+
   const slides = annoucementData?.map((item, idx) => (
     <Carousel.Slide key={item._id}>
       <SingleCard image={data[idx]?.imgLink} {...item} />
@@ -72,7 +76,7 @@ function Annoucement() {
 
   useEffect(() => {
     getAnnoucemnets();
-  }, []);
+  }, [countryredux]);
 
   return (
     <Box pt={80} pb={40} sx={{ backgroundColor: "rgb(243 241 254)" }}>
