@@ -165,7 +165,7 @@ function Header() {
       if (countriesData?.length) {
         let countryFromApi = findFromJson(countriesData, upcaseCountryFromurl, "value");
         if (!countryFromApi.value) {
-          router.replace("/in/authentication/signup");
+          router.replace("/in");
         }
       }
     }
@@ -261,7 +261,7 @@ function Header() {
         setSelectedCountry(key?.value);
       }
     }
-  }, [locationData, userCountry, countriesData]);
+  }, [locationData, userCountry, countriesData, upcaseCountryFromurl]);
 
   useEffect(() => {
     let country = findFromJson(countriesData, selectedCountry, "value");
