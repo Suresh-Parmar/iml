@@ -195,9 +195,9 @@ function StudentTestimonial() {
               { maxWidth: "sm", slideSize: "100%", slideGap: 1 },
             ]}
             mx="auto"
-            plugins={[autoplay.current]}
-            onMouseEnter={autoplay.current.stop}
-            onMouseLeave={autoplay.current.reset}
+            // plugins={[autoplay.current]}
+            // onMouseEnter={autoplay.current.stop}
+            // onMouseLeave={autoplay.current.reset}
             slidesToScroll={1}
             classNames={{
               viewport: classes.carouselCont,
@@ -236,9 +236,9 @@ function StudentTestimonial() {
               indicators: classes.indicator,
               controls: classes.controlers,
             }}
-            plugins={[teacherTestimonailRef.current]}
-            onMouseEnter={teacherTestimonailRef.current.stop}
-            onMouseLeave={teacherTestimonailRef.current.reset}
+            // plugins={[teacherTestimonailRef.current]}
+            // onMouseEnter={teacherTestimonailRef.current.stop}
+            // onMouseLeave={teacherTestimonailRef.current.reset}
             slidesToScroll={1}
           >
             {teacherSlides}

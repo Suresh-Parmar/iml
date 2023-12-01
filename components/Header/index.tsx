@@ -325,7 +325,7 @@ function Header() {
                 </a>
 
                 <Group>
-                  <Select
+                  {/* <Select
                     disabled={!!countryFromurl}
                     itemComponent={CountryComponent}
                     style={{ width: "140px" }}
@@ -336,7 +336,7 @@ function Header() {
                     }}
                     data={countriesData}
                     className={classes.hiddenTablet}
-                  />
+                  /> */}
 
                   <Link href={"/authentication/signin"}>
                     <Button variant="default">Log in</Button>
