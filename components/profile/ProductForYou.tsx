@@ -80,7 +80,7 @@ function ProductForYou() {
     }
     const { name, email_1, mobile_1 } = userData;
     const options = {
-      key: process.env.RAZORPAY_KEY, // Enter the Key ID generated from the Dashboard
+      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY, // Enter the Key ID generated from the Dashboard
       amount: amount * 100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
       currency: currency,
       name: "Ignited Mind Lab", //your business name
