@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { Box, Button, Flex, Grid, Text, TextInput, Title, createStyles } from "@mantine/core";
 import ContactForm from "../form/contactForm";
 import { setGetData } from "@/helpers/getLocalStorage";
+import { useSelector } from "react-redux";
+import { useLandingPageAPisQuery } from "@/redux/apiSlice";
+import { iterateData } from "@/helpers/getData";
 
 const useStyles = createStyles((theme, colorScheme: any) => ({
   wrapper: {
@@ -19,10 +22,30 @@ const useStyles = createStyles((theme, colorScheme: any) => ({
 }));
 
 function Contactus() {
+  // SiteConfigs;
   let isDarkThem = setGetData("colorScheme");
 
   const { classes } = useStyles(isDarkThem);
   const [MobileNo, setMobileNo] = useState("");
+
+  const reduxData = useSelector((state: any) => state?.data);
+  let selectedCountry = reduxData.selectedCountry;
+
+  let productsDataPayload: any = {
+    collection_name: "site_configs",
+    op_name: "find_many",
+    filter_var: {
+      status: true,
+      country: selectedCountry.label || "India",
+    },
+  };
+
+  let productsData = useLandingPageAPisQuery(productsDataPayload);
+  productsData = iterateData(productsData);
+  if (productsData) {
+    productsData = productsData[0];
+  }
+
   return (
     <Box id="Contactus" className={classes.wrapper} py={80}>
       <Box w={"80%"} m={"auto"}>
@@ -60,7 +83,8 @@ function Contactus() {
               <Title variant="h4" className={classes.title} style={{ padding: "8px 0" }}>
                 Office <span style={{ color: "#E01E22" }}>Address</span>
               </Title>
-              <div className={classes.subHead} style={{ textTransform: "uppercase", marginTop: "10px" }}>
+              <div dangerouslySetInnerHTML={{ __html: productsData?.address }} />
+              {/* <div className={classes.subHead} style={{ textTransform: "uppercase", marginTop: "10px" }}>
                 Ignited Mind Lab
               </div>
               <div>
@@ -73,11 +97,10 @@ function Contactus() {
                 <br />
                 <Box className={classes.subHead}>Phone</Box>
                 022-50020110 / 50020120
-              </div>
+              </div> */}
               <br />
               <Box>
                 <span className={classes.subHead} style={{ fontSize: "16px" }}>
-                  {" "}
                   Get address by SMS:
                 </span>
                 <Flex direction={"column"} gap={"md"}>

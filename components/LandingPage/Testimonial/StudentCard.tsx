@@ -21,10 +21,12 @@ type TestimonialResponse = {
 
 function StudentCard({ thumbnail, description, name, school }: TestimonialResponse) {
   let isDarkThem = setGetData("colorScheme");
+  const backgroundClr = isDarkThem == "dark" ? "#25262b" : "#fff";
+  const colorText = isDarkThem == "dark" ? "#fff" : "rgb(75, 75, 75)";
 
   const { classes } = useStyles(isDarkThem);
   return (
-    <Paper shadow="lg" p="xl" radius="md" mt={52} sx={{ color: "black" }} className={classes.card}>
+    <Paper shadow="lg" p="xl" radius="md" mt={52} sx={{ color: colorText }} className={classes.card}>
       <Image
         classNames={{
           imageWrapper: classes.imageWrapper,
@@ -59,8 +61,13 @@ function StudentCard({ thumbnail, description, name, school }: TestimonialRespon
         }}
         h={"100%"}
       >
-        <Blockquote color="#E01E22" mt={"-5px"}>
-          <Title order={3} className={classes.title} dangerouslySetInnerHTML={{ __html: description }} />
+        <Blockquote color='"#E01E22"' mt={"-5px"}>
+          <Title
+            order={3}
+            className={classes.title}
+            style={{ color: colorText }}
+            dangerouslySetInnerHTML={{ __html: description }}
+          />
         </Blockquote>
       </Box>
     </Paper>
