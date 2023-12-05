@@ -59,6 +59,9 @@ function Annoucement() {
   const [annoucementData, setannoucementData] = useState<AnnoucementType[]>([]);
   const theme = useMantineTheme();
   const mobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`);
+  let isDarkThem = setGetData("colorScheme");
+  const backgroundClr = isDarkThem == "dark" ? "#25262b" : "rgb(243 241 254)";
+  const color = isDarkThem == "dark" ? "#fff" : "#0a5392";
 
   const allReduxData = useSelector((state: any) => state?.data);
   let countryredux = allReduxData?.selectedCountry?.value;
@@ -79,7 +82,7 @@ function Annoucement() {
   }, [countryredux]);
 
   return (
-    <Box pt={80} pb={40} sx={{ backgroundColor: "rgb(243 241 254)" }}>
+    <Box pt={80} pb={40} sx={{ backgroundColor: backgroundClr }}>
       {/* <Center>
         <Title order={2} size={40}>
           Annoucements

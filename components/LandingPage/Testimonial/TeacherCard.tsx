@@ -1,51 +1,57 @@
 import { setGetData } from "@/helpers/getLocalStorage";
 import { createStyles, Card, Image, Avatar, Text, Group } from "@mantine/core";
 
-const useStyles = createStyles((theme) => ({
-  card: {
-    backgroundColor: "transparent",
-    border: "none !important",
-  },
+const useStyles = createStyles((theme: any) => {
+  let isDark = theme?.colorScheme == "dark";
+  return {
+    card: {
+      backgroundColor: "transparent",
+      border: "none !important",
+    },
 
-  desc: {
-    fontWeight: 400,
-    fontSize: "14px",
-    fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-    lineHeight: 1.35,
-    color: "#495057",
-  },
+    desc: {
+      fontWeight: 400,
+      fontSize: "14px",
+      fontFamily: `Greycliff CF, ${theme.fontFamily}`,
+      lineHeight: 1.35,
+      color: isDark ? "#fff" : "#495057",
+    },
 
-  body: {
-    padding: theme.spacing.md,
-  },
+    body: {
+      padding: theme.spacing.md,
+    },
 
-  teacherImage: {
-    width: "5.75rem",
-    height: "5.75rem",
-    position: "absolute",
-    right: "12px",
-    top: "-4px",
-  },
-  group: {
-    border: "0.0625rem solid #dee2e6",
-    backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
-    margin: "20px 0 0 12px",
-    borderRadius: "0.5rem",
-  },
-  image: {
-    borderRadius: "50%",
-    width: "140px",
-    height: "140px",
-  },
-  placeholderIcon: {
-    width: "140px !important",
-    height: "140px !important",
-    color: "#b5b7bc",
-  },
-  placeholder: {
-    color: "#b5b7bc",
-  },
-}));
+    teacherImage: {
+      width: "5.75rem",
+      height: "5.75rem",
+      position: "absolute",
+      right: "12px",
+      top: "-4px",
+    },
+
+    group: {
+      border: "0.0625rem solid #dee2e6",
+      backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
+      margin: "20px 0 0 12px",
+      borderRadius: "0.5rem",
+      color: isDark ? "#fff" : "black",
+    },
+    image: {
+      borderRadius: "50%",
+      width: "140px",
+      height: "140px",
+    },
+    placeholderIcon: {
+      width: "140px !important",
+      height: "140px !important",
+      color: "#b5b7bc",
+      backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[7] : "",
+    },
+    placeholder: {
+      color: "#b5b7bc",
+    },
+  };
+});
 
 interface ArticleCardVerticalProps {
   image: string;
@@ -101,12 +107,8 @@ export function TeacherCard({ thumbnail, name, description, startdate, school }:
             <Group spacing="xs" noWrap>
               {/* <Avatar size={20} src={"author.avatar"} /> */}~<Text size="xs">{name}</Text>
             </Group>
-            <Text size="xs" color="dimmed">
-              •
-            </Text>
-            <Text size="xs" color="dimmed">
-              {startdate}
-            </Text>
+            <Text size="xs">•</Text>
+            <Text size="xs">{startdate}</Text>
           </Group>
         </div>
       </Group>

@@ -112,6 +112,8 @@ function StudentTestimonial() {
   const autoplay = useRef(Autoplay({ delay: 2000 }));
   const teacherTestimonailRef = useRef(Autoplay({ delay: 3000 }));
   let isDarkThem = setGetData("colorScheme");
+  const backgroundClr = isDarkThem == "dark" ? "#25262b" : "rgb(243 241 254)";
+  const color = isDarkThem == "dark" ? "#fff" : "#0a5392";
 
   const { classes } = useStyles(isDarkThem);
   const [StudentData, setStudentData] = useState<TestimonialResponse[]>([]);
@@ -170,13 +172,13 @@ function StudentTestimonial() {
   }, [countryredux]);
 
   return (
-    <Box py={80} sx={{ backgroundColor: "rgb(243 241 254)" }}>
+    <Box py={80} sx={{ backgroundColor: backgroundClr }}>
       <Center display={"grid"} ta={"center"}>
-        <Title color="#0a5392" order={2} size={40}>
+        <Title color={color} order={2} size={40}>
           Testimonials
         </Title>
         {StudentData?.length ? (
-          <Text color="#495057" mt={"18px"} fz={"20px"} transform="uppercase">
+          <Text color={color} mt={"18px"} fz={"20px"} transform="uppercase">
             see what our students have to say
           </Text>
         ) : null}
