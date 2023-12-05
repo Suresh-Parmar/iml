@@ -17,6 +17,10 @@ type AnnoucementType = {
 
 function SingleCard({ image, name, whatsnew, enddate }: AnnoucementType) {
   let isDarkThem = setGetData("colorScheme");
+  isDarkThem = isDarkThem == "dark";
+  const backgroundClr = isDarkThem ? "#1A1B1E" : "rgb(243 241 254)";
+  const color = isDarkThem ? "#fff" : "";
+
   const { classes } = useStyles(isDarkThem);
   const { hovered, ref } = useHover();
 
@@ -30,7 +34,8 @@ function SingleCard({ image, name, whatsnew, enddate }: AnnoucementType) {
       sx={
         hovered
           ? {
-              backgroundColor: "#fff",
+              backgroundColor: backgroundClr,
+              color: color,
               boxShadow:
                 "rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px",
             }
@@ -49,10 +54,10 @@ function SingleCard({ image, name, whatsnew, enddate }: AnnoucementType) {
         alt=""
       />
       <Box mt={34} ta={"center"} h={"100%"} className={""}>
-        <Title order={3} className={classes.title}>
+        <Title order={3} className={classes.title} color={isDarkThem ? "white" : "#5a5858"}>
           {name}
         </Title>
-        <Text color="#5a5858" fz={"14px"} dangerouslySetInnerHTML={{ __html: whatsnew }} />
+        <Text color={isDarkThem ? "white" : "#5a5858"} fz={"14px"} dangerouslySetInnerHTML={{ __html: whatsnew }} />
       </Box>
     </Paper>
   );
