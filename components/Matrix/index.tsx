@@ -169,6 +169,8 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
   const reduxData: any = useSelector((state) => state);
 
   const clientState = reduxData.data;
+  let isDarkTheme = clientState?.colorScheme == "dark";
+
   const [columnResizeMode, setColumnResizeMode] = useState<ColumnResizeMode>("onChange");
   const [expanded, setExpanded] = useState<ExpandedState>({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -177,6 +179,23 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
   const [permissionsData, setPermissionsData] = useState<any>({});
   const [siteJson, setSiteJson] = useState<any>(allJsonData);
 
+  const setColumnData = () => {
+    let data = allTypes[formType];
+    data = data || [];
+    let dataObj: any = {};
+    data.forEach((item: any) => {
+      if (item.id) {
+        dataObj[item.id] = !!item.defaultShow;
+      }
+    });
+    return dataObj;
+  };
+
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(setColumnData());
+  const [opened, { open, close }] = useDisclosure(false);
+  const [readOnly, setReadOnly] = useState<boolean>(false);
+  const [isExtra, setIsExtra] = useState<any>(false);
+  const [checkboxData, setCheckboxData] = useState<any>([]);
   const pathname = usePathname();
 
   let userData: any = setGetData("userData", false, true);
@@ -200,6 +219,10 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
   // };
 
   useEffect(() => {
+    setCheckboxData([]);
+  }, [sorting]);
+
+  useEffect(() => {
     if (rolesData[0]?.data && Array.isArray(rolesData[0].data)) {
       setSiteJson(rolesData[0]?.data);
     }
@@ -218,24 +241,6 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
   useEffect(() => {
     handleisValid(pathname);
   }, [pathname, siteJson]);
-
-  const setColumnData = () => {
-    let data = allTypes[formType];
-    data = data || [];
-    let dataObj: any = {};
-    data.forEach((item: any) => {
-      if (item.id) {
-        dataObj[item.id] = !!item.defaultShow;
-      }
-    });
-    return dataObj;
-  };
-
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(setColumnData());
-  const [opened, { open, close }] = useDisclosure(false);
-  const [readOnly, setReadOnly] = useState<boolean>(false);
-  const [isExtra, setIsExtra] = useState<any>(false);
-  const [checkboxData, setCheckboxData] = useState<any>([]);
 
   const columns = RenderFormTypes(
     formType,
@@ -279,7 +284,7 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
   };
 
   const table = useReactTable({
-    data: useMemo(() => data, [data]),
+    data: data,
     columns,
     filterFns: {
       fuzzy: fuzzyFilter,
@@ -311,6 +316,11 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getFacetedMinMaxValues: getFacetedMinMaxValues(),
   });
+  let pageData: any = table?.getPaginationRowModel()?.flatRows;
+
+  if (Array.isArray(pageData)) {
+    pageData = pageData.map((row) => row.original);
+  }
 
   const [examCentersData, setExamCentersData] = useState<MatrixDataType>([]);
 
@@ -391,7 +401,7 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
 
   const addForm = getAddFormType(formType);
 
-  const setCheckALLData = () => {
+  const setCheckALLData = (data: any[]) => {
     let ids: any = [];
     data.map((item: any) => {
       ids.push(item._id);
@@ -429,6 +439,8 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
         console.log(err);
       });
   };
+
+  let bgColor = isDarkTheme ? "#1a1b1e" : "white";
 
   return (
     <Container
@@ -542,7 +554,7 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
               onChange={(e) => {
                 table.setPageSize(Number(e));
               }}
-              data={[10, 25, 50, 100, 250].map((pageSize) => `${pageSize}`)}
+              data={["10", "25", "50", "100", "250"]}
             />
 
             {/* Table No of Rows */}
@@ -655,18 +667,18 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
                     ) : (
                       <div
                         className="d-flex justify-content-center align-items-center bold h-100"
-                        style={{ background: "white" }}
+                        style={{ background: bgColor }}
                       >
                         <span>Actions</span>
                         {data.length && (permissionsData?.permissions?.remove || defaultShow) ? (
                           <input
                             className="mx-3"
-                            checked={checkboxData.length == data.length}
+                            checked={checkboxData.length == pageData.length}
                             onClick={() => {
                               if (checkboxData.length > 0) {
                                 setCheckboxData([]);
                               } else {
-                                setCheckALLData();
+                                setCheckALLData(pageData);
                               }
                             }}
                             type="checkbox"
