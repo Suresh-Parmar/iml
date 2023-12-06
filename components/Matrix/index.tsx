@@ -554,7 +554,7 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
               onChange={(e) => {
                 table.setPageSize(Number(e));
               }}
-              data={["2", "10", "25", "50", "100", "250"]}
+              data={["10", "25", "50", "100", "250"]}
             />
 
             {/* Table No of Rows */}
