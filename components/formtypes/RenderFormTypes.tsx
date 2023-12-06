@@ -138,7 +138,7 @@ function RenderFormTypes(
           return String(showData);
         },
         id: item["id"],
-        cell: (info: any) => info.getValue(),
+        cell: (info: any) => <div className="p-2" dangerouslySetInnerHTML={{ __html: info.getValue() }} />,
         header: () => <span>{item["id"]}</span>,
         footer: (props: any) => props.column.id,
       };
