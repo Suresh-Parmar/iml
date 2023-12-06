@@ -46,6 +46,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { changeColorTheme, setSelectedCountryRedux } from "@/redux/slice";
 import { findFromJson } from "@/helpers/filterFromJson";
 import { clearLocalData, setGetData } from "@/helpers/getLocalStorage";
+import { siteJson } from "../permissions";
 interface ItemProps extends React.ComponentPropsWithoutRef<"div"> {
   value: string;
   label: string;
@@ -158,7 +159,12 @@ function Header() {
   };
 
   const allReduxData = useSelector((state: any) => state.data);
-  let titleHeader = allReduxData?.selectedTab;
+
+  let arrpath = pathname.split("/");
+  let pathnameLast: any = arrpath[arrpath.length - 1];
+
+  let jsonObjActive = useMemo(() => findFromJson(siteJson, pathnameLast, "link"), [pathnameLast]);
+  let titleHeader = jsonObjActive?.title || "";
 
   useEffect(() => {
     if (locationData?.country_code && countryFromurl) {
