@@ -57,14 +57,15 @@ function Courses() {
 
   const onSuccessHandler = ({ razorpay_order_id, razorpay_payment_id, razorpay_signature }: any) => {
     // Validate payment at server - using webhooks is a better idea.
-    buyDetails?._id && delete buyDetails._id;
+    let newbuyDetails = structuredClone(buyDetails);
+    newbuyDetails?._id && delete newbuyDetails._id;
 
     verifyPaymantData({
       razorpay_order_id,
       razorpay_payment_id,
       razorpay_signature,
-      product_name: buyDetails?.name || "",
-      invoiceBreakdown: buyDetails,
+      product_name: newbuyDetails?.name || "",
+      invoiceBreakdown: newbuyDetails,
     })
       .then((res: any) => {
         notifications.show({
