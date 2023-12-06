@@ -1,8 +1,12 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 function SummaryForm(props: any) {
   const { form } = props;
   const values = form?.values;
+
+  const reduxData = useSelector((state: any) => state?.data);
+  let isDarkTheme = reduxData?.colorScheme == "dark";
 
   let {
     name,
@@ -22,9 +26,11 @@ function SummaryForm(props: any) {
     gender,
   } = values || {};
 
+  let tableclass = isDarkTheme ? "table-dark" : " ";
+
   return (
     <div className="my-4">
-      <table className="table table-striped">
+      <table className={"table table-striped " + tableclass}>
         <tbody>
           <tr>
             <th>Name</th>
