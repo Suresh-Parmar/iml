@@ -27,8 +27,10 @@ function Page() {
   const [groupsData, setGroupData] = useState<any>([]);
   const [cohortsData, setcohortsData] = useState<any>([]);
   const [loader, setLoader] = useState<any>(false);
+  const [pdfLoader, setpdfLoader] = useState<any>(false);
   const [studentGridData, setStudentGridData] = useState<any>([]);
   const [zipUrl, setZipUrl] = useState<any>("");
+  const [genratedData, setGenratedData] = useState<any>([]);
 
   // useEffect(() => {
   //   if (loader) {
@@ -110,7 +112,7 @@ function Page() {
         let newDataa = { ...item, ...newItem };
         newData.push(newDataa);
       } else {
-        delete item.admit_card_url;
+        // delete item.admit_card_url;
         newData.push(item);
       }
     });
@@ -120,7 +122,7 @@ function Page() {
 
   const downloadPdf = (data: any) => {
     let newData = migrateData(data, schoolsData, "school_name");
-    setSchoolsData([...newData]);
+    setSchoolsData(structuredClone(newData));
   };
 
   let genrateDataFormDropDown = (data: any) => {
@@ -134,37 +136,60 @@ function Page() {
     return data;
   };
 
-  function readSchoolsData(isSchool: any = false) {
-    let newPayload: any = {
+  async function readSchoolsData(isSchool = false) {
+    if (pdfLoader) {
+      return;
+    }
+
+    setGenratedData([]);
+
+    const newPayload = {
       country: countryName || "India",
       competition_code: allData.competition || "",
       state: allData.state,
       city: allData.city,
-      // affiliation: allData.affiliation,
     };
 
     if (isSchool) {
-      newPayload = { school_name: allData.schools };
-    }
+      for (const school of allData.schools) {
+        const payload = { school_name: [school] };
+        setpdfLoader(school);
 
-    setLoader(true);
-    admitCardCountData(newPayload)
-      .then((res) => {
+        try {
+          const res = await admitCardCountData(payload);
+          setpdfLoader(false);
+
+          if (Array.isArray(res.data) && res.data.length > 1) {
+            setZipUrl(res.data[res.data.length - 1]?.zip_file);
+          }
+          genratedData.push(...res.data);
+          setGenratedData([genratedData]);
+          downloadPdf(genratedData);
+        } catch (errors) {
+          setpdfLoader(false);
+        }
+      }
+    } else {
+      setLoader(true);
+
+      try {
+        const res = await admitCardCountData(newPayload);
         setLoader(false);
+
         if (isSchool) {
           if (Array.isArray(res.data) && res.data.length > 1) {
             setZipUrl(res.data[res.data.length - 1]?.zip_file);
           }
           downloadPdf(res.data);
         } else {
-          let data = genrateDataFormDropDown(res.data);
+          const data = genrateDataFormDropDown(res.data);
           // setSchoolsDataDropDown(data);
           setSchoolsData(res.data);
         }
-      })
-      .catch((errors) => {
+      } catch (errors) {
         setLoader(false);
-      });
+      }
+    }
   }
 
   async function readClassesData(filterBy?: "name" | "status", filterQuery?: string | number) {
@@ -538,6 +563,8 @@ function Page() {
                 <a href={item.admit_card_url} target="_blank">
                   <span className="material-symbols-outlined text-success">download</span>
                 </a>
+              ) : pdfLoader == item.school_name ? (
+                "loading..."
               ) : (
                 <span className="material-symbols-outlined text-secondary">download</span>
               )}
@@ -587,7 +614,14 @@ function Page() {
         </table>
       </div>
     );
-  }, [allData.schools, schoolsData, themeColor, checkIsAllChecked(allData.schools, schoolsData), isStudentFilters]);
+  }, [
+    allData.schools,
+    schoolsData,
+    pdfLoader,
+    themeColor,
+    checkIsAllChecked(allData.schools, schoolsData),
+    isStudentFilters,
+  ]);
 
   const renderUsersTable = useCallback(() => {
     // const renderSchoolsTable = () => {
