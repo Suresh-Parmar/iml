@@ -203,3 +203,9 @@ a {
 .font12 {
   font-size: 12px;
 }
+
+.wrapperbox {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(auto, 1fr));
+  gap: 20px;
+}
