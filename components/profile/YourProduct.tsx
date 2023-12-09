@@ -44,7 +44,7 @@ function YourProduct() {
       <div className="wrapperbox">
         {yourProductJson.map((item: any, index: any) => {
           return (
-            <div className="pointer" onClick={() => setActiveItem(item)}>
+            <div className="pointer" key={index} onClick={() => setActiveItem(item)}>
               <ProductView item={item} key={index} hideExtra />
             </div>
           );
