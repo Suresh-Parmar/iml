@@ -4,7 +4,7 @@ import ModalBox from "./Modal";
 
 function ProductView(props: any) {
   const [showDescription, setShowDescription] = useState<any>(false);
-  let { item, onClick, className } = props;
+  let { item, onClick, className, hideExtra } = props;
 
   let userData = useSelector((state: any) => state?.data?.userData?.user);
   let country = useSelector((state: any) => state?.data.selectedCountry);
@@ -52,9 +52,11 @@ function ProductView(props: any) {
         src={item.imageuploadurl}
       />
       <div className="productView">{item.name}</div>
-      <div className="btn btn-outline-danger" onClick={confirmBuy}>
-        BUY {formatter.format(item.product_bundle_price)}
-      </div>
+      {!hideExtra && (
+        <div className="btn btn-outline-danger" onClick={confirmBuy}>
+          BUY {formatter.format(item.product_bundle_price)}
+        </div>
+      )}
       <ModalBox
         open={showDescription && item?.description}
         size="80%"
