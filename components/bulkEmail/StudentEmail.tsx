@@ -1,6 +1,6 @@
 import { Container, Group, Radio, Select, TextInput } from "@mantine/core";
 import Matrix, { MatrixDataType } from "@/components/Matrix";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   readApiData,
   readCities,
@@ -36,6 +36,7 @@ function StudentEmail(props: any) {
   const [groupsData, setGroupData] = useState<any>([]);
   const [classesData, setClassesData] = useState<any>([]);
   const [dataExamCenters, setDataExamCenters] = useState<any>([]);
+  const [studentsList, setstudentsList] = useState<any>();
   const [cohortsData, setcohortsData] = useState<any>([]);
   const [templeteType, setTempleteType] = useState<any>("");
 
@@ -72,6 +73,32 @@ function StudentEmail(props: any) {
         setLoader(false);
         let groupDataApi: any = filterData(res, "label", "value");
         setGroupData([...groupDataApi]);
+      })
+      .catch((error) => {
+        console.error(error);
+        setLoader(false);
+      });
+  };
+
+  const readStudentsData = () => {
+    let payload = {
+      collection_name: "users",
+      op_name: "find_many",
+      filter_var: {
+        role: "student",
+        country: selectedCountry,
+        city: allData?.city,
+        competition: allData?.competition,
+        school_name: allData?.select_school,
+        class_id: allData?.select_class,
+        exam_center_id: allData?.exam_center,
+      },
+    };
+    setLoader(true);
+    readApiData(undefined, payload)
+      .then((res) => {
+        setLoader(false);
+        setstudentsList(res);
       })
       .catch((error) => {
         console.error(error);
@@ -393,6 +420,7 @@ function StudentEmail(props: any) {
       class: allData.select_class,
       exam_center: allData.exam_center,
       [label]: allData[key],
+      registration_Number: allData?.studentsData,
     };
 
     if (allData.attachment_name) {
@@ -419,12 +447,116 @@ function StudentEmail(props: any) {
       });
   };
 
+  const handleCHeckBOxesStudents = (
+    e: any,
+    item: any = "",
+    selectedData: any,
+    allDatatoFilter: any,
+    key: any,
+    setKey: any
+  ) => {
+    let checked: any = e.target.checked;
+    let data: any = [];
+    if (!!item) {
+      data = selectCheckBOxData(selectedData, checked, item[key], allDatatoFilter, key);
+    } else {
+      data = selectCheckBOxData(selectedData, checked, "", allDatatoFilter, key);
+    }
+
+    allData[setKey] = data;
+    setAllData({ ...allData });
+  };
+
+  const renderUsersTable = () => {
+    // const renderSchoolsTable = () => {
+
+    if (studentsList && !studentsList.length) {
+      return <> No Record Found</>;
+    }
+
+    if (!studentsList || !studentsList.length) {
+      return;
+    }
+
+    const renderTableData = () => {
+      return studentsList.map((item: any, index: any) => {
+        return (
+          <tr className="capitalize" key={index}>
+            <td scope="row">
+              <input
+                type="checkbox"
+                checked={Array.isArray(allData.studentsData) && allData.studentsData.includes(item["username"])}
+                onChange={(e: any) => {
+                  handleCHeckBOxesStudents(e, item, allData.studentsData, studentsList, "username", "studentsData");
+                }}
+              />
+            </td>
+            <td>{item["name"]}</td>
+            <td>{item["school_name"]}</td>
+            <td>{item["username"]}</td>
+            <td>{item["seat_number"]}</td>
+            {/* <td>{item["Division"]}</td>
+            <td>{item["Group"]}</td> */}
+            {/* <td className="text-center">
+              {item?.admit_card_url ? (
+                <a href={item.admit_card_url} target="_blank">
+                  <span className="material-symbols-outlined text-success">download</span>
+                </a>
+              ) : (
+                <span className="material-symbols-outlined text-secondary">download</span>
+              )}
+            </td> */}
+          </tr>
+        );
+      });
+    };
+
+    return (
+      <div className="my-4 table-responsive" style={{ maxHeight: "350px", overflow: "auto" }}>
+        <table className={`table table-striped table-${themeColor}`}>
+          <thead
+            style={{
+              position: "sticky",
+              top: 0,
+            }}
+          >
+            <tr>
+              <th scope="col">
+                <input
+                  type="checkbox"
+                  checked={checkIsAllChecked(allData.studentsData, studentsList)}
+                  onChange={(e: any) => {
+                    handleCHeckBOxesStudents(e, false, allData.studentsData, studentsList, "username", "studentsData");
+                  }}
+                />
+              </th>
+              <th scope="col">Student Name</th>
+              <th scope="col">School</th>
+              <th scope="col">Registration No</th>
+              <th scope="col">Seat No</th>
+              {/* <th scope="col">Division</th>
+              <th scope="col">Group</th> */}
+              {/* <th scope="col" className="text-center">
+                download
+              </th> */}
+            </tr>
+          </thead>
+          <tbody>{renderTableData()}</tbody>
+        </table>
+      </div>
+    );
+  };
+
   return (
     <div className="p-4">
       <div className="d-flex w-100 gap-3 align-items-center flex-wrap mx-auto justify-content-between">
         {renderFields()}
       </div>
 
+      <div className="btn btn-primary form-control mt-4" onClick={readStudentsData}>
+        Get Students List
+      </div>
+      {renderUsersTable()}
       <div className="btn btn-primary form-control mt-4" onClick={sendEmail}>
         Send Email
       </div>
