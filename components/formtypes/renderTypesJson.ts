@@ -1350,7 +1350,7 @@ export const allTypes: any = {
     },
     {
       id: "Exam Center Code",
-      key: "exam_center_code",
+      key: "exam_center_id",
     },
     {
       id: "Cohorts",
