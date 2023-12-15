@@ -1,5 +1,5 @@
 import { Group, Radio, Select, TextInput } from "@mantine/core";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { readApiData, readData, readSMTPConfigs, readSchools, sendBulkEmailToStudent } from "@/utilities/API";
 import Loader from "@/components/common/Loader";
 import { useSelector } from "react-redux";
@@ -30,6 +30,11 @@ function ExamCenterFilter() {
   let themeColor = userData?.colorScheme;
 
   const readStudentsData = () => {
+    if (!allData?.city || !allData?.examcenter) {
+      alert("Please select a city and exam center");
+      return;
+    }
+
     let payload = {
       collection_name: "users",
       op_name: "find_many",

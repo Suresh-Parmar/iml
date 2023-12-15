@@ -1,5 +1,5 @@
 import { Group, Radio, Select, TextInput } from "@mantine/core";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { readApiData, sendBulkEmailToStudent } from "@/utilities/API";
 import Loader from "@/components/common/Loader";
 import { useSelector } from "react-redux";
@@ -28,6 +28,11 @@ function TeacherFIleters() {
   let themeColor = userData?.colorScheme;
 
   const readStudentsData = () => {
+    if (!allData?.city) {
+      alert("Please select a city");
+      return;
+    }
+
     let payload = {
       collection_name: "users",
       op_name: "find_many",
