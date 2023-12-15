@@ -32,7 +32,7 @@ function TeacherFIleters() {
       collection_name: "users",
       op_name: "find_many",
       filter_var: {
-        role: "student",
+        role: "teacher",
         country: selectedCountry,
         city: allData?.city,
         class_id: allData?.select_class,
@@ -225,8 +225,8 @@ function TeacherFIleters() {
   };
 
   const sendEmail = () => {
-    if (!allData.email_short_name || !allData.childSchoolData) {
-      console.log(allData);
+    if (!allData.email_short_name || !allData.subject || !allData.smtp_name) {
+      alert("email short name, subject and smtp name are required");
       return;
     }
 
@@ -318,7 +318,8 @@ function TeacherFIleters() {
             <td>{item["name"]}</td>
             <td>{item["school_name"]}</td>
             <td>{item["username"]}</td>
-            <td>{item["seat_number"]}</td>
+            <td>{item["city"]}</td>
+            <td>{item["state"]}</td>
           </tr>
         );
       });
@@ -346,7 +347,8 @@ function TeacherFIleters() {
               <th scope="col">Student Name</th>
               <th scope="col">School</th>
               <th scope="col">Registration No</th>
-              <th scope="col">Seat No</th>
+              <th scope="col">City</th>
+              <th scope="col">State</th>
             </tr>
           </thead>
           <tbody>{renderTableData()}</tbody>
