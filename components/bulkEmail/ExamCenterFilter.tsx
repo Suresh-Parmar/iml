@@ -11,14 +11,12 @@ import Editor from "../editor/editor";
 import { findFromJson } from "@/helpers/filterFromJson";
 import { useTableDataMatrixQuery } from "@/redux/apiSlice";
 import { genratePayload, handleApiData, iterateData } from "@/helpers/getData";
+import { handleDropDownChange } from "@/helpers/dateHelpers";
 
-function StudentEmail(props: any) {
+function ExamCenterFilter() {
   const [allData, setAllData] = useState<any>({});
-  const [schoolsData, setSchoolsData] = useState<any>([]);
   const [loader, setLoader] = useState<any>(false);
-  const [groupsData, setGroupData] = useState<any>([]);
   const [studentsList, setstudentsList] = useState<any>();
-  const [cohortsData, setcohortsData] = useState<any>([]);
   const [templeteType, setTempleteType] = useState<any>("");
 
   let classesData: any = [];
@@ -30,19 +28,6 @@ function StudentEmail(props: any) {
   const userData: any = useSelector((state: any) => state.data);
   let selectedCountry = userData?.selectedCountry?.label;
   let themeColor = userData?.colorScheme;
-  const getGroups = () => {
-    setLoader(true);
-    readApiData("groups")
-      .then((res) => {
-        setLoader(false);
-        let groupDataApi: any = filterData(res, "label", "value");
-        setGroupData([...groupDataApi]);
-      })
-      .catch((error) => {
-        console.error(error);
-        setLoader(false);
-      });
-  };
 
   const readStudentsData = () => {
     let payload = {
@@ -52,10 +37,8 @@ function StudentEmail(props: any) {
         role: "student",
         country: selectedCountry,
         city: allData?.city,
-        competition: allData?.competition,
-        school_name: allData?.select_school,
         class_id: allData?.select_class,
-        exam_center_id: allData?.exam_center,
+        exam_center_id: allData?.examcenter,
       },
     };
     setLoader(true);
@@ -68,15 +51,6 @@ function StudentEmail(props: any) {
         console.error(error);
         setLoader(false);
       });
-  };
-
-  const readSchoolsData = async () => {
-    setLoader(true);
-    const schools = await readSchools("city", allData.city);
-    setLoader(false);
-    let newData = filterData(schools, "label", "value");
-
-    setSchoolsData(newData);
   };
 
   statesData = useTableDataMatrixQuery(genratePayload("states", undefined, undefined, selectedCountry));
@@ -93,7 +67,6 @@ function StudentEmail(props: any) {
   classesData = iterateData(classesData);
   classesData = handleApiData(classesData);
   classesData = filterData(classesData, "label", "value", undefined, true, "order_code", undefined, true);
-  classesData = [{ value: undefined, label: "Select" }, ...classesData];
 
   templetesData = useTableDataMatrixQuery(
     genratePayload("templates", { templatetype: "email" }, undefined, selectedCountry)
@@ -107,41 +80,17 @@ function StudentEmail(props: any) {
   smtpData = handleApiData(smtpData);
   smtpData = filterData(smtpData, "label", "value");
 
-  const getCohorts = () => {
-    setLoader(true);
-    readApiData("cohorts")
-      .then((res) => {
-        setLoader(false);
-        setcohortsData(filterData(res, "label", "value"));
-      })
-      .catch((error) => {
-        console.error(error);
-        setLoader(false);
-      });
-  };
-  useEffect(() => {
-    getGroups();
-  }, [selectedCountry]);
+  let examCentersData = useTableDataMatrixQuery(
+    genratePayload("exam_centers", { examdate: allData.exam_date, city: allData.city }, "examdate", selectedCountry)
+  );
+  examCentersData = iterateData(examCentersData);
+  examCentersData = handleApiData(examCentersData);
+  examCentersData = filterData(examCentersData, "label", "value", "_id");
 
-  useEffect(() => {
-    allData.city && readSchoolsData();
-  }, [allData.city]);
-
-  useEffect(() => {
-    selectedCountry && getCohorts();
-  }, [selectedCountry]);
-
-  const handleDropDownChange = (value: any, key: string, clear: any = "") => {
-    if (clear) {
-      if (clear == "all") {
-        setAllData({ [key]: value });
-      } else {
-        setAllData({ ...allData, [clear]: "", [key]: value });
-      }
-    } else {
-      setAllData({ ...allData, [key]: value });
-    }
-  };
+  let examDateData = useTableDataMatrixQuery(genratePayload("exam_centers", undefined, undefined, selectedCountry));
+  examDateData = iterateData(examDateData);
+  examDateData = handleApiData(examDateData);
+  examDateData = filterData(examDateData, "label", "value", "examdate", true, "examdate", "examdate");
 
   const testData = [
     { label: "None", value: "" },
@@ -152,13 +101,23 @@ function StudentEmail(props: any) {
 
   const studentFilters = [
     {
+      label: "Exam Date",
+      type: "select",
+      data: examDateData,
+      onChange: (e: any) => {
+        handleDropDownChange(e, "exam_date", allData, setAllData, "all");
+      },
+      style: { maxWidth: "35%", width: "20%" },
+      value: allData.exam_date || "",
+    },
+    {
       label: "State",
       key: "state",
       type: "select",
 
       data: statesData,
       onChange: (e: any) => {
-        handleDropDownChange(e, "state", "city");
+        handleDropDownChange(e, "state", allData, setAllData, "city");
       },
       value: allData.state,
     },
@@ -169,54 +128,30 @@ function StudentEmail(props: any) {
       type: "select",
       data: citiesData,
       onChange: (e: any) => {
-        handleDropDownChange(e, "city", "filterTypeStudent");
+        handleDropDownChange(e, "city", allData, setAllData, "filterTypeStudent");
       },
       value: allData.city,
     },
 
-    {
-      llabel: "School / Group / Cohort",
-      key: "filterTypeStudent",
-      type: "radio",
-      options: [
-        { label: "School", value: "school", fetch: "" },
-        { label: "Group", value: "group", fetch: "" },
-        { label: "Cohort", value: "cohort", fetch: "" },
-      ],
-      onChange: (e: any) => {
-        let data: any = {
-          group: { data: groupsData, label: "Group", key: "select_group" },
-          cohort: { data: cohortsData, label: "Cohort", key: "select_cohort" },
-          school: { data: schoolsData, label: "School", key: "select_school" },
-        };
-        data = data[e];
-
-        allData.childSchoolData = data;
-        handleDropDownChange(e, "filterTypeStudent");
-      },
-      value: allData.filterTypeStudent || "",
-    },
-
-    {
-      hideInput: !allData.filterTypeStudent,
-      label: allData?.childSchoolData?.label || "Select School",
-      key: "select_school",
-      type: "select",
-      data: allData?.childSchoolData?.data || schoolsData,
-      onChange: (e: any) => {
-        handleDropDownChange(e, allData?.childSchoolData?.key || "select_school");
-      },
-      value: allData[allData?.childSchoolData?.key || "select_school"] || "",
-    },
     {
       label: "Class",
       key: "select_class",
       type: "select",
       data: classesData,
       onChange: (e: any) => {
-        handleDropDownChange(e, "select_class");
+        handleDropDownChange(e, "select_class", allData, setAllData);
       },
       value: allData.select_class,
+    },
+
+    {
+      label: "Exam Center",
+      type: "select",
+      data: examCentersData,
+      onChange: (e: any) => {
+        handleDropDownChange(e, "examcenter", allData, setAllData);
+      },
+      value: allData.examcenter || "",
     },
   ];
 
@@ -225,7 +160,7 @@ function StudentEmail(props: any) {
       label: "Subject",
       value: allData.subject,
       placeholder: "Subject",
-      onChange: (e: any) => handleDropDownChange(e.target.value, "subject"),
+      onChange: (e: any) => handleDropDownChange(e.target.value, "subject", allData, setAllData),
     },
     {
       type: "select",
@@ -234,7 +169,7 @@ function StudentEmail(props: any) {
       value: allData.smtp_name,
       placeholder: "SMTP Name",
       onChange: (e: any) => {
-        handleDropDownChange(e, "smtp_name");
+        handleDropDownChange(e, "smtp_name", allData, setAllData);
       },
     },
 
@@ -247,7 +182,7 @@ function StudentEmail(props: any) {
       onChange: (e: any) => {
         let data: any = findFromJson(templetesData, e, "value");
         setTempleteType(data);
-        handleDropDownChange(e, "email_short_name");
+        handleDropDownChange(e, "email_short_name", allData, setAllData);
       },
     },
     {
@@ -257,7 +192,7 @@ function StudentEmail(props: any) {
       value: allData.attachment_name || "",
       placeholder: "Attachment Name",
       onChange: (e: any) => {
-        handleDropDownChange(e, "attachment_name");
+        handleDropDownChange(e, "attachment_name", allData, setAllData);
       },
     },
     {
@@ -268,7 +203,7 @@ function StudentEmail(props: any) {
       },
       onChange: (e: any) => {
         let file = e.target.files[0];
-        handleDropDownChange(file, "attachment_name_File");
+        handleDropDownChange(file, "attachment_name_File", allData, setAllData);
       },
     },
   ];
@@ -313,8 +248,8 @@ function StudentEmail(props: any) {
   };
 
   const sendEmail = () => {
-    if (!allData.email_short_name || !allData.childSchoolData) {
-      console.log(allData);
+    if (!allData.email_short_name || !allData.subject || !allData.smtp_name) {
+      alert("email short name, subject and smtp name are required");
       return;
     }
 
@@ -323,8 +258,8 @@ function StudentEmail(props: any) {
       return;
     }
 
-    let key = allData.childSchoolData.key;
-    let label = String(allData.childSchoolData.label).toLowerCase() + "s";
+    // let key = allData.childSchoolData.key;
+    // let label = String(allData.childSchoolData.label).toLowerCase() + "s";
 
     let payloadData = new FormData();
     let metaData: any = {
@@ -333,10 +268,7 @@ function StudentEmail(props: any) {
       subject: allData.subject,
       city: allData.city,
       state: allData.state,
-      competition: allData.competition,
       class: allData.select_class,
-      exam_center: allData.exam_center,
-      [label]: allData[key],
       registration_Number: allData?.studentsData,
     };
 
@@ -385,8 +317,6 @@ function StudentEmail(props: any) {
   };
 
   const renderUsersTable = () => {
-    // const renderSchoolsTable = () => {
-
     if (studentsList && !studentsList.length) {
       return <> No Record Found</>;
     }
@@ -412,17 +342,6 @@ function StudentEmail(props: any) {
             <td>{item["school_name"]}</td>
             <td>{item["username"]}</td>
             <td>{item["seat_number"]}</td>
-            {/* <td>{item["Division"]}</td>
-            <td>{item["Group"]}</td> */}
-            {/* <td className="text-center">
-              {item?.admit_card_url ? (
-                <a href={item.admit_card_url} target="_blank">
-                  <span className="material-symbols-outlined text-success">download</span>
-                </a>
-              ) : (
-                <span className="material-symbols-outlined text-secondary">download</span>
-              )}
-            </td> */}
           </tr>
         );
       });
@@ -451,11 +370,6 @@ function StudentEmail(props: any) {
               <th scope="col">School</th>
               <th scope="col">Registration No</th>
               <th scope="col">Seat No</th>
-              {/* <th scope="col">Division</th>
-              <th scope="col">Group</th> */}
-              {/* <th scope="col" className="text-center">
-                download
-              </th> */}
             </tr>
           </thead>
           <tbody>{renderTableData()}</tbody>
@@ -472,15 +386,18 @@ function StudentEmail(props: any) {
       <div className="btn btn-primary form-control my-4" onClick={readStudentsData}>
         Get List
       </div>
+      {renderUsersTable()}
+
       <div className="d-flex w-100 gap-3 align-items-center flex-wrap mx-auto justify-content-between">
         {renderFields(mailConfigData)}
       </div>
 
-      {renderUsersTable()}
-      {allData?.studentsData?.length && (
+      {allData?.studentsData?.length ? (
         <div className="btn btn-primary form-control mt-4" onClick={sendEmail}>
           Send Email
         </div>
+      ) : (
+        ""
       )}
       <Loader show={loader} />
       {templeteType.content && (
@@ -492,4 +409,4 @@ function StudentEmail(props: any) {
   );
 }
 
-export default StudentEmail;
+export default ExamCenterFilter;

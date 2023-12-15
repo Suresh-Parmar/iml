@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { SchoolEmail, StudentEmail } from "@/components/bulkEmail";
+import { ExamCenterFilter, SchoolEmail, StudentEmail, TeacherFIleters } from "@/components/bulkEmail";
 import { Group, Radio } from "@mantine/core";
 
 function BulkEmail() {
@@ -37,8 +37,9 @@ function BulkEmail() {
     key: "",
     type: "radio",
     options: [
-      { label: "School Wise", value: "schoolWise" },
-      { label: "Student Wise", value: "studentWise" },
+      { label: "Student", value: "studentWise" },
+      { label: "Exam Centers", value: "examCenterWise" },
+      { label: "Teachers", value: "teachersWise" },
     ],
     onChange: (e: any) => {
       handleDropDownChange(e, "admitCardFilter");
@@ -46,11 +47,26 @@ function BulkEmail() {
     value: allData.admitCardFilter || "schoolWise",
   };
 
+  const renderData = () => {
+    let obj: any = {
+      studentWise: StudentEmail,
+      examCenterWise: ExamCenterFilter,
+      teachersWise: TeacherFIleters,
+    };
+
+    let Component = obj[allData.admitCardFilter];
+    if (allData.admitCardFilter) {
+      return <Component />;
+    }
+    return;
+  };
+
   return (
     <div className="px-4 py-5" style={{ maxHeight: "100%", overflow: "auto" }}>
       <div>{renderRadio(uiFilters)}</div>
-      <SchoolEmail hide={isStudentFilters} />
-      <StudentEmail hide={!isStudentFilters} />
+      {/* <SchoolEmail hide={isStudentFilters} /> */}
+      {/* <StudentEmail hide={!isStudentFilters} /> */}
+      {renderData()}
     </div>
   );
 }
