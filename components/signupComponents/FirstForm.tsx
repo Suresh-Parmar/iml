@@ -90,6 +90,7 @@ export default function FirstForm({ form, onClickNext, setInvoiceBreakdown }: Fi
   return (
     <Flex direction={"column"} justify={"center"} align={"flex-start"} w={"100%"}>
       <Select
+        clearable
         searchable
         nothingFound="No options"
         data={boardsOptions}
@@ -103,6 +104,7 @@ export default function FirstForm({ form, onClickNext, setInvoiceBreakdown }: Fi
         w={"100%"}
       />
       <Select
+        clearable
         searchable
         nothingFound="No options"
         data={classesNames}

@@ -303,6 +303,7 @@ function SchoolForm({
               // icon={<div style={{ color: "black" }}>{getMobileCode()}</div>}
             />
             <Select
+              clearable
               disabled={readonly}
               searchable
               nothingFound="No options"
@@ -326,6 +327,7 @@ function SchoolForm({
             />
 
             <Select
+              clearable
               disabled={readonly}
               searchable
               placeholder="Group XYZ"
@@ -396,6 +398,7 @@ function SchoolForm({
             </div>
 
             <Select
+              clearable
               disabled={readonly}
               searchable
               nothingFound="No options"
@@ -410,6 +413,7 @@ function SchoolForm({
               w={"100%"}
             />
             <Select
+              clearable
               disabled={readonly || form.values.state === ""}
               searchable
               nothingFound="No options"
@@ -442,6 +446,7 @@ function SchoolForm({
               size="md"
             />
             <Select
+              clearable
               disabled={readonly}
               searchable
               placeholder="Relationship Manager"
@@ -455,6 +460,7 @@ function SchoolForm({
               w={"100%"}
             />
             <Select
+              clearable
               disabled={readonly}
               searchable
               nothingFound="No options"
@@ -468,6 +474,7 @@ function SchoolForm({
               w={"100%"}
             />
             <Select
+              clearable
               disabled={readonly}
               searchable
               nothingFound="No options"

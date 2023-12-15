@@ -50,6 +50,7 @@ export default function SecondForm({ form }: SecondFormProps) {
   return (
     <Flex direction={"column"} justify={"center"} align={"flex-start"} w={"100%"}>
       <Select
+        clearable
         searchable
         nothingFound="No options"
         data={examCentersNames}
@@ -154,6 +155,7 @@ export default function SecondForm({ form }: SecondFormProps) {
         }}
       />
       <Select
+        clearable
         searchable
         name="Gender"
         nothingFound="No options"

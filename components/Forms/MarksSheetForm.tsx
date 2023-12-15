@@ -210,7 +210,7 @@ function MarksSheetForm({
 
     return formData.map((item: any, index) => {
       if (item.type == "select") {
-        return <Select searchable={true} size="sm" key={index} {...item} />;
+        return <Select clearable searchable={true} size="sm" key={index} {...item} />;
       } else {
         return <TextInput key={index} {...item} />;
       }

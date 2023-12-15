@@ -220,6 +220,7 @@ function ExamCenterForm({
         <LoadingOverlay visible={oLoader} overlayBlur={2} />
         <div style={{ display: "grid", gridTemplateColumns: "auto auto", gap: "10px", width: "100%" }}>
           <Select
+            clearable
             disabled={readonly}
             searchable
             nothingFound="No options"
@@ -249,6 +250,7 @@ function ExamCenterForm({
           />
 
           <Select
+            clearable
             disabled={readonly}
             searchable
             nothingFound="No options"
@@ -292,6 +294,7 @@ function ExamCenterForm({
             />
           </div>
           <Select
+            clearable
             disabled={readonly}
             searchable
             nothingFound="No options"
@@ -306,6 +309,7 @@ function ExamCenterForm({
             w={"100%"}
           />
           <Select
+            clearable
             disabled={readonly || form.values.state === ""}
             searchable
             nothingFound="No options"
@@ -436,6 +440,7 @@ function ExamCenterForm({
           </div>
 
           <Select
+            clearable
             disabled={readonly}
             searchable
             nothingFound="Instructions"

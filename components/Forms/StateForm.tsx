@@ -130,6 +130,7 @@ function StateForm({
             }}
           />
           <Select
+            clearable
             disabled={readonly}
             searchable
             nothingFound="No options"

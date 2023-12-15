@@ -237,7 +237,7 @@ function WarehouseForm({
       if (item.inputType == "editor") {
         return <Editor key={index} {...item} />;
       } else if (item.inputType == "dropdown") {
-        return <Select searchable={true} style={{ width: "46%" }} key={index} {...item} />;
+        return <Select clearable searchable={true} style={{ width: "46%" }} key={index} {...item} />;
       } else {
         return <TextInput style={{ width: "46%" }} key={index} {...item} />;
       }

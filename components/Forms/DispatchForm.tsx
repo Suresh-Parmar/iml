@@ -549,7 +549,7 @@ function DispatchForm(props: any) {
       } else if (type == "select") {
         return (
           <div key={index} style={{ ...style }}>
-            <Select disabled={readonly} searchable={true} mt={"md"} size="md" {...item} />
+            <Select clearable disabled={readonly} searchable={true} mt={"md"} size="md" {...item} />
           </div>
         );
       } else {
@@ -568,7 +568,7 @@ function DispatchForm(props: any) {
       if (type == "select") {
         return (
           <div key={index} style={{ ...style }}>
-            <Select disabled={readonly} searchable={true} w={"100%"} mt={"md"} size="md" {...item} />
+            <Select clearable disabled={readonly} searchable={true} w={"100%"} mt={"md"} size="md" {...item} />
           </div>
         );
       } else {
@@ -635,6 +635,7 @@ function DispatchForm(props: any) {
               className="d-flex align-items-end justify-content-center  pb-3"
             >
               <Select
+                clearable
                 disabled={readonly}
                 searchable
                 data={products}

@@ -413,6 +413,7 @@ function Page() {
         return (
           <div key={index} style={{ maxWidth: "15%", ...style }}>
             <Select
+              clearable
               searchable={true}
               size="sm"
               w="100%"

@@ -228,7 +228,7 @@ function ExamCenterFilter() {
         return;
       }
       if (item.type == "select") {
-        return <Select searchable={true} size="sm" key={index} w="31%" {...item} />;
+        return <Select clearable searchable={true} size="sm" key={index} w="31%" {...item} />;
       } else if (item.inputType == "file") {
         return (
           <div className="mb-3" style={{ minWidth: "31%" }} key={index}>

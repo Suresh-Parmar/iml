@@ -360,6 +360,7 @@ function Studentsform({
               }}
             />
             <Select
+              clearable
               disabled={readonly}
               searchable
               nothingFound="No options"
@@ -374,6 +375,7 @@ function Studentsform({
               w={"100%"}
             />
             <Select
+              clearable
               disabled={readonly}
               searchable
               nothingFound="No options"
@@ -495,6 +497,7 @@ function Studentsform({
             />
 
             <Select
+              clearable
               disabled={readonly}
               searchable
               name="Gender"
@@ -508,6 +511,7 @@ function Studentsform({
               data={["Female", "Male", "Other", "Prefer Not To Say"]}
             />
             <Select
+              clearable
               disabled={readonly}
               searchable
               name="School"
@@ -524,6 +528,7 @@ function Studentsform({
               data={schoolNames}
             />
             <Select
+              clearable
               disabled={readonly}
               searchable
               nothingFound="No options"
@@ -558,6 +563,7 @@ function Studentsform({
             </div>
 
             <Select
+              clearable
               disabled={readonly || form.values.country === ""}
               searchable
               nothingFound="No options"
@@ -572,6 +578,7 @@ function Studentsform({
               w={"100%"}
             />
             <Select
+              clearable
               disabled={readonly || form.values.state === ""}
               searchable
               nothingFound="No options"

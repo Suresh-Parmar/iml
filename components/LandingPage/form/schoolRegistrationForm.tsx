@@ -114,6 +114,7 @@ function SchoolRegistrationForm() {
 
           <Flex gap={"15px"} w={"100%"}>
             <Select
+              clearable
               withAsterisk
               label="You are"
               placeholder="Select"

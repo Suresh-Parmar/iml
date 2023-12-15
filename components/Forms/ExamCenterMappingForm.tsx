@@ -274,6 +274,7 @@ function ExamCenterMappingForm({
             size="md"
           />
           <Select
+            clearable
             disabled={readonly}
             searchable
             nothingFound="No options"
@@ -292,6 +293,7 @@ function ExamCenterMappingForm({
             w={"100%"}
           />
           <Select
+            clearable
             disabled={readonly}
             searchable
             nothingFound="No options"
@@ -310,6 +312,7 @@ function ExamCenterMappingForm({
             w={"100%"}
           />
           <Select
+            clearable
             disabled={readonly}
             searchable
             nothingFound="No options"

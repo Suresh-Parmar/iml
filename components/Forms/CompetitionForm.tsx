@@ -425,7 +425,7 @@ function CompetitionForm({
       } else if (item.type == "dropdown") {
         return (
           <div key={index} style={{ minWidth: "48%" }}>
-            <Select {...item} />
+            <Select clearable {...item} />
           </div>
         );
       } else if (item.type == "editor") {
