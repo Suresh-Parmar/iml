@@ -326,8 +326,8 @@ function StudentEmail(props: any) {
   };
 
   const sendEmail = () => {
-    if (!allData.email_short_name || !allData.childSchoolData) {
-      console.log(allData);
+    if (!allData.email_short_name || !allData.subject || !allData.smtp_name) {
+      alert("email short name, subject and smtp name are required");
       return;
     }
 
@@ -490,16 +490,20 @@ function StudentEmail(props: any) {
       </div>
 
       {renderUsersTable()}
-      {allData?.studentsData?.length && (
+      {allData?.studentsData?.length ? (
         <div className="btn btn-primary form-control mt-4" onClick={sendEmail}>
           Send Email
         </div>
+      ) : (
+        ""
       )}
       <Loader show={loader} />
-      {templeteType.content && (
+      {templeteType.content ? (
         <div className="my-3">
           <Editor label={templeteType?.name + " Template"} readOnly disabled={true} value={templeteType.content} />
         </div>
+      ) : (
+        ""
       )}
     </div>
   );
