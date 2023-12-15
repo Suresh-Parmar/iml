@@ -45,6 +45,19 @@ function StudentEmail(props: any) {
   };
 
   const readStudentsData = () => {
+    let key: any = allData?.childSchoolData?.key;
+    let label = String(allData?.childSchoolData?.label).toLowerCase() + "s";
+
+    let keyVal: any = {
+      select_school: "school_name",
+      select_group: "group_code",
+      select_cohort: "cohort_code",
+    };
+    let newkey = "";
+    if (keyVal[key]) {
+      newkey = keyVal[key];
+    }
+
     let payload = {
       collection_name: "users",
       op_name: "find_many",
@@ -53,7 +66,7 @@ function StudentEmail(props: any) {
         country: selectedCountry,
         city: allData?.city,
         competition: allData?.competition,
-        school_name: allData?.select_school,
+        [newkey]: allData[key],
         class_id: allData?.select_class,
         exam_center_id: allData?.exam_center,
       },
