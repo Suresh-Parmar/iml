@@ -90,6 +90,7 @@ export default function ThirdForm({ form, setRecaptcha }: ThirdFormProps) {
         </div>
       </div>
       <Select
+        clearable
         searchable
         nothingFound="No options"
         data={stateNames}
@@ -103,6 +104,7 @@ export default function ThirdForm({ form, setRecaptcha }: ThirdFormProps) {
         w={"100%"}
       />
       <Select
+        clearable
         disabled={form.values.state === ""}
         searchable
         nothingFound="No options"
@@ -117,6 +119,7 @@ export default function ThirdForm({ form, setRecaptcha }: ThirdFormProps) {
         w={"100%"}
       />
       <Select
+        clearable
         searchable
         name="School"
         nothingFound="No options"

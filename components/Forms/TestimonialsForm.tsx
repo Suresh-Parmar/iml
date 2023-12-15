@@ -192,6 +192,7 @@ function TestimonialsForm({
       } else if (item.inputType == "dropdown") {
         return (
           <Select
+            clearable
             key={index}
             disabled={readonly}
             searchable

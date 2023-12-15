@@ -157,6 +157,7 @@ function CityForm({
             }}
           />
           <Select
+            clearable
             disabled={readonly}
             searchable
             nothingFound="No options"
@@ -171,6 +172,7 @@ function CityForm({
             w={"100%"}
           />
           <Select
+            clearable
             disabled={readonly || form.values.country === ""}
             searchable
             nothingFound="No options"

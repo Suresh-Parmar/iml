@@ -161,7 +161,7 @@ function DownLoadProduct() {
         } else {
           return (
             <div key={index}>
-              <Select searchable={true} {...item} />
+              <Select clearable searchable={true} {...item} />
             </div>
           );
         }

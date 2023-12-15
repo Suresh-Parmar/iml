@@ -355,6 +355,7 @@ function ProductForm({
       <form onSubmit={form.onSubmit(onHandleSubmit)}>
         <Flex direction={"column"} justify={"center"} align={"flex-start"} w={"100%"}>
           <Select
+            clearable
             disabled={readonly}
             searchable
             nothingFound="No options"
@@ -371,6 +372,7 @@ function ProductForm({
             w={"100%"}
           />
           <Select
+            clearable
             disabled={readonly}
             searchable
             nothingFound="Board Category"
@@ -479,6 +481,7 @@ function ProductForm({
             }}
           />
           <Select
+            clearable
             disabled={readonly}
             searchable
             nothingFound="No options"
@@ -493,6 +496,7 @@ function ProductForm({
             w={"100%"}
           />
           <Select
+            clearable
             disabled={readonly}
             searchable
             nothingFound="No options"

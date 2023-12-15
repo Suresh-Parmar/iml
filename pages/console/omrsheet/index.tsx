@@ -265,7 +265,7 @@ function Page() {
       } else if (type === "select") {
         return (
           <div key={index}>
-            <Select searchable={true} size="sm" {...item} />
+            <Select clearable searchable={true} size="sm" {...item} />
           </div>
         );
       } else {

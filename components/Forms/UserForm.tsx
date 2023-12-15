@@ -372,7 +372,7 @@ function UserForm({
           <LoadingOverlay visible={oLoader} overlayBlur={2} />
           <Flex gap={"md"} direction={"row"} justify={"center"} align={"flex-start"} w={"100%"}>
             <Flex direction={"column"} justify={"center"} align={"flex-start"} w={"100%"}>
-              {/* <Select
+              {/* <Select clearable 
                 disabled={readonly}
                 searchable
                 nothingFound="No options"
@@ -386,7 +386,7 @@ function UserForm({
                 onChange={onChangeCompetition}
                 w={"100%"}
               /> */}
-              {/* <Select
+              {/* <Select clearable 
                 disabled={readonly}
                 searchable
                 nothingFound="No options"
@@ -524,6 +524,7 @@ function UserForm({
               />
               {formType == "teacher" && (
                 <Select
+                  clearable
                   disabled={readonly}
                   searchable
                   name="Designation"
@@ -555,6 +556,7 @@ function UserForm({
             </Flex>
             <Flex direction={"column"} justify={"center"} align={"flex-start"} w={"100%"}>
               <Select
+                clearable
                 disabled={readonly}
                 searchable
                 name="Gender"
@@ -568,7 +570,7 @@ function UserForm({
                 placeholder="Select your gender"
                 data={["Female", "Male", "Other", "Prefer Not To Say"]}
               />
-              {/* <Select
+              {/* <Select clearable 
                 disabled={readonly}
                 searchable
                 name="School"
@@ -584,7 +586,7 @@ function UserForm({
                 label="School"
                 data={schoolNames}
               /> */}
-              {/* <Select
+              {/* <Select clearable 
                 disabled={readonly}
                 searchable
                 nothingFound="No options"
@@ -612,6 +614,7 @@ function UserForm({
                 size="md"
               />
               <Select
+                clearable
                 disabled={readonly || form.values.country === ""}
                 searchable
                 nothingFound="No options"
@@ -626,6 +629,7 @@ function UserForm({
                 w={"100%"}
               />
               <Select
+                clearable
                 disabled={readonly || form.values.state === ""}
                 searchable
                 nothingFound="No options"

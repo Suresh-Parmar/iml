@@ -1,21 +1,9 @@
-import {
-  TextInput,
-  Button,
-  Group,
-  Box,
-  Flex,
-  LoadingOverlay,
-  Select,
-} from '@mantine/core';
-import { useForm } from '@mantine/form';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { MatrixDataType, MatrixRowType } from '../Matrix';
-import {
-  createSiteConfig,
-  readSiteConfigs,
-  updateSiteConfig,
-} from '@/utilities/API';
-import { notifications } from '@mantine/notifications';
+import { TextInput, Button, Group, Box, Flex, LoadingOverlay, Select } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { MatrixDataType, MatrixRowType } from "../Matrix";
+import { createSiteConfig, readSiteConfigs, updateSiteConfig } from "@/utilities/API";
+import { notifications } from "@mantine/notifications";
 
 function SiteForm({
   open,
@@ -46,11 +34,10 @@ function SiteForm({
   const form = useForm({
     initialValues: {
       ...rowData,
-      name: rowData?.name ?? '',
+      name: rowData?.name ?? "",
     },
     validate: {
-      name: (value) =>
-        value?.length < 2 ? 'Name must have at least 2 letters' : null,
+      name: (value) => (value?.length < 2 ? "Name must have at least 2 letters" : null),
     },
   });
   const [oLoader, setOLoader] = useState<boolean>(false);
@@ -62,7 +49,7 @@ function SiteForm({
       const isSiteUpdated = await updateSiteConfig(rowData._id, {
         ...values,
       });
-      if (isSiteUpdated.toUpperCase() === 'DOCUMENT UPDATED') {
+      if (isSiteUpdated.toUpperCase() === "DOCUMENT UPDATED") {
         const siteConfigs = await readSiteConfigs();
         setData(siteConfigs);
         setOLoader(false);
@@ -73,33 +60,33 @@ function SiteForm({
       notifications.show({
         title: `Site Config ${rowData.name} updated!`,
         message: `The above class has been updated with new information.`,
-        color: 'blue',
+        color: "blue",
       });
     } else {
       const isSiteCreated = await createSiteConfig(values as MatrixRowType);
-      if (isSiteCreated.toUpperCase() === 'DOCUMENT CREATED') {
+      if (isSiteCreated.toUpperCase() === "DOCUMENT CREATED") {
         const siteConfigs = await readSiteConfigs();
         setData(siteConfigs);
         setOLoader(false);
         notifications.show({
           title: `Site Config created!`,
           message: `A new site config has been created.`,
-          color: 'green',
+          color: "green",
         });
-      } else if (isSiteCreated.toUpperCase() === 'DOCUMENT ALREADY EXISTS') {
+      } else if (isSiteCreated.toUpperCase() === "DOCUMENT ALREADY EXISTS") {
         setOLoader(false);
         notifications.show({
           title: `Site Config already exists!`,
           message: `${values.name} already exists.`,
-          color: 'orange',
+          color: "orange",
         });
       } else {
         setOLoader(false);
       }
     }
     form.setValues({
-      name: '',
-      code: '',
+      name: "",
+      code: "",
       status: true,
     });
     close();
@@ -111,7 +98,7 @@ function SiteForm({
         <LoadingOverlay visible={oLoader} overlayBlur={2} />
         <Flex direction={"column"} justify={"center"} align={"flex-start"} w={"100%"}>
           <TextInput
-            disabled={readonly }
+            disabled={readonly}
             withAsterisk
             label="Name"
             placeholder="Name"
@@ -124,6 +111,7 @@ function SiteForm({
             }}
           />
           <Select
+            clearable
             disabled={readonly}
             withAsterisk
             w={"100%"}

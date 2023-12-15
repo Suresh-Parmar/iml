@@ -548,6 +548,7 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
             </ActionIcon>
 
             <Select
+              clearable
               withinPortal
               maw={75}
               value={`${table.getState().pagination.pageSize}`}
