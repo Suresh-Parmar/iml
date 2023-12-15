@@ -1,7 +1,7 @@
 import Loader from "@/components/common/Loader";
 import { handleDropDownChange } from "@/helpers/dateHelpers";
 import { filterData } from "@/helpers/filterData";
-import { iterateData } from "@/helpers/getData";
+import { genratePayload, handleApiData, iterateData } from "@/helpers/getData";
 import { checkIsAllChecked, selectCheckBOxData } from "@/helpers/selectCheckBox";
 import { useTableDataMatrixQuery } from "@/redux/apiSlice";
 import { admitCardCountData, genrateSeatNumber } from "@/utilities/API";
@@ -21,100 +21,63 @@ function Assignadmitcard() {
   const countryName = state?.selectedCountry?.label;
   let themeColor = state?.colorScheme;
 
-  const genratePayload = (collection: string, filter?: any, required?: any) => {
-    if (required) {
-      if (Array.isArray(required)) {
-        for (let index = 0; index < required.length; index++) {
-          const element = required[index];
-          if (!filter[element]) {
-            return "";
-          }
-        }
-      } else {
-        if (!filter[required]) {
-          return "";
-        }
-      }
-    }
-
-    let obj: any = {
-      collection_name: collection,
-      filter_var: {
-        country: countryName,
-        status: true,
-      },
-      op_name: "find_many",
-    };
-
-    if (filter) {
-      obj.filter_var = { ...obj.filter_var, ...filter };
-    }
-
-    return obj;
-  };
-
-  let handleApiData = (data: any) => {
-    if (Array.isArray(data)) {
-      return structuredClone(data);
-    }
-    return [];
-  };
-
-  let competitionData = useTableDataMatrixQuery(genratePayload("competitions"));
+  let competitionData = useTableDataMatrixQuery(genratePayload("competitions", undefined, undefined, countryName));
   competitionData = iterateData(competitionData);
   competitionData = handleApiData(competitionData);
   competitionData = filterData(competitionData, "label", "value", "code");
 
-  let stateApiData = useTableDataMatrixQuery(genratePayload("states"));
+  let stateApiData = useTableDataMatrixQuery(genratePayload("states", undefined, undefined, countryName));
   stateApiData = iterateData(stateApiData);
   stateApiData = handleApiData(stateApiData);
   stateApiData = filterData(stateApiData, "label", "value");
 
-  let cityApiData = useTableDataMatrixQuery(genratePayload("cities", { state: allData.state }, "state"));
+  let cityApiData = useTableDataMatrixQuery(genratePayload("cities", { state: allData.state }, "state", countryName));
   cityApiData = iterateData(cityApiData);
   cityApiData = handleApiData(cityApiData);
   cityApiData = filterData(cityApiData, "label", "value");
 
-  let examDateData = useTableDataMatrixQuery(genratePayload("exam_centers"));
+  let examDateData = useTableDataMatrixQuery(genratePayload("exam_centers", undefined, undefined, countryName));
   examDateData = iterateData(examDateData);
   examDateData = handleApiData(examDateData);
   examDateData = filterData(examDateData, "label", "value", "examdate", true, "examdate", "examdate");
 
-  let classApiData = useTableDataMatrixQuery(genratePayload("classes"));
+  let classApiData = useTableDataMatrixQuery(genratePayload("classes", undefined, undefined, countryName));
   classApiData = iterateData(classApiData);
   classApiData = handleApiData(classApiData);
   classApiData = filterData(classApiData, "label", "value", undefined, true, "order_code", undefined, true);
   classApiData = [{ value: undefined, label: "Select" }, ...classApiData];
 
-  let schoolsData = useTableDataMatrixQuery(genratePayload("schools", { city: allData.second_city }));
+  let schoolsData = useTableDataMatrixQuery(
+    genratePayload("schools", { city: allData.second_city }, undefined, countryName)
+  );
   schoolsData = iterateData(schoolsData);
   schoolsData = handleApiData(schoolsData);
   schoolsData = filterData(schoolsData, "label", "value");
 
-  let groupsapiData = useTableDataMatrixQuery(genratePayload("groups"));
+  let groupsapiData = useTableDataMatrixQuery(genratePayload("groups", undefined, undefined, countryName));
   // let groupsapiData = useTableDataMatrixQuery(genratePayload("groups", { city: allData.second_city }, "city"));
   groupsapiData = iterateData(groupsapiData);
   groupsapiData = handleApiData(groupsapiData);
   groupsapiData = filterData(groupsapiData, "label", "value");
 
-  let cohortsapiData = useTableDataMatrixQuery(genratePayload("cohorts"));
+  let cohortsapiData = useTableDataMatrixQuery(genratePayload("cohorts", undefined, undefined, countryName));
   // let cohortsapiData = useTableDataMatrixQuery(genratePayload("cohorts", { city: allData.second_city }, "city"));
   cohortsapiData = iterateData(cohortsapiData);
   cohortsapiData = handleApiData(cohortsapiData);
   cohortsapiData = filterData(cohortsapiData, "label", "value");
 
-  let boartTypeApiData = useTableDataMatrixQuery(genratePayload("boards"));
+  let boartTypeApiData = useTableDataMatrixQuery(genratePayload("boards", undefined, undefined, countryName));
   boartTypeApiData = iterateData(boartTypeApiData);
   boartTypeApiData = handleApiData(boartTypeApiData);
   boartTypeApiData = filterData(boartTypeApiData, "label", "value", "board_type", true, "board_type", "board_type");
 
-  let getStudentsListApiData = useTableDataMatrixQuery(genratePayload("users", userPayload));
+  let getStudentsListApiData = useTableDataMatrixQuery(genratePayload("users", userPayload, undefined, countryName));
   let getStudentsList = iterateData(getStudentsListApiData);
   getStudentsList = handleApiData(getStudentsList);
   getStudentsList = filterData(getStudentsList, "label", "value");
 
   let examCentersData = useTableDataMatrixQuery(
-    genratePayload("exam_centers", { examdate: allData.exam_date, city: allData.city })
+    genratePayload("exam_centers", { examdate: allData.exam_date, city: allData.city }, undefined, countryName)
   );
   examCentersData = iterateData(examCentersData);
   examCentersData = handleApiData(examCentersData);
