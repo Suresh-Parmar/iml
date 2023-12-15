@@ -43,7 +43,7 @@ function UserForm({
   setRowData: Dispatch<SetStateAction<MatrixRowType | undefined>>;
   setFormTitle: Dispatch<SetStateAction<string>>;
   readonly?: boolean;
-  formType: FormType;
+  formType: any;
 }) {
   const [citiesData, setCitiesData] = useState<MatrixDataType>([]);
   const [statesData, setStatesData] = useState<MatrixDataType>([]);
@@ -88,33 +88,6 @@ function UserForm({
     });
     return newData;
   };
-
-  const getCohorts = () => {
-    if (formType == "Students") {
-      readApiData("cohorts")
-        .then((res) => {
-          setCohortsData(filterData(res || [], "code"));
-        })
-        .catch((error) => console.error(error));
-    }
-  };
-
-  const getGroups = () => {
-    if (formType == "Students") {
-      readApiData("groups")
-        .then((res) => {
-          setGroupData(filterData(res || [], "code"));
-        })
-        .catch((error) => console.error(error));
-    }
-  };
-
-  useEffect(() => {
-    if (!showRoles) {
-      getGroups();
-      getCohorts();
-    }
-  }, []);
 
   async function readCitiesData(filterBy?: "state", filterQuery?: string | number) {
     let cities: MatrixDataType;
@@ -549,24 +522,25 @@ function UserForm({
                   size: "md",
                 }}
               />
-              <Select
-                disabled={readonly}
-                searchable
-                name="Designation"
-                nothingFound="No options"
-                mt={"md"}
-                size="md"
-                withAsterisk
-                {...form.getInputProps("designation")}
-                w={"100%"}
-                label="Designation"
-                placeholder="Select Designation"
-                data={[
-                  { value: "teacher", label: "Teacher" },
-                  { value: "rm", label: "Relationship Manager" },
-                  { value: "principal", label: "Principal" },
-                ]}
-              />
+              {formType == "teacher" && (
+                <Select
+                  disabled={readonly}
+                  searchable
+                  name="Designation"
+                  nothingFound="No options"
+                  mt={"md"}
+                  size="md"
+                  withAsterisk
+                  {...form.getInputProps("designation")}
+                  w={"100%"}
+                  label="Designation"
+                  placeholder="Select Designation"
+                  data={[
+                    { value: "teacher", label: "Teacher" },
+                    { value: "principal", label: "Principal" },
+                  ]}
+                />
+              )}
               {/* <TextInput
                 disabled={readonly}
                 // withAsterisk
