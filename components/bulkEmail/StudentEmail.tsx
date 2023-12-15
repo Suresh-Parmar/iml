@@ -45,6 +45,11 @@ function StudentEmail(props: any) {
   };
 
   const readStudentsData = () => {
+    if (!allData?.city) {
+      alert("Please select a city  ");
+      return;
+    }
+
     let key: any = allData?.childSchoolData?.key;
     let label = String(allData?.childSchoolData?.label).toLowerCase() + "s";
 
