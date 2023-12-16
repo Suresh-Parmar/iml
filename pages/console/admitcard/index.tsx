@@ -771,7 +771,7 @@ function Page() {
         <div className="table-responsive mt-4">{renderSchoolsTable()}</div>
         <div className="table-responsive mt-4">{renderUsersTable()}</div>
         {/* <div className="table-responsive  m-4">{renderTable()}</div> */}
-        {allData?.schools?.length && !isStudentFilters ? (
+        {allData?.schools?.length && !isStudentFilters && !pdfLoader ? (
           <div className="btn btn-primary form-control" onClick={() => readSchoolsData(true)}>
             Generate PDF
           </div>

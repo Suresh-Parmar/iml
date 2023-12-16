@@ -29,6 +29,8 @@ function Page() {
   const [studentGridData, setStudentGridData] = useState<any>([]);
   const [examDate, setExamDate] = useState<any>([]);
   const [zipUrl, setZipUrl] = useState<any>("");
+  const [pdfLoader, setpdfLoader] = useState<any>(false);
+  const [genratedData, setGenratedData] = useState<any>([]);
 
   useEffect(() => {
     if (loader) {
@@ -339,6 +341,8 @@ function Page() {
                 <a href={item.attendence_sheet} target="_blank">
                   <span className="material-symbols-outlined text-success">download</span>
                 </a>
+              ) : item?._id == pdfLoader ? (
+                "loading..."
               ) : (
                 <span className="material-symbols-outlined text-secondary">download</span>
               )}
@@ -390,7 +394,7 @@ function Page() {
         </table>
       </div>
     );
-  }, [allData, dataExamCenters, checkIsAllChecked(allData.exam_center, dataExamCenters), themeColor]);
+  }, [allData, dataExamCenters, checkIsAllChecked(allData.exam_center, dataExamCenters), themeColor, pdfLoader]);
 
   let migrateData = (data: any[], data1: any[], by: string, mainKey: any = "") => {
     let newData: any[] = [];
@@ -408,40 +412,53 @@ function Page() {
     return newData;
   };
 
-  const genrateStudentPdf = () => {
+  let removeGarbage = (data: any) => {
+    let arr: any = [];
+
+    data.map((item: any) => {
+      if (item.attendence_sheet) {
+        arr.push(item);
+      }
+    });
+
+    return arr;
+  };
+
+  const genrateStudentPdf = async () => {
     let singleCompetition = findFromJson(comeptitionsData, allData.competition, "value");
+    setGenratedData([]);
 
-    let newPayload: any = {
-      country: countryName || "India",
-      competition: singleCompetition?.name || "",
-      state: allData.state,
-      city: allData.city,
-      exam_date: allData.exam_date,
-      exam_center: allData.exam_center,
-      series: allData.series,
-    };
+    for (const item of allData.exam_center) {
+      let newPayload: any = {
+        country: countryName || "India",
+        competition: singleCompetition?.name || "",
+        state: allData.state,
+        city: allData.city,
+        exam_date: allData.exam_date,
+        exam_center: [item],
+        series: allData.series,
+      };
 
-    if (allData.select_class && allData.select_class != "all") {
-      newPayload.class = allData.select_class;
-    }
+      if (allData.select_class && allData.select_class != "all") {
+        newPayload.class = allData.select_class;
+      }
 
-    setLoader(true);
-    attendenceSheetDownload(newPayload)
-      .then((res) => {
-        setLoader(false);
-        let newData = migrateData(res.data, dataExamCenters, "center_code", "_id");
-        if (Array.isArray(res.data) && res.data.length > 1) {
-          if (res.data[res.data.length - 1]?.zip_file) {
-            setZipUrl(res.data[res.data.length - 1]?.zip_file);
-          } else {
-            setZipUrl(res.data[res.data.length - 2]?.zip_file);
-          }
-        }
+      setpdfLoader(item);
+
+      try {
+        let data = await attendenceSheetDownload(newPayload);
+        setpdfLoader(false);
+        let tmpNewData = removeGarbage(data?.data);
+
+        genratedData.push(...tmpNewData);
+        setGenratedData([genratedData]);
+        let newData = migrateData(genratedData, dataExamCenters, "center_code", "_id");
         setDataExamCenters([...newData]);
-      })
-      .catch((errors) => {
-        setLoader(false);
-      });
+      } catch (err) {
+        console.log(err);
+        setpdfLoader(false);
+      }
+    }
   };
 
   const AdmitCardDownLoad = () => {
@@ -451,7 +468,7 @@ function Page() {
         <div className="table-responsive mt-4">{renderUsersTable()}</div>
         {/* <div className="table-responsive  m-4">{renderTable()}</div> */}
 
-        {allData?.exam_center?.length ? (
+        {allData?.exam_center?.length && !pdfLoader ? (
           <div className="btn btn-primary form-control" onClick={() => genrateStudentPdf()}>
             Generate PDF
           </div>

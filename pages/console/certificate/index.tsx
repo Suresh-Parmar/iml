@@ -29,6 +29,8 @@ function Page() {
   const [loader, setLoader] = useState<any>(false);
   const [studentGridData, setStudentGridData] = useState<any>([]);
   const [zipUrl, setZipUrl] = useState<any>("");
+  const [pdfLoader, setpdfLoader] = useState<any>(false);
+  const [genratedData, setGenratedData] = useState<any>([]);
 
   useEffect(() => {
     if (loader) {
@@ -131,7 +133,25 @@ function Page() {
     return data;
   };
 
-  function readSchoolsData(isSchool: any = false) {
+  let removeGarbage = (data: any) => {
+    let arr: any = [];
+
+    if (!Array.isArray(data)) {
+      return arr;
+    }
+
+    data.map((item: any) => {
+      if (item.certificate_url) {
+        arr.push(item);
+      }
+    });
+
+    return arr;
+  };
+
+  async function readSchoolsData(isSchool: any = false) {
+    setGenratedData([]);
+
     let newPayload: any = {
       country: countryName || "India",
       competition_code: allData.competition || "",
@@ -141,27 +161,36 @@ function Page() {
     };
 
     if (isSchool) {
-      newPayload = { school_name: allData.schools };
-    }
+      for (const school of allData.schools) {
+        try {
+          newPayload = { school_name: [school] };
+          setpdfLoader(school);
+          let data: any = await certificateDownload(newPayload);
+          setpdfLoader(false);
+          data = removeGarbage(data?.data);
+          genratedData.push(...data);
+          setGenratedData([genratedData]);
 
-    setLoader(true);
-    certificateDownload(newPayload)
-      .then((res) => {
-        setLoader(false);
-        if (isSchool) {
-          if (Array.isArray(res.data) && res.data.length > 1) {
-            setZipUrl(res.data[res.data.length - 1]?.zip_file);
-          }
-          downloadPdf(res.data);
-        } else {
-          let data = genrateDataFormDropDown(res.data);
-          // setSchoolsDataDropDown(data);
-          setSchoolsData(res.data);
+          let newData = downloadPdf(genratedData);
+
+          console.log(newData);
+        } catch (e) {
+          setpdfLoader(false);
+          console.log(e);
         }
-      })
-      .catch((errors) => {
-        setLoader(false);
-      });
+      }
+    } else {
+      setLoader(true);
+      certificateDownload(newPayload)
+        .then((res) => {
+          setLoader(false);
+          let data = genrateDataFormDropDown(res.data);
+          setSchoolsData(res.data);
+        })
+        .catch((errors) => {
+          setLoader(false);
+        });
+    }
   }
 
   async function readClassesData(filterBy?: "name" | "status", filterQuery?: string | number) {
@@ -528,6 +557,8 @@ function Page() {
                 <a href={item.certificate_url} target="_blank">
                   <span className="material-symbols-outlined text-success">download</span>
                 </a>
+              ) : item.school_name == pdfLoader ? (
+                "loading..."
               ) : (
                 <span className="material-symbols-outlined text-secondary">download</span>
               )}
@@ -578,7 +609,14 @@ function Page() {
         </table>
       </div>
     );
-  }, [allData.schools, schoolsData, themeColor, checkIsAllChecked(allData.schools, schoolsData), isStudentFilters]);
+  }, [
+    allData.schools,
+    schoolsData,
+    themeColor,
+    checkIsAllChecked(allData.schools, schoolsData),
+    isStudentFilters,
+    pdfLoader,
+  ]);
 
   const renderUsersTable = useCallback(() => {
     // const renderSchoolsTable = () => {
@@ -708,7 +746,7 @@ function Page() {
         <div className="table-responsive mt-4">{renderSchoolsTable()}</div>
         <div className="table-responsive mt-4">{renderUsersTable()}</div>
         {/* <div className="table-responsive  m-4">{renderTable()}</div> */}
-        {allData?.schools?.length && !isStudentFilters ? (
+        {allData?.schools?.length && !isStudentFilters && !pdfLoader ? (
           <div className="btn btn-primary form-control" onClick={() => readSchoolsData(true)}>
             Generate PDF
           </div>
