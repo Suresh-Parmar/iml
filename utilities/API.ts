@@ -158,8 +158,6 @@ export const readData = async (
     requestBody = data;
   }
 
-  console.log(requestBody);
-
   // return;
 
   try {
