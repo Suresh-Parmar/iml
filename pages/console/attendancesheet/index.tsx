@@ -292,6 +292,23 @@ function Page() {
     });
   }, [filters]);
 
+  const downloadZipConcept = async () => {
+    for (let item of genratedData[0]) {
+      if (item.attendence_sheet) {
+        let a = document.createElement("a");
+        a.href = item.attendence_sheet;
+        a.target = "_blank";
+        document.body.appendChild(a);
+
+        await new Promise((resolve) => {
+          a.click();
+          resolve("");
+        });
+        document.body.removeChild(a);
+      }
+    }
+  };
+
   const handleCHeckBOxesStudents = (
     e: any,
     item: any = "",
@@ -356,10 +373,17 @@ function Page() {
       <div className="my-4 table-responsive" style={{ maxHeight: "350px", overflow: "auto" }}>
         <div className="d-flex justify-content-between px-4">
           <span></span>
-          {zipUrl && (
-            <a href={zipUrl} target="_blank">
+          {genratedData.length ? (
+            <div
+              className="pointer"
+              onClick={() => {
+                downloadZipConcept();
+              }}
+            >
               <span className="material-symbols-outlined text-success">folder_zip</span>
-            </a>
+            </div>
+          ) : (
+            ""
           )}
         </div>
         <table className={`table table-striped table-${themeColor}`}>
