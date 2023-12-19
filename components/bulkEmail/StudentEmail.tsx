@@ -118,7 +118,7 @@ function StudentEmail(props: any) {
   );
   templetesData = iterateData(templetesData);
   templetesData = handleApiData(templetesData);
-  templetesData = filterData(templetesData, "label", "value");
+  templetesData = filterData(templetesData, "label", "value", "shortname");
 
   smtpData = useTableDataMatrixQuery(genratePayload("smtp_configs", undefined, undefined, selectedCountry));
   smtpData = iterateData(smtpData);
