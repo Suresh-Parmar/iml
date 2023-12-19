@@ -11,9 +11,8 @@ import {
   readTempates,
   updateExamCenter,
 } from "@/utilities/API";
-import { DatePickerInput } from "@mantine/dates";
 import { notifications } from "@mantine/notifications";
-import { checkValidDate, maxLength, validatePhone } from "@/helpers/validations";
+import { maxLength, validatePhone } from "@/helpers/validations";
 import Editor from "../editor/editor";
 import { filterDataMulti, filterDataSingle } from "@/helpers/dropDownData";
 import { filterData, formatedDate } from "@/helpers/filterData";

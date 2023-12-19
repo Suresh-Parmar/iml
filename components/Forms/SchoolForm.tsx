@@ -1,9 +1,10 @@
-import { TextInput, Button, Group, Box, Flex, Textarea, Select, LoadingOverlay, Radio } from "@mantine/core";
+import { TextInput, Button, Group, Box, Flex, Textarea, Select, LoadingOverlay, Radio, Checkbox } from "@mantine/core";
 import { isEmail, useForm } from "@mantine/form";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import { MatrixDataType, MatrixRowType } from "../Matrix";
 import {
+  createExamCenter,
   createSchool,
   readApiData,
   readBoards,
@@ -14,13 +15,12 @@ import {
   updateSchool,
 } from "@/utilities/API";
 import { notifications } from "@mantine/notifications";
-import { getReduxState } from "@/redux/hooks";
-import { getInternationalDailingCode } from "@/utilities/countriesUtils";
 import { maxLength } from "@/helpers/validations";
 import { filterDrodownData } from "@/helpers/filterFromJson";
 import { filterDataSingle } from "@/helpers/dropDownData";
 import { useSelector } from "react-redux";
 import { setGetData } from "@/helpers/getLocalStorage";
+import { DateinputCustom } from "../utils";
 
 function SchoolForm({
   open,
@@ -137,44 +137,24 @@ function SchoolForm({
     return "+" + reduxData?.selectedCountry?.country_code || selectedCountryLocal?.country_code || "";
   };
 
-  const form = useForm({
+  const form: any = useForm({
     initialValues: {
-      name: rowData?.name ?? "",
-      board: rowData?.board ?? "",
-      group: rowData?.group ?? "",
-      type: rowData?.type ?? "",
-      tags: rowData?.tags ?? "",
-      country: rowData?.country ?? "",
-      state: rowData?.state ?? "",
-      city: rowData?.city ?? "",
-      principal: rowData?.principal ?? "",
-      address: rowData?.address ?? "",
-      pincode: rowData?.pincode ?? "",
-      label: rowData?.label ?? "",
-      name_address: rowData?.name_address ?? "",
-      name_certificate: rowData?.name_certificate ?? "",
-      geo_address: rowData?.geo_address ?? "",
-      contact_number: String(rowData?.contact_number)?.replace(getMobileCode(), "").trim() ?? "",
-      contact_email: rowData?.contact_email ?? "",
-      status: rowData?.status ?? "",
-      relationship_manager: rowData?.relationship_manager ?? "",
-      teacher_incharge: rowData?.teacher_incharge ?? "",
-      sections: rowData?.sections ?? "",
-      paid: rowData?.paid ?? "yes",
+      ...rowData,
       affiliation: rowData?.affiliation ?? "no",
-      language: rowData?.language ?? "",
-      comments: rowData?.comments ?? "",
+      contact_number: rowData?.contact_number
+        ? String(rowData?.contact_number)?.replace(getMobileCode(), "").trim()
+        : "",
     },
 
     validate: {
-      name: (value) => (value.length < 2 ? "Name must have at least 2 letters" : null),
+      name: (value: any) => (value.length < 2 ? "Name must have at least 2 letters" : null),
       // principal: (value) => (value.length < 2 ? "Name must have at least 2 letters" : null),
       // teacher_incharge: (value) => (value.length < 2 ? "must have at least 2 letters" : null),
       // relationship_manager: (value) => (value.length < 2 ? "must have at least 2 letters" : null),
       // group: (value) => (value.length < 2 ? "must be selected" : null),
       // board: (value) => (value.length === 0 ? "Board must be selected" : null),
-      state: (value) => (value.length === 0 ? "State must be selected" : null),
-      city: (value) => (value.length === 0 ? "City must be selected" : null),
+      state: (value: any) => (value.length === 0 ? "State must be selected" : null),
+      city: (value: any) => (value.length === 0 ? "City must be selected" : null),
       // address: (value) => (value.length < 2 ? "Address must have at least 50 letters" : null),
       // name_address: (value) => (value.length < 2 ? "Address must have at least 50 letters" : null),
       // label: (value) => (value.length < 2 ? "Address must have at least 50 letters" : null),
@@ -214,6 +194,9 @@ function SchoolForm({
       };
       const isSchoolCreated = await createSchool(values as MatrixRowType);
       if (isSchoolCreated.toLowerCase() === "document created") {
+        if (form?.values?.create_exam_center) {
+          await addExamCenters(values);
+        }
         const schools = await readSchools();
         setData(schools);
         setOLoader(false);
@@ -233,22 +216,22 @@ function SchoolForm({
         setOLoader(false);
       }
     }
-    form.setValues({
-      name: "",
-      board: "",
-      group: "",
-      type: "",
-      tags: "",
 
-      country: "",
-      state: "",
-      city: "",
-      address: "",
-      pincode: "",
-      label: "",
-      geo_address: "",
-    });
     close();
+  };
+
+  const addExamCenters = async (values: any) => {
+    const genratedPayload: any = {
+      address: values.address,
+      examdate: values.exam_date,
+      mode: values.exam_mode,
+      name: values.name,
+      state: values.state,
+      city: values.city,
+    };
+
+    const isExamCenterCreated = await createExamCenter(genratedPayload);
+    console.log(isExamCenterCreated);
   };
 
   const onChangeState = async (event: any) => {
@@ -260,6 +243,44 @@ function SchoolForm({
   const cityNames = filterDataSingle(citiesData || [], "name");
   const boardNames = filterDataSingle(boardsData || [], "name");
   const stateNames = filterDataSingle(statesData || [], "name");
+
+  const renderExtraFields = () => {
+    if (form?.values?.create_exam_center) {
+      return (
+        <>
+          <DateinputCustom
+            inputProps={{
+              popoverProps: {
+                withinPortal: true,
+              },
+              disabled: readonly,
+              name: "exam_date",
+              label: "exam date",
+              // placeholder: `${new Date(Date.now()).toDateString()}`,
+              ...form.getInputProps("exam_date"),
+              w: "100%",
+              mt: "md",
+              size: "md",
+            }}
+          />
+
+          <Select
+            clearable
+            disabled={readonly}
+            searchable
+            nothingFound="No options"
+            data={["online", "offline", "both"]}
+            label={"Exam Mode"}
+            mt={"md"}
+            size="md"
+            {...form.getInputProps("exam_mode")}
+            w={"100%"}
+          />
+        </>
+      );
+    }
+    return <></>;
+  };
 
   return (
     <Box maw={"100%"} mx="auto">
@@ -325,7 +346,6 @@ function SchoolForm({
               mt={"md"}
               size="md"
             />
-
             <Select
               clearable
               disabled={readonly}
@@ -349,7 +369,6 @@ function SchoolForm({
               mt={"md"}
               size="md"
             />
-
             <TextInput
               disabled={readonly}
               label="Section"
@@ -359,7 +378,6 @@ function SchoolForm({
               mt={"md"}
               size="md"
             />
-
             <div style={{ gridColumn: "1 / -1" }}>
               <Textarea
                 disabled={readonly}
@@ -396,7 +414,6 @@ function SchoolForm({
                 size="md"
               />
             </div>
-
             <Select
               clearable
               disabled={readonly}
@@ -435,7 +452,6 @@ function SchoolForm({
               mt={"md"}
               size="md"
             />
-
             <TextInput
               disabled={readonly}
               label="Name On Certificate"
@@ -502,14 +518,24 @@ function SchoolForm({
                 <Radio value="no" label="No" />
               </Group>
             </Radio.Group>
-
             <Radio.Group {...form.getInputProps("paid")} label="Paid">
               <Group mt="xs">
                 <Radio value="yes" label="Yes" />
                 <Radio value="no" label="No" />
               </Group>
             </Radio.Group>
-
+            <Checkbox
+              className="mt-3"
+              style={{ gridColumn: "1 / -1" }}
+              label="Create Exam Center"
+              checked={form?.values?.create_exam_center}
+              onChange={(event) => {
+                form.setFieldValue("create_exam_center", event.currentTarget.checked);
+                form.setFieldValue("exam_date", "");
+                form.setFieldValue("exam_mode", "");
+              }}
+            />
+            {renderExtraFields()}
             <div style={{ gridColumn: "1 / -1" }}>
               <Textarea
                 disabled={readonly}
