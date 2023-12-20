@@ -1275,6 +1275,11 @@ export const allTypes: any = {
       defaultShow: true,
     },
     {
+      id: "Seat Number",
+      key: "seat_number",
+      defaultShow: true,
+    },
+    {
       id: "Password",
       key: "password",
     },
