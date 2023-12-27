@@ -488,9 +488,13 @@ function Reports() {
         return <div key={index}>{renderRadio(item)}</div>;
       } else if (type == "gridview") {
         if (!data) {
-          return <></>;
+          return <div key={index}></div>;
         }
-        return <div className="w-100">{renderSchoolsTable(data, arrKey)}</div>;
+        return (
+          <div key={index} className="w-100">
+            {renderSchoolsTable(data, arrKey)}
+          </div>
+        );
       } else if (type == "checkbox") {
         return (
           <Checkbox key={index} checked={checked} label={label} w={"100%"} mt={"md"} size="md" onChange={onchange} />
