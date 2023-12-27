@@ -343,6 +343,23 @@ const NavigationLinks = (props: any) => {
         },
       ],
     },
+    {
+      linkHref: "Reports",
+      href: "",
+      icon: <IconAffiliate size="2rem" />,
+      color: "gray",
+      label: "Reports",
+      description: "All users of the system",
+      navlinks: [
+        {
+          href: `${consoleBaseURL}/reports`,
+          icon: <IconUser size="2rem" />,
+          color: "gray",
+          label: "Reports",
+          description: "All users of the system",
+        },
+      ],
+    },
   ];
 
   return navigationBarLinks;
