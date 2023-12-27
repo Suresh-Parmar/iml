@@ -492,7 +492,9 @@ function Reports() {
         }
         return <div className="w-100">{renderSchoolsTable(data, arrKey)}</div>;
       } else if (type == "checkbox") {
-        return <Checkbox checked={checked} label={label} w={"100%"} mt={"md"} size="md" onChange={onchange} />;
+        return (
+          <Checkbox key={index} checked={checked} label={label} w={"100%"} mt={"md"} size="md" onChange={onchange} />
+        );
       } else {
         return (
           <div key={index} style={{ maxWidth: "15%", ...style }}>
