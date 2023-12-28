@@ -2,7 +2,7 @@ import { filterData } from "@/helpers/filterData";
 import { genratePayload, handleApiData, iterateData } from "@/helpers/getData";
 import { checkIsAllChecked, selectCheckBOxData } from "@/helpers/selectCheckBox";
 import { useTableDataMatrixQuery } from "@/redux/apiSlice";
-import { readApiData, readCities, readCompetitions, readStates } from "@/utilities/API";
+import { genericReports, readApiData, readCities, readCompetitions, readStates } from "@/utilities/API";
 import { Checkbox, Group, MultiSelect, Radio, Select } from "@mantine/core";
 import React, { useEffect } from "react";
 import { useState } from "react";
@@ -13,6 +13,7 @@ function Reports() {
   const [comeptitionsData, setCompetitionsData] = useState<any>([]);
   const [loader, setLoader] = useState<any>(false);
   const [pdfLoader, setpdfLoader] = useState<any>(false);
+  const [genratedData, setGenratedData] = useState<any>([]);
 
   console.log(allData);
 
@@ -351,7 +352,7 @@ function Reports() {
                 <a href={item.admit_card_url} target="_blank">
                   <span className="material-symbols-outlined text-success">download</span>
                 </a>
-              ) : pdfLoader == item.school_name ? (
+              ) : pdfLoader == item._id ? (
                 "loading..."
               ) : (
                 <span className="material-symbols-outlined text-secondary">download</span>
@@ -519,11 +520,68 @@ function Reports() {
     });
   };
 
+  // let migrateData = (data: any[], data1: any[], by: string, isStudent: any = false) => {
+  //   let newData: any[] = [];
+  //   data1.map((item: any) => {
+  //     let newItem = data.find((itemchild: any, i: any) => item[by] == itemchild[by]);
+  //     if (newItem) {
+  //       let newDataa = { ...item, ...newItem };
+  //       newData.push(newDataa);
+  //     } else {
+  //       // delete item.admit_card_url;
+  //       newData.push(item);
+  //     }
+  //   });
+
+  //   return newData;
+  // };
+
+  // const downloadPdf = (data: any) => {
+  //   let newData = migrateData(data, schoolsData, "school_name");
+  //   // setSchoolsData(structuredClone(newData));
+  // };
+
+  const genrateStudentPdf = async () => {
+    if (pdfLoader) {
+      return;
+    }
+
+    setGenratedData([]);
+
+    const payload: any = {
+      city: allData?.city,
+      state: allData?.state,
+      competition: allData?.competition,
+      reportname: allData?.reportname,
+      filterTypeStudent: allData?.filterTypeStudent,
+    };
+
+    for (const school of allData.schools) {
+      payload.schools = school;
+      setpdfLoader(school);
+
+      try {
+        const res = await genericReports(payload);
+        setpdfLoader(false);
+
+        console.log(res);
+
+        genratedData.push(...res.data);
+        setGenratedData([genratedData]);
+        // downloadPdf(genratedData);
+      } catch (errors) {
+        setpdfLoader(false);
+      }
+    }
+  };
+
   return (
     <div className="p-4">
       {renderFilter()}
-
       <div className="d-flex py-4 flex-wrap gap-4">{renderData()}</div>
+      <div className="btn btn-primary form-control" onClick={() => genrateStudentPdf()}>
+        Generate Report
+      </div>
     </div>
   );
 }
