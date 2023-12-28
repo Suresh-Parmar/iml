@@ -442,6 +442,8 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
 
   let bgColor = isDarkTheme ? "#1a1b1e" : "white";
 
+  let exporttitle = formType + "-export-" + new Date().toLocaleDateString().replaceAll("/", "-");
+
   return (
     <Container
       fluid
@@ -606,7 +608,7 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
           <Flex direction={"row"} justify={"center"} align={"center"}>
             {(permissionsData?.permissions?.export || defaultShow) && (
               <div className="me-3">
-                <DownloadFile formType={formType} data={data} filterString={globalFilter} />
+                <DownloadFile formType={exporttitle} data={data} filterString={globalFilter} />
               </div>
             )}
 

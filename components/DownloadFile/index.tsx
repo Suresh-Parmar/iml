@@ -6,7 +6,7 @@ import { notifications } from "@mantine/notifications";
 import { saveExcel } from "@/helpers/validations";
 
 type DownloadFileProps = {
-  formType: FormType;
+  formType: any;
   data: MatrixDataType;
   filterString?: string;
   fetchData?: any;
@@ -29,6 +29,8 @@ export default function DownloadFile({
   title = "",
   hideMsg,
 }: DownloadFileProps) {
+  let fileName = formType + "-import-template";
+
   const prepareData = () => {
     if (fetchData) {
       fetchData().then((data: any) => {
@@ -37,7 +39,7 @@ export default function DownloadFile({
             message: data.response,
           });
         } else if (data) {
-          saveExcel([data], "", filterString, formType, hideMsg);
+          saveExcel([data], "", filterString, fileName, hideMsg);
         }
       });
     }
@@ -56,7 +58,7 @@ export default function DownloadFile({
           mx={0}
           sx={(theme) => ({ padding: theme.spacing.xs, cursor: "pointer" })}
           size={36}
-          onClick={() => saveExcel("", data, filterString, formType, hideMsg)}
+          onClick={() => saveExcel("", data, filterString, fileName, hideMsg)}
         >
           <Tooltip label="Export to XLSX File" position="left" offset={10}>
             <IconTableExport />
