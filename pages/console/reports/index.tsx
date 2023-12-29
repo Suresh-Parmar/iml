@@ -14,8 +14,11 @@ function Reports() {
   const [loader, setLoader] = useState<any>(false);
   const [pdfLoader, setpdfLoader] = useState<any>(false);
   const [genratedData, setGenratedData] = useState<any>([]);
+  const [dataToPrint, setDataToPrint] = useState<any>(false);
 
-  console.log(allData);
+  useEffect(() => {
+    setDataToPrint(false);
+  }, [allData]);
 
   const state: any = useSelector((state: any) => state.data);
   const countryName = state?.selectedCountry?.label;
@@ -332,8 +335,14 @@ function Reports() {
       return <> No Record Found</>;
     }
 
+    let printData: any = schoolsData;
+
+    if (dataToPrint) {
+      printData = dataToPrint;
+    }
+
     const renderTableData = () => {
-      return schoolsData.map((item: any, index: any) => {
+      return printData.map((item: any, index: any) => {
         return (
           <tr className="capitalize" key={index}>
             <td scope="row">
@@ -348,8 +357,8 @@ function Reports() {
             <td>{item.name}</td>
             <td>{item.city}</td>
             <td className="text-center">
-              {item?.admit_card_url ? (
-                <a href={item.admit_card_url} target="_blank">
+              {item?.file_url ? (
+                <a href={item.file_url} target="_blank">
                   <span className="material-symbols-outlined text-success">download</span>
                 </a>
               ) : pdfLoader == item._id ? (
@@ -457,9 +466,11 @@ function Reports() {
     );
   };
 
-  const renderData = () => {
-    let dataToMap = josnObjects[allData.reportname];
+  let dataToMap = josnObjects[allData.reportname];
 
+  let dataToShow: any = [];
+
+  const renderData = () => {
     if (!dataToMap || !Array.isArray(dataToMap)) {
       return;
     }
@@ -491,9 +502,10 @@ function Reports() {
         if (!data) {
           return <div key={index}></div>;
         }
+        dataToShow = data;
         return (
           <div key={index} className="w-100">
-            {renderSchoolsTable(data, arrKey)}
+            {renderSchoolsTable(dataToShow, arrKey)}
           </div>
         );
       } else if (type == "checkbox") {
@@ -520,28 +532,28 @@ function Reports() {
     });
   };
 
-  // let migrateData = (data: any[], data1: any[], by: string, isStudent: any = false) => {
-  //   let newData: any[] = [];
-  //   data1.map((item: any) => {
-  //     let newItem = data.find((itemchild: any, i: any) => item[by] == itemchild[by]);
-  //     if (newItem) {
-  //       let newDataa = { ...item, ...newItem };
-  //       newData.push(newDataa);
-  //     } else {
-  //       // delete item.admit_card_url;
-  //       newData.push(item);
-  //     }
-  //   });
+  let migrateData = (data: any[], data1: any[], by: string, isStudent: any = false) => {
+    let newData: any[] = [];
+    data1.map((item: any) => {
+      let newItem = data.find((itemchild: any, i: any) => item[by] == itemchild[by]);
+      if (newItem) {
+        let newDataa = { ...item, ...newItem };
+        newData.push(newDataa);
+      } else {
+        // delete item.admit_card_url;
+        newData.push(item);
+      }
+    });
 
-  //   return newData;
-  // };
+    return newData;
+  };
 
-  // const downloadPdf = (data: any) => {
-  //   let newData = migrateData(data, schoolsData, "school_name");
-  //   // setSchoolsData(structuredClone(newData));
-  // };
+  const downloadPdf = (data: any, schoolsData: any) => {
+    let newData = migrateData(data, schoolsData, "_id");
+    setDataToPrint(newData);
+  };
 
-  const genrateStudentPdf = async () => {
+  const genrateStudentPdf = async (dataToShow: any) => {
     if (pdfLoader) {
       return;
     }
@@ -563,12 +575,15 @@ function Reports() {
       try {
         const res = await genericReports(payload);
         setpdfLoader(false);
+        let data = res?.data[0] || {};
 
-        console.log(res);
+        if (!data?._id) {
+          data._id = school;
+        }
 
-        genratedData.push(...res.data);
+        genratedData.push(data);
         setGenratedData([genratedData]);
-        // downloadPdf(genratedData);
+        downloadPdf(genratedData, dataToShow);
       } catch (errors) {
         setpdfLoader(false);
       }
@@ -579,7 +594,7 @@ function Reports() {
     <div className="p-4">
       {renderFilter()}
       <div className="d-flex py-4 flex-wrap gap-4">{renderData()}</div>
-      <div className="btn btn-primary form-control" onClick={() => genrateStudentPdf()}>
+      <div className="btn btn-primary form-control" onClick={() => genrateStudentPdf(dataToShow)}>
         Generate Report
       </div>
     </div>
