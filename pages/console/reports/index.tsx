@@ -238,18 +238,17 @@ function Reports() {
     },
   ];
 
-  let divisionBreak: any = [];
-  //   [
-  //   {
-  //     label: "Division Break",
-  //     key: "division_break",
-  //     type: "checkbox",
-  //     onchange: (e: any) => {
-  //       handleDropDownChange(e.currentTarget.checked, "division_break");
-  //     },
-  //     checked: allData.division_break,
-  //   },
-  // ];
+  let divisionBreak: any = [
+    {
+      label: "Division Wise",
+      key: "division_break",
+      type: "checkbox",
+      onchange: (e: any) => {
+        handleDropDownChange(e.currentTarget.checked, "division_break");
+      },
+      checked: allData.division_break,
+    },
+  ];
 
   const filterDataJson: any = [
     { label: "Students List School-group-exam center wise", value: "Students List School-group-exam center wise" },
@@ -573,6 +572,7 @@ function Reports() {
       competition_code: allData?.competition,
       reportname: allData?.reportname,
       filterTypeStudent: allData?.filterTypeStudent,
+      division_break: allData?.division_break,
     };
 
     for (const school of allData.schools) {

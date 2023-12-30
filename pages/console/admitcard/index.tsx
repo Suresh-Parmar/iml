@@ -152,7 +152,7 @@ function Page() {
 
     if (isSchool) {
       for (const school of allData.schools) {
-        const payload = { school_name: [school] };
+        const payload = { ...newPayload, school_name: [school] };
         setpdfLoader(school);
 
         try {
