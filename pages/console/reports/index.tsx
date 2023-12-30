@@ -234,6 +234,7 @@ function Reports() {
         handleDropDownChange(e, "select_school");
       },
       value: "select_school",
+      filterTypeStudent: "school",
     },
   ];
 
@@ -480,7 +481,12 @@ function Reports() {
         return <></>;
       }
 
-      let { type, data, label, placeholder, onchange, value, style, arrKey, checked } = item;
+      let { type, data, label, placeholder, onchange, value, style, arrKey, checked, filterTypeStudent } = item;
+
+      if (filterTypeStudent) {
+        allData.filterTypeStudent = filterTypeStudent;
+      }
+
       if (type === "multiselect") {
         return (
           <div key={index} style={{ maxWidth: "15%", ...style }}>
@@ -563,7 +569,7 @@ function Reports() {
     const payload: any = {
       city: allData?.city,
       state: allData?.state,
-      competition: allData?.competition,
+      competition_code: allData?.competition,
       reportname: allData?.reportname,
       filterTypeStudent: allData?.filterTypeStudent,
     };
