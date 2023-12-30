@@ -21,6 +21,7 @@ import { filterDataSingle } from "@/helpers/dropDownData";
 import { useSelector } from "react-redux";
 import { setGetData } from "@/helpers/getLocalStorage";
 import { DateinputCustom } from "../utils";
+import { dateInputHandler } from "@/helpers/dateHelpers";
 
 function SchoolForm({
   open,
@@ -94,6 +95,15 @@ function SchoolForm({
     let newDataFilter = filterDrodownData(newData, "name", "name");
     setgroupData(newDataFilter);
   }
+
+  const setDatesExtra = (e: any, keyArr: any[]) => {
+    keyArr.map((key: any) => {
+      let values: any = { ...form.values };
+      if (dateInputHandler(e) > dateInputHandler(values[key])) {
+        form.setFieldValue(key, e);
+      }
+    });
+  };
 
   async function readData(designation: any, setData: any, role: any = "teacher") {
     let filterData: any = {
@@ -258,6 +268,27 @@ function SchoolForm({
               label: "exam date",
               // placeholder: `${new Date(Date.now()).toDateString()}`,
               ...form.getInputProps("exam_date"),
+              minDate: new Date(),
+              onChange: (e: any) => {
+                form.setFieldValue("exam_date", e);
+                setDatesExtra(e, ["result_date"]);
+              },
+              w: "100%",
+              mt: "md",
+              size: "md",
+            }}
+          />
+          <DateinputCustom
+            inputProps={{
+              popoverProps: {
+                withinPortal: true,
+              },
+              minDate: dateInputHandler(form.values.exam_date),
+              disabled: readonly,
+              name: "result_date",
+              label: "Result Date",
+              // placeholder: `${new Date(Date.now()).toDateString()}`,
+              ...form.getInputProps("result_date"),
               w: "100%",
               mt: "md",
               size: "md",
