@@ -110,6 +110,7 @@ export const readDataCustomFilter = async (
 
   if (Object.keys(filters).length) {
     requestBody["filter_var"] = {
+      country: getSelectedCountry(),
       ...filters,
     };
   }
@@ -192,6 +193,7 @@ const updateData = async (
   };
   if (filterBy && filterQuery) {
     requestBody["filter_var"] = {
+      country: getSelectedCountry(),
       [filterBy]: filterQuery,
     };
   }
@@ -224,6 +226,7 @@ const updateDataRes = async (
 
   if (filterBy && filterQuery) {
     requestBody["filter_var"] = {
+      country: getSelectedCountry(),
       [filterBy]: filterQuery,
     };
   }

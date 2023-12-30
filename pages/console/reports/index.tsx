@@ -569,7 +569,7 @@ function Reports() {
     const payload: any = {
       city: allData?.city,
       state: allData?.state,
-      competition: allData?.competition,
+      competition_code: allData?.competition,
       reportname: allData?.reportname,
       filterTypeStudent: allData?.filterTypeStudent,
     };
