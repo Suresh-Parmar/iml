@@ -238,17 +238,18 @@ function Reports() {
     },
   ];
 
-  let divisionBreak = [
-    {
-      label: "Division Break",
-      key: "division_break",
-      type: "checkbox",
-      onchange: (e: any) => {
-        handleDropDownChange(e.currentTarget.checked, "division_break");
-      },
-      checked: allData.division_break,
-    },
-  ];
+  let divisionBreak: any = [];
+  //   [
+  //   {
+  //     label: "Division Break",
+  //     key: "division_break",
+  //     type: "checkbox",
+  //     onchange: (e: any) => {
+  //       handleDropDownChange(e.currentTarget.checked, "division_break");
+  //     },
+  //     checked: allData.division_break,
+  //   },
+  // ];
 
   const filterDataJson: any = [
     { label: "Students List School-group-exam center wise", value: "Students List School-group-exam center wise" },
