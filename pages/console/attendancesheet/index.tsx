@@ -7,7 +7,7 @@ import {
   readStates,
   studentDetails,
 } from "@/utilities/API";
-import { Group, MultiSelect, Radio, Select, TextInput } from "@mantine/core";
+import { Checkbox, Group, MultiSelect, Radio, Select, TextInput } from "@mantine/core";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { checkIsAllChecked, selectCheckBOxData } from "@/helpers/selectCheckBox";
@@ -247,18 +247,27 @@ function Page() {
       },
       value: allData.city,
     },
+    // {
+    //   label: "Series",
+    //   placeholder: "A",
+    //   key: "series",
+    //   type: "input",
+    //   data: comeptitionsData,
+    //   onChange: (e: any) => {
+    //     let val = validateAlpha(e.target.value, true, 1);
+    //     val = val.toUpperCase();
+    //     handleDropDownChange(val, "series");
+    //   },
+    //   value: allData.series || "",
+    // },
     {
-      label: "Series",
-      placeholder: "A",
-      key: "series",
-      type: "input",
-      data: comeptitionsData,
-      onChange: (e: any) => {
-        let val = validateAlpha(e.target.value, true, 1);
-        val = val.toUpperCase();
-        handleDropDownChange(val, "series");
+      label: "Division Break",
+      key: "division_break",
+      type: "checkbox",
+      onchange: (e: any) => {
+        handleDropDownChange(e.currentTarget.checked, "division_break");
       },
-      value: allData.series || "",
+      checked: allData.division_break,
     },
   ];
 
@@ -269,7 +278,7 @@ function Page() {
       if (item.hideInput) {
         return;
       }
-      let { type, data, label, placeholder, onchange, value, style } = item;
+      let { type, data, label, placeholder, onchange, value, style, checked } = item;
       if (type === "multiselect") {
         return (
           <div key={index}>
@@ -282,6 +291,8 @@ function Page() {
             <Select clearable searchable={true} size="sm" {...item} />
           </div>
         );
+      } else if (type == "checkbox") {
+        return <Checkbox key={index} checked={checked} label={label} mt={25} size="md" onChange={onchange} />;
       } else {
         return (
           <div key={index}>
@@ -461,6 +472,7 @@ function Page() {
         exam_date: allData.exam_date,
         exam_center: [item],
         series: allData.series,
+        division_break: allData.division_break,
       };
 
       if (allData.select_class && allData.select_class != "all") {
