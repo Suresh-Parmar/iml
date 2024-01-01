@@ -1,5 +1,5 @@
 import {
-  admitCardCountData,
+  downloadMarksSheet,
   readApiData,
   readCities,
   readClasses,
@@ -106,19 +106,19 @@ function Page() {
     };
 
     if (isSchool) {
-      newPayload = { school_name: allData.schools };
+      newPayload = { username: allData.schools };
     }
-    // setLoader(true);
-    // admitCardCountData(newPayload).then((res) => {
-    //   setLoader(false);
-    //   if (isSchool) {
-    //     downloadPdf(res.data);
-    //   } else {
-    //     // let data = genrateDataFormDropDown(res.data);
-    //     // setSchoolsDataDropDown(data);
-    //     setSchoolsData(res.data);
-    //   }
-    // });
+    setLoader(true);
+    downloadMarksSheet(newPayload).then((res) => {
+      setLoader(false);
+      if (isSchool) {
+        downloadPdf(res.data);
+      } else {
+        // let data = genrateDataFormDropDown(res.data);
+        // setSchoolsDataDropDown(data);
+        setSchoolsData(res.data);
+      }
+    });
   }
 
   async function readClassesData(filterBy?: "name" | "status", filterQuery?: string | number) {
@@ -219,6 +219,32 @@ function Page() {
   useEffect(() => {
     allData.city && allData.competition && readSchoolsData();
   }, [allData.city, allData.competition]);
+
+  // const readSchoolGridData = () => {
+  //   if (!isStudentFilters) {
+  //     return;
+  //   }
+
+  //   let payload = {
+  //     collection_name: "schools",
+  //     op_name: "find_many",
+  //     filter_var: {
+  //       country: countryName || "India",
+  //       city: allData.city,
+  //     },
+  //   };
+
+  //   setLoader(true);
+  //   readApiData("schools", payload)
+  //     .then((res) => {
+  //       setLoader(false);
+  //       setSchoolsDataDropDown(filterData(res, "label", "value"));
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //       setLoader(false);
+  //     });
+  // };
 
   const handleDropDownChange = (e: any, key: any, clear?: any) => {
     if (clear) {

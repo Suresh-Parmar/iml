@@ -103,57 +103,40 @@ function UserForm({
 
   const form = useForm({
     initialValues: {
-      competition_code: rowData?.competition_code || "",
-      class_code: rowData?.class_code || "",
-      section: rowData?.section || "",
-      name: rowData?.name ?? "",
+      ...rowData,
       mobile_1: rowData?.mobile_1?.replace(getMobileCode(), "").trim() ?? "",
       mobile_2: rowData?.mobile_2?.replace(getMobileCode(), "").trim() ?? "",
-      email_1: rowData?.email_1 ?? "",
-      email_2: rowData?.email_2 ?? "",
-      dob: checkValidDate(rowData?.dob),
-      gender: rowData?.gender ?? "",
-      school_name: rowData?.school_name ?? "",
-      exam_center_id: rowData?.exam_center_id || "",
-      address: rowData?.address ?? "",
+      dob: checkValidDate(rowData?.dob) || null,
       country: rowData?.country || getSelectedCountry() || "",
-      state: rowData?.state ?? "",
-      city: rowData?.city ?? "",
-      pincode: rowData?.pincode ?? "",
       role: UserRoleFormMapping[formType],
-      consented: rowData?.consented ?? true,
-      cohort_code: rowData?.cohort_code,
-      group_code: rowData?.group_code,
-      status: rowData?.status,
-      designation: rowData?.designation,
     },
     validate: {
-      name: (value) => (value.length < 2 ? "Name must have at least 2 letters" : null),
+      name: (value: any) => (value?.length < 2 || !value?.length ? "Name must have at least 2 letters" : null),
       // address: (value) => (value.length < 2 ? 'Address must have at least 50 letters' : null),
       // pincode: (value) => (/^[1-9][0-9]{5}$/.test(value) ? null : "Invalid pin-code"), // ^[1-9][0-9]{5}$ // ^[1-9]{1}[0-9]{2}\\s{0, 1}[0-9]{3}$
-      // email_1: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
+      email_1: (value: any) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
       // mobile_1: (value) => (/^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/.test(value) ? null : "Invalid mobile number"),
-      gender: (value) =>
+      gender: (value: any) =>
         ["Female", "Male", "Other", "Prefer Not To Say"].includes(value) ? null : "Gender must be selected",
       // school_name: (value) => (value.length === 0 ? "School must be selected" : null),
       // section: (value) => (value.length === 0 ? "Section must be selected" : null),
       // class_code: (value) => (value?.length === 0 ? "Class must be selected" : null),
       // competition_code: (value) => (value?.length === 0 ? "Competition must be selected" : null),
-      state: (value) => (value.length === 0 ? "State must be selected" : null),
-      city: (value) => (value.length === 0 ? "City must be selected" : null),
+      state: (value: any) => (!value?.length ? "State must be selected" : null),
+      city: (value: any) => (!value?.length ? "City must be selected" : null),
       // exam_center_id: (value) => (value.length === 0 ? "Exam center must be selected" : null),
       consented: (value) => (value === true || value === false ? null : "Communication consent must be set"),
     },
   });
   // email_2: (value) => (value.length > 0 ? /^\S+@\S+$/.test(value) ? null : 'Invalid alternate email' : 'Invalid alternate email'),
   // mobile_2: (value) => (value.length > 0 && /^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/.test(value) ? null : "Invalid alternate mobile number"),
+
   const [oLoader, setOLoader] = useState<boolean>(false);
 
   const onSubmitForm = async (values: any) => {
     values = {
       ...values,
       role: UserRoleFormMapping[formType],
-      dob: new Date(values.dob || Date()).toDateString(),
     };
 
     if (!!values.mobile_1) values.mobile_1 = getMobileCode() + values.mobile_1;
@@ -320,7 +303,7 @@ function UserForm({
               />
               <TextInput
                 disabled={readonly}
-                // withAsterisk
+                withAsterisk
                 name="Email (Primary)"
                 label="Email (Primary)"
                 placeholder="john.doe@ignitedmindlab.com"
