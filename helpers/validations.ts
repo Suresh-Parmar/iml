@@ -186,6 +186,10 @@ export let selectMinDate = (minDate: number = 2) => {
 };
 
 export const checkValidDate = (date: any, returnVal: any = null, str: any = false): any => {
+  if (!date) {
+    return null;
+  }
+
   if (String(new Date(date)) == "Invalid Date") {
     return returnVal || null;
   } else {
