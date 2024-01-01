@@ -2,21 +2,9 @@ import { TextInput, Checkbox, Button, Group, Box, Flex, Textarea, Select, Loadin
 import { useForm } from "@mantine/form";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { MatrixDataType, MatrixRowType } from "../Matrix";
-import {
-  createOtherUsers,
-  readApiData,
-  readCities,
-  readCountries,
-  readExamCenters,
-  readStates,
-  updateDataRes,
-} from "@/utilities/API";
-import { DateInput } from "@mantine/dates";
+import { createOtherUsers, readCities, readStates, updateDataRes } from "@/utilities/API";
 import { notifications } from "@mantine/notifications";
-import { FormType } from "../Matrix/types";
 import { UserRoleFormMapping } from "@/utilities/users";
-import { getReduxState } from "@/redux/hooks";
-import { getInternationalDailingCode } from "@/utilities/countriesUtils";
 import { RoleMatrix } from "../permissions";
 import { formTypeToFetcherMapper } from "@/helpers/dataFetcher";
 import { filterDataSingle } from "@/helpers/dropDownData";
@@ -47,26 +35,10 @@ function UserForm({
 }) {
   const [citiesData, setCitiesData] = useState<MatrixDataType>([]);
   const [statesData, setStatesData] = useState<MatrixDataType>([]);
-  const [countriesData, setCountriesData] = useState<MatrixDataType>([]);
-  // const [schoolsData, setSchoolsData] = useState<MatrixDataType>([]);
-  const [examCentersData, setExamCentersData] = useState<MatrixDataType>([]);
-  // const [comeptitionsData, setCompetitionsData] = useState<MatrixDataType>([]);
-  // const [classesData, setClassesData] = useState<MatrixDataType>([]);
-  const [groupsData, setGroupData] = useState<any>([]);
-  const [cohortsData, setCohortsData] = useState<any>([]);
   const [showRoles, setshowRoles] = useState<any>(isExtra ? rowData?._id : false);
   const [isUpdate, setisUpdate] = useState<any>(rowData?._id);
 
-  // async function readSchoolsData(filterBy?: "name" | "city", filterQuery?: string | number) {
-  //   let schools: MatrixDataType;
-  //   if (filterBy && filterQuery) {
-  //     schools = await readSchools(filterBy, filterQuery);
-  //   } else {
-  //     schools = await readSchools();
-  //   }
-
-  //   setSchoolsData(schools);
-  // }
+  let isteachersForm = formType == "Teachers";
 
   let reduxData = useSelector((state: any) => state.data);
   let selectedCountryLocal = setGetData("selectedCountry", "", true);
@@ -77,16 +49,6 @@ function UserForm({
 
   const getMobileCode = () => {
     return `+${getSelectedCountry()}`;
-  };
-
-  let filterData = (data: any, key: string): any[] => {
-    let newData: any[] = [];
-    data.forEach((item: any) => {
-      if (item[key]) {
-        newData.push(item[key]);
-      }
-    });
-    return newData;
   };
 
   async function readCitiesData(filterBy?: "state", filterQuery?: string | number) {
@@ -108,26 +70,6 @@ function UserForm({
     }
     setStatesData(states);
   }
-
-  async function readCountriesData(filterBy?: "name" | "status", filterQuery?: string | number) {
-    const countries = await readCountries("status", true);
-    setCountriesData(countries);
-  }
-
-  async function readExamCentersData(filterBy?: "name" | "status", filterQuery?: string | number) {
-    const examCenters = await readExamCenters();
-    setExamCentersData(examCenters);
-  }
-
-  // async function readCompetitionsData(filterBy?: "name" | "status", filterQuery?: string | number) {
-  //   const competitions = await readCompetitions();
-  //   setCompetitionsData(competitions);
-  // }
-
-  // async function readClassesData(filterBy?: "name" | "status", filterQuery?: string | number) {
-  //   const classes = await readClasses();
-  //   setClassesData(classes);
-  // }
 
   useEffect(() => {
     if (rowData) {
@@ -158,21 +100,6 @@ function UserForm({
       readCitiesData();
     }
   }, [rowData?.state]);
-
-  // useEffect(() => {
-  //   if (!showRoles) {
-  //     readSchoolsData();
-  //   }
-  // }, [rowData?.city]);
-
-  useEffect(() => {
-    if (!showRoles) {
-      // readClassesData();
-      // readCompetitionsData();
-      readCountriesData();
-      readExamCentersData();
-    }
-  }, []);
 
   const form = useForm({
     initialValues: {
@@ -293,31 +220,12 @@ function UserForm({
 
   const onChangeCityName = async (event: string) => {
     form.setFieldValue("city", event);
-    // await readSchoolsData("city", event);
   };
 
   const onChangeStateName = async (event: string) => {
     form.setFieldValue("state", event);
     await readCitiesData("state", event);
   };
-
-  // const onChangeExamCenter = async (event: string) => {
-  //   form.setFieldValue("exam_center_id", event);
-  // };
-
-  // const onChangeClass = async (event: string) => {
-  //   form.setFieldValue("class_code", event);
-  // };
-
-  // const onChangeCompetition = async (event: string) => {
-  //   form.setFieldValue("competition_code", event);
-  // };
-
-  // const schoolNames = schoolsData
-  //   .filter((schl) => Boolean(schl.status))
-  //   .map((school) => {
-  //     return school.name;
-  //   });
 
   const cityNames = filterDataSingle(citiesData || [], "name");
   const stateNames = filterDataSingle(statesData || [], "name");
@@ -372,81 +280,6 @@ function UserForm({
           <LoadingOverlay visible={oLoader} overlayBlur={2} />
           <Flex gap={"md"} direction={"row"} justify={"center"} align={"flex-start"} w={"100%"}>
             <Flex direction={"column"} justify={"center"} align={"flex-start"} w={"100%"}>
-              {/* <Select clearable 
-                disabled={readonly}
-                searchable
-                nothingFound="No options"
-                data={competitionsNames}
-                label={"Competition"}
-                name="Competition"
-                mt={"md"}
-                size="md"
-                withAsterisk
-                {...form.getInputProps("competition_code")}
-                onChange={onChangeCompetition}
-                w={"100%"}
-              /> */}
-              {/* <Select clearable 
-                disabled={readonly}
-                searchable
-                nothingFound="No options"
-                data={classesNames}
-                label={"Class"}
-                name="Class"
-                mt={"md"}
-                size="md"
-                withAsterisk
-                {...form.getInputProps("class_code")}
-                onChange={onChangeClass}
-                w={"100%"}
-              /> */}
-              {/* {formType == "Students" && (
-                <>
-                  <MultiSelect
-                    disabled={readonly}
-                    searchable
-                    nothingFound="No options"
-                    data={groupsData}
-                    label={"Groups"}
-                    name="groups"
-                    mt={"md"}
-                    size="md"
-                    withAsterisk
-                    {...form.getInputProps("group_code")}
-                    onChange={(value) => {
-                      form.setFieldValue("group_code", value ?? "");
-                    }}
-                    w={"100%"}
-                  />
-                  <MultiSelect
-                    disabled={readonly}
-                    searchable
-                    nothingFound="No options"
-                    data={cohortsData}
-                    label={"Cohorts"}
-                    name="cohorts"
-                    mt={"md"}
-                    size="md"
-                    withAsterisk
-                    {...form.getInputProps("cohort_code")}
-                    onChange={(value) => {
-                      form.setFieldValue("cohort_code", value ?? "");
-                    }}
-                    w={"100%"}
-                  />
-                </>
-              )} */}
-              {/* <TextInput
-                disabled={readonly}
-                withAsterisk
-                name="Section"
-                label="Section"
-                placeholder="Example: A"
-                mt={"md"}
-                size="md"
-                {...form.getInputProps("section")}
-                w={"100%"}
-              /> */}
               <TextInput
                 disabled={readonly}
                 withAsterisk
@@ -522,7 +355,7 @@ function UserForm({
                   size: "md",
                 }}
               />
-              {formType == "teacher" && (
+              {isteachersForm && (
                 <Select
                   clearable
                   disabled={readonly}
@@ -542,17 +375,6 @@ function UserForm({
                   ]}
                 />
               )}
-              {/* <TextInput
-                disabled={readonly}
-                // withAsterisk
-                label="Designation"
-                name="designation"
-                placeholder="teacher, principal"
-                {...form.getInputProps("designation")}
-                w={"100%"}
-                mt={"md"}
-                size="md"
-              /> */}
             </Flex>
             <Flex direction={"column"} justify={"center"} align={"flex-start"} w={"100%"}>
               <Select
@@ -570,36 +392,7 @@ function UserForm({
                 placeholder="Select your gender"
                 data={["Female", "Male", "Other", "Prefer Not To Say"]}
               />
-              {/* <Select clearable 
-                disabled={readonly}
-                searchable
-                name="School"
-                nothingFound="No options"
-                mt={"md"}
-                size="md"
-                withAsterisk
-                {...form.getInputProps("school_name")}
-                onChange={(event) => {
-                  form.setFieldValue("school_name", event ?? "");
-                }}
-                w={"100%"}
-                label="School"
-                data={schoolNames}
-              /> */}
-              {/* <Select clearable 
-                disabled={readonly}
-                searchable
-                nothingFound="No options"
-                data={examCentersNames}
-                label={"Exam Center"}
-                name="Exam Center"
-                mt={"md"}
-                size="md"
-                withAsterisk
-                {...form.getInputProps("exam_center_id")}
-                onChange={onChangeExamCenter}
-                w={"100%"}
-              /> */}
+
               <Textarea
                 disabled={readonly}
                 placeholder="23, Horizon Lane, Spring Creek Avenue, Paris, France - 780004"
