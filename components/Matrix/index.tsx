@@ -156,9 +156,11 @@ type MatrixProps = {
   showCreateForm: boolean;
   formType?: FormType | any;
   formTypeData?: any;
+  setPagiData?: any;
+  pagiData?: any;
 };
 
-function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, showLabel }: any) {
+function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, showLabel, setPagiData, pagiData }: any) {
   const theme = useMantineTheme();
   let colorScheme = setGetData("colorScheme");
 
@@ -271,6 +273,10 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
     }),
     [pageIndex, pageSize]
   );
+
+  useEffect(() => {
+    setPagiData && setPagiData({ page: pagiData.page, limit: pageSize });
+  }, [pageSize]);
 
   const renderUploadButton = (formType: any, data: object[]) => {
     if (permissionsData?.permissions?.updateFile || permissionsData?.permissions?.uploadFile || defaultShow) {
@@ -496,9 +502,15 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
               variant="light"
               ml={"xs"}
               onClick={() => {
-                table.setPageIndex(0);
+                if (setPagiData) {
+                  if (pagiData.page != 1) {
+                    setPagiData({ page: 1, limit: pageSize });
+                  }
+                } else {
+                  table.setPageIndex(0);
+                }
               }}
-              disabled={!table.getCanPreviousPage()}
+              disabled={!setPagiData && !table.getCanPreviousPage()}
             >
               <IconChevronsLeft size={"1.5rem"} />
             </ActionIcon>
@@ -506,24 +518,35 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
               variant="light"
               ml={"xs"}
               onClick={() => {
-                table.previousPage();
+                if (setPagiData) {
+                  if (pagiData.page > 1) {
+                    setPagiData({ page: pagiData.page - 1, limit: pageSize });
+                  }
+                } else {
+                  table.previousPage();
+                }
               }}
-              disabled={!table.getCanPreviousPage()}
+              disabled={!setPagiData && !table.getCanPreviousPage()}
             >
               <IconChevronLeft size={"1.5rem"} />
             </ActionIcon>
             <Flex mx={"xs"} direction={"row"} justify={"center"} align={"center"}>
               <NumberInput
                 size={"xs"}
-                maw={75}
+                maw={110}
+                miw={50}
                 type="number"
-                defaultValue={table.getState().pagination.pageIndex + 1}
-                value={table.getState().pagination.pageIndex + 1}
-                max={table.getPageCount()}
+                defaultValue={pagiData?.page || table.getState().pagination.pageIndex + 1}
+                value={pagiData?.page || table.getState().pagination.pageIndex + 1}
+                max={setPagiData ? 50000 : table.getPageCount()}
                 min={1}
                 onChange={(e) => {
                   const page = e ? Number(e) - 1 : 0;
-                  table.setPageIndex(page);
+                  if (setPagiData) {
+                    Number(e) && setPagiData({ page: e, limit: pageSize });
+                  } else {
+                    table.setPageIndex(page);
+                  }
                 }}
               />
             </Flex>
@@ -531,9 +554,13 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
               variant="light"
               mr={"xs"}
               onClick={() => {
-                table.nextPage();
+                if (setPagiData) {
+                  setPagiData({ page: pagiData.page + 1, limit: pageSize });
+                } else {
+                  table.nextPage();
+                }
               }}
-              disabled={!table.getCanNextPage()}
+              disabled={!setPagiData && !table.getCanNextPage()}
             >
               <IconChevronRight size={"1.5rem"} />
             </ActionIcon>
@@ -544,15 +571,15 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
               onClick={() => {
                 table.setPageIndex(table.getPageCount() - 1);
               }}
-              disabled={!table.getCanNextPage()}
+              disabled={!setPagiData && !table.getCanNextPage()}
             >
               <IconChevronsRight size={"1.5rem"} />
             </ActionIcon>
 
             <Select
-              clearable
               withinPortal
-              maw={75}
+              miw={85}
+              maw={105}
               value={`${table.getState().pagination.pageSize}`}
               onChange={(e) => {
                 table.setPageSize(Number(e));

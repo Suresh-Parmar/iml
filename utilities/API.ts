@@ -30,6 +30,7 @@ export const TRACKSHIPMENT = `${BASE_URL}/track_shipment`;
 export const OMRSHEET = `${BASE_URL}/OMR`;
 export const CERTIFICATE = `${BASE_URL}/Certificate`;
 export const UPDATEREQUEST = `${BASE_URL}/update_request_student`;
+// export const UPLOAMEDIA = `${BASE_URL}/upload_server`;
 export const UPLOAMEDIA = `${BASE_URL}/data_to_bucket`;
 export const STUDENTAVAILABLEPRODUCTS = `${BASE_URL}/student_available_products`;
 export const OMRSTUDENT = `${BASE_URL}/OMRStudents`;
@@ -534,8 +535,8 @@ const readExamCenters = async (
   return examCenters;
 };
 
-const readExamCentersMapping = async (filterBy?: "name" | "state", filterQuery?: string | number) => {
-  const examCentersMapping = await readData("exam_center_mapping", "find_many");
+const readExamCentersMapping = async (filterBy?: "name" | "state", filterQuery?: string | number, customData?: any) => {
+  const examCentersMapping = await readData("exam_center_mapping", "find_many", undefined, undefined, customData);
   return examCentersMapping;
 };
 

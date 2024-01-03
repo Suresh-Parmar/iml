@@ -116,8 +116,8 @@ function UserForm({
       // pincode: (value) => (/^[1-9][0-9]{5}$/.test(value) ? null : "Invalid pin-code"), // ^[1-9][0-9]{5}$ // ^[1-9]{1}[0-9]{2}\\s{0, 1}[0-9]{3}$
       email_1: (value: any) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
       // mobile_1: (value) => (/^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/.test(value) ? null : "Invalid mobile number"),
-      gender: (value: any) =>
-        ["Female", "Male", "Other", "Prefer Not To Say"].includes(value) ? null : "Gender must be selected",
+      // gender: (value: any) =>
+      //   ["Female", "Male", "Other", "Prefer Not To Say"].includes(value) ? null : "Gender must be selected",
       // school_name: (value) => (value.length === 0 ? "School must be selected" : null),
       // section: (value) => (value.length === 0 ? "Section must be selected" : null),
       // class_code: (value) => (value?.length === 0 ? "Class must be selected" : null),
@@ -368,7 +368,6 @@ function UserForm({
                 nothingFound="No options"
                 mt={"md"}
                 size="md"
-                withAsterisk
                 {...form.getInputProps("gender")}
                 w={"100%"}
                 label="Gender"

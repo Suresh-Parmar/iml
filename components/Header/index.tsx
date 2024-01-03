@@ -302,7 +302,7 @@ function Header() {
             // colorScheme={colorScheme}
             colorScheme={"light"}
           />
-          {isloggedIn && titleHeader && <div className="me-auto">{titleHeader}</div>}
+          {isloggedIn && titleHeader && <div className="mx-auto fw-bold h4 my-auto">{titleHeader}</div>}
           <Box className={classes.flex}>
             {!isloggedIn ? (
               <Group sx={{ height: "100%" }} spacing={0} className={classes.hiddenMobile}>

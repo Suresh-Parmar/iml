@@ -31,6 +31,11 @@ function Page() {
   const [loader, setLoader] = useState<any>(false);
   const [studentGridData, setStudentGridData] = useState<any>([]);
   const [examDate, setExamDate] = useState<any>([]);
+  const [genratedData, setGenratedData] = useState<any>([]);
+  const [pdfLoader, setpdfLoader] = useState<any>(false);
+
+  console.log(genratedData);
+  console.log(pdfLoader);
 
   useEffect(() => {
     if (loader) {
@@ -327,6 +332,8 @@ function Page() {
                 <a href={item.OMR_url} target="_blank">
                   <span className="material-symbols-outlined text-success">download</span>
                 </a>
+              ) : pdfLoader == item._id ? (
+                "loading"
               ) : (
                 <span className="material-symbols-outlined text-secondary">download</span>
               )}
@@ -370,7 +377,7 @@ function Page() {
         </table>
       </div>
     );
-  }, [allData, dataExamCenters, checkIsAllChecked(allData.exam_center, dataExamCenters), themeColor]);
+  }, [allData, pdfLoader, dataExamCenters, checkIsAllChecked(allData.exam_center, dataExamCenters), themeColor]);
 
   let migrateData = (data: any[], data1: any[], by: string, mainKey: any = "") => {
     let newData: any[] = [];
@@ -388,7 +395,13 @@ function Page() {
     return newData;
   };
 
-  const genrateStudentPdf = () => {
+  const genrateStudentPdf = async () => {
+    if (pdfLoader) {
+      return;
+    }
+
+    setGenratedData([]);
+
     let singleCompetition = findFromJson(comeptitionsData, allData.competition, "value");
 
     let newPayload: any = {
@@ -398,24 +411,26 @@ function Page() {
       state: allData.state,
       city: allData.city,
       exam_date: allData.exam_date,
-      exam_center: allData.exam_center,
       series: allData.series,
     };
+    // exam_center: allData.exam_center,
 
     if (allData.select_class && allData.select_class != "all") {
       newPayload.class = allData.select_class;
     }
 
-    setLoader(true);
-    omrSheetDownload(newPayload)
-      .then((res) => {
-        setLoader(false);
-        let newData = migrateData(res.data, dataExamCenters, "Exam center", "_id");
-        setDataExamCenters([...newData]);
-      })
-      .catch((errors) => {
-        setLoader(false);
-      });
+    for (const exam_center of allData.exam_center) {
+      setpdfLoader(exam_center);
+      newPayload.exam_center = [exam_center];
+      let response: any = await omrSheetDownload(newPayload);
+      setpdfLoader(false);
+
+      let data = response.data;
+      genratedData.push(...data);
+      setGenratedData([...genratedData]);
+      let newData = migrateData(genratedData, dataExamCenters, "Exam center", "_id");
+      setDataExamCenters([...newData]);
+    }
   };
 
   const AdmitCardDownLoad = () => {
