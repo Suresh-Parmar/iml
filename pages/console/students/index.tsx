@@ -4,12 +4,23 @@ import { useEffect, useState } from "react";
 import { readStudents } from "@/utilities/API";
 import Loader from "@/components/common/Loader";
 import { useSelector } from "react-redux";
+import { setGetData } from "@/helpers/getLocalStorage";
 
 export default function Students() {
   const [data, setData] = useState<MatrixDataType>([]);
   const [loader, setLoader] = useState<any>(false);
   const userData: any = useSelector((state: any) => state.data);
-  const [pagiData, setPagiData] = useState<any>({ page: 1, limit: 25 });
+  let savedPageSize = setGetData("pagesize");
+  if (savedPageSize) {
+    if (!isNaN(savedPageSize)) {
+      savedPageSize = Number(savedPageSize);
+    } else {
+      savedPageSize = 25;
+    }
+  }
+
+  const [totalrecords, setTotalrecords] = useState<any>({ totalPages: 1, pageSize: savedPageSize });
+  const [pagiData, setPagiData] = useState<any>({ page: 1, limit: savedPageSize || 25 });
 
   let selectedCountry = userData?.selectedCountry?.label;
 
@@ -25,18 +36,21 @@ export default function Students() {
 
   async function readData() {
     setLoader(true);
-    const students = await readStudents(payload);
-    setData(students);
+    const students = await readStudents(payload, true);
+    let limits = { total_count: students?.data?.total_count, total_pages: students?.data?.total_pages };
+    setTotalrecords(limits);
+    setData(students?.data?.response || []);
     setLoader(false);
   }
 
   useEffect(() => {
     readData();
-  }, [selectedCountry, pagiData.page, pagiData.limit]);
+  }, [selectedCountry, Number(pagiData.page), Number(pagiData.limit)]);
 
   return (
     <Container h={"100%"} fluid p={0}>
       <Matrix
+        totalrecords={totalrecords}
         setPagiData={setPagiData}
         pagiData={pagiData}
         data={data.length > 0 ? data : []}

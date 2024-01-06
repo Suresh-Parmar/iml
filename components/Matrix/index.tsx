@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
+import React, { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } from "react";
 import {
   Flex,
   Paper,
@@ -158,9 +158,20 @@ type MatrixProps = {
   formTypeData?: any;
   setPagiData?: any;
   pagiData?: any;
+  totalrecords?: any;
 };
 
-function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, showLabel, setPagiData, pagiData }: any) {
+function Matrix({
+  data,
+  setData,
+  showCreateForm,
+  formType,
+  formTypeData = {},
+  showLabel,
+  setPagiData,
+  pagiData,
+  totalrecords,
+}: any) {
   const theme = useMantineTheme();
   let colorScheme = setGetData("colorScheme");
 
@@ -180,6 +191,7 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
   const [sorting, setSorting] = useState<SortingState>([]);
   const [permissionsData, setPermissionsData] = useState<any>({});
   const [siteJson, setSiteJson] = useState<any>(allJsonData);
+  const [dataLimits, setDataLimits] = useState<any>(pagiData || {});
 
   const setColumnData = () => {
     let data = allTypes[formType];
@@ -261,9 +273,18 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
 
   const [columnOrder, setColumnOrder] = useState<ColumnOrderState>(columns.map((column) => column.id as string));
 
+  let savedPageSize = setGetData("pagesize");
+  if (savedPageSize) {
+    if (!isNaN(savedPageSize)) {
+      savedPageSize = Number(savedPageSize);
+    } else {
+      savedPageSize = 25;
+    }
+  }
+
   const [{ pageIndex, pageSize }, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 25,
+    pageSize: savedPageSize,
   });
 
   const pagination = React.useMemo(
@@ -275,7 +296,26 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
   );
 
   useEffect(() => {
-    setPagiData && setPagiData({ page: pagiData.page, limit: pageSize });
+    let timeout = setTimeout(() => {
+      if (dataLimits?.limit <= 500) setGetData("pagesize", dataLimits?.limit);
+      if (setPagiData) {
+        setPagiData(dataLimits);
+      }
+    }, 5000);
+
+    return () => clearTimeout(timeout);
+  }, [dataLimits?.page, dataLimits?.limit]);
+
+  useEffect(() => {
+    let timeout = setTimeout(() => {
+      dataLimits?.limit && table.setPageSize(Number(dataLimits?.limit));
+    }, 3500);
+
+    return () => clearTimeout(timeout);
+  }, [dataLimits?.limit]);
+
+  useEffect(() => {
+    setPagiData && setDataLimits({ page: pagiData?.page || 1, limit: pageSize });
   }, [pageSize]);
 
   const renderUploadButton = (formType: any, data: object[]) => {
@@ -450,28 +490,8 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
 
   let exporttitle = formType + "-export-" + new Date().toLocaleDateString().replaceAll("/", "-");
 
-  return (
-    <Container
-      fluid
-      h={"100%"}
-      px={0}
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "flex-start",
-      }}
-    >
-      {/* --data '{
-    "school_names":[
-        "Learners'\'' Academy, Bandra (W), Mumbai"
-    ],
-    "email_short_name":"Online GF Admit Card",
-    "smtp_name":"Socketlabs IML",
-    "subject":"This is a test subject by ankit",
-    "city":"PANVEL",
-    "competition":"Mental Maths Competition - 2023" */}
-
+  const modalTOShow = () => {
+    return (
       <Modal
         opened={opened}
         onClose={() => {
@@ -495,6 +515,11 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
       >
         {addForm}
       </Modal>
+    );
+  };
+
+  const renderTableHeader = () => {
+    return (
       <Paper p={"xs"} w={"100%"} pos={"sticky"} top={0} className={cx(classes.toolbar)}>
         <Flex direction={"row"} justify={"space-between"} align={"center"}>
           <Flex direction={"row"} justify={"center"} align={"center"}>
@@ -504,7 +529,7 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
               onClick={() => {
                 if (setPagiData) {
                   if (pagiData.page != 1) {
-                    setPagiData({ page: 1, limit: pageSize });
+                    setDataLimits({ page: 1, limit: pageSize });
                   }
                 } else {
                   table.setPageIndex(0);
@@ -520,7 +545,7 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
               onClick={() => {
                 if (setPagiData) {
                   if (pagiData.page > 1) {
-                    setPagiData({ page: pagiData.page - 1, limit: pageSize });
+                    setDataLimits({ page: pagiData.page - 1, limit: pageSize });
                   }
                 } else {
                   table.previousPage();
@@ -538,12 +563,12 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
                 type="number"
                 defaultValue={pagiData?.page || table.getState().pagination.pageIndex + 1}
                 value={pagiData?.page || table.getState().pagination.pageIndex + 1}
-                max={setPagiData ? 50000 : table.getPageCount()}
+                max={setPagiData ? totalrecords?.total_pages : table.getPageCount()}
                 min={1}
                 onChange={(e) => {
                   const page = e ? Number(e) - 1 : 0;
                   if (setPagiData) {
-                    Number(e) && setPagiData({ page: e, limit: pageSize });
+                    Number(e) && setDataLimits({ page: e, limit: pageSize });
                   } else {
                     table.setPageIndex(page);
                   }
@@ -555,7 +580,10 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
               mr={"xs"}
               onClick={() => {
                 if (setPagiData) {
-                  setPagiData({ page: pagiData.page + 1, limit: pageSize });
+                  let setPage =
+                    pagiData.page < totalrecords?.total_pages ? pagiData.page + 1 : totalrecords?.total_pages;
+
+                  setDataLimits({ page: setPage, limit: pageSize });
                 } else {
                   table.nextPage();
                 }
@@ -569,28 +597,30 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
               variant="light"
               mr={"xs"}
               onClick={() => {
-                table.setPageIndex(table.getPageCount() - 1);
+                setPagiData
+                  ? setDataLimits({ page: totalrecords?.total_pages, limit: pageSize })
+                  : table.setPageIndex(table.getPageCount() - 1);
               }}
               disabled={!setPagiData && !table.getCanNextPage()}
             >
               <IconChevronsRight size={"1.5rem"} />
             </ActionIcon>
 
-            <Select
-              withinPortal
-              miw={85}
-              maw={105}
-              value={`${table.getState().pagination.pageSize}`}
+            <NumberInput
+              maw={90}
+              miw={60}
+              min={10}
+              max={2000}
+              value={pageSize}
               onChange={(e) => {
-                table.setPageSize(Number(e));
+                setDataLimits({ ...dataLimits, limit: e });
               }}
-              data={["10", "25", "50", "100", "250"]}
             />
 
             {/* Table No of Rows */}
             {table.getPrePaginationRowModel().rows.length === table.getCoreRowModel().rows.length ? (
               <Text ml={"xs"} fz={"md"}>
-                {table.getCoreRowModel().rows.length} rows
+                {setPagiData ? totalrecords?.total_count : table.getCoreRowModel().rows.length} rows
               </Text>
             ) : (
               <Text ml={"xs"} fz={"md"}>
@@ -665,6 +695,11 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
           </Flex>
         </Flex>
       </Paper>
+    );
+  };
+
+  const renderTableBody = () => {
+    return (
       <ScrollArea h={"100%"} w={"100%"}>
         <LoadingOverlay visible={oLoader} overlayBlur={2} />
         <DndProvider backend={HTML5Backend}>
@@ -736,6 +771,34 @@ function Matrix({ data, setData, showCreateForm, formType, formTypeData = {}, sh
           </MantineTable>
         </DndProvider>
       </ScrollArea>
+    );
+  };
+
+  return (
+    <Container
+      fluid
+      h={"100%"}
+      px={0}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "flex-start",
+      }}
+    >
+      {/* --data '{
+    "school_names":[
+        "Learners'\'' Academy, Bandra (W), Mumbai"
+    ],
+    "email_short_name":"Online GF Admit Card",
+    "smtp_name":"Socketlabs IML",
+    "subject":"This is a test subject by ankit",
+    "city":"PANVEL",
+    "competition":"Mental Maths Competition - 2023" */}
+
+      {modalTOShow()}
+      {renderTableHeader()}
+      {renderTableBody()}
     </Container>
   );
 }

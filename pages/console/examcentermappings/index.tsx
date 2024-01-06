@@ -4,12 +4,23 @@ import { useEffect, useState } from "react";
 import { readExamCentersMapping } from "@/utilities/API";
 import Loader from "@/components/common/Loader";
 import { useSelector } from "react-redux";
+import { setGetData } from "@/helpers/getLocalStorage";
 
 export default function ExamCenterMappings() {
   const [data, setData] = useState<MatrixDataType>([]);
   const [loader, setLoader] = useState<any>(false);
   const userData: any = useSelector((state: any) => state.data);
-  const [pagiData, setPagiData] = useState<any>({ page: 1, limit: 25 });
+  let savedPageSize = setGetData("pagesize");
+  if (savedPageSize) {
+    if (!isNaN(savedPageSize)) {
+      savedPageSize = Number(savedPageSize);
+    } else {
+      savedPageSize = 25;
+    }
+  }
+
+  const [pagiData, setPagiData] = useState<any>({ page: 1, limit: savedPageSize || 25 });
+  const [totalrecords, setTotalrecords] = useState<any>({ totalPages: 1, pageSize: savedPageSize });
 
   let selectedCountry = userData?.selectedCountry?.label;
 
@@ -25,8 +36,14 @@ export default function ExamCenterMappings() {
   useEffect(() => {
     setLoader(true);
     async function readData() {
-      const examCenterMappings = await readExamCentersMapping(undefined, undefined, payloadData);
-      setData(examCenterMappings);
+      const examCenterMappings = await readExamCentersMapping(undefined, undefined, payloadData, true);
+      let limits = {
+        total_count: examCenterMappings?.data?.total_count,
+        total_pages: examCenterMappings?.data?.total_pages,
+      };
+
+      setTotalrecords(limits);
+      setData(examCenterMappings?.data?.response);
       setLoader(false);
     }
     readData();
@@ -35,6 +52,7 @@ export default function ExamCenterMappings() {
   return (
     <Container h={"100%"} fluid p={0}>
       <Matrix
+        totalrecords={totalrecords}
         setPagiData={setPagiData}
         pagiData={pagiData}
         data={data.length > 0 ? data : []}
