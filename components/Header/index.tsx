@@ -30,7 +30,7 @@ import {
 } from "@tabler/icons-react";
 import { Logo } from "./_logo";
 import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useRouter as useRouterNext } from "next/router";
 
 import { forwardRef, useEffect, useMemo, useState } from "react";
@@ -160,9 +160,12 @@ function Header() {
 
   const allReduxData = useSelector((state: any) => state.data);
 
-  let arrpath = pathname.split("/");
-  let pathnameLast: any = arrpath[arrpath.length - 1];
+  let arrpath = pathname?.split("/");
 
+  let pathnameLast: any = "";
+  if (arrpath) {
+    pathnameLast = arrpath[arrpath.length - 1];
+  }
   let jsonObjActive = useMemo(() => findFromJson(siteJson, pathnameLast, "link"), [pathnameLast]);
   let titleHeader = jsonObjActive?.title || "";
 
