@@ -34,9 +34,6 @@ function Page() {
   const [genratedData, setGenratedData] = useState<any>([]);
   const [pdfLoader, setpdfLoader] = useState<any>(false);
 
-  console.log(genratedData);
-  console.log(pdfLoader);
-
   useEffect(() => {
     if (loader) {
       setTimeout(() => {

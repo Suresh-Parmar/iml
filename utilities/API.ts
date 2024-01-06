@@ -138,7 +138,8 @@ export const readData = async (
   operationType: "find" | "find_many",
   filterBy?: any,
   filterQuery?: string | number | boolean,
-  data?: any
+  data?: any,
+  getfullRes?: any
 ) => {
   let requestBody: RequestBodyType = {
     collection_name: `${tableName}`,
@@ -171,7 +172,13 @@ export const readData = async (
       headers: getAPIHeaders(),
     });
 
-    const responseJSON: MatrixDataType = await response.data["response"];
+    let responseJSON: any = {};
+    if (getfullRes) {
+      responseJSON = await response;
+    } else {
+      responseJSON = await response.data["response"];
+    }
+
     return responseJSON;
   } catch (err: any) {
     if (err?.response?.status === 401) {
@@ -535,13 +542,25 @@ const readExamCenters = async (
   return examCenters;
 };
 
-const readExamCentersMapping = async (filterBy?: "name" | "state", filterQuery?: string | number, customData?: any) => {
-  const examCentersMapping = await readData("exam_center_mapping", "find_many", undefined, undefined, customData);
+const readExamCentersMapping = async (
+  filterBy?: "name" | "state",
+  filterQuery?: string | number,
+  customData?: any,
+  completeRes?: any
+) => {
+  const examCentersMapping = await readData(
+    "exam_center_mapping",
+    "find_many",
+    undefined,
+    undefined,
+    customData,
+    completeRes
+  );
   return examCentersMapping;
 };
 
-const readStudents = async (customData: any = false) => {
-  const students = await readData("users", "find_many", "role", "student", customData);
+const readStudents = async (customData: any = false, getfullRes: any = false) => {
+  const students = await readData("users", "find_many", "role", "student", customData, getfullRes);
   return students;
 };
 
