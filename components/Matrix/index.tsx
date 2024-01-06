@@ -183,6 +183,14 @@ function Matrix({
 
   const clientState = reduxData.data;
   let isDarkTheme = clientState?.colorScheme == "dark";
+  let savedPageSize = setGetData("pagesize");
+  if (savedPageSize) {
+    if (!isNaN(savedPageSize)) {
+      savedPageSize = Number(savedPageSize);
+    } else {
+      savedPageSize = 25;
+    }
+  }
 
   const [columnResizeMode, setColumnResizeMode] = useState<ColumnResizeMode>("onChange");
   const [expanded, setExpanded] = useState<ExpandedState>({});
@@ -191,7 +199,12 @@ function Matrix({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [permissionsData, setPermissionsData] = useState<any>({});
   const [siteJson, setSiteJson] = useState<any>(allJsonData);
-  const [dataLimits, setDataLimits] = useState<any>(pagiData || {});
+  const [dataLimits, setDataLimits] = useState<any>(
+    pagiData || {
+      page: 1,
+      limit: savedPageSize,
+    }
+  );
 
   const setColumnData = () => {
     let data = allTypes[formType];
@@ -273,15 +286,6 @@ function Matrix({
 
   const [columnOrder, setColumnOrder] = useState<ColumnOrderState>(columns.map((column) => column.id as string));
 
-  let savedPageSize = setGetData("pagesize");
-  if (savedPageSize) {
-    if (!isNaN(savedPageSize)) {
-      savedPageSize = Number(savedPageSize);
-    } else {
-      savedPageSize = 25;
-    }
-  }
-
   const [{ pageIndex, pageSize }, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
     pageSize: savedPageSize,
@@ -315,7 +319,7 @@ function Matrix({
   }, [dataLimits?.limit]);
 
   useEffect(() => {
-    setPagiData && setDataLimits({ page: pagiData?.page || 1, limit: pageSize });
+    setPagiData && pageSize && setDataLimits({ page: pagiData?.page || 1, limit: pageSize });
   }, [pageSize]);
 
   const renderUploadButton = (formType: any, data: object[]) => {
@@ -611,7 +615,7 @@ function Matrix({
               miw={60}
               min={10}
               max={2000}
-              value={pageSize}
+              value={Number(dataLimits?.limit)}
               onChange={(e) => {
                 setDataLimits({ ...dataLimits, limit: e });
               }}
