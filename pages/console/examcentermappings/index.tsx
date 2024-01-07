@@ -58,6 +58,7 @@ export default function ExamCenterMappings() {
         data={data.length > 0 ? data : []}
         setData={setData}
         showCreateForm={true}
+        showApiSearch
         formType={"Exam Center Mappings"}
       />
       <Loader show={loader} />
