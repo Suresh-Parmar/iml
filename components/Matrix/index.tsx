@@ -301,11 +301,11 @@ function Matrix({
 
   useEffect(() => {
     let timeout = setTimeout(() => {
-      if (dataLimits?.limit <= 500) setGetData("pagesize", dataLimits?.limit);
+      if (dataLimits?.limit <= 250) setGetData("pagesize", dataLimits?.limit);
       if (setPagiData) {
         setPagiData(dataLimits);
       }
-    }, 5000);
+    }, 3000);
 
     return () => clearTimeout(timeout);
   }, [dataLimits?.page, dataLimits?.limit]);
@@ -313,7 +313,7 @@ function Matrix({
   useEffect(() => {
     let timeout = setTimeout(() => {
       dataLimits?.limit && table.setPageSize(Number(dataLimits?.limit));
-    }, 3500);
+    }, 1000);
 
     return () => clearTimeout(timeout);
   }, [dataLimits?.limit]);
@@ -566,7 +566,7 @@ function Matrix({
                 miw={50}
                 type="number"
                 defaultValue={pagiData?.page || table.getState().pagination.pageIndex + 1}
-                value={pagiData?.page || table.getState().pagination.pageIndex + 1}
+                value={setPagiData ? dataLimits?.page || 1 : table.getState().pagination.pageIndex + 1}
                 max={setPagiData ? totalrecords?.total_pages : table.getPageCount()}
                 min={1}
                 onChange={(e) => {
@@ -614,7 +614,7 @@ function Matrix({
               maw={90}
               miw={60}
               min={10}
-              max={2000}
+              max={500}
               value={Number(dataLimits?.limit)}
               onChange={(e) => {
                 setDataLimits({ ...dataLimits, limit: e });
