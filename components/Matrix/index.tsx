@@ -92,6 +92,7 @@ import { iterateData } from "@/helpers/getData";
 import { WarehouseForm } from "../Forms/WarehouseForm";
 import { formTypeToFetcherMapper } from "@/helpers/dataFetcher";
 import { notifications } from "@mantine/notifications";
+import { Search } from "../grid";
 declare module "@tanstack/table-core" {
   interface FilterFns {
     fuzzy: FilterFn<unknown>;
@@ -150,17 +151,6 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-type MatrixProps = {
-  data: MatrixDataType | Array<{}> | any;
-  setData: Dispatch<SetStateAction<MatrixDataType>>;
-  showCreateForm: boolean;
-  formType?: FormType | any;
-  formTypeData?: any;
-  setPagiData?: any;
-  pagiData?: any;
-  totalrecords?: any;
-};
-
 function Matrix({
   data,
   setData,
@@ -171,6 +161,7 @@ function Matrix({
   setPagiData,
   pagiData,
   totalrecords,
+  showApiSearch,
 }: any) {
   const theme = useMantineTheme();
   let colorScheme = setGetData("colorScheme");
@@ -668,18 +659,21 @@ function Matrix({
           </Menu>
           <Flex direction={"row"} justify={"center"} align={"center"}>
             {(permissionsData?.permissions?.export || defaultShow) && (
-              <div className="me-3">
+              <div className="me-1">
                 <DownloadFile formType={exporttitle} data={data} filterString={globalFilter} />
               </div>
             )}
-
             {renderUploadButton(formType, data)}
-            <DebouncedInput
-              value={globalFilter ?? ""}
-              onChange={(value) => setGlobalFilter(String(value))}
-              placeholder="Search all columns..."
-              icon={<IconSearch size="1.5rem" />}
-            />
+            {showApiSearch ? (
+              <Search setData={setData} data={data} formType={formType} />
+            ) : (
+              <DebouncedInput
+                value={globalFilter ?? ""}
+                onChange={(value) => setGlobalFilter(String(value))}
+                placeholder="Search all columns..."
+                icon={<IconSearch size="1.5rem" />}
+              />
+            )}
             {showCreateForm &&
               formType &&
               !clientState.showAsideBar &&

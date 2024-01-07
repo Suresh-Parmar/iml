@@ -57,6 +57,7 @@ export default function Students() {
         setData={setData}
         showCreateForm={true}
         formType="Students"
+        showApiSearch={true}
       />
       <Loader show={loader} />
     </Container>

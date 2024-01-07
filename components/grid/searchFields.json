@@ -1,0 +1,96 @@
+{
+  "students": [
+    {
+      "label": "Name",
+      "value": "name"
+    },
+    {
+      "label": "Registration No",
+      "value": "username"
+    },
+    {
+      "label": "Seat No",
+      "value": "seat_number"
+    },
+    {
+      "label": "School",
+      "value": "school"
+    },
+    {
+      "label": "City",
+      "value": "city"
+    },
+    {
+      "label": "Class",
+      "value": "class"
+    }
+  ],
+  "exam center mappings": [
+    {
+      "label": "Registration No",
+      "value": "registration_number"
+    },
+    {
+      "label": "Seat No",
+      "value": "seat_number"
+    },
+    {
+      "label": "Exam Center",
+      "value": "exam_center_code"
+    },
+    {
+      "label": "Class",
+      "value": "class_code"
+    }
+  ],
+  "schools": [
+    {
+      "label": "City",
+      "value": "city"
+    },
+    {
+      "label": "State",
+      "value": "state"
+    },
+    {
+      "label": "Board",
+      "value": "board"
+    },
+    {
+      "label": "Affiliation(Y/N)",
+      "value": "affiliation"
+    }
+  ],
+  "exam_centers": [
+    {
+      "label": "City",
+      "value": "city"
+    },
+    {
+      "label": "State",
+      "value": "state"
+    },
+    {
+      "label": "Exam Mode",
+      "value": "mode"
+    },
+    {
+      "label": "Exam Date",
+      "value": "examdate"
+    }
+  ],
+  "teachers": [
+    {
+      "label": "Name",
+      "value": "name"
+    },
+    {
+      "label": "City",
+      "value": "city"
+    },
+    {
+      "label": "Designation",
+      "value": "designation"
+    }
+  ]
+}
