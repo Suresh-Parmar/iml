@@ -8,7 +8,7 @@ import { collectionPayload } from "../utils";
 import { readApiData } from "@/utilities/API";
 
 function Search(props: any) {
-  const { setData, data, formType } = props;
+  const { setData, data, formType, handleClose } = props;
   const [searchValue, setSearchValue] = useState<any>({ input: "", dropDown: "" });
   let searchJsonData: any = { ...searchJson };
   const userData: any = useSelector((state: any) => state.data);
@@ -38,23 +38,30 @@ function Search(props: any) {
 
     let payload = {
       ...payloadData,
+      op_name: "find",
       filter_var: apiPayload,
     };
 
-    let apiData = await readApiData(undefined, payload);
+    // delete payload.filter_type;
+    // delete payload.role;
 
-    console.log(apiData);
+    let apiData = await readApiData(undefined, payload);
+    setData(apiData);
   };
 
   useEffect(() => {
     let timeout = setTimeout(() => {
       if (searchValue?.input && searchValue.dropDown && searchValue?.input.length > 3) {
         apiCall();
+      } else if (searchValue?.input.length == 0 && data.length == 0) {
+        handleClose && handleClose();
       }
     }, 2000);
 
+    // handleClose
+
     return () => clearTimeout(timeout);
-  }, [searchValue, selectedCountry]);
+  }, [searchValue?.input, searchValue.dropDown, selectedCountry]);
 
   return (
     <div className="d-flex gap-1">
