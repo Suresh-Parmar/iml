@@ -665,7 +665,15 @@ function Matrix({
             )}
             {renderUploadButton(formType, data)}
             {showApiSearch ? (
-              <Search setData={setData} data={data} formType={formType} />
+              <Search
+                setData={setData}
+                data={data}
+                formType={formType}
+                handleClose={() => {
+                  let limit = dataLimits.limit == 25 ? 20 : 25;
+                  setDataLimits({ page: 1, limit });
+                }}
+              />
             ) : (
               <DebouncedInput
                 value={globalFilter ?? ""}
