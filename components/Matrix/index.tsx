@@ -156,7 +156,6 @@ function Matrix({
   setData,
   showCreateForm,
   formType,
-  formTypeData = {},
   showLabel,
   setPagiData,
   pagiData,
@@ -183,19 +182,22 @@ function Matrix({
     }
   }
 
-  const [columnResizeMode, setColumnResizeMode] = useState<ColumnResizeMode>("onChange");
+  const columnResizeMode: any = "onChange";
   const [expanded, setExpanded] = useState<ExpandedState>({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState<SortingState>([]);
   const [permissionsData, setPermissionsData] = useState<any>({});
   const [siteJson, setSiteJson] = useState<any>(allJsonData);
+  const [isSearch, setisSearch] = useState<any>(null);
   const [dataLimits, setDataLimits] = useState<any>(
     pagiData || {
       page: 1,
       limit: savedPageSize,
     }
   );
+
+  let totalCount: any = isSearch ? data.length : totalrecords?.total_count;
 
   const setColumnData = () => {
     let data = allTypes[formType];
@@ -293,7 +295,7 @@ function Matrix({
   useEffect(() => {
     let timeout = setTimeout(() => {
       if (dataLimits?.limit <= 250) setGetData("pagesize", dataLimits?.limit);
-      if (setPagiData) {
+      if (setPagiData && !isSearch) {
         setPagiData(dataLimits);
       }
     }, 3000);
@@ -310,8 +312,15 @@ function Matrix({
   }, [dataLimits?.limit]);
 
   useEffect(() => {
-    setPagiData && pageSize && setDataLimits({ page: pagiData?.page || 1, limit: pageSize });
+    !isSearch && setPagiData && pageSize && setDataLimits({ page: pagiData?.page || 1, limit: pageSize });
   }, [pageSize]);
+
+  useEffect(() => {
+    if (isSearch == false) {
+      setDataLimits({ page: 1, limit: 25 });
+      setPagination({ pageIndex: 0, pageSize: 25 });
+    }
+  }, [isSearch]);
 
   const renderUploadButton = (formType: any, data: object[]) => {
     if (permissionsData?.permissions?.updateFile || permissionsData?.permissions?.uploadFile || defaultShow) {
@@ -522,7 +531,7 @@ function Matrix({
               variant="light"
               ml={"xs"}
               onClick={() => {
-                if (setPagiData) {
+                if (setPagiData && !isSearch) {
                   if (pagiData.page != 1) {
                     setDataLimits({ page: 1, limit: pageSize });
                   }
@@ -538,7 +547,7 @@ function Matrix({
               variant="light"
               ml={"xs"}
               onClick={() => {
-                if (setPagiData) {
+                if (setPagiData && !isSearch) {
                   if (pagiData.page > 1) {
                     setDataLimits({ page: pagiData.page - 1, limit: pageSize });
                   }
@@ -557,12 +566,12 @@ function Matrix({
                 miw={50}
                 type="number"
                 defaultValue={pagiData?.page || table.getState().pagination.pageIndex + 1}
-                value={setPagiData ? dataLimits?.page || 1 : table.getState().pagination.pageIndex + 1}
-                max={setPagiData ? totalrecords?.total_pages : table.getPageCount()}
+                value={setPagiData && !isSearch ? dataLimits?.page || 1 : table.getState().pagination.pageIndex + 1}
+                max={setPagiData && !isSearch ? totalrecords?.total_pages : table.getPageCount()}
                 min={1}
                 onChange={(e) => {
                   const page = e ? Number(e) - 1 : 0;
-                  if (setPagiData) {
+                  if (setPagiData && !isSearch) {
                     Number(e) && setDataLimits({ page: e, limit: pageSize });
                   } else {
                     table.setPageIndex(page);
@@ -574,7 +583,7 @@ function Matrix({
               variant="light"
               mr={"xs"}
               onClick={() => {
-                if (setPagiData) {
+                if (setPagiData && !isSearch) {
                   let setPage =
                     pagiData.page < totalrecords?.total_pages ? pagiData.page + 1 : totalrecords?.total_pages;
 
@@ -592,7 +601,7 @@ function Matrix({
               variant="light"
               mr={"xs"}
               onClick={() => {
-                setPagiData
+                setPagiData && !isSearch
                   ? setDataLimits({ page: totalrecords?.total_pages, limit: pageSize })
                   : table.setPageIndex(table.getPageCount() - 1);
               }}
@@ -615,7 +624,7 @@ function Matrix({
             {/* Table No of Rows */}
             {table.getPrePaginationRowModel().rows.length === table.getCoreRowModel().rows.length ? (
               <Text ml={"xs"} fz={"md"}>
-                {setPagiData ? totalrecords?.total_count : table.getCoreRowModel().rows.length} rows
+                {setPagiData && !isSearch ? totalCount : table.getCoreRowModel().rows.length} rows
               </Text>
             ) : (
               <Text ml={"xs"} fz={"md"}>
@@ -666,6 +675,7 @@ function Matrix({
             {renderUploadButton(formType, data)}
             {showApiSearch ? (
               <Search
+                setisSearch={setisSearch}
                 setData={setData}
                 data={data}
                 formType={formType}
