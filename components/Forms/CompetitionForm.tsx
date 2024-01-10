@@ -146,13 +146,13 @@ function CompetitionForm({
         divStyle: { width: "18%" },
         label: item.name,
         placeholder: "99",
-        ...form.getInputProps("class" + item._id),
+        ...form.getInputProps("cutoff_class__" + item.code),
         w: "100%",
         mt: "md",
         size: "md",
         onChange: (event: any) => {
           let val = validatePhone(event.currentTarget.value, 3);
-          form.setFieldValue("class" + item._id, val);
+          form.setFieldValue("cutoff_class__" + item.code, val);
         },
       };
       data.push(dataItem);
@@ -160,6 +160,16 @@ function CompetitionForm({
 
     return data;
   };
+
+  let valueGet = (obj: any, key: any, index: any) => {
+    if (obj[key] && Array.isArray(obj[key]) && obj[key][index]) {
+      return obj[key][index];
+    }
+
+    return "";
+  };
+
+  console.log(formValues);
 
   let dataObj = [
     {
@@ -284,13 +294,27 @@ function CompetitionForm({
       divStyle: { width: "22%" },
       label: "Grade A min (%)",
       placeholder: "99",
-      ...form.getInputProps("grade_a_min"),
       w: "100%",
       mt: "md",
       size: "md",
+      value: valueGet(formValues, "grade_a", 0),
       onChange: (event: any) => {
-        let val = validatePhone(event.currentTarget.value, 3, !!formValues.grade_a_max ? +formValues.grade_a_max : 100);
-        form.setFieldValue("grade_a_min", val);
+        let val: any = validatePhone(
+          event.currentTarget.value,
+          3,
+          !!valueGet(formValues, "grade_a", 1) ? +valueGet(formValues, "grade_a", 1) : 100
+        );
+
+        let arr = [];
+
+        if (Array.isArray(formValues.grade_a)) {
+          arr = formValues.grade_a;
+          arr[0] = val;
+        } else {
+          arr = [val];
+        }
+
+        form.setFieldValue("grade_a", arr);
       },
     },
     {
@@ -298,16 +322,24 @@ function CompetitionForm({
       divStyle: { width: "22%" },
       label: "Grade A max (%)",
       placeholder: "99",
-      ...form.getInputProps("grade_a_max"),
       w: "100%",
       mt: "md",
       size: "md",
+
+      value: valueGet(formValues, "grade_a", 1),
       onChange: (event: any) => {
         let val: any = validatePhone(event.currentTarget.value, 3, 100);
-        if (val < Number(formValues?.grade_a_min)) {
-          val = formValues.grade_a_min;
+        if (val < valueGet(formValues, "grade_a", 0)) {
+          val = valueGet(formValues, "grade_a", 0);
         }
-        form.setFieldValue("grade_a_max", val);
+        let arr = [];
+        if (Array.isArray(formValues.grade_a)) {
+          arr = formValues.grade_a;
+          arr[1] = val;
+        } else {
+          arr = [0, val];
+        }
+        form.setFieldValue("grade_a", arr);
       },
     },
     {
@@ -315,30 +347,53 @@ function CompetitionForm({
       divStyle: { width: "22%" },
       label: "Grade B min (%)",
       placeholder: "99",
-      ...form.getInputProps("grade_b_min"),
+
       w: "100%",
+      value: valueGet(formValues, "grade_b", 0),
       mt: "md",
       size: "md",
       onChange: (event: any) => {
-        let val = validatePhone(event.currentTarget.value, 3, !!formValues.grade_b_max ? +formValues.grade_b_max : 100);
-        form.setFieldValue("grade_b_min", val);
+        let val: any = validatePhone(
+          event.currentTarget.value,
+          3,
+          !!valueGet(formValues, "grade_b", 1) ? +valueGet(formValues, "grade_b", 1) : 100
+        );
+
+        let arr = [];
+
+        if (Array.isArray(formValues.grade_b)) {
+          arr = formValues.grade_b;
+          arr[0] = val;
+        } else {
+          arr = [val];
+        }
+
+        form.setFieldValue("grade_b", arr);
       },
     },
+
     {
       disabled: readonly,
       divStyle: { width: "22%" },
       label: "Grade B max (%)",
       placeholder: "99",
-      ...form.getInputProps("grade_b_max"),
+      value: valueGet(formValues, "grade_b", 1),
       w: "100%",
       mt: "md",
       size: "md",
       onChange: (event: any) => {
         let val: any = validatePhone(event.currentTarget.value, 3, 100);
-        if (val < Number(formValues?.grade_b_min)) {
-          val = formValues.grade_b_min;
+        if (val < valueGet(formValues, "grade_b", 0)) {
+          val = valueGet(formValues, "grade_b", 0);
         }
-        form.setFieldValue("grade_b_max", val);
+        let arr = [];
+        if (Array.isArray(formValues.grade_b)) {
+          arr = formValues.grade_b;
+          arr[1] = val;
+        } else {
+          arr = [0, val];
+        }
+        form.setFieldValue("grade_b", arr);
       },
     },
     {
@@ -346,13 +401,27 @@ function CompetitionForm({
       divStyle: { width: "22%" },
       label: "Grade C min (%)",
       placeholder: "99",
-      ...form.getInputProps("grade_c_min"),
+      value: valueGet(formValues, "grade_c", 0),
       w: "100%",
       mt: "md",
       size: "md",
       onChange: (event: any) => {
-        let val = validatePhone(event.currentTarget.value, 3, !!formValues.grade_c_max ? +formValues.grade_c_max : 100);
-        form.setFieldValue("grade_c_min", val);
+        let val: any = validatePhone(
+          event.currentTarget.value,
+          3,
+          !!valueGet(formValues, "grade_c", 1) ? +valueGet(formValues, "grade_c", 1) : 100
+        );
+
+        let arr = [];
+
+        if (Array.isArray(formValues.grade_c)) {
+          arr = formValues.grade_c;
+          arr[0] = val;
+        } else {
+          arr = [val];
+        }
+
+        form.setFieldValue("grade_c", arr);
       },
     },
     {
@@ -360,16 +429,23 @@ function CompetitionForm({
       divStyle: { width: "22%" },
       label: "Grade C max (%)",
       placeholder: "99",
-      ...form.getInputProps("grade_c_max"),
+      value: valueGet(formValues, "grade_c", 1),
       w: "100%",
       mt: "md",
       size: "md",
       onChange: (event: any) => {
         let val: any = validatePhone(event.currentTarget.value, 3, 100);
-        if (val < Number(formValues?.grade_c_min)) {
-          val = formValues.grade_c_min;
+        if (val < valueGet(formValues, "grade_c", 0)) {
+          val = valueGet(formValues, "grade_c", 0);
         }
-        form.setFieldValue("grade_c_max", val);
+        let arr = [];
+        if (Array.isArray(formValues.grade_c)) {
+          arr = formValues.grade_c;
+          arr[1] = val;
+        } else {
+          arr = [0, val];
+        }
+        form.setFieldValue("grade_c", arr);
       },
     },
     {
@@ -377,13 +453,27 @@ function CompetitionForm({
       divStyle: { width: "22%" },
       label: "Grade D min (%)",
       placeholder: "99",
-      ...form.getInputProps("grade_d_min"),
+      value: valueGet(formValues, "grade_d", 0),
       w: "100%",
       mt: "md",
       size: "md",
       onChange: (event: any) => {
-        let val = validatePhone(event.currentTarget.value, 3, !!formValues.grade_d_max ? +formValues.grade_d_max : 100);
-        form.setFieldValue("grade_d_min", val);
+        let val: any = validatePhone(
+          event.currentTarget.value,
+          3,
+          !!valueGet(formValues, "grade_d", 1) ? +valueGet(formValues, "grade_d", 1) : 100
+        );
+
+        let arr = [];
+
+        if (Array.isArray(formValues.grade_d)) {
+          arr = formValues.grade_d;
+          arr[0] = val;
+        } else {
+          arr = [val];
+        }
+
+        form.setFieldValue("grade_d", arr);
       },
     },
     {
@@ -391,16 +481,23 @@ function CompetitionForm({
       divStyle: { width: "22%" },
       label: "Grade D max (%)",
       placeholder: "99",
-      ...form.getInputProps("grade_d_max"),
+      value: valueGet(formValues, "grade_d", 1),
       w: "100%",
       mt: "md",
       size: "md",
       onChange: (event: any) => {
         let val: any = validatePhone(event.currentTarget.value, 3, 100);
-        if (val < Number(formValues?.grade_d_min)) {
-          val = formValues.grade_d_min;
+        if (val < valueGet(formValues, "grade_d", 0)) {
+          val = valueGet(formValues, "grade_d", 0);
         }
-        form.setFieldValue("grade_d_max", val);
+        let arr = [];
+        if (Array.isArray(formValues.grade_d)) {
+          arr = formValues.grade_d;
+          arr[1] = val;
+        } else {
+          arr = [0, val];
+        }
+        form.setFieldValue("grade_d", arr);
       },
     },
     { title: "Cut-off Marks Setting for Grand Finale" },

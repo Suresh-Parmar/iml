@@ -8,7 +8,7 @@ import { collectionPayload } from "../utils";
 import { readApiData } from "@/utilities/API";
 
 function Search(props: any) {
-  const { setData, data, formType, handleClose } = props;
+  const { setData, data, formType, handleClose, setisSearch } = props;
   const [searchValue, setSearchValue] = useState<any>({ input: "", dropDown: "" });
   let searchJsonData: any = { ...searchJson };
   const userData: any = useSelector((state: any) => state.data);
@@ -51,9 +51,11 @@ function Search(props: any) {
 
   useEffect(() => {
     let timeout = setTimeout(() => {
-      if (searchValue?.input && searchValue.dropDown && searchValue?.input.length > 3) {
+      if (searchValue?.input && searchValue.dropDown && searchValue?.input.length > 1) {
+        setisSearch && setisSearch(true);
         apiCall();
-      } else if (searchValue?.input.length == 0 && data.length == 0) {
+      } else if (searchValue?.input.length == 0) {
+        setisSearch && setisSearch(false);
         handleClose && handleClose();
       }
     }, 2000);
@@ -61,7 +63,7 @@ function Search(props: any) {
     // handleClose
 
     return () => clearTimeout(timeout);
-  }, [searchValue?.input, searchValue.dropDown, selectedCountry]);
+  }, [searchValue?.input, searchValue?.dropDown, selectedCountry]);
 
   return (
     <div className="d-flex gap-1">
