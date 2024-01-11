@@ -177,9 +177,12 @@ function Matrix({
   if (savedPageSize) {
     if (!isNaN(savedPageSize)) {
       savedPageSize = Number(savedPageSize);
+      console.log(savedPageSize, "savedPageSize ddd");
     } else {
       savedPageSize = 25;
     }
+  } else {
+    savedPageSize = 25;
   }
 
   const columnResizeMode: any = "onChange";
