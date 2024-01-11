@@ -28,7 +28,7 @@ function Search(props: any) {
   let apiCall = async () => {
     let payloadData: any = collectionPayload(formType) || {};
     let apiPayload: any = {
-      [searchValue.dropDown]: { $regex: searchValue.input },
+      [searchValue.dropDown]: { $regex: searchValue.input, $options: "i" },
       country: selectedCountry || "India",
     };
 
