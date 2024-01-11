@@ -14,7 +14,7 @@
     },
     {
       "label": "School",
-      "value": "school"
+      "value": "school_name"
     },
     {
       "label": "City",
