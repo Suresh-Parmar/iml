@@ -141,18 +141,23 @@ function CompetitionForm({
   const classesDataJson = () => {
     let data: any = [];
     classesData.map((item: any) => {
+      let keytoShow = "Class " + item.code;
       let dataItem = {
         disabled: readonly,
         divStyle: { width: "18%" },
         label: item.name,
         placeholder: "99",
-        ...form.getInputProps("cutoff_class__" + item.code),
         w: "100%",
         mt: "md",
         size: "md",
+        value: formValues?.cutoffs ? formValues?.cutoffs[0][keytoShow] : "",
         onChange: (event: any) => {
           let val = validatePhone(event.currentTarget.value, 3);
-          form.setFieldValue("cutoff_class__" + item.code, val);
+          let values = formValues?.cutoffs || [{}];
+          values = values[0];
+          values[keytoShow] = val;
+          form.setFieldValue("cutoffs", [values]);
+          // form.setFieldValue("cutoff_class__" + item.code, val);
         },
       };
       data.push(dataItem);
@@ -335,9 +340,9 @@ function CompetitionForm({
         let arr = [];
         if (Array.isArray(formValues.grade_a)) {
           arr = formValues.grade_a;
-          arr[1] = val;
+          arr[1] = String(val);
         } else {
-          arr = [0, val];
+          arr = ["0", val];
         }
         form.setFieldValue("grade_a", arr);
       },
@@ -389,9 +394,9 @@ function CompetitionForm({
         let arr = [];
         if (Array.isArray(formValues.grade_b)) {
           arr = formValues.grade_b;
-          arr[1] = val;
+          arr[1] = String(val);
         } else {
-          arr = [0, val];
+          arr = ["0", val];
         }
         form.setFieldValue("grade_b", arr);
       },
@@ -441,9 +446,9 @@ function CompetitionForm({
         let arr = [];
         if (Array.isArray(formValues.grade_c)) {
           arr = formValues.grade_c;
-          arr[1] = val;
+          arr[1] = String(val);
         } else {
-          arr = [0, val];
+          arr = ["0", val];
         }
         form.setFieldValue("grade_c", arr);
       },
@@ -493,9 +498,9 @@ function CompetitionForm({
         let arr = [];
         if (Array.isArray(formValues.grade_d)) {
           arr = formValues.grade_d;
-          arr[1] = val;
+          arr[1] = String(val);
         } else {
-          arr = [0, val];
+          arr = ["0", val];
         }
         form.setFieldValue("grade_d", arr);
       },
