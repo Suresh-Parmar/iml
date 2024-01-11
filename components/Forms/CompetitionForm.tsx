@@ -334,9 +334,9 @@ function CompetitionForm({
       value: valueGet(formValues, "grade_a", 1),
       onChange: (event: any) => {
         let val: any = validatePhone(event.currentTarget.value, 3, 100);
-        if (val < valueGet(formValues, "grade_a", 0)) {
-          val = valueGet(formValues, "grade_a", 0);
-        }
+        // if (val < valueGet(formValues, "grade_a", 0) && val.length > 1) {
+        //   val = valueGet(formValues, "grade_a", 0);
+        // }
         let arr = [];
         if (Array.isArray(formValues.grade_a)) {
           arr = formValues.grade_a;
@@ -388,9 +388,9 @@ function CompetitionForm({
       size: "md",
       onChange: (event: any) => {
         let val: any = validatePhone(event.currentTarget.value, 3, 100);
-        if (val < valueGet(formValues, "grade_b", 0)) {
-          val = valueGet(formValues, "grade_b", 0);
-        }
+        // if (val < valueGet(formValues, "grade_b", 0) && val.length > 1) {
+        //   val = valueGet(formValues, "grade_b", 0);
+        // }
         let arr = [];
         if (Array.isArray(formValues.grade_b)) {
           arr = formValues.grade_b;
@@ -440,9 +440,9 @@ function CompetitionForm({
       size: "md",
       onChange: (event: any) => {
         let val: any = validatePhone(event.currentTarget.value, 3, 100);
-        if (val < valueGet(formValues, "grade_c", 0)) {
-          val = valueGet(formValues, "grade_c", 0);
-        }
+        // if (val < valueGet(formValues, "grade_c", 0) && val.length > 1) {
+        //   val = valueGet(formValues, "grade_c", 0);
+        // }
         let arr = [];
         if (Array.isArray(formValues.grade_c)) {
           arr = formValues.grade_c;
@@ -492,9 +492,9 @@ function CompetitionForm({
       size: "md",
       onChange: (event: any) => {
         let val: any = validatePhone(event.currentTarget.value, 3, 100);
-        if (val < valueGet(formValues, "grade_d", 0)) {
-          val = valueGet(formValues, "grade_d", 0);
-        }
+        // if (val < valueGet(formValues, "grade_d", 0) && val.length > 1) {
+        //   val = valueGet(formValues, "grade_d", 0);
+        // }
         let arr = [];
         if (Array.isArray(formValues.grade_d)) {
           arr = formValues.grade_d;
