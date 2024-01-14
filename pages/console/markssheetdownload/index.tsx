@@ -26,6 +26,8 @@ function Page() {
   const [groupsData, setGroupData] = useState<any>([]);
   const [cohortsData, setcohortsData] = useState<any>([]);
   const [loader, setLoader] = useState<any>(false);
+  const [pdfLoader, setpdfLoader] = useState<any>(false);
+  const [genratedData, setGenratedData] = useState<any>([]);
 
   const state: any = useSelector((state: any) => state.data);
   const countryName = state?.selectedCountry?.label;
@@ -81,8 +83,25 @@ function Page() {
     setCitiesData(cities);
   }
 
+  let migrateData = (data: any[], data1: any[], by: string, isStudent: any = false) => {
+    let newData: any[] = [];
+    data1.map((item: any) => {
+      let newItem = data.find((itemchild: any, i: any) => item[by] == itemchild[by]);
+      if (newItem) {
+        let newDataa = { ...item, ...newItem };
+        newData.push(newDataa);
+      } else {
+        // delete item.admit_card_url;
+        newData.push(item);
+      }
+    });
+
+    return newData;
+  };
+
   const downloadPdf = (data: any) => {
-    // console.log(data);
+    let newData = migrateData(data, schoolsData, "school_name");
+    setSchoolsData(structuredClone(newData));
   };
 
   let genrateDataFormDropDown = (data: any) => {
@@ -96,7 +115,13 @@ function Page() {
     return data;
   };
 
-  function readSchoolsData(isSchool: any = false) {
+  async function readSchoolsData(isSchool = false) {
+    if (pdfLoader) {
+      return;
+    }
+
+    setGenratedData([]);
+
     let newPayload: any = {
       country: countryName || "India",
       competition_code: allData.competition || "",
@@ -106,19 +131,33 @@ function Page() {
     };
 
     if (isSchool) {
-      newPayload = { username: allData.schools };
-    }
-    setLoader(true);
-    downloadMarksSheet(newPayload).then((res) => {
-      setLoader(false);
-      if (isSchool) {
-        downloadPdf(res.data);
-      } else {
+      for (const school of allData.schools) {
+        const payload = { ...newPayload, username: [school] };
+        setpdfLoader(school);
+
+        try {
+          const res = await downloadMarksSheet(payload);
+          setpdfLoader(false);
+          let dataObj: any = res.data[0];
+          dataObj.school_name = school;
+          genratedData.push(dataObj);
+          setGenratedData([genratedData]);
+          downloadPdf(genratedData);
+        } catch (errors) {
+          setpdfLoader(false);
+        }
+      }
+    } else {
+      setLoader(true);
+
+      downloadMarksSheet(newPayload).then((res) => {
+        setLoader(false);
+
         // let data = genrateDataFormDropDown(res.data);
         // setSchoolsDataDropDown(data);
         setSchoolsData(res.data);
-      }
-    });
+      });
+    }
   }
 
   async function readClassesData(filterBy?: "name" | "status", filterQuery?: string | number) {
@@ -494,7 +533,15 @@ function Page() {
             <td>{item.school_name}</td>
             <td>{item.students_count}</td>
             <td>
-              <span className="material-symbols-outlined">download</span>
+              {item.school_name == pdfLoader ? (
+                <div style={{ height: 32 }}> loading... </div>
+              ) : item.marksheets_url ? (
+                <a href={item.marksheets_url} target="_blank">
+                  <span className="material-symbols-outlined text-success">download</span>
+                </a>
+              ) : (
+                <span className="material-symbols-outlined">download</span>
+              )}
             </td>
           </tr>
         );
@@ -522,7 +569,7 @@ function Page() {
         <tbody>{renderTableData()}</tbody>
       </table>
     );
-  }, [allData.schools, schoolsData, checkIsAllChecked(allData.schools, schoolsData), isStudentFilters]);
+  }, [allData.schools, schoolsData, checkIsAllChecked(allData.schools, schoolsData), isStudentFilters, pdfLoader]);
 
   const AdmitCardDownLoad = () => {
     return (
@@ -531,8 +578,11 @@ function Page() {
         <div className="table-responsive mt-4">{renderSchoolsTable()}</div>
         {/* <div className="table-responsive  m-4">{renderTable()}</div> */}
         {allData?.schools?.length && !isStudentFilters ? (
-          <div className="btn btn-primary form-control" onClick={() => readSchoolsData(true)}>
-            Download admit cards in pdf
+          <div
+            className={`btn btn-primary form-control ${pdfLoader ? "disabled btn-secondary" : ""}`}
+            onClick={() => readSchoolsData(true)}
+          >
+            Download Marksheets
           </div>
         ) : (
           ""
