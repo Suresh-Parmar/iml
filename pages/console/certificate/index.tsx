@@ -8,7 +8,7 @@ import {
   readStates,
   studentDetails,
 } from "@/utilities/API";
-import { Group, MultiSelect, Radio, Select } from "@mantine/core";
+import { Checkbox, Group, MultiSelect, Radio, Select } from "@mantine/core";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { checkIsAllChecked, selectCheckBOxData } from "@/helpers/selectCheckBox";
@@ -157,13 +157,14 @@ function Page() {
       competition_code: allData.competition || "",
       state: allData.state,
       city: allData.city,
+
       // affiliation: allData.affiliation,
     };
 
     if (isSchool) {
       for (const school of allData.schools) {
         try {
-          newPayload = { school_name: [school] };
+          newPayload = { school_name: [school], whitbackground: allData?.whitbackground };
           setpdfLoader(school);
           let data: any = await certificateDownload(newPayload);
           setpdfLoader(false);
@@ -744,8 +745,11 @@ function Page() {
   // };
 
   const genrateStudentPdf = () => {
+    let payload = { username: allData?.studentsData, whitbackground: allData?.whitbackground };
+
     setLoader(true);
-    certificateDownload({ username: allData.studentsData })
+
+    certificateDownload(payload)
       .then((res) => {
         setLoader(false);
         // console.log(res.data);
@@ -771,15 +775,39 @@ function Page() {
         <div className="table-responsive mt-4">{renderUsersTable()}</div>
         {/* <div className="table-responsive  m-4">{renderTable()}</div> */}
         {allData?.schools?.length && !isStudentFilters && !pdfLoader ? (
-          <div className="btn btn-primary form-control" onClick={() => readSchoolsData(true)}>
-            Generate PDF
+          <div>
+            <div className="mb-3">
+              <Checkbox
+                label="With Background"
+                checked={allData?.whitbackground}
+                onChange={(e) => {
+                  allData.whitbackground = e.target.checked;
+                  setAllData({ ...allData });
+                }}
+              />
+            </div>
+            <div className="btn btn-primary form-control" onClick={() => readSchoolsData(true)}>
+              Download Certificate
+            </div>
           </div>
         ) : (
           ""
         )}
         {allData?.studentsData?.length && isStudentFilters ? (
-          <div className="btn btn-primary form-control" onClick={() => genrateStudentPdf()}>
-            Generate PDF
+          <div>
+            <div className="mb-3">
+              <Checkbox
+                label="With Background"
+                checked={allData?.whitbackground}
+                onChange={(e) => {
+                  allData.whitbackground = e.target.checked;
+                  setAllData({ ...allData });
+                }}
+              />
+            </div>
+            <div className="btn btn-primary form-control" onClick={() => genrateStudentPdf()}>
+              Download Certificate
+            </div>
           </div>
         ) : (
           ""

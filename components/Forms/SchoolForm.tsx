@@ -15,7 +15,7 @@ import {
   updateSchool,
 } from "@/utilities/API";
 import { notifications } from "@mantine/notifications";
-import { maxLength } from "@/helpers/validations";
+import { checkValidEmailOrNot, maxLength } from "@/helpers/validations";
 import { filterDrodownData } from "@/helpers/filterFromJson";
 import { filterDataSingle } from "@/helpers/dropDownData";
 import { useSelector } from "react-redux";
@@ -46,6 +46,7 @@ function SchoolForm({
   const [groupData, setgroupData] = useState<any>([]);
   const [teacher, setTeacher] = useState<any>([]);
   const [principal, setPrincipal] = useState<any>([]);
+  const [EmailError, setEmailError] = useState<any>("");
   const [relationshipManager, setrelationshipManager] = useState<any>([]);
 
   let reduxData = useSelector((state: any) => state.data);
@@ -157,14 +158,14 @@ function SchoolForm({
     },
 
     validate: {
-      name: (value: any) => (value.length < 2 ? "Name must have at least 2 letters" : null),
+      name: (value: any) => (value || value?.length < 2 ? "Name must have at least 2 letters" : null),
       // principal: (value) => (value.length < 2 ? "Name must have at least 2 letters" : null),
       // teacher_incharge: (value) => (value.length < 2 ? "must have at least 2 letters" : null),
       // relationship_manager: (value) => (value.length < 2 ? "must have at least 2 letters" : null),
       // group: (value) => (value.length < 2 ? "must be selected" : null),
       // board: (value) => (value.length === 0 ? "Board must be selected" : null),
-      state: (value: any) => (value.length === 0 ? "State must be selected" : null),
-      city: (value: any) => (value.length === 0 ? "City must be selected" : null),
+      state: (value: any) => (!value?.length ? "State must be selected" : null),
+      city: (value: any) => (!value?.length ? "City must be selected" : null),
       // address: (value) => (value.length < 2 ? "Address must have at least 50 letters" : null),
       // name_address: (value) => (value.length < 2 ? "Address must have at least 50 letters" : null),
       // label: (value) => (value.length < 2 ? "Address must have at least 50 letters" : null),
@@ -203,7 +204,7 @@ function SchoolForm({
         country: getSelectedCountry(),
       };
       const isSchoolCreated = await createSchool(values as MatrixRowType);
-      if (isSchoolCreated.toLowerCase() === "document created") {
+      if (isSchoolCreated?.toLowerCase() === "document created") {
         if (form?.values?.create_exam_center) {
           await addExamCenters(values);
         }
@@ -215,7 +216,7 @@ function SchoolForm({
           message: `A new school has been created.`,
           color: "green",
         });
-      } else if (isSchoolCreated.toUpperCase() === "DOCUMENT ALREADY EXISTS") {
+      } else if (isSchoolCreated?.toUpperCase() === "DOCUMENT ALREADY EXISTS") {
         setOLoader(false);
         notifications.show({
           title: `School already exists!`,
@@ -332,16 +333,35 @@ function SchoolForm({
                 form.setFieldValue("name", event.currentTarget.value);
               }}
             />
-            <TextInput
-              disabled={readonly}
-              name="Contact E-Mail"
-              label="Contact E-Mail"
-              placeholder="john.doe@ignitedmindlab.com"
-              {...form.getInputProps("contact_email")}
-              w={"100%"}
-              mt={"md"}
-              size="md"
-            />
+            <div>
+              <TextInput
+                disabled={readonly}
+                name="Contact E-Mail"
+                label="Contact E-Mail"
+                placeholder="john.doe@ignitedmindlab.com"
+                {...form.getInputProps("contact_email")}
+                w={"100%"}
+                onChange={(evt) => {
+                  let val = evt.target.value;
+                  val = val.replaceAll(" ", "");
+                  form.setFieldValue("contact_email", val);
+                  if (EmailError) {
+                    setEmailError("");
+                  }
+                }}
+                onBlur={(e) => {
+                  let mail = e.target.value;
+                  let validMail = checkValidEmailOrNot(mail);
+                  if (!validMail) {
+                    form.setFieldValue("contact_email", "");
+                    setEmailError("Invalid email Address");
+                  }
+                }}
+                mt={"md"}
+                size="md"
+              />
+              {EmailError && <div className="font12 text-danger">{EmailError}</div>}
+            </div>
             <TextInput
               disabled={readonly}
               // withAsterisk
