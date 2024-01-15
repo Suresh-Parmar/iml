@@ -6,14 +6,15 @@ import {
   readCompetitions,
   readSchools,
   readStates,
+  studentDetails,
 } from "@/utilities/API";
 import { Group, MultiSelect, Radio, Select } from "@mantine/core";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { checkIsAllChecked, selectCheckBOxData } from "@/helpers/selectCheckBox";
-import { SingleStudent } from "@/components/admitCard";
 import Loader from "@/components/common/Loader";
-import { filterData as filterHelper } from "@/helpers/filterData";
+import { filterData } from "@/helpers/filterData";
+import { findFromJson } from "@/helpers/filterFromJson";
 
 function Page() {
   const [allData, setAllData] = useState<any>({});
@@ -27,46 +28,66 @@ function Page() {
   const [cohortsData, setcohortsData] = useState<any>([]);
   const [loader, setLoader] = useState<any>(false);
   const [pdfLoader, setpdfLoader] = useState<any>(false);
+  const [studentGridData, setStudentGridData] = useState<any>([]);
+  const [zipUrl, setZipUrl] = useState<any>("");
   const [genratedData, setGenratedData] = useState<any>([]);
+
+  // useEffect(() => {
+  //   if (loader) {
+  //     setTimeout(() => {
+  //       setLoader(false);
+  //     }, 4000);
+  //   }
+  // }, [loader]);
 
   const state: any = useSelector((state: any) => state.data);
   const countryName = state?.selectedCountry?.label;
   let isStudentFilters = allData.admitCardFilter == "studentWise";
+  let themeColor = state?.colorScheme;
 
-  const filterData = (data: any[], key: string, val: string, findkey: any = "") => {
-    let newData: any[] = [];
-    if (Array.isArray(data)) {
-      data.forEach((element: any) => {
-        element[key] = element.name;
-        element[val] = findkey ? element[findkey] : element.name;
-        if (element.group) {
-          element.groupName = element.group;
-          delete element.group;
-        }
+  let genratePayloadStudentWise = () => {
+    let singleClassData = findFromJson(classesData, allData.select_class, "label");
+    let singleCompetition = findFromJson(comeptitionsData, allData.competition, "value");
 
-        if (element.status && element[key] && element[key] != "None") {
-          let data = newData.find((elm) => elm[key] == element[key]);
+    let values: any = {
+      cohort: "select_cohort",
+      group: "select_group",
+      school: "select_school",
+    };
 
-          if (!data) {
-            newData.push(element);
-          }
-        }
-      });
+    let newKey = values[allData.filterTypeStudent];
+
+    let obj: any = {
+      country: countryName || "India",
+      competition: singleCompetition.label || "",
+      state: allData.state,
+      city: allData.city,
+      role: "student",
+      [allData.filterTypeStudent]: allData[newKey],
+
+      // class_code: singleClassData.code || allData.select_class || "",
+    };
+
+    if (singleClassData.code || (allData.select_class && allData.select_class != "all")) {
+      obj.class = singleClassData.code || allData.select_class || "";
     }
 
-    return newData.sort((a: any, b: any) => {
-      let fa = a.label.toLowerCase(),
-        fb = b.label.toLowerCase();
-
-      if (fa < fb) {
-        return -1;
-      }
-      if (fa > fb) {
-        return 1;
-      }
-      return 0;
-    });
+    return obj;
   };
+  let getStudentDetailsApi = () => {
+    let payload = genratePayloadStudentWise();
+    studentDetails(payload)
+      .then((res) => {
+        setStudentGridData(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    allData.city && allData.filterTypeStudent && allData.select_class && getStudentDetailsApi();
+  }, [allData]);
 
   // fetch data
 
@@ -91,7 +112,7 @@ function Page() {
         let newDataa = { ...item, ...newItem };
         newData.push(newDataa);
       } else {
-        // delete item.admit_card_url;
+        // delete item.marksheets_url;
         newData.push(item);
       }
     });
@@ -122,12 +143,11 @@ function Page() {
 
     setGenratedData([]);
 
-    let newPayload: any = {
+    const newPayload = {
       country: countryName || "India",
       competition_code: allData.competition || "",
       state: allData.state,
       city: allData.city,
-      // affiliation: allData.affiliation,
     };
 
     if (isSchool) {
@@ -138,9 +158,11 @@ function Page() {
         try {
           const res = await downloadMarksSheet(payload);
           setpdfLoader(false);
-          let dataObj: any = res.data[0];
-          if (!dataObj.school_name) dataObj.school_name = school;
-          genratedData.push(dataObj);
+
+          if (Array.isArray(res.data) && res.data.length > 1) {
+            setZipUrl(res.data[res.data.length - 1]?.zip_file);
+          }
+          genratedData.push(...res.data);
           setGenratedData([genratedData]);
           downloadPdf(genratedData);
         } catch (errors) {
@@ -150,27 +172,36 @@ function Page() {
     } else {
       setLoader(true);
 
-      downloadMarksSheet(newPayload).then((res) => {
+      try {
+        const res = await downloadMarksSheet(newPayload);
         setLoader(false);
 
-        // let data = genrateDataFormDropDown(res.data);
-        // setSchoolsDataDropDown(data);
-        setSchoolsData(res.data);
-      });
+        if (isSchool) {
+          if (Array.isArray(res.data) && res.data.length > 1) {
+            setZipUrl(res.data[res.data.length - 1]?.zip_file);
+          }
+          downloadPdf(res.data);
+        } else {
+          const data = genrateDataFormDropDown(res.data);
+          // setSchoolsDataDropDown(data);
+          setSchoolsData(res.data);
+        }
+      } catch (errors) {
+        setLoader(false);
+      }
     }
   }
 
   async function readClassesData(filterBy?: "name" | "status", filterQuery?: string | number) {
-    let classes = await readClasses();
-    classes = filterHelper(classes, "label", "value", "", true, "code");
+    let classes: any = await readClasses();
+    classes = filterData(classes, "label", "value", "", true, "order_code", undefined, true);
+    classes.unshift("all");
     setClassesData(classes);
   }
 
   async function readCompetitionsData(filterBy?: "name" | "status", filterQuery?: string | number) {
     let competitions = await readCompetitions();
-
     competitions = filterData(competitions, "label", "value", "code");
-
     setCompetitionsData(competitions);
   }
 
@@ -178,30 +209,13 @@ function Page() {
     if (!isStudentFilters) {
       return;
     }
+
     if (allData?.childSchoolData?.key == "select_cohort") {
       setLoader(true);
       readApiData("cohorts")
         .then((res) => {
           setLoader(false);
           setcohortsData(filterData(res, "label", "value"));
-        })
-        .catch((error) => {
-          console.error(error);
-          setLoader(false);
-        });
-    }
-  };
-
-  const getGroups = () => {
-    if (!isStudentFilters) {
-      return;
-    }
-    if (allData?.childSchoolData?.key == "select_group") {
-      setLoader(true);
-      readApiData("groups")
-        .then((res) => {
-          setLoader(false);
-          setGroupData(filterData(res, "label", "value"));
         })
         .catch((error) => {
           console.error(error);
@@ -237,6 +251,24 @@ function Page() {
     }
   };
 
+  const getGroups = () => {
+    if (!isStudentFilters) {
+      return;
+    }
+    if (allData?.childSchoolData?.key == "select_group") {
+      setLoader(true);
+      readApiData("groups")
+        .then((res) => {
+          setLoader(false);
+          setGroupData(filterData(res, "label", "value"));
+        })
+        .catch((error) => {
+          console.error(error);
+          setLoader(false);
+        });
+    }
+  };
+
   // fetch data
 
   useEffect(() => {
@@ -256,34 +288,20 @@ function Page() {
   }, [allData.state]);
 
   useEffect(() => {
-    allData.city && allData.competition && readSchoolsData();
-  }, [allData.city, allData.competition]);
+    allData.city && allData.competition && !isStudentFilters && readSchoolsData();
+  }, [allData.city, allData.competition, !!isStudentFilters]);
 
-  // const readSchoolGridData = () => {
-  //   if (!isStudentFilters) {
-  //     return;
-  //   }
+  let dataObj: any = {
+    group: { data: groupsData, label: "Group", key: "select_group" },
+    cohort: { data: cohortsData, label: "Cohort", key: "select_cohort" },
+    school: { data: schoolsDataDropDown, label: "School", key: "select_school" },
+  };
 
-  //   let payload = {
-  //     collection_name: "schools",
-  //     op_name: "find_many",
-  //     filter_var: {
-  //       country: countryName || "India",
-  //       city: allData.city,
-  //     },
-  //   };
-
-  //   setLoader(true);
-  //   readApiData("schools", payload)
-  //     .then((res) => {
-  //       setLoader(false);
-  //       setSchoolsDataDropDown(filterData(res, "label", "value"));
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //       setLoader(false);
-  //     });
-  // };
+  useEffect(() => {
+    let data = dataObj[allData.filterTypeStudent];
+    allData.childSchoolData = data;
+    setAllData({ ...allData });
+  }, [groupsData, cohortsData, schoolsDataDropDown]);
 
   const handleDropDownChange = (e: any, key: any, clear?: any) => {
     if (clear) {
@@ -347,18 +365,6 @@ function Page() {
     // },
   ];
 
-  let dataObj: any = {
-    group: { data: groupsData, label: "Group", key: "select_group" },
-    cohort: { data: cohortsData, label: "Cohort", key: "select_cohort" },
-    school: { data: schoolsDataDropDown, label: "School", key: "select_school" },
-  };
-
-  useEffect(() => {
-    let data = dataObj[allData.filterTypeStudent];
-    allData.childSchoolData = data;
-    setAllData({ ...allData });
-  }, [groupsData, cohortsData, schoolsDataDropDown]);
-
   const studentFilters = [
     {
       label: "Competition",
@@ -389,12 +395,12 @@ function Page() {
       type: "select",
       data: citiesData,
       onchange: (e: any) => {
-        handleDropDownChange(e, "city", "schools");
+        handleDropDownChange(e, "city");
       },
       value: allData.city,
     },
     {
-      label: "School / group / cohort",
+      label: "School / Group / Cohort",
       key: "filterTypeStudent",
       type: "radio",
       options: [
@@ -405,7 +411,7 @@ function Page() {
       onChange: (e: any) => {
         let data = dataObj[e];
         allData.childSchoolData = data;
-        handleDropDownChange(e, "filterTypeStudent");
+        handleDropDownChange(e, "filterTypeStudent", "studentsData");
       },
       value: allData.filterTypeStudent || "",
     },
@@ -450,13 +456,13 @@ function Page() {
     );
   };
 
+  // const renderData = useCallback(() => {
   const renderData = () => {
-    // const renderData = useCallback(() => {
     return filters.map((item: any, index) => {
-      let { type, data, label, placeholder, onchange, value, style, hideInput } = item;
-      if (hideInput) {
+      if (item.hideInput) {
         return;
       }
+      let { type, data, label, placeholder, onchange, value, style } = item;
       if (type === "multiselect") {
         return (
           <div key={index} style={{ maxWidth: "15%", ...style }}>
@@ -508,13 +514,34 @@ function Page() {
     setAllData({ ...allData });
   };
 
+  const handleCHeckBOxesStudents = (
+    e: any,
+    item: any = "",
+    selectedData: any,
+    allDatatoFilter: any,
+    key: any,
+    setKey: any
+  ) => {
+    let checked: any = e.target.checked;
+    let data: any = [];
+    if (!!item) {
+      data = selectCheckBOxData(selectedData, checked, item[key], allDatatoFilter, key);
+    } else {
+      data = selectCheckBOxData(selectedData, checked, "", allDatatoFilter, key);
+    }
+
+    allData[setKey] = data;
+    setAllData({ ...allData });
+  };
+
   const renderSchoolsTable = useCallback(() => {
     // const renderSchoolsTable = () => {
     if (isStudentFilters) {
-      return <> </>;
+      return <></>;
     }
+
     if (!schoolsData.length) {
-      return <>No Record Found</>;
+      return <> No Record Found</>;
     }
 
     const renderTableData = () => {
@@ -531,16 +558,16 @@ function Page() {
               />
             </td>
             <td>{item.school_name}</td>
-            <td>{item.students_count}</td>
-            <td>
-              {item.school_name == pdfLoader ? (
-                <div style={{ height: 32 }}> loading... </div>
-              ) : item.marksheets_url ? (
+            <td className="text-center">{item.students_count}</td>
+            <td className="text-center">
+              {item?.marksheets_url ? (
                 <a href={item.marksheets_url} target="_blank">
                   <span className="material-symbols-outlined text-success">download</span>
                 </a>
+              ) : pdfLoader == item.school_name ? (
+                "loading..."
               ) : (
-                <span className="material-symbols-outlined">download</span>
+                <span className="material-symbols-outlined text-secondary">download</span>
               )}
             </td>
           </tr>
@@ -549,40 +576,235 @@ function Page() {
     };
 
     return (
-      <table className="table">
-        <thead>
-          <tr>
-            <th scope="col">
+      <div className="my-4 table-responsive" style={{ maxHeight: "350px", overflow: "auto" }}>
+        <div className="d-flex justify-content-between px-4">
+          <span></span>
+          {genratedData.length ? (
+            <div
+              className="pointer"
+              onClick={() => {
+                downloadZipConcept();
+              }}
+            >
+              <span className="material-symbols-outlined text-success">folder_zip</span>
+            </div>
+          ) : (
+            ""
+          )}
+        </div>
+        <table className={`table table-striped table-${themeColor}`}>
+          <thead
+            style={{
+              position: "sticky",
+              top: 0,
+            }}
+          >
+            <tr>
+              <th scope="col">
+                <input
+                  type="checkbox"
+                  checked={checkIsAllChecked(allData.schools, schoolsData)}
+                  onChange={(e) => {
+                    handleCHeckBOxes(e);
+                  }}
+                />
+              </th>
+              <th scope="col">School Name</th>
+              <th scope="col" className="text-center">
+                Students Count
+              </th>
+              <th scope="col" className="text-center">
+                download
+              </th>
+            </tr>
+          </thead>
+          <tbody>{renderTableData()}</tbody>
+        </table>
+      </div>
+    );
+  }, [
+    allData.schools,
+    schoolsData,
+    pdfLoader,
+    themeColor,
+    checkIsAllChecked(allData.schools, schoolsData),
+    isStudentFilters,
+  ]);
+
+  const renderUsersTable = useCallback(() => {
+    // const renderSchoolsTable = () => {
+    if (!isStudentFilters) {
+      return <></>;
+    }
+
+    if (!studentGridData.length) {
+      return <> No Record Found</>;
+    }
+
+    const renderTableData = () => {
+      return studentGridData.map((item: any, index: any) => {
+        return (
+          <tr className="capitalize" key={index}>
+            <td scope="row">
               <input
                 type="checkbox"
-                checked={checkIsAllChecked(allData.schools, schoolsData)}
-                onChange={(e) => {
-                  handleCHeckBOxes(e);
+                checked={Array.isArray(allData.studentsData) && allData.studentsData.includes(item["Registration No"])}
+                onChange={(e: any) => {
+                  handleCHeckBOxesStudents(
+                    e,
+                    item,
+                    allData.studentsData,
+                    studentGridData,
+                    "Registration No",
+                    "studentsData"
+                  );
                 }}
               />
-            </th>
-            <th scope="col">School Name</th>
-            <th scope="col">Students Count</th>
-            <th scope="col"> download</th>
+            </td>
+            <td>{item["Student Name"]}</td>
+            <td>{item["School"]}</td>
+            <td>{item["Registration No"]}</td>
+            <td>{item["Seat No"]}</td>
+            <td>{item["Division"]}</td>
+            <td>{item["Group"]}</td>
+            {/* <td className="text-center">
+              {item?.marksheets_url ? (
+                <a href={item.marksheets_url} target="_blank">
+                  <span className="material-symbols-outlined text-success">download</span>
+                </a>
+              ) : (
+                <span className="material-symbols-outlined text-secondary">download</span>
+              )}
+            </td> */}
           </tr>
-        </thead>
-        <tbody>{renderTableData()}</tbody>
-      </table>
+        );
+      });
+    };
+
+    return (
+      <div className="my-4 table-responsive" style={{ maxHeight: "350px", overflow: "auto" }}>
+        <table className={`table table-striped table-${themeColor}`}>
+          <thead
+            style={{
+              position: "sticky",
+              top: 0,
+            }}
+          >
+            <tr>
+              <th scope="col">
+                <input
+                  type="checkbox"
+                  checked={checkIsAllChecked(allData.studentsData, studentGridData)}
+                  onChange={(e: any) => {
+                    handleCHeckBOxesStudents(
+                      e,
+                      false,
+                      allData.studentsData,
+                      studentGridData,
+                      "Registration No",
+                      "studentsData"
+                    );
+                  }}
+                />
+              </th>
+              <th scope="col">Student Name</th>
+              <th scope="col">School</th>
+              <th scope="col">Registration No</th>
+              <th scope="col">Seat No</th>
+              <th scope="col">Division</th>
+              <th scope="col">Group</th>
+              {/* <th scope="col" className="text-center">
+                download
+              </th> */}
+            </tr>
+          </thead>
+          <tbody>{renderTableData()}</tbody>
+        </table>
+      </div>
     );
-  }, [allData.schools, schoolsData, checkIsAllChecked(allData.schools, schoolsData), isStudentFilters, pdfLoader]);
+  }, [
+    allData.studentsData,
+    studentGridData,
+    checkIsAllChecked(allData.studentsData, studentGridData),
+    isStudentFilters,
+    themeColor,
+  ]);
+
+  // let downloadPdfstudent = (data: any, allData: any, setALlData: any, key: any = "") => {
+  //   let newData = migrateData(data, allData, key, true);
+  //   console.log(newData, "newData");
+  //   setALlData([...newData]);
+  // };
+
+  const genrateStudentPdf = () => {
+    let data: any = {
+      school: allData.select_school,
+      group: allData.select_group,
+      cohort: allData.select_cohort,
+    };
+
+    let newPayload: any = {
+      country: countryName || "India",
+      competition_code: allData.competition || "",
+      state: allData.state,
+      city: allData.city,
+      username: allData.studentsData,
+      [allData.filterTypeStudent]: data[allData.filterTypeStudent],
+    };
+
+    setLoader(true);
+    downloadMarksSheet(newPayload)
+      .then((res) => {
+        setLoader(false);
+        // console.log(res.data);
+        if (res.data[0]?.marksheets_url) {
+          var link = document.createElement("a");
+          link.href = res.data[0]?.marksheets_url;
+          link.setAttribute("target", "_blank");
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+      })
+      .catch((errors) => {
+        setLoader(false);
+      });
+  };
+
+  const downloadZipConcept = async () => {
+    for (let item of genratedData[0]) {
+      if (item.marksheets_url) {
+        let a = document.createElement("a");
+        a.href = item.marksheets_url;
+        a.target = "_blank";
+        document.body.appendChild(a);
+
+        await new Promise((resolve) => {
+          a.click();
+          resolve("");
+        });
+        document.body.removeChild(a);
+      }
+    }
+  };
 
   const AdmitCardDownLoad = () => {
     return (
       <div className="m-4">
         <div className="d-flex flex-wrap gap-4">{renderData()}</div>
         <div className="table-responsive mt-4">{renderSchoolsTable()}</div>
+        <div className="table-responsive mt-4">{renderUsersTable()}</div>
         {/* <div className="table-responsive  m-4">{renderTable()}</div> */}
-        {allData?.schools?.length && !isStudentFilters ? (
-          <div
-            className={`btn btn-primary form-control ${pdfLoader ? "disabled btn-secondary" : ""}`}
-            onClick={() => readSchoolsData(true)}
-          >
-            Download Marksheets
+        {allData?.schools?.length && !isStudentFilters && !pdfLoader ? (
+          <div className="btn btn-primary form-control" onClick={() => readSchoolsData(true)}>
+            Generate PDF
+          </div>
+        ) : (
+          ""
+        )}
+        {allData?.studentsData?.length && isStudentFilters ? (
+          <div className="btn btn-primary form-control" onClick={() => genrateStudentPdf()}>
+            Generate PDF
           </div>
         ) : (
           ""
@@ -606,7 +828,7 @@ function Page() {
   };
 
   return (
-    <div className="m-4">
+    <div className="mx-4 py-5" style={{ maxHeight: "100%", overflow: "auto" }}>
       <div>{renderRadio(uiFilters)}</div>
       {AdmitCardDownLoad()}
       <Loader show={loader} />
