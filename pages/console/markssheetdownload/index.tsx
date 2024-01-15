@@ -132,14 +132,14 @@ function Page() {
 
     if (isSchool) {
       for (const school of allData.schools) {
-        const payload = { ...newPayload, username: [school] };
+        const payload = { ...newPayload, school_name: [school] };
         setpdfLoader(school);
 
         try {
           const res = await downloadMarksSheet(payload);
           setpdfLoader(false);
           let dataObj: any = res.data[0];
-          dataObj.school_name = school;
+          if (!dataObj.school_name) dataObj.school_name = school;
           genratedData.push(dataObj);
           setGenratedData([genratedData]);
           downloadPdf(genratedData);
