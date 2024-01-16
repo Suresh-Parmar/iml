@@ -1,4 +1,4 @@
-import { TextInput, Button, Group, Box, Flex, LoadingOverlay, Checkbox } from "@mantine/core";
+import { TextInput, Button, Group, Box, Flex, LoadingOverlay, Checkbox, Select } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { MatrixDataType, MatrixRowType } from "../Matrix";
@@ -145,6 +145,22 @@ function SMTPForm({
             onChange={(event) => {
               form.setFieldValue("send_protocol", event.currentTarget.value);
             }}
+          />
+
+          <Select
+            clearable
+            disabled={readonly}
+            searchable
+            nothingFound="No options"
+            data={["STARTTLS", "SSL", "TLS", "SSL/TLS"]}
+            label="Encryption type"
+            placeholder="Encryption type"
+            name="encryptiontype"
+            mt={"md"}
+            size="md"
+            withAsterisk
+            {...form.getInputProps("encryptiontype")}
+            w={"100%"}
           />
           <TextInput
             disabled={readonly}

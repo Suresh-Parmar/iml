@@ -393,6 +393,10 @@ const trackShipment = async (data: any) => {
   return await axios.post(TRACKSHIPMENT, data, { headers: getAPIHeaders() });
 };
 
+const getDataLandingPage = async (data: any) => {
+  return await axios.post(LANDING_API, data);
+};
+
 const createData = async (tableName: string, operationType: "create", payload: MatrixRowType) => {
   const filterCountry = tableName !== "countries";
   let newPayload = { ...payload };
@@ -1211,4 +1215,5 @@ export {
   updateDataRes,
   genrateSeatNumber,
   readDataFromNEXT,
+  getDataLandingPage,
 };

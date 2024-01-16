@@ -741,6 +741,11 @@ export const allTypes: any = {
       defaultShow: true,
     },
     {
+      id: "Encryption type",
+      key: "encryptiontype",
+      defaultShow: false,
+    },
+    {
       id: "Smtp User",
       key: "smtp_user",
       defaultShow: true,
