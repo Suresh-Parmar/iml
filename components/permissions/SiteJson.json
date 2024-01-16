@@ -434,7 +434,7 @@
     }
   },
   {
-    "title": "Markssheet",
+    "title": "Marksheet",
     "link": "markssheet",
     "icon": "supervisor_account",
     "permissions": {
@@ -464,8 +464,8 @@
     }
   },
   {
-    "title": "OMR Sheet",
-    "link": "omrsheet",
+    "title": "Marksheet Download",
+    "link": "markssheetdownload",
     "icon": "supervisor_account",
     "permissions": {
       "create": false,
@@ -479,8 +479,70 @@
     }
   },
   {
-    "title": "Attendnace Sheet",
-    "link": "attendance",
+    "title": "Admit card",
+    "link": "admitcard",
+    "icon": "supervisor_account",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false,
+      "remove": false
+    }
+  },
+  {
+    "title": "Assign Admit Card",
+    "link": "assignadmitcard",
+    "icon": "supervisor_account",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false,
+      "remove": false
+    }
+  },
+
+  {
+    "title": "Attendance sheet",
+    "link": "attendancesheet",
+    "icon": "supervisor_account",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false,
+      "remove": false
+    }
+  },
+  {
+    "title": "Reports",
+    "link": "reports",
+    "icon": "supervisor_account",
+    "permissions": {
+      "create": false,
+      "update": false,
+      "delete": false,
+      "view": true,
+      "uploadFile": false,
+      "updateFile": false,
+      "export": false,
+      "remove": false
+    },
+    "extra_permissions": []
+  },
+  {
+    "title": "OMR Sheet",
+    "link": "omrsheet",
     "icon": "supervisor_account",
     "permissions": {
       "create": false,

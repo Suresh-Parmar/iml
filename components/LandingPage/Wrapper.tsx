@@ -9,11 +9,14 @@ import data from "./Footer/data.json";
 import { Footer } from "./Footer";
 import Courses from "./Courses";
 import Contactus from "./Contactus";
+import { MarksResult } from "../result";
 
 function Wrapper() {
   return (
     <Box className={styles.mainCont}>
       <Banner />
+
+      <MarksResult />
       <Aboutus />
       <Annoucement />
       <div className={styles.bgimg1}>
@@ -24,7 +27,6 @@ function Wrapper() {
           {/* </span> */}
         </div>
       </div>
-
       {/* <div className={styles.bgimg2}>
         <div className={styles.caption}>
           <span className={`${styles.border} ${styles.container}`}>
@@ -32,11 +34,9 @@ function Wrapper() {
           </span>
         </div>
       </div> */}
-
       <div className={styles.relative}>
         <StudentTestimonial />
       </div>
-
       {/* <div className={styles.bgimg3}>
         <div className={styles.caption}>
           <span className={`${styles.border} ${styles.container}`}>

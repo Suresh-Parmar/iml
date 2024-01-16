@@ -40,7 +40,7 @@ import { useStyles } from "../LandingPage/Hero/styles";
 import { mockdata } from "../LandingPage/Hero/Menu";
 import { IconDatabaseCog } from "@tabler/icons-react";
 import ProgressBar from "./ProgressBar";
-import { useFinduserGeoLocationQuery, useGetAllLocationsQuery, useLandingPageAPisQuery } from "@/redux/apiSlice";
+import { useFinduserGeoLocationQuery, useLandingPageAPisQuery } from "@/redux/apiSlice";
 import { getUserData, iterateData } from "@/helpers/getData";
 import { useDispatch, useSelector } from "react-redux";
 import { changeColorTheme, setSelectedCountryRedux } from "@/redux/slice";
