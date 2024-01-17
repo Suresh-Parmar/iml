@@ -39,6 +39,7 @@ export const ATTENDENCESHEET = `${BASE_URL}/attendence_sheets`;
 export const GENRATESEAT = `${BASE_URL}/generate_seat`;
 export const GENERICREPORTS = `${BASE_URL}/generic_reports`;
 export const MARKSSHEET = `${BASE_URL}/marksheets_download`;
+export const RESULT = `${BASE_URL}/fetch_result`;
 
 export const SELFGETAPI = "/api/landingpages";
 
@@ -363,6 +364,10 @@ const genericReports = async (data: any) => {
 
 const downloadMarksSheet = async (data: any) => {
   return await axios.post(MARKSSHEET, data, { headers: getAPIHeaders() });
+};
+
+const getResult = async (data: any) => {
+  return await axios.post(RESULT, data, { headers: getAPIHeaders() });
 };
 
 const updateRequest = async (data: any) => {
@@ -1216,4 +1221,5 @@ export {
   genrateSeatNumber,
   readDataFromNEXT,
   getDataLandingPage,
+  getResult,
 };

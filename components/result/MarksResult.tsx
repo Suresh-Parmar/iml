@@ -3,7 +3,7 @@ import { filterDrodownData, findFromJson } from "@/helpers/filterFromJson";
 import { handleApiData, iterateData } from "@/helpers/getData";
 import { validatePhone } from "@/helpers/validations";
 import { useLandingPageAPisQuery } from "@/redux/apiSlice";
-import { getDataLandingPage } from "@/utilities/API";
+import { getDataLandingPage, getResult } from "@/utilities/API";
 import { Select } from "@mantine/core";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
@@ -49,42 +49,15 @@ function MarksResult() {
       },
     };
 
-    getDataLandingPage(payload)
+    getResult(payload)
       .then((res) => {
-        if (res.data?.response && res.data?.response[0]) {
+        if (res.data?.response && res.data?.response[0] && typeof res.data?.response[0] == "object") {
           let resultData = { ...res.data?.response[0] };
           resultData.competitionName = allData.competitionName;
-
-          getSeatNo();
           setResult(resultData);
         } else {
           setResult({ res: true });
         }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const getSeatNo = () => {
-    let payload = {
-      collection_name: "users",
-      op_name: "find_many",
-      filter_var: {
-        seat_number: allData.seat_number,
-        country: countryredux || "India",
-        status: true,
-      },
-    };
-
-    getDataLandingPage(payload)
-      .then((res) => {
-        console.log(res);
-        // if (res.data?.response && res.data?.response[0]) {
-        // let resultData = { ...res.data?.response[0] };
-        // resultData.competitionName = allData.competitionName;
-        // setResult(resultData);
-        // }
       })
       .catch((err) => {
         console.log(err);
@@ -106,6 +79,9 @@ function MarksResult() {
           <p>
             Seat No. : <b> {result.seatnumber}</b>
           </p>
+          <p>
+            Student Name : <b> {result.name}</b>
+          </p>
 
           <div className="d-flex justify-content-between">
             <div className="w-50">
@@ -113,7 +89,7 @@ function MarksResult() {
             </div>
 
             <div className="w-50">
-              School Name : <b> {result.schoolname}</b>
+              School Name : <b> {result.school_name}</b>
             </div>
           </div>
         </div>

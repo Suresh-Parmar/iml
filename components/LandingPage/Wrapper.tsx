@@ -15,8 +15,6 @@ function Wrapper() {
   return (
     <Box className={styles.mainCont}>
       <Banner />
-
-      <MarksResult />
       <Aboutus />
       <Annoucement />
       <div className={styles.bgimg1}>
