@@ -329,9 +329,9 @@ function Header() {
                 <a href="#" className={classes.link}>
                   Gallery
                 </a>
-                <a href="#" className={classes.link}>
+                <Link href="/result" target="_self" className={classes.link}>
                   Result
-                </a>
+                </Link>
 
                 <Group>
                   {/* <Select
