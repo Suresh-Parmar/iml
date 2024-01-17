@@ -39,7 +39,7 @@ const Recaptcha = (props: any): any => {
           setRecaptcha(captcha || "");
         }}
         theme={colorScheme}
-        size={captchaSize || "compact"}
+        size={captchaSize}
         ref={recaptchaRef}
         sitekey={RECAPTCHA_KEY}
         key={colorScheme}
