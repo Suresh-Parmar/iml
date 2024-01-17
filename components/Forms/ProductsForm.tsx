@@ -147,6 +147,7 @@ function ProductForm({
   const uploadFIleToCloud = async (file: any, key: any, values: any) => {
     let payload: any = new FormData();
     payload.append("file", file);
+    payload.append("meta_data", JSON.stringify({ file_path: "products" }));
     setLoader(true);
     await uploadMedia(payload)
       .then((res) => {

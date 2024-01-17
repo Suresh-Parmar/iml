@@ -52,6 +52,8 @@ function UserProfile(props: any) {
   const updateUserImage = () => {
     const payload = new FormData();
     payload.append("file", userImage);
+    payload.append("meta_data", JSON.stringify({ file_path: "profile" }));
+
     setLoading(true);
     uploadMedia(payload)
       .then((res) => {

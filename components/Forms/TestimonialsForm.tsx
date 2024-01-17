@@ -45,6 +45,7 @@ function TestimonialsForm({
   const submitImage = async (values: any) => {
     const payload: any = new FormData();
     payload.append("file", form.values.thumbnail);
+    payload.append("meta_data", JSON.stringify({ file_path: "testimonials" }));
     setOLoader(true);
     await uploadMedia(payload)
       .then((res) => {
