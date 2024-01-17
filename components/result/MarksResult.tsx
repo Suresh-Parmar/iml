@@ -7,6 +7,7 @@ import { getDataLandingPage, getResult } from "@/utilities/API";
 import { Select } from "@mantine/core";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import { Recaptcha } from "../common";
 
 function MarksResult() {
   const allReduxData = useSelector((state: any) => state?.data);
@@ -17,6 +18,7 @@ function MarksResult() {
 
   const [allData, setallData] = useState<any>({ competition: "", competitionName: "", seat_number: "" });
   const [result, setResult] = useState<any>({});
+  const [recaptcha, setRecaptcha] = useState<any>("");
 
   let payload = {
     collection_name: "competitions",
@@ -33,6 +35,11 @@ function MarksResult() {
   getCompetition = filterData(getCompetition, "label", "value", "code");
 
   const getMarks = () => {
+    if (!recaptcha) {
+      alert("Please select Recaptcha");
+      return;
+    }
+
     if (!allData.competition || !allData.seat_number) {
       alert("Please select Competition and Seat number");
       return;
@@ -119,36 +126,39 @@ function MarksResult() {
     <div className="d-flex justify-content-center w-100 py-3">
       <div className={`container p-3 m-2 w-100  ${themeBGColor} ${textColer} bordered`}>
         <h3 className="text-center"> {result?.competitionName || "Result"} </h3>
-        <div className="form-group mb-2">
-          <Select
-            label="Competition"
-            clearable
-            placeholder="Competition"
-            value={allData.competition}
-            onChange={(e) => {
-              let competitionName = findFromJson(getCompetition, e, "code");
-              setallData({ ...allData, competition: e, competitionName: competitionName.name });
-            }}
-            data={getCompetition}
-          />
+        <div style={{ maxWidth: 500, margin: "20px auto" }}>
+          <div className="form-group mb-2">
+            <Select
+              label="Competition"
+              clearable
+              placeholder="Competition"
+              value={allData.competition}
+              onChange={(e) => {
+                let competitionName = findFromJson(getCompetition, e, "code");
+                setallData({ ...allData, competition: e, competitionName: competitionName.name });
+              }}
+              data={getCompetition}
+            />
+          </div>
+          <div className="form-group">
+            <label>Seat Number</label>
+            <input
+              type="text"
+              className={`form-control ${themeBGColor} ${textColer}`}
+              value={allData.seat_number}
+              onChange={(e) => {
+                let val = e.target.value;
+                // val = validatePhone(val, 15);
+                setallData({ ...allData, seat_number: val });
+              }}
+              placeholder="Seat Number"
+            />
+            <Recaptcha setRecaptcha={setRecaptcha} />
+          </div>
+          <button onClick={getMarks} type="submit" className="btn btn-secondary mb-2 mt-4">
+            Get Marks
+          </button>
         </div>
-        <div className="form-group">
-          <label>Seat Number</label>
-          <input
-            type="text"
-            className={`form-control ${themeBGColor} ${textColer}`}
-            value={allData.seat_number}
-            onChange={(e) => {
-              let val = e.target.value;
-              // val = validatePhone(val, 15);
-              setallData({ ...allData, seat_number: val });
-            }}
-            placeholder="Seat Number"
-          />
-        </div>
-        <button onClick={getMarks} type="submit" className="btn btn-secondary mb-2 mt-4">
-          Get Marks
-        </button>
         {renderResult()}
       </div>
     </div>
