@@ -112,6 +112,7 @@ const RowActions = ({
   };
 
   let label_url = formRowData?.label_url;
+  let invoice_url = formRowData?.invoice_url;
 
   const trackShipmentDetails = () => {
     let data = {
@@ -286,15 +287,28 @@ const RowActions = ({
         </Tooltip>
       )}
       {isDispatchForm ? (
-        labelData || label_url ? (
-          <a href={labelData || label_url} target="_blank" className="text-success">
-            <span className="material-symbols-outlined">download</span>
-          </a>
-        ) : (
-          <span className="material-symbols-outlined pointer gray" onClick={createShipment}>
-            box_add
-          </span>
-        )
+        <>
+          {labelData || label_url ? (
+            <Tooltip label="Download receipt">
+              <a href={labelData || label_url} target="_blank" className="text-success">
+                <span className="material-symbols-outlined">download</span>
+              </a>
+            </Tooltip>
+          ) : (
+            <Tooltip label="Create Shipment">
+              <span className="material-symbols-outlined pointer gray" onClick={createShipment}>
+                box_add
+              </span>
+            </Tooltip>
+          )}
+          {invoice_url && (
+            <Tooltip label="Download invoice">
+              <a href={invoice_url} target="_blank" className="text-success">
+                <span className="material-symbols-outlined">apk_install</span>
+              </a>
+            </Tooltip>
+          )}
+        </>
       ) : (
         ""
       )}
