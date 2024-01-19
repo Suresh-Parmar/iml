@@ -4,7 +4,7 @@ import { handleApiData, iterateData } from "@/helpers/getData";
 import { validatePhone } from "@/helpers/validations";
 import { useLandingPageAPisQuery } from "@/redux/apiSlice";
 import { getDataLandingPage, getResult } from "@/utilities/API";
-import { Select } from "@mantine/core";
+import { Group, Radio, Select } from "@mantine/core";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Recaptcha } from "../common";
@@ -16,7 +16,12 @@ function MarksResult() {
   let themeBGColor = themeColor == "light" ? "bg-white" : "bg-dark";
   let textColer = themeColor == "light" ? "text-dark" : "text-white";
 
-  const [allData, setallData] = useState<any>({ competition: "", competitionName: "", seat_number: "" });
+  const [allData, setallData] = useState<any>({
+    competition: "",
+    competitionName: "",
+    seat_number: "",
+    searchby: "seatnumber",
+  });
   const [result, setResult] = useState<any>({});
   const [recaptcha, setRecaptcha] = useState<any>("");
 
@@ -50,7 +55,7 @@ function MarksResult() {
       op_name: "find_many",
       filter_var: {
         code: allData.competition,
-        seatnumber: allData.seat_number,
+        [allData.searchby]: allData.seat_number,
         country: countryredux || "India",
         status: true,
       },
@@ -69,6 +74,25 @@ function MarksResult() {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const showcheckbox = () => {
+    return (
+      <div>
+        <Radio.Group
+          value={allData.searchby}
+          onChange={(e) => {
+            allData.searchby = e;
+            setallData({ ...allData });
+          }}
+        >
+          <Group mt="xs">
+            <Radio value="seatnumber" label="Seat Number" />
+            <Radio value="registrationnumber" label="Registration Number" />
+          </Group>
+        </Radio.Group>
+      </div>
+    );
   };
 
   const renderResult = () => {
@@ -126,36 +150,39 @@ function MarksResult() {
     <div className="d-flex justify-content-center w-100 py-3">
       <div className={`container p-3 m-2 w-100  ${themeBGColor} ${textColer} bordered`}>
         <h3 className="text-center"> {result?.competitionName || "Result"} </h3>
-        <div style={{ maxWidth: 500, margin: "20px auto" }}>
-          <div className="form-group mb-2">
-            <Select
-              label="Competition"
-              clearable
-              placeholder="Competition"
-              value={allData.competition}
-              onChange={(e) => {
-                let competitionName = findFromJson(getCompetition, e, "code");
-                setallData({ ...allData, competition: e, competitionName: competitionName.name });
-              }}
-              data={getCompetition}
-            />
+        <div style={{ margin: "20px auto" }}>
+          {showcheckbox()}
+          <div className="d-flex gap-3 align-items-center">
+            <div className="form-group mb-2 mt-2 w-100">
+              <Select
+                label="Competition"
+                clearable
+                placeholder="Competition"
+                value={allData.competition}
+                onChange={(e) => {
+                  let competitionName = findFromJson(getCompetition, e, "code");
+                  setallData({ ...allData, competition: e, competitionName: competitionName.name });
+                }}
+                data={getCompetition}
+              />
+            </div>
+            <div className="form-group w-100">
+              <label>{allData.searchby == "registrationnumber" ? "Registration" : "Seat"} Number</label>
+              <input
+                type="text"
+                className={`form-control ${themeBGColor} ${textColer}`}
+                value={allData.seat_number}
+                onChange={(e) => {
+                  let val = e.target.value;
+                  // val = validatePhone(val, 15);
+                  setallData({ ...allData, seat_number: val });
+                }}
+                placeholder="Seat Number"
+              />
+            </div>
           </div>
-          <div className="form-group">
-            <label>Seat Number</label>
-            <input
-              type="text"
-              className={`form-control ${themeBGColor} ${textColer}`}
-              value={allData.seat_number}
-              onChange={(e) => {
-                let val = e.target.value;
-                // val = validatePhone(val, 15);
-                setallData({ ...allData, seat_number: val });
-              }}
-              placeholder="Seat Number"
-            />
-            <Recaptcha setRecaptcha={setRecaptcha} />
-          </div>
-          <button onClick={getMarks} type="submit" className="btn btn-secondary mb-2 mt-4">
+          <Recaptcha setRecaptcha={setRecaptcha} />
+          <button onClick={getMarks} type="submit" className="btn btn-secondary mb-2">
             Get Marks
           </button>
         </div>

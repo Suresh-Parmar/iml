@@ -209,9 +209,11 @@ const RowActions = ({
 
       {isDispatchForm ? (
         formRowData?.awb_number ? (
-          <span className="material-symbols-outlined pointer gray" onClick={trackShipmentDetails}>
-            distance
-          </span>
+          <Tooltip label="Track Shipment">
+            <span className="material-symbols-outlined pointer gray" onClick={trackShipmentDetails}>
+              distance
+            </span>
+          </Tooltip>
         ) : (
           ""
         )
