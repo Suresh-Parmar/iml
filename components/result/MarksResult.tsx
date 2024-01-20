@@ -22,6 +22,7 @@ function MarksResult() {
     seat_number: "",
     searchby: "seatnumber",
   });
+
   const [result, setResult] = useState<any>({});
   const [recaptcha, setRecaptcha] = useState<any>("");
 
