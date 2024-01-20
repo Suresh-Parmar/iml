@@ -18,6 +18,7 @@ import Loader from "@/components/common/Loader";
 import { filterData } from "@/helpers/filterData";
 import { findFromJson } from "@/helpers/filterFromJson";
 import { validateAlpha } from "@/helpers/validations";
+import { sortData } from "@/helpers/sorting";
 
 function Page() {
   const [allData, setAllData] = useState<any>({});
@@ -33,6 +34,7 @@ function Page() {
   const [examDate, setExamDate] = useState<any>([]);
   const [genratedData, setGenratedData] = useState<any>([]);
   const [pdfLoader, setpdfLoader] = useState<any>(false);
+  const [order, setOrder] = useState<any>(true);
 
   useEffect(() => {
     if (loader) {
@@ -359,12 +361,66 @@ function Page() {
                   }}
                 />
               </th>
-              <th scope="col">Center</th>
-              <th scope="col">Center Code</th>
-              <th scope="col">Exam Type</th>
-              <th scope="col">Paper Type</th>
-              <th scope="col">State</th>
-              <th scope="col">City</th>
+              <th
+                scope="col"
+                onClick={() => {
+                  setOrder(!order);
+                  let data = sortData(dataExamCenters, "name", order);
+                  setDataExamCenters([...data]);
+                }}
+              >
+                Center
+              </th>
+              <th
+                scope="col"
+                onClick={() => {
+                  setOrder(!order);
+                  let data = sortData(dataExamCenters, "_id", order);
+                  setDataExamCenters([...data]);
+                }}
+              >
+                Center Code
+              </th>
+              <th
+                scope="col"
+                onClick={() => {
+                  setOrder(!order);
+                  let data = sortData(dataExamCenters, "mode", order);
+                  setDataExamCenters([...data]);
+                }}
+              >
+                Exam Type
+              </th>
+              <th
+                scope="col"
+                onClick={() => {
+                  setOrder(!order);
+                  let data = sortData(dataExamCenters, "paper_code", order);
+                  setDataExamCenters([...data]);
+                }}
+              >
+                Paper Type
+              </th>
+              <th
+                scope="col"
+                onClick={() => {
+                  setOrder(!order);
+                  let data = sortData(dataExamCenters, "state", order);
+                  setDataExamCenters([...data]);
+                }}
+              >
+                State
+              </th>
+              <th
+                scope="col"
+                onClick={() => {
+                  setOrder(!order);
+                  let data = sortData(dataExamCenters, "city", order);
+                  setDataExamCenters([...data]);
+                }}
+              >
+                City
+              </th>
               <th scope="col" className="text-center">
                 download
               </th>
