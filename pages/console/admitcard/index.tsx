@@ -15,6 +15,7 @@ import { checkIsAllChecked, selectCheckBOxData } from "@/helpers/selectCheckBox"
 import Loader from "@/components/common/Loader";
 import { filterData } from "@/helpers/filterData";
 import { findFromJson } from "@/helpers/filterFromJson";
+import { sortData } from "@/helpers/sorting";
 
 function Page() {
   const [allData, setAllData] = useState<any>({});
@@ -31,6 +32,7 @@ function Page() {
   const [studentGridData, setStudentGridData] = useState<any>([]);
   const [zipUrl, setZipUrl] = useState<any>("");
   const [genratedData, setGenratedData] = useState<any>([]);
+  const [order, setOrder] = useState<any>(true);
 
   // useEffect(() => {
   //   if (loader) {
@@ -609,8 +611,25 @@ function Page() {
                   }}
                 />
               </th>
-              <th scope="col">School Name</th>
-              <th scope="col" className="text-center">
+              <th
+                scope="col"
+                onClick={() => {
+                  setOrder(!order);
+                  let data = sortData(schoolsData, "school_name", order);
+                  setSchoolsData([...data]);
+                }}
+              >
+                School Name
+              </th>
+              <th
+                scope="col"
+                className="text-center"
+                onClick={() => {
+                  setOrder(!order);
+                  let data = sortData(schoolsData, "students_count", order);
+                  setSchoolsData([...data]);
+                }}
+              >
                 Students Count
               </th>
               <th scope="col" className="text-center">
@@ -707,12 +726,66 @@ function Page() {
                   }}
                 />
               </th>
-              <th scope="col">Student Name</th>
-              <th scope="col">School</th>
-              <th scope="col">Registration No</th>
-              <th scope="col">Seat No</th>
-              <th scope="col">Division</th>
-              <th scope="col">Group</th>
+              <th
+                scope="col"
+                onClick={() => {
+                  setOrder(!order);
+                  let data = sortData(studentGridData, "Student Name", order);
+                  setStudentGridData([...data]);
+                }}
+              >
+                Student Name
+              </th>
+              <th
+                scope="col"
+                onClick={() => {
+                  setOrder(!order);
+                  let data = sortData(studentGridData, "School", order);
+                  setStudentGridData([...data]);
+                }}
+              >
+                School
+              </th>
+              <th
+                scope="col"
+                onClick={() => {
+                  setOrder(!order);
+                  let data = sortData(studentGridData, "Registration No", order);
+                  setStudentGridData([...data]);
+                }}
+              >
+                Registration No
+              </th>
+              <th
+                scope="col"
+                onClick={() => {
+                  setOrder(!order);
+                  let data = sortData(studentGridData, "Seat No", order);
+                  setStudentGridData([...data]);
+                }}
+              >
+                Seat No
+              </th>
+              <th
+                scope="col"
+                onClick={() => {
+                  setOrder(!order);
+                  let data = sortData(studentGridData, "Division", order);
+                  setStudentGridData([...data]);
+                }}
+              >
+                Division
+              </th>
+              <th
+                scope="col"
+                onClick={() => {
+                  setOrder(!order);
+                  let data = sortData(studentGridData, "Group", order);
+                  setStudentGridData([...data]);
+                }}
+              >
+                Group
+              </th>
               {/* <th scope="col" className="text-center">
                 download
               </th> */}
