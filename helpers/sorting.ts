@@ -1,9 +1,12 @@
 const sortData = (data: any, sortKey: string, order = false) => {
   return data.sort((a: any, b: any) => {
+    let aValue = String(a[sortKey]).toLowerCase();
+    let bValue = String(b[sortKey]).toLowerCase();
+
     if (!order) {
-      return a[sortKey] > b[sortKey] ? 1 : -1;
+      return aValue > bValue ? 1 : -1;
     } else {
-      return a[sortKey] < b[sortKey] ? 1 : -1;
+      return aValue < bValue ? 1 : -1;
     }
   });
 };
