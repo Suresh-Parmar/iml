@@ -221,7 +221,7 @@ const updateDataRes = async (
   filterQuery: any,
   op_name: any = "update"
 ) => {
-  let requestBody: RequestBodyType = {
+  let requestBody: any = {
     collection_name: `${tableName}`,
     op_name,
   };
@@ -229,8 +229,10 @@ const updateDataRes = async (
   if (updateBody) {
     if (op_name == "update") {
       requestBody.update_var = updateBody;
+      if (!requestBody.update_var.country) requestBody.update_var.country = getSelectedCountry();
     } else {
-      requestBody.new_var = updateBody;
+      requestBody.new_var = updateBody || {};
+      if (!requestBody.new_var.country) requestBody.new_var.country = getSelectedCountry();
     }
   }
 

@@ -61,11 +61,11 @@ function CompetitionForm({
     initialValues: rowData,
 
     validate: {
-      name: (value) => (value.length < 2 ? "Name must have at least 2 letters" : null),
-      subject_id: (value) => (value.length < 2 ? "Subject must have at least 2 letters" : null),
-      parent_competition_id: (value) => (value.length < 2 ? "Parent competition must have at least 2 letters" : null),
-      code: (value) => (value.length < 1 ? "Code must have at least 1 letters" : null),
-      mode_id: (value) => (value.length === 0 ? "Mode must be selected" : null),
+      name: (value) => (value?.length < 2 ? "Name must have at least 2 letters" : null),
+      subject_id: (value) => (value?.length < 2 ? "Subject must have at least 2 letters" : null),
+      parent_competition_id: (value) => (value?.length < 2 ? "Parent competition must have at least 2 letters" : null),
+      code: (value) => (value?.length < 1 ? "Code must have at least 1 letters" : null),
+      mode_id: (value) => (value?.length === 0 ? "Mode must be selected" : null),
     },
   });
   let formValues: any = form.values;
@@ -97,11 +97,11 @@ function CompetitionForm({
       });
     } else {
       const isCompetitionCreated = await createCompetition(values as MatrixRowType);
-      if (isCompetitionCreated.toUpperCase() === "DOCUMENT CREATED") {
+      if (isCompetitionCreated?.toUpperCase() === "DOCUMENT CREATED") {
         const competitions = await readCompetitions();
         setData(competitions);
         setOLoader(false);
-      } else if (isCompetitionCreated.toUpperCase() === "DOCUMENT ALREADY EXISTS") {
+      } else if (isCompetitionCreated?.toUpperCase() === "DOCUMENT ALREADY EXISTS") {
         setOLoader(false);
         notifications.show({
           title: `Competition already exists!`,
