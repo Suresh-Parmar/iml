@@ -213,11 +213,12 @@ function UserForm({
   const cityNames = filterDataSingle(citiesData || [], "name");
   const stateNames = filterDataSingle(statesData || [], "name");
 
-  const saveJson = (json: any) => {
-    let action = !!isUpdate ? "update" : "create";
+  const saveJson = (json: any, updateData: any) => {
+    let action = !!updateData?._id ? "update" : "create";
     let data = {
       name: showRoles,
       data: json,
+      _id: updateData?._id,
     };
     updateDataRes("rolemappings", data, "", "", action)
       .then((res) => {
@@ -247,8 +248,8 @@ function UserForm({
       <RoleMatrix
         filterID={showRoles || isUpdate}
         title={isUpdate ? "Update" : "Add"}
-        onclick={(json: any) => {
-          saveJson(json);
+        onclick={(json: any, updateData: any) => {
+          saveJson(json, updateData);
         }}
       />
     );

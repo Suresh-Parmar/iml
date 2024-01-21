@@ -6,6 +6,7 @@ import { findFromJson } from "@/helpers/filterFromJson";
 const Matrix = (props: any) => {
   const { title, onclick, filterID } = props;
   const [rolesJosn, setRolesJosn] = useState<any>(siteJson);
+  const [updateData, setUpdateData] = useState<any>({});
 
   useEffect(() => {
     fetchData();
@@ -32,6 +33,7 @@ const Matrix = (props: any) => {
     updateDataRes("rolemappings", "", "name", filterID, "find_many")
       .then((res) => {
         if (res?.data?.response[0]) {
+          setUpdateData(res?.data?.response[0]);
           matchJsonAndFilter(res?.data?.response[0]?.data, rolesJosn);
         }
       })
@@ -43,21 +45,34 @@ const Matrix = (props: any) => {
   const handleSectionCheckboxChange = (event: any, obj: any, key: string) => {
     const { checked } = event.target;
     obj[key] = checked;
+
     setRolesJosn([...rolesJosn]);
   };
 
-  let checkAll = (obj: any, isTrue: any) => {
-    Object.keys(obj).map((key) => {
-      obj[key] = !!isTrue;
-    });
+  let checkAll = (obj: any, isTrue: any, extraKey?: any) => {
+    if (extraKey && Array.isArray(obj)) {
+      obj.map((dataobj: any) => {
+        dataobj[extraKey] = !!isTrue;
+      });
+    } else {
+      Object.keys(obj).map((key) => {
+        obj[key] = !!isTrue;
+      });
+    }
     return obj;
   };
 
   const selectAll = (event: any, index: any = 0) => {
     let { checked } = event.target;
     if (checked) {
+      if (rolesJosn[index].extra_permissions) {
+        rolesJosn[index].extra_permissions = [...checkAll(rolesJosn[index].extra_permissions, true, "show")];
+      }
       rolesJosn[index].permissions = { ...checkAll(rolesJosn[index].permissions, true) };
     } else {
+      if (rolesJosn[index].extra_permissions) {
+        rolesJosn[index].extra_permissions = [...checkAll(rolesJosn[index].extra_permissions, false, "show")];
+      }
       rolesJosn[index].permissions = { ...checkAll(rolesJosn[index].permissions, false) };
     }
     setRolesJosn([...rolesJosn]);
@@ -66,6 +81,15 @@ const Matrix = (props: any) => {
   let checkIsChecked = (index: number = 0) => {
     let isChecked: any = true;
     let obj: any = rolesJosn[index].permissions;
+    let obj1: any = rolesJosn[index].extra_permissions;
+
+    if (obj1 && Array.isArray(obj1)) {
+      obj1.map((item) => {
+        if (!item.show) {
+          isChecked = false;
+        }
+      });
+    }
 
     Object.keys(obj).map((key) => {
       if (!obj[key]) {
@@ -95,7 +119,7 @@ const Matrix = (props: any) => {
     });
   };
 
-  const renderCard = (title: any, listData: any, index: number = 0, icon: any) => {
+  const renderCard = (title: any, listData: any, index: number = 0, icon: any, extra_permissions: any) => {
     return (
       <div className="card border-dark mb-3" style={{ width: "360px" }}>
         <div className="card-header">
@@ -118,15 +142,54 @@ const Matrix = (props: any) => {
             </div>
           </div>
         </div>
-        <div className="card-body d-flex flex-wrap gap-3 justify-content-between">{listData}</div>
+        <div className="card-body d-flex flex-wrap gap-3 justify-content-between">
+          {listData}
+          {extra_permissions}
+        </div>
       </div>
     );
   };
 
+  const renderExtra = (extra_permissions: any) => {
+    if (!extra_permissions) {
+      return <></>;
+    }
+
+    if (Array.isArray(extra_permissions)) {
+      return extra_permissions.map((item: any, index: any) => {
+        let { label, value, show } = item;
+
+        return (
+          <div key={index} className="align-items-center d-flex">
+            <input
+              id={value}
+              type="checkbox"
+              name={value}
+              checked={show}
+              onChange={(event) => {
+                handleSectionCheckboxChange(event, item, "show");
+              }}
+            />
+            <label htmlFor={value} className="ms-1 capitalize">
+              {label}
+            </label>
+          </div>
+        );
+      });
+    }
+
+    return <></>;
+  };
+
   const renderCheckboxes = () => {
     return rolesJosn.map((item: any, index: any) => {
-      let { link, title, permissions, icon } = item;
-      return <div key={link + index}>{renderCard(title, renderSections(permissions, title), index, icon)}</div>;
+      let { link, title, permissions, icon, extra_permissions } = item;
+
+      return (
+        <div key={link + index}>
+          {renderCard(title, renderSections(permissions, title), index, icon, renderExtra(extra_permissions))}
+        </div>
+      );
     });
   };
 
@@ -137,7 +200,7 @@ const Matrix = (props: any) => {
       <div className="px-4 pt-2 position-sticky bottom-0 bg-white">
         <button
           onClick={() => {
-            onclick && onclick(rolesJosn);
+            onclick && onclick(rolesJosn, updateData);
           }}
           className="btn btn-primary form-control mb-4"
         >

@@ -508,7 +508,6 @@
       "remove": false
     }
   },
-
   {
     "title": "Attendance sheet",
     "link": "attendancesheet",
@@ -552,34 +551,37 @@
       {
         "label": "Students List who are not assigned any exam center",
         "value": "Students List who are not assigned any exam center",
-        "show": false
+        "show": true
       },
       {
         "label": "Student count class-wise school-wise for selected competition",
         "value": "Student count class-wise school-wise for selected competition",
         "show": false
       },
-      { "label": "List of Students - worksheet list", "value": "List of Students - worksheet list", "show": false },
+      {
+        "label": "List of Students - worksheet list",
+        "value": "List of Students - worksheet list",
+        "show": true
+      },
       {
         "label": "GF Students qualified list school-group wise",
         "value": "GF Students qualified list school-group wise",
-        "show": false
+        "show": true
       },
       {
         "label": "GF Students Paid list school-group wise",
         "value": "GF Students Paid list school-group wise",
-        "show": false
+        "show": true
       },
-
       {
         "label": "Class-section wise count report highlighting the numbers above threshold",
         "value": "Class-section wise count report highlighting the numbers above threshold",
-        "show": false
+        "show": true
       },
       {
         "label": "School results",
         "value": "School results",
-        "show": false
+        "show": true
       },
       {
         "label": "Medal winners list",
