@@ -22,8 +22,10 @@
           <b>Seat No: {{seatnumber}} </b>
           <p>Student Name: {{studentname}}</p>
           <p>School Name: {{schoolname}}</p>
-          <p>Class: {{Class}}</p>
-          <p>Section: {{section}}</p>
+          <div style="display: flex">
+            <p>Class: {{Class}}</p>
+            <p style="margin-left: 10px">Section: {{section}}</p>
+          </div>
         </div>
 
         <table
@@ -52,9 +54,9 @@
             </tr>
           </tbody>
         </table>
-        <div style="display: flex; justify-content: space-between; gap: 20px">
-          <div>{{marksheet_instruction}} {{grand_finale_msg}}</div>
-          <div>
+        <div style="display: flex; justify-content: space-between">
+          <div style="max-width: 60%">{{marksheet_instruction}} {{grand_finale_msg}}</div>
+          <div style="width: 30%">
             <img
               style="margin: 10px; width: 260px; max-height: 260px"
               src="https://imldatabucket.s3.ap-south-1.amazonaws.com/vishal909@gmail.com/dated_on20231023_105428.png"
@@ -82,8 +84,10 @@
           <b>Seat No: {{seatnumber2}} </b>
           <p>Student Name: {{studentname2}}</p>
           <p>School Name: {{schoolname2}}</p>
-          <p>Class: {{Class2}}</p>
-          <p>Section: {{section2}}</p>
+          <div style="display: flex; gap: 15px">
+            <p>Class: {{Class2}}</p>
+            <p style="margin-left: 10px">Section: {{section2}}</p>
+          </div>
         </div>
 
         <table
@@ -112,9 +116,9 @@
             </tr>
           </tbody>
         </table>
-        <div style="display: flex; justify-content: space-between; gap: 20px">
-          <div>{{marksheet_instruction2}} {{grand_finale_msg2}}</div>
-          <div>
+        <div style="display: flex; justify-content: space-between">
+          <div style="max-width: 60%">{{marksheet_instruction2}} {{grand_finale_msg2}}</div>
+          <div style="width: 30%">
             <img
               style="margin: 10px; width: 260px; max-height: 260px"
               src="https://imldatabucket.s3.ap-south-1.amazonaws.com/vishal909@gmail.com/dated_on20231023_105428.png"
