@@ -4,43 +4,49 @@ import { useEffect, useState } from "react";
 import { readSchools } from "@/utilities/API";
 import Loader from "@/components/common/Loader";
 import { useSelector } from "react-redux";
-
-const formTypeData = {
-  Code: true,
-  Name: true,
-  City: true,
-  State: true,
-  Board: true,
-  actions: true,
-  Group: false,
-  Type: false,
-  Tags: false,
-  Country: false,
-  Address: false,
-  "Pin-Code": false,
-  Label: false,
-  "Geographic Address": false,
-  pincode: false,
-  "Contact Number": true,
-  "Contact E-Mail": false,
-  status: false,
-};
+import { setGetData } from "@/helpers/getLocalStorage";
 
 export default function Schools() {
-  const [data, setData] = useState<MatrixDataType>([]);
+  const [data, setData] = useState<any>([]);
   const [loader, setLoader] = useState<any>(false);
   const userData: any = useSelector((state: any) => state.data);
   let selectedCountry = userData?.selectedCountry?.label;
 
+  let savedPageSize = setGetData("pagesize");
+  if (savedPageSize) {
+    if (!isNaN(savedPageSize)) {
+      savedPageSize = Number(savedPageSize);
+    } else {
+      savedPageSize = 25;
+    }
+  }
+
+  const [totalrecords, setTotalrecords] = useState<any>({ totalPages: 1, pageSize: savedPageSize });
+  const [pagiData, setPagiData] = useState<any>({ page: 1, limit: savedPageSize || 25 });
+
+  let payload = {
+    collection_name: "schools",
+    op_name: "find_many",
+    ...pagiData,
+    filter_var: {
+      country: selectedCountry,
+    },
+  };
+
   useEffect(() => {
-    setLoader(true)
+    setLoader(true);
     async function readData() {
-      const schools = await readSchools();
-      setData(schools);
-    setLoader(false)
+      const schools: any = await readSchools(undefined, undefined, payload, true);
+      let limits = { total_count: schools?.data?.total_count, total_pages: schools?.data?.total_pages };
+
+      setTotalrecords(limits);
+      setData(schools.data.response || []);
+
+      setLoader(false);
     }
     readData();
-  }, [selectedCountry]);
+  }, [selectedCountry, Number(pagiData.page), Number(pagiData.limit)]);
+
   return (
     <Container h={"100%"} fluid p={0}>
       <Matrix
@@ -48,9 +54,12 @@ export default function Schools() {
         setData={setData}
         showCreateForm={true}
         formType={"School"}
-        formTypeData={formTypeData}
+        showApiSearch={true}
+        totalrecords={totalrecords}
+        setPagiData={setPagiData}
+        pagiData={pagiData}
       />
-      <Loader show={loader}/>
+      <Loader show={loader} />
     </Container>
   );
 }

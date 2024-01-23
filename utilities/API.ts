@@ -513,12 +513,17 @@ const readBoards = async (filterBy?: "name" | "state", filterQuery?: string | nu
   return boards;
 };
 
-const readSchools = async (filterBy?: "name" | "city", filterQuery?: string | number, customFIlters?: any) => {
+const readSchools = async (
+  filterBy?: "name" | "city",
+  filterQuery?: string | number,
+  customFIlters?: any,
+  getfullRes?: any
+) => {
   let schools: MatrixDataType;
   if (filterBy && filterQuery) {
-    schools = await readData("schools", "find_many", filterBy, filterQuery, customFIlters);
+    schools = await readData("schools", "find_many", filterBy, filterQuery, customFIlters, getfullRes);
   } else {
-    schools = await readData("schools", "find_many");
+    schools = await readData("schools", "find_many", undefined, undefined, customFIlters, getfullRes);
   }
   return schools;
 };
