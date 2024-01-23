@@ -841,43 +841,31 @@ function Page() {
     return (
       <div className="m-4">
         <div className="d-flex flex-wrap gap-4">{renderData()}</div>
+
+        <div className="mt-3">
+          <Checkbox
+            label="With Background"
+            checked={allData?.whitbackground}
+            onChange={(e) => {
+              allData.whitbackground = e.target.checked;
+              setAllData({ ...allData });
+            }}
+          />
+        </div>
+
         <div className="table-responsive mt-4">{renderSchoolsTable()}</div>
         <div className="table-responsive mt-4">{renderUsersTable()}</div>
         {/* <div className="table-responsive  m-4">{renderTable()}</div> */}
         {allData?.schools?.length && !isStudentFilters && !pdfLoader ? (
-          <div>
-            <div className="mb-3">
-              <Checkbox
-                label="With Background"
-                checked={allData?.whitbackground}
-                onChange={(e) => {
-                  allData.whitbackground = e.target.checked;
-                  setAllData({ ...allData });
-                }}
-              />
-            </div>
-            <div className="btn btn-primary form-control" onClick={() => readSchoolsData(true)}>
-              Download Certificate
-            </div>
+          <div className="btn btn-primary form-control" onClick={() => readSchoolsData(true)}>
+            Download Certificate
           </div>
         ) : (
           ""
         )}
         {allData?.studentsData?.length && isStudentFilters ? (
-          <div>
-            <div className="mb-3">
-              <Checkbox
-                label="With Background"
-                checked={allData?.whitbackground}
-                onChange={(e) => {
-                  allData.whitbackground = e.target.checked;
-                  setAllData({ ...allData });
-                }}
-              />
-            </div>
-            <div className="btn btn-primary form-control" onClick={() => genrateStudentPdf()}>
-              Download Certificate
-            </div>
+          <div className="btn btn-primary form-control" onClick={() => genrateStudentPdf()}>
+            Download Certificate
           </div>
         ) : (
           ""

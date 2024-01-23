@@ -5,41 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>pdf</title>
   </head>
-  <body style="margin: 0; padding: 0">
+  <body style="margin: 0; padding: 0; line-height: 0.9; font-family: calibri">
     <div style="display: flex; width: 100%; box-sizing: border-box">
       <div style="border: 3px solid gray; padding: 20px; margin: 10px; width: 100%">
         <div style="text-align: center">
           <img src="http://www.ignitedmindlab.com/images/invoice-logo.png " style="margin-top: 0.1cm; width: 205px" />
           <!-- <div> -->
           <div style="line-height: 0.8">
-            <h2>Mental Maths Competition - 2023</h2>
+            <h2>{{competition}}</h2>
             <h2>Mark Statement</h2>
           </div>
         </div>
 
         <!-- details Section -->
-        <div>
-          <b> Seat No: 10021001 </b>
-          <p>Student Name: Anvika Arun</p>
-          <p>Student Name: Kendriya Vidyalaya, Udupi</p>
+        <div style="line-height: 0.6">
+          <b>Seat No: {{seatnumber}} </b>
+          <p>Student Name: {{studentname}}</p>
+          <p>School Name: {{schoolname}}</p>
+          <p>Class: {{Class}} <span style="margin-left: 10px"> Section: {{section}} </span></p>
         </div>
 
-        <div
-          style="
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px 0 0;
-            white-space: nowrap;
-            gap: 30px;
-          "
+        <table
+          border="1px solid"
+          cellspacing="0"
+          cellpadding="10"
+          width="100%"
+          style="margin-top: 20px; text-align: center"
         >
-          <div style="width: 60%"></div>
-          <div>Class: 1</div>
-          <div>Section: A</div>
-        </div>
-
-        <table border="1px solid" cellspacing="0" cellpadding="10" width="100%" style="margin-top: 20px">
           <thead>
             <tr>
               <th>Examination</th>
@@ -51,33 +43,86 @@
           </thead>
           <tbody>
             <tr>
-              <td>Mental Maths Competition - 2023</td>
-              <td>48</td>
-              <td>100</td>
-              <td>C</td>
-              <td>1st</td>
+              <td>{{competition}}</td>
+              <td>{{marks_obtain}}</td>
+              <td>{{marks_total}}</td>
+              <td>{{grade}}</td>
+              <td>{{rank}}</td>
             </tr>
           </tbody>
         </table>
         <div style="display: flex; justify-content: space-between">
-          <div>
-            <p>1. Interpretation of Grades:- A - 80% to 100% B - 60% to 79.99% C - 35% to 59.99% D - Below 35%</p>
-            <p>2. Application for verification of marks can be made within 7 days of declaration of results.</p>
-            <p>Please visit www.ignitedmindlab.com for details</p>
-            <b> Grand Finale Message </b>
-          </div>
-          <div>
+          <div style="max-width: 60%">{{marksheet_instruction}} {{grand_finale_msg}}</div>
+          <div style="width: 40%">
             <img
-              style="margin: 10px; max-width: 200px"
+              style="margin: 10px; width: 260px; max-height: 260px"
               src="https://imldatabucket.s3.ap-south-1.amazonaws.com/vishal909@gmail.com/dated_on20231023_105428.png"
             />
           </div>
         </div>
 
-        <div style="text-align: center; margin-top: 10px">
-          Address: C-157, Antop Hill Warehouse, 1st Floor, Wadala (E), Mumbai - 400037. Tel. No.: +91 22 50020110
-        </div>
+        <div style="text-align: center; margin-top: 10px">{{company_address}}</div>
       </div>
     </div>
+
+    <div style="display: flex; width: 100%; box-sizing: border-box">
+      <div style="border: 3px solid gray; padding: 20px; margin: 10px; width: 100%">
+        <div style="text-align: center">
+          <img src="http://www.ignitedmindlab.com/images/invoice-logo.png " style="margin-top: 0.1cm; width: 205px" />
+          <!-- <div> -->
+          <div style="line-height: 0.8">
+            <h2>{{competition2}}</h2>
+            <h2>Mark Statement</h2>
+          </div>
+        </div>
+
+        <!-- details Section -->
+        <div style="line-height: 0.6">
+          <b>Seat No: {{seatnumber2}} </b>
+          <p>Student Name: {{studentname2}}</p>
+          <p>School Name: {{schoolname2}}</p>
+          <p>Class: {{Class2}} <span style="margin-left: 10px"> Section: {{section2}} </span></p>
+        </div>
+
+        <table
+          border="1px solid"
+          cellspacing="0"
+          cellpadding="10"
+          width="100%"
+          style="margin-top: 20px; text-align: center"
+        >
+          <thead>
+            <tr>
+              <th>Examination</th>
+              <th>Marks Obtained</th>
+              <th>Max Marks</th>
+              <th>Grade</th>
+              <th>Rank</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{competition2}}</td>
+              <td>{{marks_obtain2}}</td>
+              <td>{{marks_total2}}</td>
+              <td>{{grade2}}</td>
+              <td>{{rank2}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="display: flex; justify-content: space-between">
+          <div style="max-width: 60%">{{marksheet_instruction2}} {{grand_finale_msg2}}</div>
+          <div style="width: 40%">
+            <img
+              style="margin: 10px; width: 260px; max-height: 260px"
+              src="https://imldatabucket.s3.ap-south-1.amazonaws.com/vishal909@gmail.com/dated_on20231023_105428.png"
+            />
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 10px">{{company_address2}}</div>
+      </div>
+    </div>
+     
   </body>
 </html>

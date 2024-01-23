@@ -177,7 +177,7 @@ function Matrix({
   if (savedPageSize) {
     if (!isNaN(savedPageSize)) {
       savedPageSize = Number(savedPageSize);
-      console.log(savedPageSize, "savedPageSize ddd");
+      console.log(formType, "savedPageSize ddd");
     } else {
       savedPageSize = 25;
     }
