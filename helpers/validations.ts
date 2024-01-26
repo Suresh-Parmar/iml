@@ -124,8 +124,9 @@ export const saveExcel = async (fetchData: any, data: any, filterString: any, fi
     const worksheet = workbook.addWorksheet(workSheetName);
 
     const firstData = dataTOexport[0];
+    const sortedKeys = Object.keys(firstData).sort();
 
-    const columns = Object.keys(firstData).map((value) => ({
+    const columns = sortedKeys.map((value) => ({
       header: value,
       key: value,
     }));
