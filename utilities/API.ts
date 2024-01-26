@@ -196,6 +196,10 @@ const updateData = async (
   filterBy?: "_id" | "name" | "country_id" | "state" | "city" | "status",
   filterQuery?: string | number | boolean
 ) => {
+  if (updateVars._id) {
+    delete updateVars._id;
+  }
+
   let requestBody: RequestBodyType = {
     collection_name: `${tableName}`,
     op_name: "update",
