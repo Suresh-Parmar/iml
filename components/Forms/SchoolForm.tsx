@@ -158,7 +158,7 @@ function SchoolForm({
     },
 
     validate: {
-      name: (value: any) => (value || value?.length < 2 ? "Name must have at least 2 letters" : null),
+      name: (value: any) => (!value || value?.length < 2 ? "Name must have at least 2 letters" : null),
       // principal: (value) => (value.length < 2 ? "Name must have at least 2 letters" : null),
       // teacher_incharge: (value) => (value.length < 2 ? "must have at least 2 letters" : null),
       // relationship_manager: (value) => (value.length < 2 ? "must have at least 2 letters" : null),
