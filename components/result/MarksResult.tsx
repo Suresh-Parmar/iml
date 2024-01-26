@@ -178,7 +178,7 @@ function MarksResult() {
                   // val = validatePhone(val, 15);
                   setallData({ ...allData, seat_number: val });
                 }}
-                placeholder="Seat Number"
+                placeholder={allData.searchby == "registrationnumber" ? "Registration" : "Seat"}
               />
             </div>
           </div>

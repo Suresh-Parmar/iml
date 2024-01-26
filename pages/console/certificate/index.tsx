@@ -841,18 +841,6 @@ function Page() {
     return (
       <div className="m-4">
         <div className="d-flex flex-wrap gap-4">{renderData()}</div>
-
-        <div className="mt-3">
-          <Checkbox
-            label="With Background"
-            checked={allData?.whitbackground}
-            onChange={(e) => {
-              allData.whitbackground = e.target.checked;
-              setAllData({ ...allData });
-            }}
-          />
-        </div>
-
         <div className="table-responsive mt-4">{renderSchoolsTable()}</div>
         <div className="table-responsive mt-4">{renderUsersTable()}</div>
         {/* <div className="table-responsive  m-4">{renderTable()}</div> */}
@@ -890,7 +878,19 @@ function Page() {
 
   return (
     <div className="mx-4 py-5" style={{ maxHeight: "100%", overflow: "auto" }}>
-      <div>{renderRadio(uiFilters)}</div>
+      <div className="d-flex">
+        {renderRadio(uiFilters)}
+        <div className="mt-4 pt-2 ms-5 mx-3">
+          <Checkbox
+            label="With Background"
+            checked={allData?.whitbackground}
+            onChange={(e) => {
+              allData.whitbackground = e.target.checked;
+              setAllData({ ...allData });
+            }}
+          />
+        </div>
+      </div>
       {AdmitCardDownLoad()}
       <Loader show={loader} />
     </div>

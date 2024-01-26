@@ -141,7 +141,7 @@ function CompetitionForm({
   const classesDataJson = () => {
     let data: any = [];
     classesData.map((item: any) => {
-      let keytoShow = "Class " + item.code;
+      let keytoShow = item.code;
       let dataItem = {
         disabled: readonly,
         divStyle: { width: "18%" },
