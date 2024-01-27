@@ -573,7 +573,7 @@ export const allTypes: any = {
   "Exam Center": [
     {
       id: "Center Code",
-      key: "_id",
+      key: "exam_center_id",
       defaultShow: true,
       filterFn: "equals",
       sortingFn: fuzzySort,
