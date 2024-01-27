@@ -314,14 +314,21 @@ function Page() {
             <td scope="row">
               <input
                 type="checkbox"
-                checked={Array.isArray(allData.exam_center) && allData.exam_center.includes(item["_id"])}
+                checked={Array.isArray(allData.exam_center) && allData.exam_center.includes(item["exam_center_id"])}
                 onChange={(e: any) => {
-                  handleCHeckBOxesStudents(e, item, allData.exam_center, dataExamCenters, "_id", "exam_center");
+                  handleCHeckBOxesStudents(
+                    e,
+                    item,
+                    allData.exam_center,
+                    dataExamCenters,
+                    "exam_center_id",
+                    "exam_center"
+                  );
                 }}
               />
             </td>
             <td>{item["name"]}</td>
-            <td>{item["_id"]}</td>
+            <td>{item["exam_center_id"]}</td>
             <td>{item["mode"]}</td>
             <td>{item["paper_code"]}</td>
             <td>{item["state"]}</td>
@@ -331,7 +338,7 @@ function Page() {
                 <a href={item.OMR_url} target="_blank">
                   <span className="material-symbols-outlined text-success">download</span>
                 </a>
-              ) : pdfLoader == item._id ? (
+              ) : pdfLoader == item.exam_center_id ? (
                 "loading"
               ) : (
                 <span className="material-symbols-outlined text-secondary">download</span>
@@ -357,7 +364,14 @@ function Page() {
                   type="checkbox"
                   checked={checkIsAllChecked(allData.exam_center, dataExamCenters)}
                   onChange={(e: any) => {
-                    handleCHeckBOxesStudents(e, false, allData.exam_center, dataExamCenters, "_id", "exam_center");
+                    handleCHeckBOxesStudents(
+                      e,
+                      false,
+                      allData.exam_center,
+                      dataExamCenters,
+                      "exam_center_id",
+                      "exam_center"
+                    );
                   }}
                 />
               </th>
@@ -375,7 +389,7 @@ function Page() {
                 scope="col"
                 onClick={() => {
                   setOrder(!order);
-                  let data = sortData(dataExamCenters, "_id", order);
+                  let data = sortData(dataExamCenters, "exam_center_id", order);
                   setDataExamCenters([...data]);
                 }}
               >

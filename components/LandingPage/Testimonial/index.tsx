@@ -126,7 +126,7 @@ function StudentTestimonial() {
     </Carousel.Slide>
   ));
 
-  const teacherSlides = teacherData.map((item) => (
+  const teacherSlides = teacherData?.map((item) => (
     <Carousel.Slide key={item._id}>
       <TeacherCard {...item} />
     </Carousel.Slide>
@@ -162,7 +162,7 @@ function StudentTestimonial() {
   };
 
   useEffect(() => {
-    if ((!StudentData.length || !teacherData.length) && apiRes) {
+    if ((!StudentData?.length || !teacherData?.length) && apiRes) {
       getData();
     }
   }, [StudentData, teacherData]);
