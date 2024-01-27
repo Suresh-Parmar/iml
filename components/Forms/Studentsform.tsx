@@ -335,7 +335,7 @@ function Studentsform({
   const schoolNames = filterDataSingle(schoolsData || [], "name");
   const cityNames = filterDataSingle(citiesData || [], "name");
   const stateNames = filterDataSingle(statesData || [], "name");
-  const examCentersNames = filterDataMulti(examCentersData, "name", "_id", "ID:", "_id");
+  const examCentersNames = filterDataMulti(examCentersData, "name", "exam_center_id", "ID:", "exam_center_id");
   const competitionsNames = filterDataMulti(comeptitionsData, "name", "code");
   const classesNames = filterDataMulti(classesData, "name", "code", "", "", false);
 
