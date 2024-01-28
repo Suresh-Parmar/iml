@@ -90,7 +90,7 @@ function ExamCenterFilter() {
   );
   examCentersData = iterateData(examCentersData);
   examCentersData = handleApiData(examCentersData);
-  examCentersData = filterData(examCentersData, "label", "value", "_id");
+  examCentersData = filterData(examCentersData, "label", "value", "exam_center_id");
 
   let examDateData = useTableDataMatrixQuery(genratePayload("exam_centers", undefined, undefined, selectedCountry));
   examDateData = iterateData(examDateData);
