@@ -5,6 +5,7 @@ import { MatrixDataType, MatrixRowType } from "../Matrix";
 import { createCity, readCities, readCountries, readDataCustomFilter, readStates, updateCity } from "@/utilities/API";
 
 import { notifications } from "@mantine/notifications";
+import { filterData } from "@/helpers/filterData";
 
 function CityForm({
   open,
@@ -31,7 +32,7 @@ function CityForm({
     setCountriesData(countries);
   }
 
-  async function readStatesData(filterBy?: "country", filterQuery?: string | number) {
+  async function readStatesData(filterBy?: "country_id", filterQuery?: string | number) {
     let states: MatrixDataType;
     if (filterBy && filterQuery) {
       states = await readDataCustomFilter("states", "find_many", {
@@ -56,7 +57,7 @@ function CityForm({
 
   useEffect(() => {
     if (rowData?.country) {
-      readStatesData("country", rowData.country);
+      readStatesData("country_id", rowData.country);
     }
   }, [rowData?.country]);
 
@@ -129,14 +130,16 @@ function CityForm({
   };
 
   const onChangeCountry = async (event: any) => {
-    form.setFieldValue("country", event ?? "");
-    form.setFieldValue("state", "");
-    await readStatesData("country", event ?? "");
+    form.setFieldValue("country_id", event ?? "");
+    form.setFieldValue("state_id", "");
+    await readStatesData("country_id", event ?? "");
   };
 
-  const stateNames = statesData.filter((c) => Boolean(c.status)).map((state) => state.name);
+  // const stateNames = statesData.filter((c) => Boolean(c.status)).map((state) => state.name);
+  const stateNames = filterData(statesData, "label", "value", "_id");
+  const countryNames = filterData(countriesData, "label", "value", "_id");
 
-  const countryNames = countriesData.filter((c) => Boolean(c.status)).map((country) => country.name);
+  // const countryNames = countriesData.filter((c) => Boolean(c.status)).map((country) => country.name);
 
   return (
     <Box maw={"100%"} mx="auto" mih={500}>
@@ -167,7 +170,7 @@ function CityForm({
             mt={"md"}
             size="md"
             withAsterisk
-            {...form.getInputProps("country")}
+            {...form.getInputProps("country_id")}
             onChange={onChangeCountry}
             w={"100%"}
           />
@@ -182,9 +185,9 @@ function CityForm({
             mt={"md"}
             size="md"
             withAsterisk
-            {...form.getInputProps("state")}
+            {...form.getInputProps("state_id")}
             onChange={async (event) => {
-              form.setFieldValue("state", event ?? "");
+              form.setFieldValue("state_id", event ?? "");
             }}
             w={"100%"}
           />

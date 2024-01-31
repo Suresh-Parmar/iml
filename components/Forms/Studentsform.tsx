@@ -65,11 +65,47 @@ function Studentsform({
   const [classesData, setClassesData] = useState<MatrixDataType>([]);
   const [groupsData, setGroupData] = useState<any>([]);
   const [cohortsData, setCohortsData] = useState<any>([]);
-  const [showRoles, setshowRoles] = useState<any>(false);
-  const [isUpdate, setisUpdate] = useState<any>(rowData?._id);
 
   let allReduxData: any = useSelector((state) => state);
   let globalCountry = allReduxData?.client?.selectedCountry?.name;
+
+  useEffect(() => {
+    if (rowData) {
+      let title = rowData.name;
+      if (rowData?.seat_number) {
+        title += ` (${rowData.seat_number})`;
+      }
+
+      if (readonly) {
+        title = "view " + title;
+      } else {
+        title = "Update " + title;
+      }
+      setFormTitle(title);
+    } else {
+      setFormTitle(`Add ${formType}`);
+    }
+  }, []);
+
+  useEffect(() => {
+    getGroups();
+    getCohorts();
+    readStatesData();
+  }, [rowData?.country]);
+
+  useEffect(() => {
+    readCitiesData();
+  }, [rowData?.state]);
+
+  useEffect(() => {
+    readSchoolsData();
+  }, [rowData?.city]);
+
+  useEffect(() => {
+    readClassesData();
+    readCompetitionsData();
+    readExamCentersData();
+  }, []);
 
   async function readSchoolsData(filterBy?: "name" | "city", filterQuery?: string | number) {
     let schools: MatrixDataType;
@@ -111,13 +147,6 @@ function Studentsform({
     }
   };
 
-  useEffect(() => {
-    if (!showRoles) {
-      getGroups();
-      getCohorts();
-    }
-  }, []);
-
   async function readCitiesData(filterBy?: "state", filterQuery?: string | number) {
     let cities: MatrixDataType;
     if (filterBy && filterQuery) {
@@ -158,51 +187,6 @@ function Studentsform({
     classes = filterData(classes, "label", "value", "", true, "order_code", undefined, true);
     setClassesData(classes);
   }
-
-  useEffect(() => {
-    if (rowData) {
-      let title = rowData.name;
-      if (rowData?.seat_number) {
-        title += ` (${rowData.seat_number})`;
-      }
-
-      if (readonly) {
-        title = "view " + title;
-      } else {
-        title = "Update " + title;
-      }
-      setFormTitle(title);
-    } else {
-      setFormTitle(`Add ${formType}`);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!showRoles) {
-      readStatesData();
-    }
-  }, [rowData?.country]);
-
-  useEffect(() => {
-    if (!showRoles) {
-      readCitiesData();
-    }
-  }, [rowData?.state]);
-
-  useEffect(() => {
-    if (!showRoles) {
-      readSchoolsData();
-    }
-  }, [rowData?.city]);
-
-  useEffect(() => {
-    if (!showRoles) {
-      readClassesData();
-      readCompetitionsData();
-      // readCountriesData();
-      readExamCentersData();
-    }
-  }, []);
 
   const form = useForm({
     initialValues: {
