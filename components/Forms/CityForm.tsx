@@ -6,6 +6,7 @@ import { createCity, readCities, readCountries, readDataCustomFilter, readStates
 
 import { notifications } from "@mantine/notifications";
 import { filterData } from "@/helpers/filterData";
+import { findFromJson } from "@/helpers/filterFromJson";
 
 function CityForm({
   open,
@@ -19,20 +20,21 @@ function CityForm({
   open: () => void;
   close: () => void;
   setData: Dispatch<SetStateAction<MatrixDataType>>;
-  rowData?: MatrixRowType;
+  rowData?: any;
   setRowData: Dispatch<SetStateAction<MatrixRowType | undefined>>;
   setFormTitle: Dispatch<SetStateAction<string>>;
   readonly?: boolean;
 }) {
   const [statesData, setStatesData] = useState<MatrixDataType>([]);
   const [countriesData, setCountriesData] = useState<MatrixDataType>([]);
+  const [oLoader, setOLoader] = useState<boolean>(false);
 
   async function readCountriesData() {
     const countries = await readCountries("status", true);
     setCountriesData(countries);
   }
 
-  async function readStatesData(filterBy?: "country_id", filterQuery?: string | number) {
+  async function readStatesData(filterBy?: "country", filterQuery?: string | number) {
     let states: MatrixDataType;
     if (filterBy && filterQuery) {
       states = await readDataCustomFilter("states", "find_many", {
@@ -56,10 +58,11 @@ function CityForm({
   }, []);
 
   useEffect(() => {
-    if (rowData?.country) {
-      readStatesData("country_id", rowData.country);
+    if (rowData?.country_id) {
+      let findJson = findFromJson(countriesData, rowData.country_id, "_id");
+      readStatesData("country", findJson.name);
     }
-  }, [rowData?.country]);
+  }, [!!countriesData.length, rowData?.country_id]);
 
   useEffect(() => {
     readCountriesData();
@@ -68,17 +71,18 @@ function CityForm({
   const form = useForm({
     initialValues: {
       name: rowData?.name ?? "",
-      state: rowData?.state ?? "",
-      country: rowData?.country ?? "",
+      state_id: rowData?.state_id ?? "",
+      country_id: rowData?.country_id ?? "",
       status: rowData?.status ?? "",
     },
     validate: {
       name: (value) => (value.length < 2 ? "Name must have at least 2 letters" : null),
-      state: (value) => (value.length === 0 ? "State must be selected" : null),
-      country: (value) => (value.length === 0 ? "Country must be selected" : null),
+      state_id: (value) => (value.length === 0 ? "State must be selected" : null),
+      country_id: (value) => (value.length === 0 ? "Country must be selected" : null),
     },
   });
-  const [oLoader, setOLoader] = useState<boolean>(false);
+
+  let formvalues: any = form.values;
 
   const onHandleSubmit = async (values: any) => {
     setOLoader(true);
@@ -122,8 +126,8 @@ function CityForm({
     }
     form.setValues({
       name: "",
-      state: "",
-      country: "",
+      state_id: "",
+      country_id: "",
       status: true,
     });
     close();
@@ -132,7 +136,8 @@ function CityForm({
   const onChangeCountry = async (event: any) => {
     form.setFieldValue("country_id", event ?? "");
     form.setFieldValue("state_id", "");
-    await readStatesData("country_id", event ?? "");
+    let findJson = findFromJson(countriesData, event, "_id");
+    await readStatesData("country", findJson.name ?? "");
   };
 
   // const stateNames = statesData.filter((c) => Boolean(c.status)).map((state) => state.name);
@@ -176,7 +181,7 @@ function CityForm({
           />
           <Select
             clearable
-            disabled={readonly || form.values.country === ""}
+            disabled={readonly || formvalues.country_id === ""}
             searchable
             nothingFound="No options"
             data={stateNames}

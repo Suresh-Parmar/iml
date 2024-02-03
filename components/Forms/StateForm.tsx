@@ -47,7 +47,7 @@ function StateForm({
     initialValues: {
       name: rowData?.name ?? "",
       status: rowData?.status ?? true,
-      country: rowData?.country ?? "",
+      country_id: rowData?.country_id ?? "",
     },
     validate: {
       name: (value) => (value.length < 2 ? "Name must have at least 2 letters" : null),
@@ -97,7 +97,7 @@ function StateForm({
     }
     form.setValues({
       name: "",
-      country: "",
+      country_id: "",
       status: true,
     });
     close();
@@ -109,7 +109,6 @@ function StateForm({
 
   // const countryNames = countriesData.filter((c) => Boolean(c.status)).map((country) => country.name);
 
-  console.log(countriesData, "countriesData");
   const countryNames = filterData(countriesData, "label", "value", "_id");
 
   return (
