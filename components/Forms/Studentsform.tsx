@@ -19,7 +19,6 @@ import {
   readCities,
   readClasses,
   readCompetitions,
-  readCountries,
   readExamCenters,
   readSchools,
   readStates,
@@ -28,7 +27,7 @@ import {
 import { notifications } from "@mantine/notifications";
 import { FormType } from "../Matrix/types";
 import { UserRoleFormMapping } from "@/utilities/users";
-import { checkValidDate, maxLength, selectMinDate } from "@/helpers/validations";
+import { maxLength, selectMinDate } from "@/helpers/validations";
 import { useSelector } from "react-redux";
 import { formTypeToFetcherMapper } from "@/helpers/dataFetcher";
 import { findFromJson } from "@/helpers/filterFromJson";
@@ -51,7 +50,7 @@ function Studentsform({
   open: () => void;
   close: () => void;
   setData: Dispatch<SetStateAction<MatrixDataType>>;
-  rowData?: MatrixRowType;
+  rowData?: any;
   setRowData: Dispatch<SetStateAction<MatrixRowType | undefined>>;
   setFormTitle: Dispatch<SetStateAction<string>>;
   readonly?: boolean;
@@ -95,7 +94,7 @@ function Studentsform({
 
   useEffect(() => {
     readCitiesData();
-  }, [rowData?.state]);
+  }, [rowData?.state_id]);
 
   useEffect(() => {
     readSchoolsData();
@@ -131,7 +130,7 @@ function Studentsform({
     if (formType == "Students") {
       readApiData("cohorts")
         .then((res) => {
-          setCohortsData(filterDataSingle(res || [], "code"));
+          setCohortsData(filterData(res, "label", "value", "_id"));
         })
         .catch((error) => console.error(error));
     }
@@ -141,13 +140,15 @@ function Studentsform({
     if (formType == "Students") {
       readApiData("groups")
         .then((res) => {
-          setGroupData(filterDataSingle(res || [], "code"));
+          setGroupData(filterData(res, "label", "value", "_id"));
         })
         .catch((error) => console.error(error));
     }
   };
 
   async function readCitiesData(filterBy?: "state", filterQuery?: string | number) {
+    // let stateObj = findFromJson(stateNames, form.values.state_id, "_id");
+
     let cities: MatrixDataType;
     if (filterBy && filterQuery) {
       cities = await readCities(filterBy, filterQuery);
@@ -207,18 +208,17 @@ function Studentsform({
       // mobile_1: (value) => (/^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/.test(value) ? null : "Invalid mobile number"),
       // gender: (value) =>
       //   ["Female", "Male", "Other", "Prefer Not To Say"].includes(value) ? null : "Gender must be selected",
-      school_name: (value: any) => (value?.length === 0 ? "School must be selected" : null),
+      school_id: (value: any) => (value?.length === 0 ? "School must be selected" : null),
       // section: (value:any) => (value.length === 0 ? "Section must be selected" : null),
       class_code: (value: any) => (!value ? "Class must be selected" : null),
       competition_code: (value: any) => (value?.length === 0 ? "Competition must be selected" : null),
-      state: (value: any) => (value?.length === 0 ? "State must be selected" : null),
-      city: (value: any) => (value?.length === 0 ? "City must be selected" : null),
+      state_id: (value: any) => (value?.length === 0 ? "State must be selected" : null),
+      city_id: (value: any) => (value?.length === 0 ? "City must be selected" : null),
       exam_center_id: (value: any) => (value?.length === 0 ? "Exam center must be selected" : null),
       consented: (value: any) => (value === true || value === false ? null : "Communication consent must be set"),
     },
   });
-  // email_2: (value) => (value.length > 0 ? /^\S+@\S+$/.test(value) ? null : 'Invalid alternate email' : 'Invalid alternate email'),
-  // mobile_2: (value) => (value.length > 0 && /^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/.test(value) ? null : "Invalid alternate mobile number"),
+
   const [oLoader, setOLoader] = useState<boolean>(false);
 
   const onSubmitForm = async (values: any) => {
@@ -291,13 +291,16 @@ function Studentsform({
   };
 
   const onChangeCityName = async (event: string) => {
-    form.setFieldValue("city", event);
-    await readSchoolsData("city", event);
+    let cityObject = findFromJson(citiesData, event, "_id");
+
+    form.setFieldValue("city_id", event);
+    await readSchoolsData("city", cityObject.name);
   };
 
   const onChangeStateName = async (event: string) => {
-    form.setFieldValue("state", event);
-    await readCitiesData("state", event);
+    form.setFieldValue("state_id", event);
+    let stateObj = findFromJson(stateNames, event, "_id");
+    await readCitiesData("state", stateObj.name);
   };
 
   const onChangeExamCenter = async (event: string) => {
@@ -316,12 +319,12 @@ function Studentsform({
     form.setFieldValue("competition_code", event);
   };
 
-  const schoolNames = filterDataSingle(schoolsData || [], "name");
-  const cityNames = filterDataSingle(citiesData || [], "name");
-  const stateNames = filterDataSingle(statesData || [], "name");
+  const schoolNames = filterData(schoolsData, "label", "value", "_id");
+  const cityNames = filterData(citiesData, "label", "value", "_id");
+  const stateNames = filterData(statesData, "label", "value", "_id");
   const examCentersNames = filterDataMulti(examCentersData, "name", "exam_center_id", "ID:", "exam_center_id");
   const competitionsNames = filterDataMulti(comeptitionsData, "name", "code");
-  const classesNames = filterDataMulti(classesData, "name", "code", "", "", false);
+  const classesNames = filterData(classesData, "label", "value", undefined, true, "order_code", undefined, true);
 
   return (
     <Box maw={"100%"} mx="auto">
@@ -394,9 +397,9 @@ function Studentsform({
                 name="groups"
                 mt={"md"}
                 size="md"
-                {...form.getInputProps("group_code")}
+                {...form.getInputProps("group_id")}
                 onChange={(value) => {
-                  form.setFieldValue("group_code", value ?? "");
+                  form.setFieldValue("group_id", value ?? "");
                 }}
                 w={"100%"}
               />
@@ -409,9 +412,9 @@ function Studentsform({
                 name="cohorts"
                 mt={"md"}
                 size="md"
-                {...form.getInputProps("cohort_code")}
+                {...form.getInputProps("cohort_id")}
                 onChange={(value) => {
-                  form.setFieldValue("cohort_code", value ?? "");
+                  form.setFieldValue("cohort_id", value ?? "");
                 }}
                 w={"100%"}
               />
@@ -503,9 +506,9 @@ function Studentsform({
               mt={"md"}
               size="md"
               withAsterisk
-              {...form.getInputProps("school_name")}
+              {...form.getInputProps("school_id")}
               onChange={(event) => {
-                form.setFieldValue("school_name", event ?? "");
+                form.setFieldValue("school_id", event ?? "");
               }}
               w={"100%"}
               label="School"
@@ -557,13 +560,13 @@ function Studentsform({
               mt={"md"}
               size="md"
               withAsterisk
-              {...form.getInputProps("state")}
+              {...form.getInputProps("state_id")}
               onChange={onChangeStateName}
               w={"100%"}
             />
             <Select
               clearable
-              disabled={readonly || form.values.state === ""}
+              disabled={readonly || form.values.state_id === ""}
               searchable
               nothingFound="No options"
               data={cityNames}
@@ -572,7 +575,7 @@ function Studentsform({
               mt={"md"}
               size="md"
               withAsterisk
-              {...form.getInputProps("city")}
+              {...form.getInputProps("city_id")}
               onChange={onChangeCityName}
               w={"100%"}
             />

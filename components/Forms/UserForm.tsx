@@ -12,6 +12,8 @@ import { checkValidDate } from "@/helpers/validations";
 import { useSelector } from "react-redux";
 import { setGetData } from "@/helpers/getLocalStorage";
 import { DateinputCustom } from "../utils";
+import { findFromJson } from "@/helpers/filterFromJson";
+import { filterData } from "@/helpers/filterData";
 
 function UserForm({
   readonly,
@@ -27,7 +29,7 @@ function UserForm({
   open: () => void;
   close: () => void;
   setData: Dispatch<SetStateAction<MatrixDataType>>;
-  rowData?: MatrixRowType;
+  rowData?: any;
   setRowData: Dispatch<SetStateAction<MatrixRowType | undefined>>;
   setFormTitle: Dispatch<SetStateAction<string>>;
   readonly?: boolean;
@@ -112,24 +114,12 @@ function UserForm({
     },
     validate: {
       name: (value: any) => (value?.length < 2 || !value?.length ? "Name must have at least 2 letters" : null),
-      // address: (value) => (value.length < 2 ? 'Address must have at least 50 letters' : null),
-      // pincode: (value) => (/^[1-9][0-9]{5}$/.test(value) ? null : "Invalid pin-code"), // ^[1-9][0-9]{5}$ // ^[1-9]{1}[0-9]{2}\\s{0, 1}[0-9]{3}$
       email_1: (value: any) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
-      // mobile_1: (value) => (/^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/.test(value) ? null : "Invalid mobile number"),
-      // gender: (value: any) =>
-      //   ["Female", "Male", "Other", "Prefer Not To Say"].includes(value) ? null : "Gender must be selected",
-      // school_name: (value) => (value.length === 0 ? "School must be selected" : null),
-      // section: (value) => (value.length === 0 ? "Section must be selected" : null),
-      // class_code: (value) => (value?.length === 0 ? "Class must be selected" : null),
-      // competition_code: (value) => (value?.length === 0 ? "Competition must be selected" : null),
-      state: (value: any) => (!value?.length ? "State must be selected" : null),
-      city: (value: any) => (!value?.length ? "City must be selected" : null),
-      // exam_center_id: (value) => (value.length === 0 ? "Exam center must be selected" : null),
+      state_id: (value: any) => (!value?.length ? "State must be selected" : null),
+      city_id: (value: any) => (!value?.length ? "City must be selected" : null),
       consented: (value) => (value === true || value === false ? null : "Communication consent must be set"),
     },
   });
-  // email_2: (value) => (value.length > 0 ? /^\S+@\S+$/.test(value) ? null : 'Invalid alternate email' : 'Invalid alternate email'),
-  // mobile_2: (value) => (value.length > 0 && /^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/.test(value) ? null : "Invalid alternate mobile number"),
 
   const [oLoader, setOLoader] = useState<boolean>(false);
 
@@ -202,16 +192,17 @@ function UserForm({
   };
 
   const onChangeCityName = async (event: string) => {
-    form.setFieldValue("city", event);
+    form.setFieldValue("city_id", event);
   };
 
   const onChangeStateName = async (event: string) => {
-    form.setFieldValue("state", event);
-    await readCitiesData("state", event);
+    form.setFieldValue("state_id", event);
+    let stateobj = findFromJson(stateNames, event, "_id");
+    await readCitiesData("state", stateobj.name);
   };
 
-  const cityNames = filterDataSingle(citiesData || [], "name");
-  const stateNames = filterDataSingle(statesData || [], "name");
+  const cityNames = filterData(citiesData, "label", "value", "_id");
+  const stateNames = filterData(statesData, "label", "value", "_id");
 
   const saveJson = (json: any, updateData: any) => {
     let action = !!updateData?._id ? "update" : "create";
@@ -400,7 +391,7 @@ function UserForm({
                 mt={"md"}
                 size="md"
                 withAsterisk
-                {...form.getInputProps("state")}
+                {...form.getInputProps("state_id")}
                 onChange={onChangeStateName}
                 w={"100%"}
               />
@@ -415,7 +406,7 @@ function UserForm({
                 mt={"md"}
                 size="md"
                 withAsterisk
-                {...form.getInputProps("city")}
+                {...form.getInputProps("city_id")}
                 onChange={onChangeCityName}
                 w={"100%"}
               />
