@@ -168,11 +168,6 @@ function Studentsform({
     setStatesData(states);
   }
 
-  // async function readCountriesData(filterBy?: "name" | "status", filterQuery?: string | number) {
-  //   const countries = await readCountries("status", true);
-  //   setCountriesData(countries);
-  // }
-
   async function readExamCentersData(filterBy?: "name" | "status", filterQuery?: string | number) {
     const examCenters = await readExamCenters();
     setExamCentersData(examCenters);
@@ -185,7 +180,8 @@ function Studentsform({
 
   async function readClassesData(filterBy?: "name" | "status", filterQuery?: string | number) {
     let classes = await readClasses();
-    classes = filterData(classes, "label", "value", "", true, "order_code", undefined, true);
+    classes = filterData(classes, "label", "value", "_id", true, "order_code", undefined, true);
+
     setClassesData(classes);
   }
 
@@ -193,7 +189,6 @@ function Studentsform({
     initialValues: {
       ...rowData,
       role: UserRoleFormMapping[formType],
-      // dob: checkValidDate(rowData?.dob, null),
       country: rowData?.country || globalCountry,
       consented: rowData?.consented ?? true,
       mobile_1: rowData?.mobile_1?.replace(getMobileCode(), "").trim() ?? "",
@@ -202,14 +197,7 @@ function Studentsform({
 
     validate: {
       name: (value: any) => (value.length < 2 ? "Name must have at least 2 letters" : null),
-      // address: (value) => (value.length < 2 ? 'Address must have at least 50 letters' : null),
-      // pincode: (value) => (/^[1-9][0-9]{5}$/.test(value) ? null : "Invalid pin-code"), // ^[1-9][0-9]{5}$ // ^[1-9]{1}[0-9]{2}\\s{0, 1}[0-9]{3}$
-      // email_1: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
-      // mobile_1: (value) => (/^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/.test(value) ? null : "Invalid mobile number"),
-      // gender: (value) =>
-      //   ["Female", "Male", "Other", "Prefer Not To Say"].includes(value) ? null : "Gender must be selected",
       school_id: (value: any) => (value?.length === 0 ? "School must be selected" : null),
-      // section: (value:any) => (value.length === 0 ? "Section must be selected" : null),
       class_code: (value: any) => (!value ? "Class must be selected" : null),
       competition_code: (value: any) => (value?.length === 0 ? "Competition must be selected" : null),
       state_id: (value: any) => (value?.length === 0 ? "State must be selected" : null),
@@ -308,23 +296,24 @@ function Studentsform({
   };
 
   const onChangeClass = async (event: string) => {
-    let filterdData = findFromJson(classesData, event, "code");
-    form.setFieldValue("class_id", filterdData.name);
-    form.setFieldValue("class_code", event);
+    let filterdData = findFromJson(classesData, event, "_id");
+    form.setFieldValue("class_id", event);
+    form.setFieldValue("class_code", filterdData.code);
   };
 
   const onChangeCompetition = async (event: string) => {
-    let filterdData = findFromJson(comeptitionsData, event, "code");
-    form.setFieldValue("competition", filterdData.name);
-    form.setFieldValue("competition_code", event);
+    let filterdData = findFromJson(comeptitionsData, event, "_id");
+    form.setFieldValue("competition_id", event);
+    form.setFieldValue("competition_code", filterdData.code);
   };
 
   const schoolNames = filterData(schoolsData, "label", "value", "_id");
   const cityNames = filterData(citiesData, "label", "value", "_id");
   const stateNames = filterData(statesData, "label", "value", "_id");
-  const examCentersNames = filterDataMulti(examCentersData, "name", "exam_center_id", "ID:", "exam_center_id");
-  const competitionsNames = filterDataMulti(comeptitionsData, "name", "code");
-  const classesNames = filterData(classesData, "label", "value", undefined, true, "order_code", undefined, true);
+  let examCentersNames = filterDataMulti(examCentersData, "name", "exam_center_id", "ID:", "exam_center_id");
+  examCentersNames = filterData(examCentersData, "label", "value", "_id");
+  let competitionsNames = filterData(comeptitionsData, "label", "value", "_id");
+  const classesNames = filterData(classesData, "label", "value", "_id", true, "order_code", undefined, true);
 
   return (
     <Box maw={"100%"} mx="auto">
@@ -357,7 +346,7 @@ function Studentsform({
               mt={"md"}
               size="md"
               withAsterisk
-              {...form.getInputProps("competition_code")}
+              {...form.getInputProps("competition_id")}
               onChange={onChangeCompetition}
               w={"100%"}
             />
@@ -372,7 +361,7 @@ function Studentsform({
               mt={"md"}
               size="md"
               withAsterisk
-              {...form.getInputProps("class_code")}
+              {...form.getInputProps("class_id")}
               onChange={onChangeClass}
               w={"100%"}
             />

@@ -2,6 +2,7 @@ import { setGetData } from "@/helpers/getLocalStorage";
 import {
   admitCardCountData,
   certificateDownload,
+  downloadMarksSheet,
   omrSheetDownload,
   omrSheetDownloadStudent,
   readCompetitions,
@@ -55,15 +56,22 @@ function DownLoadProduct() {
       admitCard: admitCardCountData,
       certificate: certificateDownload,
       omr: omrSheetDownloadStudent,
-      marksheet: omrSheetDownload,
+      marksheet: downloadMarksSheet,
     };
-    let payload = { username: [userDataDetails?.username], competition: allData.competition };
+    let payload = { username: [userDataDetails?.username], competition: allData.competition, whitbackground: true };
+
     setLoader(true);
     let callApi = apis[item.key](payload);
     callApi
       .then((res: any) => {
         setLoader(false);
-        setUrl({ ...url, [item.apiKey]: res.data[item.apiKey] });
+        let dataObj = res.data;
+
+        if (Array.isArray(dataObj)) {
+          dataObj = dataObj[0];
+        }
+
+        setUrl({ ...url, [item.apiKey]: dataObj[item.apiKey] });
         if (res.data[item.apiKey]) {
           var link = document.createElement("a");
           link.href = res.data[item.apiKey];
@@ -106,7 +114,7 @@ function DownLoadProduct() {
       key: "marksheet",
       type: "downloads",
       url: "https://i0.wp.com/www.sscgyan.com/wp-content/uploads/2019/02/OMR-Sheet-Pdf.jpg?fit=549%2C350&ssl=1",
-      apiKey: "marksheet_url",
+      apiKey: "marksheets_url",
     },
   ];
 
@@ -179,42 +187,44 @@ function DownLoadProduct() {
         className="justify-content-center "
         style={{ display: "flex", flexDirection: "row", gap: "25px", flexWrap: "wrap" }}
       >
-        {downloadsCardImages.map((item, index) => (
-          <div
-            key={index}
-            className="rounded"
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: "10px",
-              border: "1px solid gray",
-              padding: "10px",
-              width: "300px",
-            }}
-          >
-            <img
-              style={{ objectFit: "cover", width: "100%", borderRadius: "5px", height: "150px" }}
-              className="justify-align-item-center"
-              alt={item.label}
-              src={item.url}
-            />
-            {url[item.apiKey] ? (
-              <a href={url[item.apiKey]} className="form-control btn btn-primary">
-                {item.label}
-              </a>
-            ) : (
-              <button
-                className="form-control btn btn-outline-primary"
-                onClick={() => {
-                  callAPi(item, index);
-                }}
-              >
-                {item.label}
-              </button>
-            )}
-          </div>
-        ))}
+        {downloadsCardImages.map((item, index) => {
+          return (
+            <div
+              key={index}
+              className="rounded"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "10px",
+                border: "1px solid gray",
+                padding: "10px",
+                width: "300px",
+              }}
+            >
+              <img
+                style={{ objectFit: "cover", width: "100%", borderRadius: "5px", height: "150px" }}
+                className="justify-align-item-center"
+                alt={item.label}
+                src={item.url}
+              />
+              {url[item.apiKey] ? (
+                <a href={url[item.apiKey]} className="form-control btn btn-primary">
+                  {item.label}
+                </a>
+              ) : (
+                <button
+                  className="form-control btn btn-outline-primary"
+                  onClick={() => {
+                    callAPi(item, index);
+                  }}
+                >
+                  {item.label}
+                </button>
+              )}
+            </div>
+          );
+        })}
       </div>
       <Loader show={loader} />
     </div>
