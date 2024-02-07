@@ -276,7 +276,7 @@ export const readLandingData = async (
 
     requestBody["filter_var"] = {
       ...existingFilters,
-      country: countryVal ? countryVal : "India",
+      country_id: countryVal ? countryVal : "",
     };
   }
   try {
@@ -652,7 +652,7 @@ export const readProductsLanding = async (className: string, boardName: string, 
   requestBody["filter_var"] = {
     class: className,
     board: boardName,
-    country: countryVal || "India",
+    country_id: countryVal || "",
   };
 
   if (customData) {
@@ -1126,7 +1126,7 @@ const createOrder = async (product_name: string, userName: any) => {
   const geoInfo = await getGeographicalInformation();
   const countryFromGeoInfo = geoInfo.country_name;
   let requestBody: RequestBodyType = {
-    country: `${countryFromGeoInfo}`,
+    country_id: `${countryFromGeoInfo}`,
     product_name: product_name,
     registration_number: userName,
   };
