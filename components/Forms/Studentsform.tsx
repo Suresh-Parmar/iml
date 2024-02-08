@@ -202,7 +202,7 @@ function Studentsform({
       competition_code: (value: any) => (value?.length === 0 ? "Competition must be selected" : null),
       state_id: (value: any) => (value?.length === 0 ? "State must be selected" : null),
       city_id: (value: any) => (value?.length === 0 ? "City must be selected" : null),
-      exam_center_id: (value: any) => (value?.length === 0 ? "Exam center must be selected" : null),
+      exam_id: (value: any) => (value?.length === 0 ? "Exam center must be selected" : null),
       consented: (value: any) => (value === true || value === false ? null : "Communication consent must be set"),
     },
   });
@@ -292,7 +292,10 @@ function Studentsform({
   };
 
   const onChangeExamCenter = async (event: string) => {
-    form.setFieldValue("exam_center_id", event);
+    const examCenterData = findFromJson(examCentersNames, event, "_id");
+
+    form.setFieldValue("exam_center_code", examCenterData.code);
+    form.setFieldValue("exam_id", event);
   };
 
   const onChangeClass = async (event: string) => {
@@ -310,7 +313,7 @@ function Studentsform({
   const schoolNames = filterData(schoolsData, "label", "value", "_id");
   const cityNames = filterData(citiesData, "label", "value", "_id");
   const stateNames = filterData(statesData, "label", "value", "_id");
-  let examCentersNames = filterDataMulti(examCentersData, "name", "exam_center_id", "ID:", "exam_center_id");
+  let examCentersNames = filterDataMulti(examCentersData, "name", "exam_id", "ID:", "exam_id");
   examCentersNames = filterData(examCentersData, "label", "value", "_id");
   let competitionsNames = filterData(comeptitionsData, "label", "value", "_id");
   const classesNames = filterData(classesData, "label", "value", "_id", true, "order_code", undefined, true);
@@ -514,7 +517,7 @@ function Studentsform({
               mt={"md"}
               size="md"
               withAsterisk
-              {...form.getInputProps("exam_center_id")}
+              {...form.getInputProps("exam_id")}
               onChange={onChangeExamCenter}
               w={"100%"}
             />

@@ -164,6 +164,10 @@ export const readData = async (
 
   if (data) {
     requestBody = data;
+    if (data["filter_var"] && !data["filter_var"]?.country_id) {
+      data["filter_var"].country_id = getSelectedCountry();
+      delete data["filter_var"].country;
+    }
   }
 
   // return;
