@@ -118,32 +118,32 @@ function ProductForm({
     setCompetitions(competitionsRes);
   }
 
-  const getClassesValues = (classesArr: any) => {
-    let newclasses: any = [];
-    if (Array.isArray(classesArr)) {
-      classesArr.map((item) => {
-        let obj = findFromJson(classes, item, "_id");
-        newclasses.push(obj.code);
-      });
-    } else {
-      return [];
-    }
+  // const getClassesValues = (classesArr: any, key = "_id") => {
+  //   let newclasses: any = [];
+  //   if (Array.isArray(classesArr)) {
+  //     classesArr.map((item) => {
+  //       let obj = findFromJson(classes, item, key);
+  //       newclasses.push(obj.code);
+  //     });
+  //   } else {
+  //     return [];
+  //   }
 
-    return newclasses;
-  };
+  //   return newclasses;
+  // };
 
   async function fetchProducts() {
-    let updatedClasses = getClassesValues(form.values.class);
+    // let updatedClasses = getClassesValues(form.values.class);
 
-    const productsRes = await readProducts("class", updatedClasses);
+    const productsRes = await readProducts("class", form.values.class);
     setProducts(productsRes);
   }
 
   useEffect(() => {
-    if (form.values.class_id && form.values.bundle) {
+    if (form.values.class && form.values.bundle) {
       fetchProducts();
     }
-  }, [form.values.bundle, form.values.class_id]);
+  }, [form.values.bundle, form.values.class]);
 
   // Fetch Product Types
   useEffect(() => {
@@ -250,11 +250,13 @@ function ProductForm({
   // board_type
 
   const productTypesOptions = filterData(productTypes, "label", "value", "_id");
-  let board_category = filterData(boards, "label", "value", "_id");
-  const classesOptions = filterData(classes, "label", "value", "_id", true, "order_code", undefined, true);
+  let board_category = filterData(structuredClone(boards), "label", "value", "_id");
+  const classesOptions = filterData(classes, "label", "value", "code", true, "order_code", undefined, true);
   const subjectsOptions = filterData(subjects, "label", "value", "_id");
   const competitionsOptions = filterData(competitions, "label", "value", "_id");
   let boardsOptions = [];
+
+  console.log(board_category, "board_category");
 
   let formValues: any = form.values;
 
@@ -266,7 +268,7 @@ function ProductForm({
       }
     });
 
-    boardsOptions = filterData(dataBoard, "label", "value", "_id");
+    boardsOptions = filterData(dataBoard, "label", "value", "name");
   }
 
   useEffect(() => {
@@ -420,9 +422,9 @@ function ProductForm({
             mt={"md"}
             size="md"
             withAsterisk
-            {...form.getInputProps("boards_id")}
+            {...form.getInputProps("boards")}
             onChange={(value) => {
-              form.setFieldValue("boards_id", value ?? "");
+              form.setFieldValue("boards", value ?? "");
             }}
             w={"100%"}
           />
@@ -436,7 +438,7 @@ function ProductForm({
             mt={"md"}
             size="md"
             withAsterisk
-            {...form.getInputProps("class_id")}
+            {...form.getInputProps("class")}
             w={"100%"}
           />
           <Radio.Group
