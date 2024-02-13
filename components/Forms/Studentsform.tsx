@@ -130,7 +130,7 @@ function Studentsform({
     if (formType == "Students") {
       readApiData("cohorts")
         .then((res) => {
-          setCohortsData(filterData(res, "label", "value", "_id"));
+          setCohortsData(filterData(res, "label", "value", "code"));
         })
         .catch((error) => console.error(error));
     }
@@ -140,7 +140,7 @@ function Studentsform({
     if (formType == "Students") {
       readApiData("groups")
         .then((res) => {
-          setGroupData(filterData(res, "label", "value", "_id"));
+          setGroupData(filterData(res, "label", "value", "code"));
         })
         .catch((error) => console.error(error));
     }
@@ -294,7 +294,7 @@ function Studentsform({
   const onChangeExamCenter = async (event: string) => {
     const examCenterData = findFromJson(examCentersNames, event, "_id");
 
-    form.setFieldValue("exam_center_code", examCenterData.code);
+    form.setFieldValue("exam_center_code", examCenterData.exam_center_id);
     form.setFieldValue("exam_id", event);
   };
 
@@ -389,9 +389,9 @@ function Studentsform({
                 name="groups"
                 mt={"md"}
                 size="md"
-                {...form.getInputProps("group_id")}
+                {...form.getInputProps("group_code")}
                 onChange={(value) => {
-                  form.setFieldValue("group_id", value ?? "");
+                  form.setFieldValue("group_code", value ?? "");
                 }}
                 w={"100%"}
               />
@@ -404,9 +404,9 @@ function Studentsform({
                 name="cohorts"
                 mt={"md"}
                 size="md"
-                {...form.getInputProps("cohort_id")}
+                {...form.getInputProps("cohort")}
                 onChange={(value) => {
-                  form.setFieldValue("cohort_id", value ?? "");
+                  form.setFieldValue("cohort", value ?? "");
                 }}
                 w={"100%"}
               />
