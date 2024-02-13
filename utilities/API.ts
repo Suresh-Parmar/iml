@@ -75,7 +75,7 @@ let selectedCountryLocal = setGetData("selectedCountry", "", true);
 
 const getSelectedCountry = () => {
   const state = getReduxState();
-  return state?.data?.selectedCountry?.label || selectedCountryLocal?.country_code || userData?.user?.country;
+  return state?.data?.selectedCountry?._id || selectedCountryLocal?._id || userData?.user?.country;
 };
 
 async function getGeographicalInformation() {
@@ -113,7 +113,7 @@ export const readDataCustomFilter = async (
 
   if (Object.keys(filters).length) {
     requestBody["filter_var"] = {
-      country: getSelectedCountry(),
+      country_id: getSelectedCountry(),
       ...filters,
     };
   }
@@ -158,12 +158,16 @@ export const readData = async (
     const existingFilters: any = requestBody?.["filter_var"] ?? {};
     requestBody["filter_var"] = {
       ...existingFilters,
-      country: getSelectedCountry(),
+      country_id: getSelectedCountry(),
     };
   }
 
   if (data) {
     requestBody = data;
+    if (data["filter_var"] && !data["filter_var"]?.country_id) {
+      data["filter_var"].country_id = getSelectedCountry();
+      delete data["filter_var"].country;
+    }
   }
 
   // return;
@@ -207,7 +211,7 @@ const updateData = async (
   };
   if (filterBy && filterQuery) {
     requestBody["filter_var"] = {
-      country: getSelectedCountry(),
+      country_id: getSelectedCountry(),
       [filterBy]: filterQuery,
     };
   }
@@ -236,13 +240,13 @@ const updateDataRes = async (
       if (!requestBody.update_var.country) requestBody.update_var.country = getSelectedCountry();
     } else {
       requestBody.new_var = updateBody || {};
-      if (!requestBody.new_var.country) requestBody.new_var.country = getSelectedCountry();
+      if (!requestBody.new_var.country_id) requestBody.new_var.country_id = getSelectedCountry();
     }
   }
 
   if (filterBy && filterQuery) {
     requestBody["filter_var"] = {
-      country: getSelectedCountry(),
+      country_id: getSelectedCountry(),
       [filterBy]: filterQuery,
     };
   }
@@ -276,7 +280,7 @@ export const readLandingData = async (
 
     requestBody["filter_var"] = {
       ...existingFilters,
-      country: countryVal ? countryVal : "India",
+      country_id: countryVal ? countryVal : "",
     };
   }
   try {
@@ -301,6 +305,10 @@ export const LandingForms = async (
   filterBy?: "name" | "country_id" | "state" | "city" | "status" | "role" | "country" | "class",
   filterQuery?: string | number | boolean
 ) => {
+  if (!values?.country_id) {
+    values.country_id = getSelectedCountry();
+  }
+
   let requestBody: RequestBodyType = {
     collection_name: `${tableName}`,
     op_name: `create`,
@@ -415,7 +423,7 @@ const createData = async (tableName: string, operationType: "create", payload: M
   if (filterCountry) {
     newPayload = {
       ...payload,
-      country: getSelectedCountry(),
+      country_id: getSelectedCountry(),
     };
   }
 
@@ -648,7 +656,7 @@ export const readProductsLanding = async (className: string, boardName: string, 
   requestBody["filter_var"] = {
     class: className,
     board: boardName,
-    country: countryVal || "India",
+    country_id: countryVal || "",
   };
 
   if (customData) {
@@ -872,7 +880,7 @@ const createOtherUsers = async (payload: MatrixRowType) => {
     `${OTHER_USER_CREATION}`,
     {
       ...payload,
-      country: getSelectedCountry(),
+      country_id: getSelectedCountry(),
     },
     {
       headers: getAPIHeaders(),
@@ -886,7 +894,7 @@ const createStudent = async (payload: MatrixRowType) => {
     `${STUDENT_NEXT_API}`,
     {
       ...payload,
-      country: getSelectedCountry(),
+      country_id: getSelectedCountry(),
     },
     {
       headers: getAPIHeaders(),
@@ -900,7 +908,7 @@ const createStudentSignUp = (payload: MatrixRowType) => {
     `${STUDENT_SIGNUP_NEXT_API}`,
     {
       ...payload,
-      country: getSelectedCountry(),
+      country_id: getSelectedCountry(),
     },
     {
       headers: getAPIHeaders(),
@@ -1122,7 +1130,7 @@ const createOrder = async (product_name: string, userName: any) => {
   const geoInfo = await getGeographicalInformation();
   const countryFromGeoInfo = geoInfo.country_name;
   let requestBody: RequestBodyType = {
-    country: `${countryFromGeoInfo}`,
+    country_id: `${countryFromGeoInfo}`,
     product_name: product_name,
     registration_number: userName,
   };

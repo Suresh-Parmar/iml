@@ -4,7 +4,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { MatrixDataType, MatrixRowType } from "../Matrix";
 import { createState, readCountries, readStates, updateState } from "@/utilities/API";
 import { notifications } from "@mantine/notifications";
-import { filterDataSingle } from "@/helpers/dropDownData";
+import { filterData } from "@/helpers/filterData";
 
 function StateForm({
   open,
@@ -47,7 +47,7 @@ function StateForm({
     initialValues: {
       name: rowData?.name ?? "",
       status: rowData?.status ?? true,
-      country: rowData?.country ?? "",
+      country_id: rowData?.country_id ?? "",
     },
     validate: {
       name: (value) => (value.length < 2 ? "Name must have at least 2 letters" : null),
@@ -97,19 +97,19 @@ function StateForm({
     }
     form.setValues({
       name: "",
-      country: "",
+      country_id: "",
       status: true,
     });
     close();
   };
 
   const onChangeCountry = async (event: any) => {
-    form.setFieldValue("country", event || "");
+    form.setFieldValue("country_id", event || "");
   };
 
   // const countryNames = countriesData.filter((c) => Boolean(c.status)).map((country) => country.name);
 
-  const countryNames = filterDataSingle(countriesData || [], "name");
+  const countryNames = filterData(countriesData, "label", "value", "_id");
 
   return (
     <Box maw={"100%"} mx="auto" mih={500}>
@@ -140,7 +140,7 @@ function StateForm({
             mt={"md"}
             size="md"
             withAsterisk
-            {...form.getInputProps("country")}
+            {...form.getInputProps("country_id")}
             onChange={onChangeCountry}
             w={"100%"}
             dropdownPosition="bottom"

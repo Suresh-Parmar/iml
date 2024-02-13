@@ -4,7 +4,6 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { MatrixDataType, MatrixRowType } from "../Matrix";
 import { createCompetition, readClasses, readCompetitions, readData, updateCompetition } from "@/utilities/API";
 import { notifications } from "@mantine/notifications";
-import { getReduxState } from "@/redux/hooks";
 import Editor from "../editor/editor";
 import { useSelector } from "react-redux";
 import { setGetData } from "@/helpers/getLocalStorage";
@@ -28,7 +27,7 @@ function CompetitionForm({
   setFormTitle: Dispatch<SetStateAction<string>>;
   readonly?: boolean;
 }) {
-  const [subjects, setSubjects] = useState<MatrixDataType>();
+  const [subjects, setSubjects] = useState<MatrixDataType>([]);
   const [classesData, setClassesData] = useState<any>([]);
 
   const readSubjects = async () => {
@@ -68,6 +67,7 @@ function CompetitionForm({
       mode_id: (value) => (value?.length === 0 ? "Mode must be selected" : null),
     },
   });
+
   let formValues: any = form.values;
   const [oLoader, setOLoader] = useState<boolean>(false);
   let reduxData = useSelector((state: any) => state.data);
@@ -130,13 +130,7 @@ function CompetitionForm({
     close();
   };
 
-  let subjectNames: any = [];
-
-  subjects?.map((subject) => {
-    if (subject.name && subject.status) {
-      subjectNames.push(subject.name);
-    }
-  });
+  let subjectNames: any = filterData(subjects, "label", "value", "_id");
 
   const classesDataJson = () => {
     let data: any = [];
@@ -173,8 +167,6 @@ function CompetitionForm({
 
     return "";
   };
-
-  console.log(formValues);
 
   let dataObj = [
     {

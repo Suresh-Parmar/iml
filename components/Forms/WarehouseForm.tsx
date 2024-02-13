@@ -63,14 +63,14 @@ function WarehouseForm({
 
   async function readStatesData(filterBy?: "country", filterQuery?: string | number) {
     let states = await readStates(filterBy, filterQuery);
-    states = filterData(states, "label", "value");
+    states = filterData(states, "label", "value", "_id");
     setStatesData(states);
   }
 
   async function readCitiesData(filterBy?: "state", filterQuery?: string | number) {
     let cities: any[];
     cities = await readCities(filterBy, filterQuery);
-    cities = filterData(cities, "label", "value");
+    cities = filterData(cities, "label", "value", "_id");
     setCitiesData(cities);
   }
 

@@ -14,8 +14,7 @@ import {
 import { notifications } from "@mantine/notifications";
 import { maxLength, validatePhone } from "@/helpers/validations";
 import Editor from "../editor/editor";
-import { filterDataMulti, filterDataSingle } from "@/helpers/dropDownData";
-import { filterData, formatedDate } from "@/helpers/filterData";
+import { filterData } from "@/helpers/filterData";
 import { findFromJson } from "@/helpers/filterFromJson";
 import { DateinputCustom } from "../utils";
 import { dateInputHandler } from "@/helpers/dateHelpers";
@@ -49,7 +48,7 @@ function ExamCenterForm({
 
   const readTemplates = async () => {
     const templates = await readTempates("templatetype", "instruction");
-    let data = filterData(templates, "label", "value");
+    let data = filterData(templates, "label", "value", "_id");
     settemplatesData(data);
   };
 
@@ -111,14 +110,14 @@ function ExamCenterForm({
       result_date: (value) => (value.toString()?.length === 0 ? "Result date must be selected" : null),
       time: (value) => (value.length === 0 ? "Time must be entered" : null),
       mode: (value) => (value.length === 0 ? "Mode must be selected" : null),
-      competition: (value) => (value?.length === 0 ? "Competition must be selected" : null),
+      competition_id: (value) => (value?.length === 0 ? "Competition must be selected" : null),
     },
   });
 
   const [oLoader, setOLoader] = useState<boolean>(false);
 
   const onChangeCompetitions = async (event: string) => {
-    form.setFieldValue("competition", event ?? "");
+    form.setFieldValue("competition_id", event ?? "");
   };
 
   const onHandleSubmit = async (values: any) => {
@@ -194,14 +193,15 @@ function ExamCenterForm({
     close();
   };
 
-  const competitionsNames = filterDataMulti(comeptitionsData, "name", "code");
-  const cityNames = filterDataSingle(citiesData || [], "name");
-  const stateNames = filterDataSingle(statesData || [], "name");
+  const competitionsNames = filterData(comeptitionsData, "label", "value", "_id");
+  const cityNames = filterData(citiesData, "label", "value", "_id");
+  const stateNames = filterData(statesData, "label", "value", "_id");
 
   const onChangeState = async (event: any) => {
-    form.setFieldValue("state", event || "");
-    form.setFieldValue("city", "");
-    await readCitiesData("state", event);
+    form.setFieldValue("state_id", event || "");
+    form.setFieldValue("city_id", "");
+    let stateObj = findFromJson(stateNames, event, "_id");
+    await readCitiesData("state", stateObj.name);
   };
 
   const setDatesExtra = (e: any, keyArr: any[]) => {
@@ -229,7 +229,7 @@ function ExamCenterForm({
             mt={"md"}
             size="md"
             withAsterisk
-            {...form.getInputProps("competition")}
+            {...form.getInputProps("competition_id")}
             onChange={onChangeCompetitions}
             w={"100%"}
           />
@@ -303,13 +303,13 @@ function ExamCenterForm({
             mt={"md"}
             size="md"
             withAsterisk
-            {...form.getInputProps("state")}
+            {...form.getInputProps("state_id")}
             onChange={onChangeState}
             w={"100%"}
           />
           <Select
             clearable
-            disabled={readonly || form.values.state === ""}
+            disabled={readonly || form.values.state_id === ""}
             searchable
             nothingFound="No options"
             data={cityNames}
@@ -317,7 +317,7 @@ function ExamCenterForm({
             mt={"md"}
             size="md"
             withAsterisk
-            {...form.getInputProps("city")}
+            {...form.getInputProps("city_id")}
             w={"100%"}
           />
 

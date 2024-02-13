@@ -19,6 +19,7 @@ import { notifications } from "@mantine/notifications";
 import { findFromJson } from "@/helpers/filterFromJson";
 import { useFinduserGeoLocationQuery } from "@/redux/apiSlice";
 import { iterateData } from "@/helpers/getData";
+import { filterData } from "@/helpers/filterData";
 
 function DispatchForm(props: any) {
   const { formType, setData, close, rowData, readonly } = props;
@@ -46,48 +47,13 @@ function DispatchForm(props: any) {
   const state: any = useSelector((state: any) => state.data);
   const countryName = state?.selectedCountry?.label;
 
-  const filterData = (data: any[], key: string, val: string, findkey: any = "") => {
-    let newData: any[] = [];
-    if (Array.isArray(data)) {
-      data.forEach((element: any) => {
-        element[key] = element.name;
-        element[val] = findkey ? element[findkey] : element.name;
-        if (element.group) {
-          element.groupName = element.group;
-          delete element.group;
-        }
-
-        if (element.status && element[key] && element[key] != "None") {
-          let data = newData.find((elm) => elm[key] == element[key]);
-
-          if (!data) {
-            newData.push(element);
-          }
-        }
-      });
-    }
-
-    return newData.sort((a: any, b: any) => {
-      let fa = a.label.toLowerCase(),
-        fb = b.label.toLowerCase();
-
-      if (fa < fb) {
-        return -1;
-      }
-      if (fa > fb) {
-        return 1;
-      }
-      return 0;
-    });
-  };
-
   // fetch data
 
   async function readStatesData(filterBy?: "country", filterQuery?: string | number) {
     setLoader(true);
     let states = await readStates(filterBy, filterQuery);
     setLoader(false);
-    states = filterData(states, "label", "value");
+    states = filterData(states, "label", "value", "_id");
     setStatesData(states);
   }
 
@@ -95,7 +61,7 @@ function DispatchForm(props: any) {
     setLoader(true);
     let newData = await readApiData("dispatch_status");
     setLoader(false);
-    newData = filterData(newData, "label", "value");
+    newData = filterData(newData, "label", "value", "_id");
     setstatusData(newData);
   }
 
@@ -103,14 +69,14 @@ function DispatchForm(props: any) {
     setLoader(true);
     const rm = await readRelationshipManagers();
     setLoader(false);
-    let newData = filterData(rm, "label", "value", "username");
+    let newData = filterData(rm, "label", "value", "_id");
     setRMData(newData);
   };
 
   const readStudentsData = async () => {
     setLoader(true);
     const students = await readStudents();
-    let newData = filterData(students, "label", "value", "username");
+    let newData = filterData(students, "label", "value", "_id");
     setLoader(false);
 
     setStudentsData(newData);
@@ -119,15 +85,16 @@ function DispatchForm(props: any) {
   async function readCitiesData(filterBy?: "state", filterQuery?: string | number) {
     let cities: any[];
     cities = await readCities(filterBy, filterQuery);
-    cities = filterData(cities, "label", "value");
+    cities = filterData(cities, "label", "value", "_id");
     setCitiesData(cities);
   }
 
   async function readSchoolsData() {
+    let cityName = findFromJson(citiesData, allData.city_id, "_id");
     setLoader(true);
-    const schools = await readSchools("city", allData.city);
+    const schools = await readSchools("city", cityName.name);
     setLoader(false);
-    let data = filterData(schools, "label", "value", "code");
+    let data = filterData(schools, "label", "value", "_id");
     setSchoolsDataDropDown(data);
   }
 
@@ -135,7 +102,7 @@ function DispatchForm(props: any) {
     setLoader(true);
     const products = await readProducts();
     setLoader(false);
-    let data = filterData(products, "label", "value");
+    let data = filterData(products, "label", "value", "_id");
     setProducts(data);
   };
 
@@ -143,28 +110,32 @@ function DispatchForm(props: any) {
     setLoader(true);
     const newData = await readApiData("warehouses");
     setLoader(false);
-    let data = filterData(newData, "label", "value");
+    let data = filterData(newData, "label", "value", "_id");
     setcourierData(data);
   };
 
   // fetch data
 
   useEffect(() => {
-    countryName && fetchCourierName();
-    countryName && readStatesData();
-    countryName && readReadRelationshipManagers();
-    countryName && readStudentsData();
-    countryName && readProductsData();
-    countryName && readStatusData();
+    if (countryName) {
+      fetchCourierName();
+      readStatesData();
+      readReadRelationshipManagers();
+      readStudentsData();
+      readProductsData();
+      readStatusData();
+    }
   }, [countryName]);
 
   useEffect(() => {
-    allData.state && readCitiesData("state", allData.state);
-  }, [allData.state]);
+    let stateName = findFromJson(statesData, allData.state_id, "_id");
+
+    allData.state_id && readCitiesData("state", stateName.name);
+  }, [allData.state_id]);
 
   useEffect(() => {
-    allData.city && readSchoolsData();
-  }, [allData.city]);
+    allData.city_id && readSchoolsData();
+  }, [allData.city_id]);
 
   const handleDropDownChange = (e: any, key: any, clear?: any) => {
     if (clear) {
@@ -272,9 +243,9 @@ function DispatchForm(props: any) {
       style: { minWidth: "48%" },
       data: statesData,
       onChange: (e: any) => {
-        handleDropDownChange(e, "state", "city");
+        handleDropDownChange(e, "state_id", "city");
       },
-      value: allData.state,
+      value: allData.state_id,
     },
     {
       label: "City",
@@ -282,9 +253,9 @@ function DispatchForm(props: any) {
       type: "select",
       data: citiesData,
       onChange: (e: any) => {
-        handleDropDownChange(e, "city", "filterTypeStudent");
+        handleDropDownChange(e, "city_id", "filterTypeStudent");
       },
-      value: allData.city,
+      value: allData.city_id,
     },
     {
       style: { minWidth: "48%" },
@@ -783,8 +754,8 @@ function DispatchForm(props: any) {
       country: countryName,
       receiver_type: allData?.childSchoolData?.label,
       receiver_name: allData.receiver_name,
-      city: allData.city,
-      state: allData.state,
+      city: allData.city_id,
+      state: allData.state_id,
       // dispatch_date: allData.dispatch_date,
       eway_bill_no: allData["eway_bill_no"] || "",
       approx_weight: allData.approx_weight,
@@ -862,8 +833,8 @@ function DispatchForm(props: any) {
       country: countryName,
       receiver_type: allData?.childSchoolData?.label,
       receiver_name: allData.receiver_name,
-      city: allData.city,
-      state: allData.state,
+      city: allData.city_id,
+      state: allData.state_id,
       // dispatch_date: allData.dispatch_date,
       eway_bill_no: allData["eway_bill_no"] || "",
       approx_weight: allData.approx_weight,

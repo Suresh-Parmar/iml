@@ -16,12 +16,13 @@ import {
 } from "@/utilities/API";
 import { notifications } from "@mantine/notifications";
 import { checkValidEmailOrNot, maxLength } from "@/helpers/validations";
-import { filterDrodownData } from "@/helpers/filterFromJson";
+import { filterDrodownData, findFromJson } from "@/helpers/filterFromJson";
 import { filterDataSingle } from "@/helpers/dropDownData";
 import { useSelector } from "react-redux";
 import { setGetData } from "@/helpers/getLocalStorage";
 import { DateinputCustom } from "../utils";
 import { dateInputHandler } from "@/helpers/dateHelpers";
+import { filterData } from "@/helpers/filterData";
 
 function SchoolForm({
   open,
@@ -35,7 +36,7 @@ function SchoolForm({
   open: () => void;
   close: () => void;
   setData: Dispatch<SetStateAction<MatrixDataType>>;
-  rowData?: MatrixRowType;
+  rowData?: any;
   setRowData: Dispatch<SetStateAction<MatrixRowType | undefined>>;
   setFormTitle: Dispatch<SetStateAction<string>>;
   readonly?: boolean;
@@ -66,10 +67,11 @@ function SchoolForm({
   }, []);
 
   useEffect(() => {
-    if (rowData?.state) {
-      readCitiesData("state", rowData?.state);
+    if (rowData?.state_id) {
+      let stateName = findFromJson(stateNames, rowData?.state_id, "_id");
+      readCitiesData("state", stateName.name);
     }
-  }, [rowData?.state]);
+  }, [rowData?.state_id]);
 
   async function readCitiesData(filterBy?: "state", filterQuery?: string | number) {
     let cities: MatrixDataType;
@@ -93,7 +95,7 @@ function SchoolForm({
 
   async function readDataGroups() {
     const newData = await readApiData("groups");
-    let newDataFilter = filterDrodownData(newData, "name", "name");
+    let newDataFilter = filterData(newData, "label", "value", "_id");
     setgroupData(newDataFilter);
   }
 
@@ -164,8 +166,8 @@ function SchoolForm({
       // relationship_manager: (value) => (value.length < 2 ? "must have at least 2 letters" : null),
       // group: (value) => (value.length < 2 ? "must be selected" : null),
       // board: (value) => (value.length === 0 ? "Board must be selected" : null),
-      state: (value: any) => (!value?.length ? "State must be selected" : null),
-      city: (value: any) => (!value?.length ? "City must be selected" : null),
+      state_id: (value: any) => (!value?.length ? "State must be selected" : null),
+      city_id: (value: any) => (!value?.length ? "City must be selected" : null),
       // address: (value) => (value.length < 2 ? "Address must have at least 50 letters" : null),
       // name_address: (value) => (value.length < 2 ? "Address must have at least 50 letters" : null),
       // label: (value) => (value.length < 2 ? "Address must have at least 50 letters" : null),
@@ -176,6 +178,8 @@ function SchoolForm({
     },
   });
   const [oLoader, setOLoader] = useState<boolean>(false);
+
+  console.log(form.values, "formvalues");
 
   const onHandleSubmit = async (values: any) => {
     setOLoader(true);
@@ -237,23 +241,24 @@ function SchoolForm({
       examdate: values.exam_date,
       mode: values.exam_mode,
       name: values.name,
-      state: values.state,
-      city: values.city,
+      state_id: values.state_id,
+      city_id: values.city_id,
     };
 
     const isExamCenterCreated = await createExamCenter(genratedPayload);
-    console.log(isExamCenterCreated);
   };
 
   const onChangeState = async (event: any) => {
-    form.setFieldValue("state", event || "");
-    form.setFieldValue("city", "");
-    await readCitiesData("state", event);
+    form.setFieldValue("state_id", event || "");
+    form.setFieldValue("city_id", "");
+    let stateName = findFromJson(stateNames, event, "_id");
+
+    await readCitiesData("state", stateName.name);
   };
 
-  const cityNames = filterDataSingle(citiesData || [], "name");
-  const boardNames = filterDataSingle(boardsData || [], "name");
-  const stateNames = filterDataSingle(statesData || [], "name");
+  const cityNames = filterData(citiesData, "label", "value", "_id");
+  const boardNames = filterData(boardsData, "label", "value", "_id");
+  const stateNames = filterData(statesData, "label", "value", "_id");
 
   const renderExtraFields = () => {
     if (form?.values?.create_exam_center) {
@@ -384,7 +389,7 @@ function SchoolForm({
               mt={"md"}
               size="md"
               // withAsterisk
-              {...form.getInputProps("board")}
+              {...form.getInputProps("board_id")}
               w={"100%"}
             />
             <TextInput
@@ -408,7 +413,7 @@ function SchoolForm({
               mt={"md"}
               size="md"
               // withAsterisk
-              {...form.getInputProps("group")}
+              {...form.getInputProps("group_id")}
               w={"100%"}
             />
             <TextInput
@@ -476,13 +481,13 @@ function SchoolForm({
               mt={"md"}
               size="md"
               withAsterisk
-              {...form.getInputProps("state")}
+              {...form.getInputProps("state_id")}
               onChange={onChangeState}
               w={"100%"}
             />
             <Select
               clearable
-              disabled={readonly || form.values.state === ""}
+              disabled={readonly || form.values.state_id === ""}
               searchable
               nothingFound="No options"
               data={cityNames}
@@ -490,7 +495,7 @@ function SchoolForm({
               mt={"md"}
               size="md"
               withAsterisk
-              {...form.getInputProps("city")}
+              {...form.getInputProps("city_id")}
               w={"100%"}
             />
             <TextInput
@@ -523,7 +528,7 @@ function SchoolForm({
               mt={"md"}
               size="md"
               // withAsterisk
-              {...form.getInputProps("relationship_manager")}
+              {...form.getInputProps("relationship_manager_id")}
               w={"100%"}
             />
             <Select
@@ -537,7 +542,7 @@ function SchoolForm({
               mt={"md"}
               size="md"
               // withAsterisk
-              {...form.getInputProps("principal")}
+              {...form.getInputProps("principal_id")}
               w={"100%"}
             />
             <Select
@@ -551,7 +556,7 @@ function SchoolForm({
               placeholder="Teacher Incharge"
               size="md"
               // withAsterisk
-              {...form.getInputProps("teacher_incharge")}
+              {...form.getInputProps("teacher_incharge_id")}
               w={"100%"}
             />
             <TextInput

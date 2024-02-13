@@ -35,6 +35,8 @@ import Loader from "../common/Loader";
 import Editor from "../editor/editor";
 import { useSelector } from "react-redux";
 import { DateinputCustom } from "../utils";
+import { filterData } from "@/helpers/filterData";
+import { findFromJson } from "@/helpers/filterFromJson";
 
 function ProductForm({
   open,
@@ -116,7 +118,23 @@ function ProductForm({
     setCompetitions(competitionsRes);
   }
 
+  // const getClassesValues = (classesArr: any, key = "_id") => {
+  //   let newclasses: any = [];
+  //   if (Array.isArray(classesArr)) {
+  //     classesArr.map((item) => {
+  //       let obj = findFromJson(classes, item, key);
+  //       newclasses.push(obj.code);
+  //     });
+  //   } else {
+  //     return [];
+  //   }
+
+  //   return newclasses;
+  // };
+
   async function fetchProducts() {
+    // let updatedClasses = getClassesValues(form.values.class);
+
     const productsRes = await readProducts("class", form.values.class);
     setProducts(productsRes);
   }
@@ -225,33 +243,38 @@ function ProductForm({
   };
 
   const onChangeSubject = (value: string | null) => {
-    form.setFieldValue("subject", value ?? "");
+    form.setFieldValue("subject_id", value ?? "");
     // fetchCompetitions(value ?? "");
   };
 
-  const productTypesOptions = filterDataSingle(productTypes, "name");
-  let board_category = filterDataSingle(boards, "board_type");
-  const classesOptions = filterDataSingle(classes, "name", "", "", false);
-  const subjectsOptions = filterDataSingle(subjects, "name");
-  const competitionsOptions = filterDataSingle(competitions, "name");
+  // board_type
+
+  const productTypesOptions = filterData(productTypes, "label", "value", "_id");
+  let board_category = filterData(structuredClone(boards), "label", "value", "_id");
+  const classesOptions = filterData(classes, "label", "value", "code", true, "order_code", undefined, true);
+  const subjectsOptions = filterData(subjects, "label", "value", "_id");
+  const competitionsOptions = filterData(competitions, "label", "value", "_id");
   let boardsOptions = [];
+
+  console.log(board_category, "board_category");
 
   let formValues: any = form.values;
 
-  if (formValues.boardcategory) {
+  if (formValues.boardcategory_id) {
     let dataBoard: any = [];
     boards.map((item) => {
-      if (item.board_type == formValues.boardcategory) {
+      if (item._id == formValues.boardcategory_id) {
         dataBoard.push(item);
       }
     });
 
-    boardsOptions = filterDataSingle(dataBoard, "code");
+    boardsOptions = filterData(dataBoard, "label", "value", "name");
   }
 
   useEffect(() => {
-    formValues.subject && fetchCompetitions(formValues.subject ?? "");
-  }, [formValues.subject]);
+    let subjectValue = findFromJson(subjectsOptions, formValues.subject_id, "_id");
+    formValues.subject_id && fetchCompetitions(subjectValue?.name ?? "");
+  }, [formValues.subject_id]);
 
   const renderBundles = () => {
     if (!form.values.bundle) {
@@ -366,9 +389,9 @@ function ProductForm({
             mt={"md"}
             size="md"
             withAsterisk
-            {...form.getInputProps("producttype")}
+            {...form.getInputProps("producttype_id")}
             onChange={(value) => {
-              form.setFieldValue("producttype", value ?? "");
+              form.setFieldValue("producttype_id", value ?? "");
             }}
             w={"100%"}
           />
@@ -383,7 +406,7 @@ function ProductForm({
             mt={"md"}
             size="md"
             withAsterisk
-            {...form.getInputProps("boardcategory")}
+            {...form.getInputProps("boardcategory_id")}
             // onChange={(value) => {
             //   form.setFieldValue("boardcategory", value ?? "");
             // }}
@@ -492,7 +515,7 @@ function ProductForm({
             mt={"md"}
             size="md"
             withAsterisk
-            {...form.getInputProps("subject")}
+            {...form.getInputProps("subject_id")}
             onChange={onChangeSubject}
             w={"100%"}
           />
@@ -507,9 +530,9 @@ function ProductForm({
             mt={"md"}
             size="md"
             withAsterisk
-            {...form.getInputProps("competition")}
+            {...form.getInputProps("competition_id")}
             onChange={(value) => {
-              form.setFieldValue("competition", value ?? "");
+              form.setFieldValue("competition_id", value ?? "");
             }}
             w={"100%"}
           />
