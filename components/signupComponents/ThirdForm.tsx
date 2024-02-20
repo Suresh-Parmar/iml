@@ -4,6 +4,7 @@ import { readLandingData } from "@/utilities/API";
 import { Checkbox, Flex, Select, TextInput, Textarea } from "@mantine/core";
 import { Recaptcha } from "@/components/common";
 import { filterDataSingle } from "@/helpers/dropDownData";
+import { filterData } from "@/helpers/filterData";
 
 type ThirdFormProps = {
   form: any;
@@ -23,12 +24,12 @@ export default function ThirdForm({ form, setRecaptcha }: ThirdFormProps) {
   }
 
   async function readCitiesData(stateName: string) {
-    const cities = await readLandingData("cities", "find_many", "state", stateName);
+    const cities = await readLandingData("cities", "find_many", "state_id", stateName);
     setCitiesData(cities);
   }
 
   async function readSchoolsData(cityName: string) {
-    const schools = await readLandingData("schools", "find_many", "city", cityName);
+    const schools = await readLandingData("schools", "find_many", "city_id", cityName);
     setSchoolsData(schools);
   }
 
@@ -37,27 +38,27 @@ export default function ThirdForm({ form, setRecaptcha }: ThirdFormProps) {
   }, []);
 
   useEffect(() => {
-    form.values.city && readSchoolsData(form.values.city || "");
+    form.values.city_id && readSchoolsData(form.values.city_id || "");
   }, [form?.values?.city]);
 
   useEffect(() => {
-    form.values.state && readCitiesData(form.values.state || "");
-  }, [form?.values?.state]);
+    form.values.state_id && readCitiesData(form.values.state_id || "");
+  }, [form?.values?.state_id]);
 
-  const schoolNames = filterDataSingle(schoolsData || [], "name");
-  const stateNames = filterDataSingle(statesData || [], "name");
-  const cityNames = filterDataSingle(citiesData || [], "name");
+  const schoolNames = filterData(schoolsData, "label", "value", "_id");
+  const stateNames = filterData(statesData, "label", "value", "_id");
+  const cityNames = filterData(citiesData, "label", "value", "_id");
 
   const onChangeState = async (event: any) => {
-    form.setFieldValue("state", event || "");
-    form.setFieldValue("city", "");
+    form.setFieldValue("state_id", event || "");
+    form.setFieldValue("city_id", "");
     // const state = statesData.find((state) => state.name === event);
     // await readCitiesData(state?.name ?? "");
   };
 
   const onChangeCities = async (event: any) => {
-    form.setFieldValue("city", event || "");
-    form.setFieldValue("school_name", "");
+    form.setFieldValue("city_id", event || "");
+    form.setFieldValue("school_id", "");
   };
 
   return (
@@ -99,13 +100,13 @@ export default function ThirdForm({ form, setRecaptcha }: ThirdFormProps) {
         mt={"md"}
         size="md"
         withAsterisk
-        {...form.getInputProps("state")}
+        {...form.getInputProps("state_id")}
         onChange={onChangeState}
         w={"100%"}
       />
       <Select
         clearable
-        disabled={form.values.state === ""}
+        disabled={form.values.state_id === ""}
         searchable
         nothingFound="No options"
         data={cityNames}
@@ -114,7 +115,7 @@ export default function ThirdForm({ form, setRecaptcha }: ThirdFormProps) {
         mt={"md"}
         size="md"
         withAsterisk
-        {...form.getInputProps("city")}
+        {...form.getInputProps("city_id")}
         onChange={onChangeCities}
         w={"100%"}
       />
@@ -126,9 +127,9 @@ export default function ThirdForm({ form, setRecaptcha }: ThirdFormProps) {
         mt={"md"}
         size="md"
         withAsterisk
-        {...form.getInputProps("school_name")}
+        {...form.getInputProps("school_id")}
         onChange={(event) => {
-          form.setFieldValue("school_name", event ?? "");
+          form.setFieldValue("school_id", event ?? "");
         }}
         w={"100%"}
         label="School"
