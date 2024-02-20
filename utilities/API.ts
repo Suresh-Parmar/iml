@@ -4,6 +4,7 @@ import axios from "axios";
 import { GeographicalInformationType, RequestBodyType, PaymentResponseType, ContactUSType } from "./api-types";
 import { getReduxState } from "@/redux/hooks";
 import { clearLocalData, setGetData } from "@/helpers/getLocalStorage";
+import store from "@/redux/store";
 
 export const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 export const NEXT_API = `${BASE_URL}/crud_ops`;
@@ -74,8 +75,9 @@ axios.interceptors.response.use(
 let selectedCountryLocal = setGetData("selectedCountry", "", true);
 
 const getSelectedCountry = () => {
-  const state = getReduxState();
-  return state?.data?.selectedCountry?._id || selectedCountryLocal?._id || userData?.user?.country;
+  const state = store.getState();
+
+  return state?.data?.selectedCountry?._id || selectedCountryLocal?._id || userData?.user?.country_id;
 };
 
 async function getGeographicalInformation() {
@@ -142,6 +144,8 @@ export const readData = async (
   data?: any,
   getfullRes?: any
 ) => {
+  console.log(getSelectedCountry());
+
   let requestBody: RequestBodyType = {
     collection_name: `${tableName}`,
     op_name: `${operationType}`,
@@ -258,7 +262,7 @@ const updateDataRes = async (
 export const readLandingData = async (
   tableName: string,
   operationType: "find" | "find_many",
-  filterBy?: "name" | "country_id" | "state" | "city" | "status" | "role" | "country" | "class" | "mode",
+  filterBy?: any,
   filterQuery?: string | number | boolean
 ) => {
   let requestBody: RequestBodyType = {

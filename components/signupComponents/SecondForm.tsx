@@ -2,13 +2,12 @@ import { MatrixDataType } from "@/components/Matrix";
 import { filterDataSingle } from "@/helpers/dropDownData";
 import { setGetData } from "@/helpers/getLocalStorage";
 import { emailFormat, validatePhone } from "@/helpers/validations";
-import { getReduxState } from "@/redux/hooks";
 import { readLandingData } from "@/utilities/API";
-import { getInternationalDailingCode } from "@/utilities/countriesUtils";
 import { Flex, Select, TextInput } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { DateinputCustom } from "../utils";
+import { filterData } from "@/helpers/filterData";
 
 type SecondFormProps = {
   form: any;
@@ -28,12 +27,12 @@ export default function SecondForm({ form }: SecondFormProps) {
     readExamCentersData();
   }, []);
 
-  const examCentersNames = filterDataSingle(examCentersData || [], "name");
+  const examCentersNames = filterData(examCentersData, "label", "value", "exam_center_id");
 
   const onChangeExamCenter = async (event: any) => {
     form.setFieldValue("exam_center_code", event || "");
-    const iExamCenter = examCentersData.find((i) => i.name === event);
-    form.setFieldValue("exam_center_id", iExamCenter?._id ?? "");
+    const iExamCenter = examCentersData.find((i) => i.exam_center_id === event);
+    form.setFieldValue("exam_id", iExamCenter?._id ?? "");
   };
 
   let selectedCountryLocal = setGetData("selectedCountry", "", true);
