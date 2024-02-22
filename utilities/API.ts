@@ -659,7 +659,7 @@ export const readProductsLanding = async (className: string, boardName: string, 
 
   requestBody["filter_var"] = {
     class: className,
-    board: boardName,
+    board_id: boardName,
     country_id: countryVal || "",
   };
 
