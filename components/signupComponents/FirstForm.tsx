@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
-import Image from "next/image";
-import { Button, Card, Flex, Overlay, Select, Text } from "@mantine/core";
+import { Flex, Select } from "@mantine/core";
 
 import { readBoardsLanding, readClassesLanding, readProductsLanding } from "@/utilities/API";
 import { MatrixDataType } from "@/components/Matrix";
-import { CardImageUrl } from "../../pageComponents/utils";
 import { filterDataSingle } from "@/helpers/dropDownData";
 import { useSelector } from "react-redux";
 import { filterData } from "@/helpers/filterData";
@@ -27,9 +25,9 @@ export default function FirstForm({ form, onClickNext, setInvoiceBreakdown }: Fi
   }, [selectedCountry?.value]);
 
   useEffect(() => {
-    form.values.class_id && form.values.board && readProductsLandingData(form.values.class_id, form.values.board);
-    form.values.board && readClassesData();
-  }, [selectedCountry?.value, form.values.board]);
+    form.values.class_id && form.values.board_id && readProductsLandingData(form.values.class_id, form.values.board_id);
+    form.values.board_id && readClassesData();
+  }, [selectedCountry?.value, form.values.board_id]);
 
   async function readClassesData() {
     let classes: any = await readClassesLanding();
@@ -60,28 +58,18 @@ export default function FirstForm({ form, onClickNext, setInvoiceBreakdown }: Fi
     onClickNext();
   };
 
-  let handleFilter = (arr: any[], key: string) => {
-    let newArr = [];
-    for (let i = 0; i < arr.length; i++) {
-      if (arr[i][key] && arr[i].status) {
-        newArr.push(arr[i][key]);
-      }
-    }
-    return newArr;
-  };
-
   const classesNames = filterDataSingle(classesData, "name", "", "", false);
-  const boardsOptions = filterDataSingle(boards, "code");
+  const boardsOptions = filterData(boards, "label", "value", "_id");
 
   const onChangeClasses = (event: any) => {
     form.setFieldValue("class_id", event ?? "");
     const iClass = classesData.find((i) => i.name === event);
     form.setFieldValue("class_code", iClass?.code ?? "");
-    readProductsLandingData(iClass?.name ?? "", form.values.board);
+    readProductsLandingData(iClass?.name ?? "", form.values.board_id);
   };
 
   const onChangeBoard = (event: any) => {
-    form.setFieldValue("board", event ?? "");
+    form.setFieldValue("board_id", event ?? "");
     form.setFieldValue("class_code", "");
     form.setFieldValue("class_id", "");
     // readClassesData();
@@ -99,7 +87,7 @@ export default function FirstForm({ form, onClickNext, setInvoiceBreakdown }: Fi
         mt={"md"}
         size="md"
         withAsterisk
-        {...form.getInputProps("board")}
+        {...form.getInputProps("board_id")}
         onChange={onChangeBoard}
         w={"100%"}
       />

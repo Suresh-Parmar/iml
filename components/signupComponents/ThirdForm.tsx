@@ -3,7 +3,6 @@ import { MatrixDataType } from "@/components/Matrix";
 import { readLandingData } from "@/utilities/API";
 import { Checkbox, Flex, Select, TextInput, Textarea } from "@mantine/core";
 import { Recaptcha } from "@/components/common";
-import { filterDataSingle } from "@/helpers/dropDownData";
 import { filterData } from "@/helpers/filterData";
 
 type ThirdFormProps = {
@@ -39,7 +38,7 @@ export default function ThirdForm({ form, setRecaptcha }: ThirdFormProps) {
 
   useEffect(() => {
     form.values.city_id && readSchoolsData(form.values.city_id || "");
-  }, [form?.values?.city]);
+  }, [form?.values?.city_id]);
 
   useEffect(() => {
     form.values.state_id && readCitiesData(form.values.state_id || "");
