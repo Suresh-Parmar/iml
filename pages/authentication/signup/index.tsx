@@ -103,9 +103,8 @@ export default function SignUp() {
     initialValues: {
       name: "",
       address: "",
-      country: "",
-      state: "",
-      city: "",
+      state_id: "",
+      city_id: "",
       pincode: "",
       email_1: "",
       email_2: "",
@@ -113,7 +112,7 @@ export default function SignUp() {
       mobile_2: "",
       dob: "",
       gender: "",
-      school_name: "",
+      school_id: "",
       section: "",
       class_id: "",
       competition: "",
@@ -121,7 +120,7 @@ export default function SignUp() {
       status: true,
       exam_center_code: "",
       consented: true,
-      exam_center_id: "",
+      exam_id: "",
       class_code: "",
       competition_code: "",
       country_code: getSelectedCountry(),
@@ -151,11 +150,11 @@ export default function SignUp() {
 
       if (active === 2) {
         return {
-          school_name: values.school_name === "" ? "School must be selected" : null,
+          school_id: values.school_id === "" ? "School must be selected" : null,
           // section: values.section.length < 1 ? "Section must have at least 1 letters" : null,
           address: values.address.length < 2 ? "Section must have at least 2 letters" : null,
-          state: values.state === "" ? "State must be selected" : null,
-          city: values.city === "" ? "City must be selected" : null,
+          state_id: values.state_id === "" ? "State must be selected" : null,
+          city_id: values.city_id === "" ? "City must be selected" : null,
           pincode: /^[1-9][0-9]{5}$/.test(values.pincode) ? null : "Invalid pin-code",
         };
       }
