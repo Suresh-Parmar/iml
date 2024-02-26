@@ -31,7 +31,7 @@ export default function FirstForm({ form, onClickNext, setInvoiceBreakdown }: Fi
 
   async function readClassesData() {
     let classes: any = await readClassesLanding();
-    classes = filterData(classes, "label", "value", "", true, "order_code", undefined, true);
+    classes = filterData(classes, "label", "value", "_id", true, "order_code", undefined, true);
     setClassesData(classes);
   }
 
@@ -50,7 +50,7 @@ export default function FirstForm({ form, onClickNext, setInvoiceBreakdown }: Fi
   const onClickSubmitCompetition = (comp: string, prod: any) => {
     setInvoiceBreakdown(prod);
     const iComp: any = products.find((i) => i.name === comp);
-    form.setFieldValue("competition", iComp.competition || "");
+    form.setFieldValue("competition_id", iComp.competition_id || "");
     form.setFieldValue("myproducts", [iComp.sku_code]);
     form.setFieldValue("product_name", iComp.name);
 
@@ -58,12 +58,11 @@ export default function FirstForm({ form, onClickNext, setInvoiceBreakdown }: Fi
     onClickNext();
   };
 
-  const classesNames = filterDataSingle(classesData, "name", "", "", false);
   const boardsOptions = filterData(boards, "label", "value", "_id");
 
   const onChangeClasses = (event: any) => {
     form.setFieldValue("class_id", event ?? "");
-    const iClass = classesData.find((i) => i.name === event);
+    const iClass = classesData.find((i) => i._id === event);
     form.setFieldValue("class_code", iClass?.code ?? "");
     readProductsLandingData(iClass?.name ?? "", form.values.board_id);
   };
@@ -95,7 +94,7 @@ export default function FirstForm({ form, onClickNext, setInvoiceBreakdown }: Fi
         clearable
         searchable
         nothingFound="No options"
-        data={classesNames}
+        data={classesData}
         label={"Class"}
         name="Class"
         mt={"md"}
