@@ -1134,7 +1134,7 @@ const createOrder = async (product_name: string, userName: any) => {
   const geoInfo = await getGeographicalInformation();
   const countryFromGeoInfo = geoInfo.country_name;
   let requestBody: RequestBodyType = {
-    country_id: `${countryFromGeoInfo}`,
+    country_id: getSelectedCountry(),
     product_name: product_name,
     registration_number: userName,
   };
