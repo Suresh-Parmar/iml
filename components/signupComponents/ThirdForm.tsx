@@ -4,13 +4,16 @@ import { readLandingData } from "@/utilities/API";
 import { Checkbox, Flex, Select, TextInput, Textarea } from "@mantine/core";
 import { Recaptcha } from "@/components/common";
 import { filterData } from "@/helpers/filterData";
+import { findFromJson } from "@/helpers/filterFromJson";
 
 type ThirdFormProps = {
   form: any;
   setRecaptcha: (value: string) => void;
+  setOtherValues?: any;
+  otherValues?: any;
 };
 
-export default function ThirdForm({ form, setRecaptcha }: ThirdFormProps) {
+export default function ThirdForm({ form, setRecaptcha, setOtherValues, otherValues }: ThirdFormProps) {
   const [schoolsData, setSchoolsData] = useState<MatrixDataType>([]);
   const [citiesData, setCitiesData] = useState<MatrixDataType>([]);
   const [statesData, setStatesData] = useState<MatrixDataType>([]);
@@ -49,6 +52,11 @@ export default function ThirdForm({ form, setRecaptcha }: ThirdFormProps) {
   const cityNames = filterData(citiesData, "label", "value", "_id");
 
   const onChangeState = async (event: any) => {
+    if (setOtherValues && otherValues) {
+      let stateValue = findFromJson(statesData, event, "_id");
+      otherValues.state = stateValue.name;
+    }
+
     form.setFieldValue("state_id", event || "");
     form.setFieldValue("city_id", "");
     // const state = statesData.find((state) => state.name === event);
@@ -56,6 +64,11 @@ export default function ThirdForm({ form, setRecaptcha }: ThirdFormProps) {
   };
 
   const onChangeCities = async (event: any) => {
+    if (setOtherValues && otherValues) {
+      let cityValue = findFromJson(citiesData, event, "_id");
+      otherValues.city = cityValue.name;
+    }
+
     form.setFieldValue("city_id", event || "");
     form.setFieldValue("school_id", "");
   };
@@ -128,6 +141,10 @@ export default function ThirdForm({ form, setRecaptcha }: ThirdFormProps) {
         withAsterisk
         {...form.getInputProps("school_id")}
         onChange={(event) => {
+          if (setOtherValues && otherValues) {
+            let schoolData = findFromJson(schoolsData, event, "_id");
+            otherValues.school_name = schoolData.name;
+          }
           form.setFieldValue("school_id", event ?? "");
         }}
         w={"100%"}

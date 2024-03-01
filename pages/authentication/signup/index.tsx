@@ -170,11 +170,11 @@ export default function SignUp() {
   const [isPaid, setisPaid] = useState<any>(false);
   const [active, setActive] = useState(0);
   const [recaptcha, setRecaptcha] = useState<string>("");
+  const [otherValues, setOtherValues] = useState<any>({});
+
+  console.log(otherValues);
 
   let formValues: any = form.values;
-
-  console.log(userData, "form.values");
-  console.log(formValues, "form.values");
 
   const nextStep = (isSkipValidate = false) => {
     if (active == 2 && !recaptcha) {
@@ -324,6 +324,8 @@ export default function SignUp() {
                   <FirstForm
                     setInvoiceBreakdown={setInvoiceBreakdown}
                     form={form}
+                    setOtherValues={setOtherValues}
+                    otherValues={otherValues}
                     onClickNext={() => {
                       setActive(+active + 1);
                       // nextStep(true)
@@ -334,10 +336,15 @@ export default function SignUp() {
                   <SecondForm form={form} />
                 </Stepper.Step>
                 <Stepper.Step label="Address" description="" allowStepSelect={false}>
-                  <ThirdForm form={form} setRecaptcha={setRecaptcha} />
+                  <ThirdForm
+                    form={form}
+                    setOtherValues={setOtherValues}
+                    otherValues={otherValues}
+                    setRecaptcha={setRecaptcha}
+                  />
                 </Stepper.Step>
                 <Stepper.Step label="Summary" description="" allowStepSelect={false}>
-                  <SummaryForm form={form} setRecaptcha={setRecaptcha} />
+                  <SummaryForm otherValues={otherValues} form={form} setRecaptcha={setRecaptcha} />
                 </Stepper.Step>
                 {/* <Stepper.Step label="Address" description="" allowStepSelect={false}>
                   <ThirdForm form={form} setRecaptcha={setRecaptcha} />
