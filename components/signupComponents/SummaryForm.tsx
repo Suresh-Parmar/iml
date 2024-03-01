@@ -2,29 +2,15 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 function SummaryForm(props: any) {
-  const { form } = props;
+  const { form, otherValues } = props;
   const values = form?.values;
 
   const reduxData = useSelector((state: any) => state?.data);
   let isDarkTheme = reduxData?.colorScheme == "dark";
 
-  let {
-    name,
-    dob,
-    address,
-    city,
-    class_id,
-    school_name,
-    section,
-    competition,
-    email_1,
-    pincode,
-    email_2,
-    mobile_1,
-    mobile_2,
-    state,
-    gender,
-  } = values || {};
+  let { name, dob, address, class_id, section, email_1, pincode, email_2, mobile_1, mobile_2, gender } = values || {};
+
+  let { city, state, school_name, competition } = otherValues;
 
   let tableclass = isDarkTheme ? "table-dark" : " ";
 

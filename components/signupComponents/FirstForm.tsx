@@ -12,9 +12,17 @@ type FirstFormProps = {
   form: any;
   onClickNext: () => void;
   setInvoiceBreakdown: (arg: any) => void;
+  setOtherValues?: any;
+  otherValues?: any;
 };
 
-export default function FirstForm({ form, onClickNext, setInvoiceBreakdown }: FirstFormProps) {
+export default function FirstForm({
+  form,
+  onClickNext,
+  setInvoiceBreakdown,
+  setOtherValues,
+  otherValues,
+}: FirstFormProps) {
   const [classesData, setClassesData] = useState<MatrixDataType>([]);
   const [products, setProducts] = useState<MatrixDataType>([]);
   const [boards, setBoards] = useState<MatrixDataType>([]);
@@ -53,6 +61,10 @@ export default function FirstForm({ form, onClickNext, setInvoiceBreakdown }: Fi
     form.setFieldValue("competition_id", iComp.competition_id || "");
     form.setFieldValue("myproducts", [iComp.sku_code]);
     form.setFieldValue("product_name", iComp.name);
+
+    if (setOtherValues && otherValues) {
+      otherValues.competition = iComp.competition;
+    }
 
     // form.setFieldValue("competition_code", iComp?.code ?? "");
     onClickNext();
