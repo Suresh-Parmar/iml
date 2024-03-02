@@ -130,7 +130,7 @@ function Courses() {
     filter_var: {
       status: true,
       showfront: true,
-      country: selectedCountry.label || "India",
+      country_id: selectedCountry._id || "India",
     },
   };
   if (isloggedIn && userClass) {

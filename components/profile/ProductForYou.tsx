@@ -1,4 +1,11 @@
-import { VerifyPaymentData, createOrder, loadPaymentScript, readProducts, verifyPaymantData } from "@/utilities/API";
+import {
+  VerifyPaymentData,
+  createOrder,
+  loadPaymentScript,
+  readApiData,
+  readProducts,
+  verifyPaymantData,
+} from "@/utilities/API";
 import { notifications } from "@mantine/notifications";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -7,6 +14,7 @@ import { ProductView } from "../common";
 function ProductForYou() {
   const [product, setyourProducts] = useState<any>([]);
   const [buyDetails, setBuyDetails] = useState<any>({});
+  const [userClass, setuserClass] = useState<any>({});
 
   let userData = useSelector((state: any) => state?.data?.userData?.user);
   let country = useSelector((state: any) => state?.data.selectedCountry);
@@ -20,7 +28,7 @@ function ProductForYou() {
     //  const payload = { username: userData.username };
     //  studentAvailableproducts(payload);
 
-    readProducts("class", [userData?.class_id])
+    readProducts("class", userClass.name)
       .then((res: any) => {
         if (Array.isArray(res)) {
           setyourProducts(res);
@@ -31,9 +39,31 @@ function ProductForYou() {
       });
   };
 
+  const getUserClass = () => {
+    let payload = {
+      collection_name: "classes",
+      op_name: "find_many",
+      filter_var: {
+        _id: userData?.class_id,
+      },
+    };
+
+    readApiData("classes", payload)
+      .then((res: any) => {
+        setuserClass(res[0]);
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
-    userData.class_id && filterYourProducts();
-  }, [userData?.class_id, country.value]);
+    userClass.name && filterYourProducts();
+  }, [userClass.name, country.value]);
+
+  useEffect(() => {
+    userData.class_id && getUserClass();
+  }, [userData?.class_id]);
 
   const onSuccessHandler = ({ razorpay_order_id, razorpay_payment_id, razorpay_signature }: VerifyPaymentData) => {
     // Validate payment at server - using webhooks is a better idea.

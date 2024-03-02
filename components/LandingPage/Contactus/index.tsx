@@ -36,7 +36,7 @@ function Contactus() {
     op_name: "find_many",
     filter_var: {
       status: true,
-      country: selectedCountry.label || "India",
+      country_id: selectedCountry._id || "India",
     },
   };
 
