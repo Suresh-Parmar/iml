@@ -19,6 +19,7 @@ const initialState: any = {
   colorScheme: color || "light",
   userData: userData,
   selectedTab: selectedTabData || "",
+  userClassOBJ: {},
 };
 
 export const counterSlice = createSlice({
@@ -46,6 +47,10 @@ export const counterSlice = createSlice({
       setGetDataSession("selectedTab", state.selectedTab);
     },
 
+    setUserClass: (state, action) => {
+      state.userClassOBJ = action.payload;
+    },
+
     ControlApplicationShellComponents: (state, action) => {
       state.showAsideBar = action.payload.showAsideBar;
       state.showFooter = action.payload.showFooter;
@@ -67,6 +72,7 @@ export const {
   UpdateCountry,
   ControlApplicationShellComponents,
   selectedTabUpdate,
+  setUserClass,
 } = counterSlice.actions;
 
 export default counterSlice.reducer;

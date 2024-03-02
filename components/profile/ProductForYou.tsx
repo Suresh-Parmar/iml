@@ -8,16 +8,23 @@ import {
 } from "@/utilities/API";
 import { notifications } from "@mantine/notifications";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ProductView } from "../common";
+import { setUserClass } from "@/redux/slice";
 
 function ProductForYou() {
   const [product, setyourProducts] = useState<any>([]);
   const [buyDetails, setBuyDetails] = useState<any>({});
-  const [userClass, setuserClass] = useState<any>({});
 
-  let userData = useSelector((state: any) => state?.data?.userData?.user);
-  let country = useSelector((state: any) => state?.data.selectedCountry);
+  let reduxData = useSelector((state: any) => state?.data);
+
+  let userClassObj: any = reduxData?.userClassOBJ;
+  let userClassName = userClassObj?.name;
+
+  let userData = reduxData?.userData?.user;
+  let country = reduxData.selectedCountry;
+
+  const dispatch = useDispatch();
 
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -28,7 +35,7 @@ function ProductForYou() {
     //  const payload = { username: userData.username };
     //  studentAvailableproducts(payload);
 
-    readProducts("class", userClass.name)
+    readProducts("class", userClassName)
       .then((res: any) => {
         if (Array.isArray(res)) {
           setyourProducts(res);
@@ -50,7 +57,7 @@ function ProductForYou() {
 
     readApiData("classes", payload)
       .then((res: any) => {
-        setuserClass(res[0]);
+        dispatch(setUserClass(res[0]));
       })
       .catch((err: any) => {
         console.log(err);
@@ -58,11 +65,11 @@ function ProductForYou() {
   };
 
   useEffect(() => {
-    userClass.name && filterYourProducts();
-  }, [userClass.name, country.value]);
+    userClassName && filterYourProducts();
+  }, [userClassName, country.value]);
 
   useEffect(() => {
-    userData.class_id && getUserClass();
+    userData.class_id && !userClassName && getUserClass();
   }, [userData?.class_id]);
 
   const onSuccessHandler = ({ razorpay_order_id, razorpay_payment_id, razorpay_signature }: VerifyPaymentData) => {
