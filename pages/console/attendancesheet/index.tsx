@@ -5,34 +5,36 @@ import {
   readCompetitions,
   readExamCenters,
   readStates,
-  studentDetails,
+  // studentDetails,
 } from "@/utilities/API";
-import { Checkbox, Group, MultiSelect, Radio, Select, TextInput } from "@mantine/core";
+import { Checkbox, MultiSelect, Select, TextInput } from "@mantine/core";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { checkIsAllChecked, selectCheckBOxData } from "@/helpers/selectCheckBox";
 import Loader from "@/components/common/Loader";
 import { filterData } from "@/helpers/filterData";
 import { findFromJson } from "@/helpers/filterFromJson";
-import { validateAlpha } from "@/helpers/validations";
+// import { validateAlpha } from "@/helpers/validations";
 import { sortData } from "@/helpers/sorting";
 
 function Page() {
   const [allData, setAllData] = useState<any>({});
   const [citiesData, setCitiesData] = useState<any>([]);
   const [statesData, setStatesData] = useState<any>([]);
-  const [schoolsData, setSchoolsData] = useState<any>([]);
+  // const [schoolsData, setSchoolsData] = useState<any>([]);
   const [comeptitionsData, setCompetitionsData] = useState<any>([]);
   const [classesData, setClassesData] = useState<any>([]);
   const [dataExamCenters, setDataExamCenters] = useState<any>([]);
   const [filteredDataExamCenter, setFilteredDataExamCenter] = useState<any>([]);
   const [loader, setLoader] = useState<any>(false);
-  const [studentGridData, setStudentGridData] = useState<any>([]);
+  // const [studentGridData, setStudentGridData] = useState<any>([]);
   const [examDate, setExamDate] = useState<any>([]);
-  const [zipUrl, setZipUrl] = useState<any>("");
+  // const [zipUrl, setZipUrl] = useState<any>("");
   const [pdfLoader, setpdfLoader] = useState<any>(false);
   const [genratedData, setGenratedData] = useState<any>([]);
   const [order, setOrder] = useState<any>(true);
+
+  console.log(allData, "allData allData");
 
   useEffect(() => {
     if (loader) {
@@ -59,49 +61,49 @@ function Page() {
   // let isStudentFilters = allData.admitCardFilter == "studentWise";
   let themeColor = state?.colorScheme;
 
-  let genratePayloadStudentWise = () => {
-    let singleClassData = findFromJson(classesData, allData.select_class, "label");
-    let singleCompetition = findFromJson(comeptitionsData, allData.competition, "value");
+  // let genratePayloadStudentWise = () => {
+  //   let singleClassData = findFromJson(classesData, allData.select_class, "label");
+  //   let singleCompetition = findFromJson(comeptitionsData, allData.competition, "value");
 
-    let values: any = {
-      cohort: "select_cohort",
-      group: "select_group",
-      school: "select_school",
-    };
+  //   let values: any = {
+  //     cohort: "select_cohort",
+  //     group: "select_group",
+  //     school: "select_school",
+  //   };
 
-    let newKey = values[allData.filterTypeStudent];
+  //   let newKey = values[allData.filterTypeStudent];
 
-    let obj: any = {
-      country: countryName || "India",
-      competition: singleCompetition.label || "",
-      state: allData.state,
-      city: allData.city,
-      role: "student",
-      [allData.filterTypeStudent]: allData[newKey],
-      class: singleClassData.code || allData.select_class || "",
-      // class_code: singleClassData.code || allData.select_class || "",
-    };
+  //   let obj: any = {
+  //     country: countryName || "India",
+  //     competition: singleCompetition.label || "",
+  //     state: allData.state,
+  //     city: allData.city,
+  //     role: "student",
+  //     [allData.filterTypeStudent]: allData[newKey],
+  //     class: singleClassData.code || allData.select_class || "",
+  //     // class_code: singleClassData.code || allData.select_class || "",
+  //   };
 
-    return obj;
-  };
+  //   return obj;
+  // };
 
-  let getStudentDetailsApi = () => {
-    let payload = genratePayloadStudentWise();
-    studentDetails(payload)
-      .then((res) => {
-        setStudentGridData(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  // let getStudentDetailsApi = () => {
+  //   let payload = genratePayloadStudentWise();
+  //   studentDetails(payload)
+  //     .then((res) => {
+  //       setStudentGridData(res.data);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
 
   async function readExamCentersData() {
     let payload: any = {
       collection_name: "exam_centers",
       op_name: "find_many",
       filter_var: {
-        city: allData.city,
+        city_id: allData.city_id,
         country: countryName || "India",
       },
     };
@@ -111,7 +113,7 @@ function Page() {
     }
 
     setLoader(true);
-    let examCentersData: any = await readExamCenters("city", allData.city, payload);
+    let examCentersData: any = await readExamCenters("city_id", allData.city_id, payload);
     setLoader(false);
     let examCenters = filterData(examCentersData, "label", "value");
 
@@ -130,28 +132,28 @@ function Page() {
     setFilteredDataExamCenter(examCenters);
   }
 
-  useEffect(() => {
-    allData.city && allData.filterTypeStudent && allData.select_class && getStudentDetailsApi();
-  }, [allData]);
+  // useEffect(() => {
+  //   allData.city && allData.filterTypeStudent && allData.select_class && getStudentDetailsApi();
+  // }, [allData]);
 
   // fetch data
 
-  async function readStatesData(filterBy?: "country", filterQuery?: string | number) {
-    let states = await readStates(filterBy, filterQuery);
-    states = filterData(states, "label", "value");
+  async function readStatesData() {
+    let states = await readStates();
+    states = filterData(states, "label", "value", "_id");
     setStatesData(states);
   }
 
-  async function readCitiesData(filterBy?: "state", filterQuery?: string | number) {
+  async function readCitiesData(filterBy?: "state_id", filterQuery?: string | number) {
     let cities: any[];
     cities = await readCities(filterBy, filterQuery);
-    cities = filterData(cities, "label", "value");
+    cities = filterData(cities, "label", "value", "_id");
     setCitiesData(cities);
   }
 
   async function readCompetitionsData(filterBy?: "name" | "status", filterQuery?: string | number) {
     let competitions = await readCompetitions();
-    competitions = filterData(competitions, "label", "value", "code");
+    competitions = filterData(competitions, "label", "value", "_id");
     setCompetitionsData(competitions);
   }
 
@@ -172,12 +174,12 @@ function Page() {
   }, [countryName]);
 
   useEffect(() => {
-    (allData.city || allData.competition) && readExamCentersData();
-  }, [allData.city, allData.competition]);
+    (allData.city_id || allData.competition) && readExamCentersData();
+  }, [allData.city_id, allData.competition]);
 
   useEffect(() => {
-    allData.state && readCitiesData("state", allData.state);
-  }, [allData.state]);
+    allData.state_id && readCitiesData("state_id", allData.state_id);
+  }, [allData.state_id]);
 
   const handleDropDownChange = (e: any, key: any, clear?: any) => {
     if (clear) {
@@ -199,9 +201,9 @@ function Page() {
       type: "select",
       data: comeptitionsData,
       onChange: (e: any) => {
-        handleDropDownChange(e, "competition", "all");
+        handleDropDownChange(e, "competition_id", "all");
       },
-      value: allData.competition,
+      value: allData.competition_id,
     },
 
     {
@@ -234,9 +236,9 @@ function Page() {
       type: "select",
       data: statesData,
       onChange: (e: any) => {
-        handleDropDownChange(e, "state", "city");
+        handleDropDownChange(e, "state_id", "city_id");
       },
-      value: allData.state || "",
+      value: allData.state_id || "",
     },
     {
       label: "City",
@@ -245,9 +247,9 @@ function Page() {
       type: "select",
       data: citiesData,
       onChange: (e: any) => {
-        handleDropDownChange(e, "city", "exam_center");
+        handleDropDownChange(e, "city_id", "exam_center");
       },
-      value: allData.city,
+      value: allData.city_id,
     },
     // {
     //   label: "Series",
@@ -538,7 +540,7 @@ function Page() {
         country: countryName || "India",
         competition: singleCompetition?.name || "",
         state: allData.state,
-        city: allData.city,
+        city_id: allData.city_id,
         exam_date: allData.exam_date,
         exam_center: [item],
         series: allData.series,

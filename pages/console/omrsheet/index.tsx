@@ -493,10 +493,14 @@ function Page() {
       setpdfLoader(false);
 
       let data = response.data;
-      genratedData.push(...data);
-      setGenratedData([...genratedData]);
-      let newData = migrateData(genratedData, dataExamCenters, "Exam center", "_id");
-      setDataExamCenters([...newData]);
+
+      if (Array.isArray(data)) {
+        genratedData.push(...data);
+        setGenratedData([...genratedData]);
+        let newData = migrateData(genratedData, dataExamCenters, "Exam center", "exam_center_id");
+
+        setDataExamCenters([...newData]);
+      }
     }
   };
 
