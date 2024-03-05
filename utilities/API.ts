@@ -514,7 +514,7 @@ const readStates = async (filterBy?: "country", filterQuery?: string | number) =
   return states;
 };
 
-const readCities = async (filterBy?: "name" | "state", filterQuery?: string | number) => {
+const readCities = async (filterBy?: "name" | "state" | "state_id", filterQuery?: string | number) => {
   let cities: MatrixDataType;
   if (filterBy && filterQuery) {
     cities = await readData("cities", "find_many", filterBy, filterQuery);
@@ -566,7 +566,7 @@ const readAnnoucementsAdmin = async (filterBy?: "name" | "state", filterQuery?: 
 };
 
 const readExamCenters = async (
-  filterBy?: "name" | "state" | "city",
+  filterBy?: "name" | "state" | "city" | "city_id",
   filterQuery?: string | number,
   customData: any = ""
 ) => {
