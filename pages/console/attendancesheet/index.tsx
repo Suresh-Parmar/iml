@@ -534,15 +534,13 @@ function Page() {
   const genrateStudentPdf = async () => {
     let singleCompetition = findFromJson(comeptitionsData, allData.competition_id, "_id");
 
-    console.log(singleCompetition, "singleCompetition");
-
     setGenratedData([]);
 
     for (const item of allData.exam_center) {
       let newPayload: any = {
         country_id: countryName || "India",
         competition_id: singleCompetition?._id || "",
-        state: allData.state,
+        state_id: allData.state_id,
         city_id: allData.city_id,
         exam_date: allData.exam_date,
         exam_center: [item],
