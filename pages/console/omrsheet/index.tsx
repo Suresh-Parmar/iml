@@ -24,13 +24,11 @@ function Page() {
   const [allData, setAllData] = useState<any>({});
   const [citiesData, setCitiesData] = useState<any>([]);
   const [statesData, setStatesData] = useState<any>([]);
-  const [schoolsData, setSchoolsData] = useState<any>([]);
   const [comeptitionsData, setCompetitionsData] = useState<any>([]);
   const [classesData, setClassesData] = useState<any>([]);
   const [dataExamCenters, setDataExamCenters] = useState<any>([]);
   const [filteredDataExamCenter, setFilteredDataExamCenter] = useState<any>([]);
   const [loader, setLoader] = useState<any>(false);
-  const [studentGridData, setStudentGridData] = useState<any>([]);
   const [examDate, setExamDate] = useState<any>([]);
   const [genratedData, setGenratedData] = useState<any>([]);
   const [pdfLoader, setpdfLoader] = useState<any>(false);
@@ -148,7 +146,7 @@ function Page() {
     setLoader(true);
     let classes: any = await readClasses();
     setLoader(false);
-    classes = filterData(classes, "label", "value", "", true, "order_code", undefined, true);
+    classes = filterData(classes, "label", "value", "code", true, "order_code", undefined, true);
     classes.unshift("all");
     setClassesData(classes);
   }
