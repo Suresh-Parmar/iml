@@ -467,6 +467,9 @@ function Page() {
       return;
     }
 
+    if (!allData.series) {
+      alert("Please Type series");
+    }
     setGenratedData([]);
 
     let singleCompetition = findFromJson(comeptitionsData, allData.competition, "value");

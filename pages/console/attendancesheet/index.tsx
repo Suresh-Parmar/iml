@@ -57,7 +57,7 @@ function Page() {
   }, [allData?.exam_date]);
 
   const state: any = useSelector((state: any) => state.data);
-  const countryName = state?.selectedCountry?.label;
+  const countryName = state?.selectedCountry?._id;
   // let isStudentFilters = allData.admitCardFilter == "studentWise";
   let themeColor = state?.colorScheme;
 
@@ -74,7 +74,7 @@ function Page() {
   //   let newKey = values[allData.filterTypeStudent];
 
   //   let obj: any = {
-  //     country: countryName || "India",
+  //     country_id: countryName || "India",
   //     competition: singleCompetition.label || "",
   //     state: allData.state,
   //     city: allData.city,
@@ -104,12 +104,12 @@ function Page() {
       op_name: "find_many",
       filter_var: {
         city_id: allData.city_id,
-        country: countryName || "India",
+        country_id: countryName || "India",
       },
     };
 
-    if (allData.competition) {
-      payload.filter_var.competition = allData.competition;
+    if (allData.competition_id) {
+      payload.filter_var.competition_id = allData.competition_id;
     }
 
     setLoader(true);
@@ -174,8 +174,8 @@ function Page() {
   }, [countryName]);
 
   useEffect(() => {
-    (allData.city_id || allData.competition) && readExamCentersData();
-  }, [allData.city_id, allData.competition]);
+    (allData.city_id || allData.competition_id) && readExamCentersData();
+  }, [allData.city_id, allData.competition_id]);
 
   useEffect(() => {
     allData.state_id && readCitiesData("state_id", allData.state_id);
@@ -532,13 +532,16 @@ function Page() {
   };
 
   const genrateStudentPdf = async () => {
-    let singleCompetition = findFromJson(comeptitionsData, allData.competition, "value");
+    let singleCompetition = findFromJson(comeptitionsData, allData.competition_id, "_id");
+
+    console.log(singleCompetition, "singleCompetition");
+
     setGenratedData([]);
 
     for (const item of allData.exam_center) {
       let newPayload: any = {
-        country: countryName || "India",
-        competition: singleCompetition?.name || "",
+        country_id: countryName || "India",
+        competition_id: singleCompetition?._id || "",
         state: allData.state,
         city_id: allData.city_id,
         exam_date: allData.exam_date,
