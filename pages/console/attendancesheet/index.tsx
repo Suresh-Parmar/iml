@@ -503,10 +503,13 @@ function Page() {
     );
   }, [allData, dataExamCenters, checkIsAllChecked(allData.exam_center, dataExamCenters), themeColor, pdfLoader]);
 
-  let migrateData = (data: any[], data1: any[], by: string, mainKey: any = "") => {
+  let migrateData = (data: any[], data1: any[], by: string = "center_code", mainKey: any = "exam_center_id") => {
     let newData: any[] = [];
     data1.map((item: any) => {
-      let newItem = data.find((itemchild: any, i: any) => item[mainKey] == itemchild[by]);
+      let newItem = data.find((itemchild: any, i: any) => {
+        return item[mainKey] == itemchild[by];
+      });
+
       if (newItem) {
         let newDataa = { ...item, ...newItem };
         newData.push(newDataa);
@@ -557,11 +560,12 @@ function Page() {
       try {
         let data = await attendenceSheetDownload(newPayload);
         setpdfLoader(false);
+
         let tmpNewData = removeGarbage(data?.data);
 
         genratedData.push(...tmpNewData);
         setGenratedData([genratedData]);
-        let newData = migrateData(genratedData, dataExamCenters, "center_code", "_id");
+        let newData = migrateData(genratedData, dataExamCenters, "center_code", "exam_center_id");
         setDataExamCenters([...newData]);
       } catch (err) {
         console.log(err);
