@@ -304,7 +304,7 @@ export const allTypes: any = {
     },
     {
       id: "Subject",
-      key: "subject_id",
+      key: "subject_name",
       defaultShow: true,
       filterFn: "equals",
       sortingFn: fuzzySort,
