@@ -78,7 +78,7 @@ function CompetitionForm({
   };
 
   const onHandleSubmit = async (values: any) => {
-    values = { ...values, country_id: getSelectedCountry() };
+    values = { ...values };
     setOLoader(true);
     if (rowData !== undefined) {
       const isCompetitionUpdated = await updateCompetition(rowData._id, values);
