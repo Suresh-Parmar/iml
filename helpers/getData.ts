@@ -45,7 +45,7 @@ export const genratePayload = (collection: string, filter?: any, required?: any,
   let obj: any = {
     collection_name: collection,
     filter_var: {
-      country: countryName,
+      country_id: countryName,
       status: true,
     },
     op_name: "find_many",

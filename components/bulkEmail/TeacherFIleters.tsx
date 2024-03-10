@@ -24,7 +24,7 @@ function TeacherFIleters() {
   let smtpData: any = [];
 
   const userData: any = useSelector((state: any) => state.data);
-  let selectedCountry = userData?.selectedCountry?.label;
+  let selectedCountry = userData?.selectedCountry?._id;
   let themeColor = userData?.colorScheme;
 
   const readStudentsData = () => {
@@ -38,7 +38,7 @@ function TeacherFIleters() {
       op_name: "find_many",
       filter_var: {
         role: "teacher",
-        country: selectedCountry,
+        country_id: selectedCountry,
         city: allData?.city,
         class_id: allData?.select_class,
       },

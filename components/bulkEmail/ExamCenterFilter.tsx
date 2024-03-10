@@ -26,7 +26,7 @@ function ExamCenterFilter() {
   let smtpData: any = [];
 
   const userData: any = useSelector((state: any) => state.data);
-  let selectedCountry = userData?.selectedCountry?.label;
+  let selectedCountry = userData?.selectedCountry?._id;
   let themeColor = userData?.colorScheme;
 
   const readStudentsData = () => {
@@ -40,7 +40,7 @@ function ExamCenterFilter() {
       op_name: "find_many",
       filter_var: {
         role: "student",
-        country: selectedCountry,
+        country_id: selectedCountry,
         city: allData?.city,
         class_id: allData?.select_class,
         exam_center_id: allData?.examcenter,
