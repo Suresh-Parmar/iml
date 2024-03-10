@@ -21,7 +21,7 @@ function Reports() {
   }, [allData]);
 
   const state: any = useSelector((state: any) => state.data);
-  const countryName = state?.selectedCountry?.label;
+  const countryName = state?.selectedCountry?._id;
   let themeColor = state?.colorScheme;
 
   async function readCompetitionsData(filterBy?: "name" | "status", filterQuery?: string | number) {
@@ -51,7 +51,7 @@ function Reports() {
     genratePayload(
       "schools",
       {
-        country: countryName || "India",
+        country_id: countryName || "India",
         city: allData.city,
       },
       undefined,
@@ -67,7 +67,7 @@ function Reports() {
     genratePayload(
       "groups",
       {
-        country: countryName || "India",
+        country_id: countryName || "India",
         city: allData.city,
       },
       undefined,
@@ -87,7 +87,7 @@ function Reports() {
     genratePayload(
       "exam_centers",
       {
-        country: countryName || "India",
+        country_id: countryName || "India",
         city: allData.city,
       },
       undefined,

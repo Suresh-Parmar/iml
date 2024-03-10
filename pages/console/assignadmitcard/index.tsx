@@ -18,7 +18,7 @@ function Assignadmitcard() {
   });
   const [loader, setLoader] = useState<any>(false);
   const state: any = useSelector((state: any) => state.data);
-  const countryName = state?.selectedCountry?.label;
+  const countryName = state?.selectedCountry?._id;
   let themeColor = state?.colorScheme;
 
   let competitionData = useTableDataMatrixQuery(genratePayload("competitions", undefined, undefined, countryName));
@@ -320,7 +320,7 @@ function Assignadmitcard() {
     };
 
     let newPayload: any = {
-      country: countryName || "India",
+      country_id: countryName || "India",
       competition_code: allData.competition || "",
       state: allData.state,
       city: allData.city,
@@ -358,7 +358,7 @@ function Assignadmitcard() {
 
     let payload: any = {
       registration_number: allData.studentsList,
-      country: countryName,
+      country_id: countryName,
       exam_center_id: allData.examcenter,
 
       competition_code: allData.competition,
