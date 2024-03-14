@@ -5,7 +5,6 @@ import Loader from "@/components/common/Loader";
 import { useSelector } from "react-redux";
 import { filterData } from "@/helpers/filterData";
 import { checkIsAllChecked, selectCheckBOxData } from "@/helpers/selectCheckBox";
-import { filterDataSingle } from "@/helpers/dropDownData";
 import { notifications } from "@mantine/notifications";
 import Editor from "../editor/editor";
 import { findFromJson } from "@/helpers/filterFromJson";
@@ -28,14 +27,14 @@ function StudentEmail(props: any) {
   let smtpData: any = [];
 
   const userData: any = useSelector((state: any) => state.data);
-  let selectedCountry = userData?.selectedCountry?.label;
+  let selectedCountry = userData?.selectedCountry?._id;
   let themeColor = userData?.colorScheme;
   const getGroups = () => {
     setLoader(true);
     readApiData("groups")
       .then((res) => {
         setLoader(false);
-        let groupDataApi: any = filterData(res, "label", "value");
+        let groupDataApi: any = filterData(res, "label", "value", "_id");
         setGroupData([...groupDataApi]);
       })
       .catch((error) => {
@@ -45,7 +44,7 @@ function StudentEmail(props: any) {
   };
 
   const readStudentsData = () => {
-    if (!allData?.city) {
+    if (!allData?.city_id) {
       alert("Please select a city  ");
       return;
     }
@@ -54,9 +53,9 @@ function StudentEmail(props: any) {
     let label = String(allData?.childSchoolData?.label).toLowerCase() + "s";
 
     let keyVal: any = {
-      select_school: "school_name",
-      select_group: "group_code",
-      select_cohort: "cohort_code",
+      select_school: "school_id",
+      select_group: "group_id",
+      select_cohort: "cohort_id",
     };
     let newkey = "";
     if (keyVal[key]) {
@@ -68,8 +67,8 @@ function StudentEmail(props: any) {
       op_name: "find_many",
       filter_var: {
         role: "student",
-        country: selectedCountry,
-        city: allData?.city,
+        country_id: selectedCountry,
+        city_id: allData?.city_id,
         competition: allData?.competition,
         [newkey]: allData[key],
         class_id: allData?.select_class,
@@ -90,9 +89,9 @@ function StudentEmail(props: any) {
 
   const readSchoolsData = async () => {
     setLoader(true);
-    const schools = await readSchools("city", allData.city);
+    const schools = await readSchools("city_id", allData.city_id);
     setLoader(false);
-    let newData = filterData(schools, "label", "value");
+    let newData = filterData(schools, "label", "value", "_id");
 
     setSchoolsData(newData);
   };
@@ -100,17 +99,19 @@ function StudentEmail(props: any) {
   statesData = useTableDataMatrixQuery(genratePayload("states", undefined, undefined, selectedCountry));
   statesData = iterateData(statesData);
   statesData = handleApiData(statesData);
-  statesData = filterData(statesData, "label", "value");
+  statesData = filterData(statesData, "label", "value", "_id");
 
-  citiesData = useTableDataMatrixQuery(genratePayload("cities", { state: allData.state }, "state", selectedCountry));
+  citiesData = useTableDataMatrixQuery(
+    genratePayload("cities", { state_id: allData.state_id }, "state_id", selectedCountry)
+  );
   citiesData = iterateData(citiesData);
   citiesData = handleApiData(citiesData);
-  citiesData = filterData(citiesData, "label", "value");
+  citiesData = filterData(citiesData, "label", "value", "_id");
 
   classesData = useTableDataMatrixQuery(genratePayload("classes", undefined, undefined, selectedCountry));
   classesData = iterateData(classesData);
   classesData = handleApiData(classesData);
-  classesData = filterData(classesData, "label", "value", undefined, true, "order_code", undefined, true);
+  classesData = filterData(classesData, "label", "value", "_id", true, "order_code", undefined, true);
   classesData = [{ value: undefined, label: "Select" }, ...classesData];
 
   templetesData = useTableDataMatrixQuery(
@@ -130,7 +131,7 @@ function StudentEmail(props: any) {
     readApiData("cohorts")
       .then((res) => {
         setLoader(false);
-        setcohortsData(filterData(res, "label", "value"));
+        setcohortsData(filterData(res, "label", "value", "_id"));
       })
       .catch((error) => {
         console.error(error);
@@ -142,8 +143,8 @@ function StudentEmail(props: any) {
   }, [selectedCountry]);
 
   useEffect(() => {
-    allData.city && readSchoolsData();
-  }, [allData.city]);
+    allData.city_id && readSchoolsData();
+  }, [allData.city_id]);
 
   useEffect(() => {
     selectedCountry && getCohorts();
@@ -176,9 +177,9 @@ function StudentEmail(props: any) {
 
       data: statesData,
       onChange: (e: any) => {
-        handleDropDownChange(e, "state", "city");
+        handleDropDownChange(e, "state_id", "city_id");
       },
-      value: allData.state,
+      value: allData.state_id,
     },
     {
       label: "City",
@@ -187,9 +188,9 @@ function StudentEmail(props: any) {
       type: "select",
       data: citiesData,
       onChange: (e: any) => {
-        handleDropDownChange(e, "city", "filterTypeStudent");
+        handleDropDownChange(e, "city_id", "filterTypeStudent");
       },
-      value: allData.city,
+      value: allData.city_id,
     },
 
     {
@@ -349,8 +350,8 @@ function StudentEmail(props: any) {
       email_short_name: allData.email_short_name,
       smtp_config: allData.smtp_name,
       subject: allData.subject,
-      city: allData.city,
-      state: allData.state,
+      city_id: allData.city,
+      state: allData.state_id,
       competition: allData.competition,
       class: allData.select_class,
       exam_center: allData.exam_center,
