@@ -28,7 +28,7 @@ function TeacherFIleters() {
   let themeColor = userData?.colorScheme;
 
   const readStudentsData = () => {
-    if (!allData?.city) {
+    if (!allData?.city_id) {
       alert("Please select a city");
       return;
     }
@@ -39,7 +39,7 @@ function TeacherFIleters() {
       filter_var: {
         role: "teacher",
         country_id: selectedCountry,
-        city: allData?.city,
+        city_id: allData?.city_id,
         class_id: allData?.select_class,
       },
     };
@@ -63,12 +63,12 @@ function TeacherFIleters() {
   citiesData = useTableDataMatrixQuery(genratePayload("cities", { state: allData.state }, "state", selectedCountry));
   citiesData = iterateData(citiesData);
   citiesData = handleApiData(citiesData);
-  citiesData = filterData(citiesData, "label", "value");
+  citiesData = filterData(citiesData, "label", "value", "_id");
 
   classesData = useTableDataMatrixQuery(genratePayload("classes", undefined, undefined, selectedCountry));
   classesData = iterateData(classesData);
   classesData = handleApiData(classesData);
-  classesData = filterData(classesData, "label", "value", undefined, true, "order_code", undefined, true);
+  classesData = filterData(classesData, "label", "value", "_id", true, "order_code", undefined, true);
 
   templetesData = useTableDataMatrixQuery(
     genratePayload("templates", { templatetype: "email" }, undefined, selectedCountry)
@@ -109,7 +109,7 @@ function TeacherFIleters() {
 
       data: statesData,
       onChange: (e: any) => {
-        handleDropDownChange(e, "state", "city");
+        handleDropDownChange(e, "state", "city_id");
       },
       value: allData.state,
     },
@@ -120,9 +120,9 @@ function TeacherFIleters() {
       type: "select",
       data: citiesData,
       onChange: (e: any) => {
-        handleDropDownChange(e, "city", "filterTypeStudent");
+        handleDropDownChange(e, "city_id", "filterTypeStudent");
       },
-      value: allData.city,
+      value: allData.city_id,
     },
 
     {
@@ -248,7 +248,7 @@ function TeacherFIleters() {
       email_short_name: allData.email_short_name,
       smtp_config: allData.smtp_name,
       subject: allData.subject,
-      city: allData.city,
+      city_id: allData.city_id,
       state: allData.state,
       class: allData.select_class,
       registration_Number: allData?.studentsData,
