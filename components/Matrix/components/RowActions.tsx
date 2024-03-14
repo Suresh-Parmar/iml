@@ -171,7 +171,7 @@ const RowActions = ({
         radius="md"
       >
         <Text size="sm" mb="xs" weight={500}>
-          Are you sure you want to mark {formType} {id} {label} as {status ? "in-active" : "active"}?
+          Are you sure you want to mark {formType} {label} as {status ? "in-active" : "active"}?
         </Text>
         <Flex align="center" gap={"sm"} justify={"flex-end"}>
           <Button variant={"light"} color={"green"} onClick={dialogClose}>
@@ -193,7 +193,7 @@ const RowActions = ({
                 const data = await dataLoader();
                 setData(data);
                 notifications.show({
-                  title: `${formType} ${id} ${label} marked as ${status ? "in-active" : "active"}`,
+                  title: `${formType}  ${label} marked as ${status ? "in-active" : "active"}`,
                   message: `The above ${formType} has been marked as ${status ? "in-active" : "active"}.`,
                   color: status ? "red" : "green",
                 });

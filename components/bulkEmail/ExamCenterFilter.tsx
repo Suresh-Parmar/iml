@@ -71,7 +71,7 @@ function ExamCenterFilter() {
   classesData = useTableDataMatrixQuery(genratePayload("classes", undefined, undefined, selectedCountry));
   classesData = iterateData(classesData);
   classesData = handleApiData(classesData);
-  classesData = filterData(classesData, "label", "value", undefined, true, "order_code", undefined, true);
+  classesData = filterData(classesData, "label", "value", "_id", true, "order_code", undefined, true);
 
   templetesData = useTableDataMatrixQuery(
     genratePayload("templates", { templatetype: "email" }, undefined, selectedCountry)
@@ -90,7 +90,7 @@ function ExamCenterFilter() {
   );
   examCentersData = iterateData(examCentersData);
   examCentersData = handleApiData(examCentersData);
-  examCentersData = filterData(examCentersData, "label", "value", "exam_center_id");
+  examCentersData = filterData(examCentersData, "label", "value", "_id");
 
   let examDateData = useTableDataMatrixQuery(genratePayload("exam_centers", undefined, undefined, selectedCountry));
   examDateData = iterateData(examDateData);
