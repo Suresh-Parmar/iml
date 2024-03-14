@@ -530,7 +530,7 @@ const readBoards = async (filterBy?: "name" | "state", filterQuery?: string | nu
 };
 
 const readSchools = async (
-  filterBy?: "name" | "city",
+  filterBy?: "name" | "city" | "city_id",
   filterQuery?: string | number,
   customFIlters?: any,
   getfullRes?: any
