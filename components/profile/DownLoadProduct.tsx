@@ -39,7 +39,7 @@ function DownLoadProduct() {
     setLoader(true);
     let subjects = await readSubjects();
     setLoader(false);
-    subjects = filterData(subjects, "label", "value");
+    subjects = filterData(subjects, "label", "value", "_id");
     setSubjectsData(subjects);
   }
 
