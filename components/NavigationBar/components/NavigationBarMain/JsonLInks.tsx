@@ -341,6 +341,13 @@ const NavigationLinks = (props: any) => {
           label: "Attendance Sheet",
           description: "All users of the system",
         },
+        {
+          href: `${consoleBaseURL}/medalwinner`,
+          icon: <IconUser size="2rem" />,
+          color: "gray",
+          label: "Medal Winner",
+          description: "All users of the system",
+        },
       ],
     },
     {

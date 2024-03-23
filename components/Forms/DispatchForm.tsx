@@ -46,6 +46,7 @@ function DispatchForm(props: any) {
 
   const state: any = useSelector((state: any) => state.data);
   const countryName = state?.selectedCountry?.label;
+  const country_id = state?.selectedCountry?._id;
 
   // fetch data
 
@@ -210,7 +211,7 @@ function DispatchForm(props: any) {
   const calcuLateWeight = () => {
     let val = 0;
     allData.products.map((item: any, index: any) => {
-      let data = findFromJson(products, item.sku_name, "value");
+      let data = findFromJson(products, item.product_id, "value");
       if (!isNaN(+data.weight)) {
         val += +data.weight;
       }
@@ -243,7 +244,7 @@ function DispatchForm(props: any) {
       style: { minWidth: "48%" },
       data: statesData,
       onChange: (e: any) => {
-        handleDropDownChange(e, "state_id", "city");
+        handleDropDownChange(e, "state_id", "city_id");
       },
       value: allData.state_id,
     },
@@ -430,26 +431,6 @@ function DispatchForm(props: any) {
       value: allData.warehouse_name || "",
     },
 
-    // {
-    //   type: "date",
-    //   style: { minWidth: "48%" },
-    //   label: "Dispatch Date",
-    //   placeholder: "Dispatch Date",
-    //   onChange: (e: any) => {
-    //     handleDropDownChange(e.target.value, "dispatch_date");
-    //   },
-    //   value: allData.dispatch_date || "",
-    // },
-    // {
-    //   type: "date",
-    //   style: { minWidth: "48%" },
-    //   label: "Delivery Date",
-    //   placeholder: "Delivery Date",
-    //   onChange: (e: any) => {
-    //     handleDropDownChange(e.target.value, "delivery_date");
-    //   },
-    //   value: allData.delivery_date || "",
-    // },
     {
       style: { minWidth: "48%" },
       label: `Receiver's Name`,
@@ -613,12 +594,13 @@ function DispatchForm(props: any) {
                 name="SKU Name"
                 style={{ width: "100%" }}
                 label="SKU Name"
-                value={allData.products[index]?.sku_name || ""}
+                value={allData.products[index]?.product_id || ""}
                 onChange={(e: any) => {
                   let data = findFromJson(products, e, "value");
                   handleNestedFields(data.producttype, "order_type", index);
                   handleNestedFields(data.amount, "rate", index);
-                  handleNestedFields(e, "sku_name", index);
+                  handleNestedFields(data.sku_code, "sku_code", index);
+                  handleNestedFields(e, "product_id", index);
                 }}
                 placeholder="SKU Name"
                 w={"100%"}
@@ -703,16 +685,6 @@ function DispatchForm(props: any) {
   let locationData = useFinduserGeoLocationQuery("");
   locationData = iterateData(locationData);
 
-  let validateData = (allData: any, keys: any[]) => {
-    let isvalid = true;
-    keys.map((item) => {
-      if (!allData[item] || allData[item].trim().length < 1) {
-        isvalid = false;
-      }
-    });
-    return isvalid;
-  };
-
   const saveData = () => {
     let amount = calculateData("amount");
 
@@ -752,10 +724,12 @@ function DispatchForm(props: any) {
     let data = {
       packaging_unit_details: dataArr,
       country: countryName,
+      country_id: country_id,
+
       receiver_type: allData?.childSchoolData?.label,
       receiver_name: allData.receiver_name,
-      city: allData.city_id,
-      state: allData.state_id,
+      city_id: allData.city_id,
+      state_id: allData.state_id,
       // dispatch_date: allData.dispatch_date,
       eway_bill_no: allData["eway_bill_no"] || "",
       approx_weight: allData.approx_weight,
@@ -830,11 +804,12 @@ function DispatchForm(props: any) {
 
     let dataToUpdate = {
       packaging_unit_details: dataArr,
+      country_id: country_id,
       country: countryName,
       receiver_type: allData?.childSchoolData?.label,
       receiver_name: allData.receiver_name,
-      city: allData.city_id,
-      state: allData.state_id,
+      city_id: allData.city_id,
+      state_id: allData.state_id,
       // dispatch_date: allData.dispatch_date,
       eway_bill_no: allData["eway_bill_no"] || "",
       approx_weight: allData.approx_weight,
