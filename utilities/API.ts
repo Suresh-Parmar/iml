@@ -39,6 +39,7 @@ export const BULD_USER_CREATION = `${BASE_URL}/bulkcreation_other_user`;
 export const ATTENDENCESHEET = `${BASE_URL}/attendence_sheets`;
 export const GENRATESEAT = `${BASE_URL}/generate_seat`;
 export const GENERICREPORTS = `${BASE_URL}/generic_reports`;
+export const maddleWinnerexcel = `${BASE_URL}/medal_winners_excel`;
 export const MARKSSHEET = `${BASE_URL}/marksheets_download`;
 export const RESULT = `${BASE_URL}/fetch_result`;
 
@@ -378,6 +379,10 @@ const certificateDownload = async (data: any) => {
 
 const genericReports = async (data: any) => {
   return await axios.post(GENERICREPORTS, data, { headers: getAPIHeaders() });
+};
+
+const maddleWinnerexcelReport = async (data: any) => {
+  return await axios.post(maddleWinnerexcel, data, { headers: getAPIHeaders() });
 };
 
 const downloadMarksSheet = async (data: any) => {
@@ -1235,6 +1240,7 @@ export {
   omrSheetDownloadStudent,
   certificateDownload,
   genericReports,
+  maddleWinnerexcelReport,
   downloadMarksSheet,
   dispatchRequest,
   dispatchIDGenration,

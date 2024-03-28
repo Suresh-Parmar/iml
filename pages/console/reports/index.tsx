@@ -2,7 +2,7 @@ import { filterData } from "@/helpers/filterData";
 import { genratePayload, handleApiData, iterateData } from "@/helpers/getData";
 import { checkIsAllChecked, selectCheckBOxData } from "@/helpers/selectCheckBox";
 import { useTableDataMatrixQuery } from "@/redux/apiSlice";
-import { genericReports, readApiData, readCities, readCompetitions, readStates } from "@/utilities/API";
+import { genericReports, maddleWinnerexcelReport, readCompetitions } from "@/utilities/API";
 import { Checkbox, Group, MultiSelect, Radio, Select } from "@mantine/core";
 import React, { useEffect } from "react";
 import { useState } from "react";
@@ -11,7 +11,6 @@ import { useSelector } from "react-redux";
 function Reports() {
   const [allData, setAllData] = useState<any>({});
   const [comeptitionsData, setCompetitionsData] = useState<any>([]);
-  const [loader, setLoader] = useState<any>(false);
   const [pdfLoader, setpdfLoader] = useState<any>(false);
   const [genratedData, setGenratedData] = useState<any>([]);
   const [dataToPrint, setDataToPrint] = useState<any>(false);
@@ -40,7 +39,7 @@ function Reports() {
   let statesData = useTableDataMatrixQuery(genratePayload("states", undefined, undefined, countryName));
   statesData = iterateData(statesData);
   statesData = handleApiData(statesData);
-  statesData = filterData(statesData, "label", "value");
+  statesData = filterData(statesData, "label", "value", "_id");
 
   let classesData = useTableDataMatrixQuery(genratePayload("classes", undefined, undefined, countryName));
   classesData = iterateData(classesData);
@@ -52,7 +51,7 @@ function Reports() {
       "schools",
       {
         country_id: countryName || "India",
-        city: allData.city,
+        city_id: allData.city_id,
       },
       undefined,
       countryName
@@ -68,7 +67,7 @@ function Reports() {
       "groups",
       {
         country_id: countryName || "India",
-        city: allData.city,
+        city_id: allData.city_id,
       },
       undefined,
       countryName
@@ -78,17 +77,19 @@ function Reports() {
   groupsData = handleApiData(groupsData);
   groupsData = filterData(groupsData, "label", "value");
 
-  let citiesData = useTableDataMatrixQuery(genratePayload("cities", { state: allData.state }, "state", countryName));
+  let citiesData = useTableDataMatrixQuery(
+    genratePayload("cities", { state_id: allData.state_id }, "state_id", countryName)
+  );
   citiesData = iterateData(citiesData);
   citiesData = handleApiData(citiesData);
-  citiesData = filterData(citiesData, "label", "value");
+  citiesData = filterData(citiesData, "label", "value", "_id");
 
   let examCenterData = useTableDataMatrixQuery(
     genratePayload(
       "exam_centers",
       {
         country_id: countryName || "India",
-        city: allData.city,
+        city_id: allData.city_id,
       },
       undefined,
       countryName
@@ -193,9 +194,9 @@ function Reports() {
       style: { maxWidth: "35%", width: "30%" },
       data: statesData,
       onchange: (e: any) => {
-        handleDropDownChange(e, "state", "city");
+        handleDropDownChange(e, "state_id", "city_id");
       },
-      value: allData.state,
+      value: allData.state_id,
     },
     {
       label: "City",
@@ -204,9 +205,9 @@ function Reports() {
       type: "select",
       data: citiesData,
       onchange: (e: any) => {
-        handleDropDownChange(e, "city", "filterTypeStudent");
+        handleDropDownChange(e, "city_id", "filterTypeStudent");
       },
-      value: allData.city,
+      value: allData.city_id,
     },
   ];
 
@@ -559,21 +560,53 @@ function Reports() {
     setDataToPrint(newData);
   };
 
+  let medal_winner_list = () => {
+    const payload: any = {
+      city_id: allData?.city_id,
+      country_id: countryName,
+      competition_code: allData?.competition,
+      reportname: allData?.reportname,
+    };
+
+    maddleWinnerexcelReport(payload)
+      .then((res) => {
+        let file = res?.data?.response?.file_url;
+        const link: any = document.createElement("a");
+        link.href = file;
+        link.target = "_blank";
+        link.setAttribute("download", "maddleWinnerexcelReport"); //
+        document.body.appendChild(link);
+        link.click();
+        link.parentNode.removeChild(link);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const genrateStudentPdf = async (dataToShow: any) => {
     if (pdfLoader) {
+      return;
+    }
+
+    if (allData?.reportname == "Medal winners list") {
+      medal_winner_list();
       return;
     }
 
     setGenratedData([]);
 
     const payload: any = {
-      city: allData?.city,
-      state: allData?.state,
+      city_id: allData?.city_id,
+      state_id: allData?.state_id,
       competition_code: allData?.competition,
       reportname: allData?.reportname,
       filterTypeStudent: allData?.filterTypeStudent,
       division_break: allData?.division_break,
+      country_id: countryName,
     };
+
+    // maddleWinnerexcelReport;
 
     for (const school of allData.schools) {
       payload.schools = school;
