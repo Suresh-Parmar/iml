@@ -7,7 +7,6 @@ import { notifications } from "@mantine/notifications";
 import { UserRoleFormMapping } from "@/utilities/users";
 import { RoleMatrix } from "../permissions";
 import { formTypeToFetcherMapper } from "@/helpers/dataFetcher";
-import { filterDataSingle } from "@/helpers/dropDownData";
 import { checkValidDate } from "@/helpers/validations";
 import { useSelector } from "react-redux";
 import { setGetData } from "@/helpers/getLocalStorage";

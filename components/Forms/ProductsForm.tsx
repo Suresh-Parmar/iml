@@ -272,8 +272,8 @@ function ProductForm({
   }
 
   useEffect(() => {
-    let subjectValue = findFromJson(subjectsOptions, formValues.subject_id, "_id");
-    formValues.subject_id && fetchCompetitions(subjectValue?.name ?? "");
+    // let subjectValue = findFromJson(subjectsOptions, formValues.subject_id, "_id");
+    formValues.subject_id && fetchCompetitions(formValues?.subject_id ?? "");
   }, [formValues.subject_id]);
 
   const renderBundles = () => {
