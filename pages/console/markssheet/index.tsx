@@ -45,8 +45,6 @@ export default function Announcements() {
     readData();
   }, [selectedCountry]);
 
-  console.log(totalrecords, "totalrecords");
-
   return (
     <Container h={"100%"} fluid p={0}>
       <Matrix
