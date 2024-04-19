@@ -36,18 +36,21 @@ export default function Announcements() {
   useEffect(() => {
     setLoader(true);
     async function readData() {
-      const newData = await readApiData("marks", payload);
-      setData(newData);
+      const newData = await readApiData("marks", payload, true);
+      let limits = { total_count: newData?.data?.total_count, total_pages: newData?.data?.total_pages };
+      setTotalrecords(limits);
+      setData(newData?.data?.response || []);
       setLoader(false);
     }
     readData();
   }, [selectedCountry]);
 
-  //
+  console.log(totalrecords, "totalrecords");
 
   return (
     <Container h={"100%"} fluid p={0}>
       <Matrix
+        totalrecords={totalrecords}
         setPagiData={setPagiData}
         pagiData={pagiData}
         showApiSearch={true}
