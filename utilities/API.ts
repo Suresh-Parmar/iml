@@ -641,8 +641,8 @@ const readAnnoucements = async () => {
   return annoucement;
 };
 
-const readApiData = async (collection: any, customData: any = "") => {
-  let apiData = await readData(collection, "find_many", undefined, undefined, customData);
+const readApiData = async (collection: any, customData: any = "", fullres: any = false) => {
+  let apiData = await readData(collection, "find_many", undefined, undefined, customData, fullres);
   return apiData;
 };
 
