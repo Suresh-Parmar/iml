@@ -13,6 +13,7 @@ function MarksResult() {
   const allReduxData = useSelector((state: any) => state?.data);
   let themeColor = allReduxData?.colorScheme;
   let countryredux = allReduxData?.selectedCountry?.label;
+  let countryId = allReduxData?.selectedCountry?._id;
   let themeBGColor = themeColor == "light" ? "bg-white" : "bg-dark";
   let textColer = themeColor == "light" ? "text-dark" : "text-white";
 
@@ -30,7 +31,7 @@ function MarksResult() {
     collection_name: "competitions",
     op_name: "find_many",
     filter_var: {
-      country: countryredux || "India",
+      country_id: countryId || "India",
       status: true,
     },
   };
@@ -57,7 +58,7 @@ function MarksResult() {
       filter_var: {
         code: allData.competition,
         [allData.searchby]: allData.seat_number,
-        country: countryredux || "India",
+        country_id: countryId || "India",
         status: true,
       },
     };
