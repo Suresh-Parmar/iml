@@ -256,14 +256,14 @@ function ProductForm({
   const competitionsOptions = filterData(competitions, "label", "value", "_id");
   let boardsOptions = [];
 
-  console.log(board_category, "board_category");
-
   let formValues: any = form.values;
 
   if (formValues.boardcategory_id) {
+    const boardType = findFromJson(boards, formValues.boardcategory_id, "_id");
+
     let dataBoard: any = [];
     boards.map((item) => {
-      if (item._id == formValues.boardcategory_id) {
+      if (item.board_type == boardType?.board_type) {
         dataBoard.push(item);
       }
     });

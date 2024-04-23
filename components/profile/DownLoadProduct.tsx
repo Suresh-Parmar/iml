@@ -25,6 +25,7 @@ function DownLoadProduct() {
 
   const state: any = useSelector((state: any) => state.data);
   const countryName = state?.selectedCountry?.label;
+  const countryID = state?.selectedCountry?._id;
 
   async function readCompetitionsData() {
     setLoader(true);
@@ -58,7 +59,12 @@ function DownLoadProduct() {
       omr: omrSheetDownloadStudent,
       marksheet: downloadMarksSheet,
     };
-    let payload = { username: [userDataDetails?.username], competition: allData.competition, whitbackground: true };
+    let payload = {
+      username: [userDataDetails?.username],
+      competition: allData.competition,
+      whitbackground: true,
+      country_id: countryID,
+    };
 
     setLoader(true);
     let callApi = apis[item.key](payload);
