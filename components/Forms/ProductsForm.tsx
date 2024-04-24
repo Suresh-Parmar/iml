@@ -250,7 +250,7 @@ function ProductForm({
   // board_type
 
   const productTypesOptions = filterData(productTypes, "label", "value", "_id");
-  let board_category = filterData(structuredClone(boards), "label", "value", "_id");
+  let board_category = filterData(structuredClone(boards), "label", "value", "_id", false, false, "board_type");
   const classesOptions = filterData(classes, "label", "value", "code", true, "order_code", undefined, true);
   const subjectsOptions = filterData(subjects, "label", "value", "_id");
   const competitionsOptions = filterData(competitions, "label", "value", "_id");
