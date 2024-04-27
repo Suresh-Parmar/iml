@@ -145,8 +145,6 @@ export const readData = async (
   data?: any,
   getfullRes?: any
 ) => {
-  console.log(getSelectedCountry());
-
   let requestBody: RequestBodyType = {
     collection_name: `${tableName}`,
     op_name: `${operationType}`,
