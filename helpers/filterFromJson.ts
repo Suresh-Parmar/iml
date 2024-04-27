@@ -10,13 +10,16 @@ export const findFromJson = (jsonArr: any[], key: any, josnKey: any) => {
   return {};
 };
 
-export const filterDrodownData = (data: any[], key: string, labelKey: string) => {
+export const filterDrodownData = (data: any[], key: string, labelKey: string, setKey?: any) => {
   let newDataData: any = [];
   data.map((item) => {
     if (item.status) {
       item.value = item[key];
       item.label = item[labelKey];
       item[key] && item[labelKey] && newDataData.push(item);
+    }
+    if (setKey) {
+      item.value = item[setKey];
     }
   });
 

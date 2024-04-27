@@ -1,5 +1,5 @@
 import { TextInput, Button, Group, Box, Flex, Textarea, Select, LoadingOverlay, Radio, Checkbox } from "@mantine/core";
-import { isEmail, useForm } from "@mantine/form";
+import { useForm } from "@mantine/form";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import { MatrixDataType, MatrixRowType } from "../Matrix";
@@ -17,7 +17,6 @@ import {
 import { notifications } from "@mantine/notifications";
 import { checkValidEmailOrNot, maxLength } from "@/helpers/validations";
 import { filterDrodownData, findFromJson } from "@/helpers/filterFromJson";
-import { filterDataSingle } from "@/helpers/dropDownData";
 import { useSelector } from "react-redux";
 import { setGetData } from "@/helpers/getLocalStorage";
 import { DateinputCustom } from "../utils";
@@ -95,7 +94,7 @@ function SchoolForm({
 
   async function readDataGroups() {
     const newData = await readApiData("groups");
-    let newDataFilter = filterData(newData, "label", "value", "_id");
+    let newDataFilter = filterData(newData, "label", "value", "code");
     setgroupData(newDataFilter);
   }
 
@@ -108,7 +107,7 @@ function SchoolForm({
     });
   };
 
-  async function readData(designation: any, setData: any, role: any = "teacher") {
+  async function readData(designation: any, setData: any, role: any = "teacher", setKey: any = "name") {
     let filterData: any = {
       collection_name: "users",
       op_name: "find_many",
@@ -123,7 +122,7 @@ function SchoolForm({
     }
 
     const teachers = await readTeachers(filterData);
-    let newData = filterDrodownData(teachers, "name", "name");
+    let newData = filterDrodownData(teachers, "name", "name", setKey);
     setData && setData(newData);
   }
 
@@ -143,7 +142,7 @@ function SchoolForm({
     readDataGroups();
     readData("teacher", setTeacher);
     readData("principal", setPrincipal);
-    readData("", setrelationshipManager, "rm");
+    readData("", setrelationshipManager, "rm", "_id");
   }, []);
 
   const getMobileCode = () => {
@@ -153,6 +152,7 @@ function SchoolForm({
   const form: any = useForm({
     initialValues: {
       ...rowData,
+      create_exam_center: false,
       affiliation: rowData?.affiliation ?? "no",
       contact_number: rowData?.contact_number
         ? String(rowData?.contact_number)?.replace(getMobileCode(), "").trim()
@@ -257,7 +257,7 @@ function SchoolForm({
   };
 
   const cityNames = filterData(citiesData, "label", "value", "_id");
-  const boardNames = filterData(boardsData, "label", "value", "_id");
+  const boardNames = filterData(boardsData, "label", "value", "code");
   const stateNames = filterData(statesData, "label", "value", "_id");
 
   const renderExtraFields = () => {
@@ -528,7 +528,7 @@ function SchoolForm({
               mt={"md"}
               size="md"
               // withAsterisk
-              {...form.getInputProps("relationship_manager_id")}
+              {...form.getInputProps("rm_id")}
               w={"100%"}
             />
             <Select
