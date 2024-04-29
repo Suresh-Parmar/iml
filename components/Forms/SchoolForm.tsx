@@ -149,11 +149,23 @@ function SchoolForm({
     return "+" + reduxData?.selectedCountry?.country_code || selectedCountryLocal?.country_code || "";
   };
 
+  let affiliationShow: any = {
+    y: "yes",
+    n: "no",
+    Y: "yes",
+    N: "no",
+  };
+
+  let affiliationVal = affiliationShow[rowData?.affiliation];
+  if (!affiliationVal) {
+    affiliationVal = rowData?.affiliation || "no";
+  }
+
   const form: any = useForm({
     initialValues: {
       ...rowData,
       create_exam_center: false,
-      affiliation: rowData?.affiliation ?? "no",
+      affiliation: affiliationVal,
       contact_number: rowData?.contact_number
         ? String(rowData?.contact_number)?.replace(getMobileCode(), "").trim()
         : "",
@@ -389,8 +401,11 @@ function SchoolForm({
               mt={"md"}
               size="md"
               // withAsterisk
-              {...form.getInputProps("board_id")}
               w={"100%"}
+              value={Array.isArray(form.values.board_id) ? form.values.board_id[0] : form.values.board_id}
+              onChange={(val: any) => {
+                form.setFieldValue("board_id", [val]);
+              }}
             />
             <TextInput
               disabled={readonly}
@@ -413,7 +428,10 @@ function SchoolForm({
               mt={"md"}
               size="md"
               // withAsterisk
-              {...form.getInputProps("group_id")}
+              value={Array.isArray(form.values.group_id) ? form.values.group_id[0] : form.values.group_id}
+              onChange={(val: any) => {
+                form.setFieldValue("group_id", [val]);
+              }}
               w={"100%"}
             />
             <TextInput

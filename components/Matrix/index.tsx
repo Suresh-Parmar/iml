@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Flex,
   Paper,
@@ -12,7 +12,6 @@ import {
   Button,
   Modal,
   LoadingOverlay,
-  Select,
   NumberInput,
   ActionIcon,
   Text,
@@ -23,7 +22,6 @@ import {
   ExpandedState,
   useReactTable,
   ColumnFiltersState,
-  ColumnResizeMode,
   getCoreRowModel,
   getFilteredRowModel,
   getExpandedRowModel,
@@ -54,7 +52,7 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 
 import { DebouncedInput } from "./components/DebouncedInput";
-import { FormType, MatrixDataType, MatrixRowType, UsersTypes } from "./types";
+import { MatrixDataType, MatrixRowType } from "./types";
 import { fuzzyFilter } from "./utilities";
 import ColumnHeader from "./components/ColumnHeader";
 import { UserForm } from "../Forms/UserForm";
