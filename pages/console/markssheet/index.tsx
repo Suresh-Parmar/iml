@@ -43,7 +43,7 @@ export default function Announcements() {
       setLoader(false);
     }
     readData();
-  }, [selectedCountry]);
+  }, [selectedCountry, Number(pagiData.page), Number(pagiData.limit)]);
 
   return (
     <Container h={"100%"} fluid p={0}>
