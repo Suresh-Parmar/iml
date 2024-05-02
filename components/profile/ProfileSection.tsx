@@ -1,7 +1,5 @@
 import { setGetData } from "@/helpers/getLocalStorage";
-import { Card } from "@mantine/core";
-import Image from "next/image";
-import React, { useState } from "react";
+import React from "react";
 import DownLoadProduct from "./DownLoadProduct";
 import ProductForYou from "./ProductForYou";
 import YourProduct from "./YourProduct";
