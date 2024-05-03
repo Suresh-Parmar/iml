@@ -65,7 +65,16 @@ export const apiSlice: any = createApi({
     }),
 
     roleCrudOpsget: builder.query({
-      query: (dataID) => {
+      query: (data: any) => {
+        let dataID = data;
+        if (typeof data == "object") {
+          dataID = data.id;
+        }
+
+        if (data?.exit) {
+          return null;
+        }
+
         return {
           url: NEXT_API,
           method: "POST",
