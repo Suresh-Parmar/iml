@@ -209,3 +209,37 @@ a {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 20px;
 }
+
+.circleDiv {
+  border-radius: 10000px;
+  border: 1px solid gray;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  min-height: 220px;
+  min-width: 220px;
+  width: max-content;
+}
+
+.resize-handle {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 10px; /* or any desired width */
+  height: 100%;
+  cursor: col-resize;
+}
+
+.resizable-table th {
+  position: relative;
+}
+
+.resizable-table td,
+.resizable-table th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}

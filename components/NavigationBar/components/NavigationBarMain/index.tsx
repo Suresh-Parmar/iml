@@ -8,23 +8,38 @@ import { iterateData } from "@/helpers/getData";
 import { useDispatch } from "react-redux";
 import { selectedTabUpdate } from "@/redux/slice";
 import NavigationLinks from "./JsonLInks";
+import navigationData from "./rmManager";
+
+const rmNavData = navigationData;
 
 function NavigationBarMain({ opened }: { opened: boolean }) {
-  const consoleBaseURL = "/console";
+  let consoleBaseURL = "/console";
+
   const router = useRouter();
   const pathname = usePathname();
   const [siteJson, setSiteJson] = useState<any>([]);
 
   let userData: any = setGetData("userData", false, true);
   let activeUserID = userData?.user?._id;
-  let defaultShow = userData?.metadata?.role == "super_admin";
+  let userRole = userData?.metadata?.role;
+  let defaultShow = userRole == "super_admin";
+  let isRmUser = userRole == "rm";
+
+  if (isRmUser) {
+    consoleBaseURL = "/relationshipmanager";
+  }
 
   let excludePaths = ["profile"];
 
   const dispatch = useDispatch();
 
-  let rolesData = useRoleCrudOpsgetQuery(activeUserID);
-  rolesData = iterateData(rolesData);
+  let rolesData: any = "";
+  if (!isRmUser) {
+    rolesData = useRoleCrudOpsgetQuery(activeUserID);
+    rolesData = iterateData(rolesData);
+  } else {
+    rolesData = rmNavData;
+  }
 
   const changeTab = (tab: string) => {
     dispatch(selectedTabUpdate(tab));
@@ -48,10 +63,12 @@ function NavigationBarMain({ opened }: { opened: boolean }) {
     if (rolesData[0]?.data && Array.isArray(rolesData[0].data)) {
       setSiteJson(rolesData[0]?.data);
     }
-  }, [rolesData]);
+  }, [rolesData, isRmUser]);
 
   useEffect(() => {
-    handleisValid(pathname);
+    if (!isRmUser) {
+      handleisValid(pathname);
+    }
   }, [pathname, siteJson]);
 
   const handleisValid = (pathname: string) => {
@@ -66,12 +83,14 @@ function NavigationBarMain({ opened }: { opened: boolean }) {
     let data = findFromJson(siteJson, pathname, "link");
 
     if (!data?.permissions?.view && !excludePaths.includes(pathname)) {
-      router.replace(consoleBaseURL);
+      setTimeout(() => {
+        router.replace(consoleBaseURL);
+      }, 100);
     }
   };
 
   const getDataFromJson = (key: string = "") => {
-    if (defaultShow) {
+    if (defaultShow || isRmUser) {
       return true;
     }
 
@@ -83,9 +102,13 @@ function NavigationBarMain({ opened }: { opened: boolean }) {
     return !!data.permissions && !!data.permissions.view;
   };
 
-  const navigationBarLinks = NavigationLinks({ consoleBaseURL });
+  let navigationBarLinks: any = [];
 
-  const [showLabel, setShowLabel] = useState<boolean>(false);
+  if (isRmUser) {
+    navigationBarLinks = rolesData;
+  } else {
+    navigationBarLinks = NavigationLinks({ consoleBaseURL });
+  }
 
   const useStyles = createStyles((theme, colorScheme: any) => ({
     navbar: {
@@ -125,8 +148,6 @@ function NavigationBarMain({ opened }: { opened: boolean }) {
   const NavLinkIcon = (navigationBarLink: any) => {
     return (
       <ThemeIcon
-        onMouseEnter={() => setShowLabel(true)}
-        onMouseLeave={() => setShowLabel(false)}
         mx={0}
         sx={(theme) => ({ padding: theme.spacing.xs })}
         size={36}
@@ -140,7 +161,7 @@ function NavigationBarMain({ opened }: { opened: boolean }) {
 
   return (
     <Navbar.Section grow className={classes.links} component={ScrollArea}>
-      {navigationBarLinks.map((navigationBarLink) => {
+      {navigationBarLinks.map((navigationBarLink: any) => {
         let showMenu = getDataFromJson(navigationBarLink.href || navigationBarLink.linkHref);
         if (!showMenu) {
           return;
@@ -163,7 +184,7 @@ function NavigationBarMain({ opened }: { opened: boolean }) {
             }}
             childrenOffset={28}
           >
-            {navigationBarLink.navlinks?.map((navLink) => {
+            {navigationBarLink.navlinks?.map((navLink: any) => {
               let showMenu = getDataFromJson(navLink.href);
               if (!showMenu) {
                 return;
