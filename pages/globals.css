@@ -224,3 +224,22 @@ a {
   min-width: 220px;
   width: max-content;
 }
+
+.resize-handle {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 10px; /* or any desired width */
+  height: 100%;
+  cursor: col-resize;
+}
+
+.resizable-table th {
+  position: relative;
+}
+
+.resizable-table td,
+.resizable-table th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}

@@ -1,14 +1,23 @@
 import { setGetData } from "@/helpers/getLocalStorage";
 import { ControlApplicationShellComponents } from "@/redux/slice";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import MyTable from "../Table";
+import { readApiData, rmDashboard } from "@/utilities/API";
+import Loader from "../common/Loader";
 
 function RMHomePage() {
   const dispatch = useDispatch();
   let authentication: any = setGetData("userData", false, true);
   let role = authentication?.user?.role;
   const router: any = useRouter();
+
+  const reduxData: any = useSelector((state: any) => state.data);
+  let selectedCountry = reduxData?.selectedCountry?._id;
+
+  const [counts, setCounts] = useState<any>({});
+  const [loader, setLoader] = useState<any>(false);
 
   useEffect(() => {
     if (role == "student") {
@@ -29,68 +38,110 @@ function RMHomePage() {
     }
   }, [authentication?.metadata?.status, dispatch, router]);
 
+  useEffect(() => {
+    getRmDataCounts();
+  }, []);
+
+  const getRmDataCounts = () => {
+    setLoader(true);
+    rmDashboard()
+      .then((res) => {
+        setLoader(false);
+        setCounts(res.data);
+      })
+      .catch((error) => {
+        setLoader(false);
+        console.log(error);
+      });
+  };
+
+  let payload = {
+    collection_name: "dispatches_data",
+    op_name: "find_many",
+    filter_var: {
+      country: selectedCountry,
+      user_id: authentication?.user?._id,
+    },
+  };
+
+  // async function readDispatches() {
+  //   setLoader(true);
+
+  //   const dispatches: any = await readApiData(null, payload);
+  //   setLoader(false);
+
+  //   console.log(dispatches);
+
+  //   //  setData(schools.data.response || []);
+  // }
+
+  // useEffect(() => {
+  //   readDispatches();
+  // }, [selectedCountry]);
+
+  const dataa = [
+    {
+      "Sr. No.": "Test",
+      "Dispatch Date": "Test",
+      "AWB No": "Test",
+      "Consignee Name": "Test",
+      "Description of goods":
+        "Lorem ipsum dolor sit amet consectetur Lorem ipsum dolor sit amet consectetur Lorem ipsum dolor sit amet consectetur",
+      "Weight (kg)": "Test",
+      Status: "Test",
+      Tracking: "Test",
+    },
+    {
+      "Sr. No.": "Test",
+      "Dispatch Date": "Test",
+      "AWB No": "Test",
+      "Consignee Name": "Test",
+      "Description of goods": "Test",
+      "Weight (kg)": "Test",
+      Status: "Test",
+      Tracking: "Test",
+    },
+  ];
+
+  const headers = [
+    "Sr. No.",
+    "Dispatch Date",
+    "AWB No",
+    "Consignee Name",
+    "Description of goods",
+    "Weight (kg)",
+    "Status",
+    "Tracking",
+  ];
+
+  const keys = [
+    "Sr. No.",
+    "Dispatch Date",
+    "AWB No",
+    "Consignee Name",
+    "Description of goods",
+    "Weight (kg)",
+    "Status",
+    "Tracking",
+  ];
+
   return (
-    <div className="d-flex justify-content-around align-items-center p-3 ">
-      <div className="w-100">
+    <div className="d-flex justify-content-around align-items-center p-3" style={{ overflow: "auto", height: "100%" }}>
+      <div className="w-100 py-5">
         <div className="d-flex justify-content-around align-items-center py-3 flex-wrap">
           <div className="circleDiv">
-            <div className="fs-1">10</div>
+            <div className="fs-1">{counts?.school_count || 0}</div>
             <div>No Of Schools</div>
           </div>
           <div className="circleDiv">
-            <div className="fs-1">500</div>
+            <div className="fs-1"> {counts?.student_count || 0}</div>
             <div>No Of Students</div>
           </div>
         </div>
         <div className="my-3 fs-5">Dispatches</div>
-        <div className="table-responsive">
-          <table className="table table-striped">
-            <thead>
-              <tr style={{ whiteSpace: "nowrap" }}>
-                <th className="text-center">Sr. No.</th>
-                <th>Dispatch Date</th>
-                <th>AWB No</th>
-                <th>Consignee Name</th>
-                <th>Description of goods</th>
-                <th>Weight (kg)</th>
-                <th>Status</th>
-                <th>Tracking</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="text-center">1</td>
-                <td>20-04-2024</td>
-                <td>XYZ</td>
-                <td>Consignee Name</td>
-                <td>
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit. Harum iusto excepturi debitis at voluptatem.
-                  Blanditiis ut reiciendis consectetur autem labore nobis, debitis, obcaecati, dolore similique illo
-                  commodi ducimus iste expedita.
-                </td>
-                <td>50.5</td>
-                <td>Status</td>
-                <td>Tracking</td>
-              </tr>
-
-              <tr>
-                <td className="text-center">2</td>
-                <td>28-04-2024</td>
-                <td>ABC</td>
-                <td>Consignee Name</td>
-                <td>
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit. Harum iusto excepturi debitis at voluptatem.
-                  Blanditiis ut reiciendis consectetur autem labore nobis, debitis, obcaecati, dolore similique illo
-                  commodi ducimus iste expedita.
-                </td>
-                <td>10.5</td>
-                <td>Status</td>
-                <td>Tracking</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <MyTable data={dataa} headers={headers} keys={keys} />
       </div>
+      <Loader show={loader} />
     </div>
   );
 }

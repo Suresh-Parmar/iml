@@ -42,8 +42,9 @@ export const GENERICREPORTS = `${BASE_URL}/generic_reports`;
 export const maddleWinnerexcel = `${BASE_URL}/medal_winners_excel`;
 export const MARKSSHEET = `${BASE_URL}/marksheets_download`;
 export const RESULT = `${BASE_URL}/fetch_result`;
-
 export const SELFGETAPI = "/api/landingpages";
+export const RM_DASHBOARD = `${BASE_URL}/rm_dashboard?rm_id=100901256`;
+export const RM_MY_SCHOOLS = `${BASE_URL}/rm_my_schools`;
 
 let userData: any = setGetData("userData", false, true);
 
@@ -70,6 +71,22 @@ axios.interceptors.response.use(
     } else {
       return Promise.reject(error);
     }
+  }
+);
+
+axios.interceptors.request.use(
+  (config) => {
+    let userData: any = setGetData("userData", false, true);
+    let token = userData?.metadata?.token;
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
   }
 );
 
@@ -353,6 +370,10 @@ const admitCardCountData = async (data: any) => {
 
 const readDataFromNEXT = async (data: any) => {
   return await axios.post(SELFGETAPI, data, { headers: getAPIHeaders() });
+};
+
+const rmDashboard = async () => {
+  return await axios.get(RM_DASHBOARD);
 };
 
 const omrSheetDownload = async (data: any) => {
@@ -1249,4 +1270,5 @@ export {
   readDataFromNEXT,
   getDataLandingPage,
   getResult,
+  rmDashboard,
 };
