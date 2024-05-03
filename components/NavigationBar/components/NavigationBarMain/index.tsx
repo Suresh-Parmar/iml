@@ -34,11 +34,11 @@ function NavigationBarMain({ opened }: { opened: boolean }) {
   const dispatch = useDispatch();
 
   let rolesData: any = "";
-  if (!isRmUser) {
-    rolesData = useRoleCrudOpsgetQuery(activeUserID);
-    rolesData = iterateData(rolesData);
-  } else {
+  rolesData = useRoleCrudOpsgetQuery({ id: activeUserID, exit: isRmUser });
+  if (isRmUser) {
     rolesData = rmNavData;
+  } else {
+    rolesData = iterateData(rolesData);
   }
 
   const changeTab = (tab: string) => {
