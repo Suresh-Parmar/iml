@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const ResizableTable = ({ data, headers, keys }: { data: any; headers: any; keys: any[] }) => {
+const CustomTable = ({ data, headers, keys }: { data: any; headers: any; keys: any[] }) => {
   const [columnWidths, setColumnWidths] = useState<any>({});
   const [isResizing, setIsResizing] = useState<any>(false);
   const [resizingColumnIndex, setResizingColumnIndex] = useState<any>(null);
@@ -74,4 +74,4 @@ const ResizableTable = ({ data, headers, keys }: { data: any; headers: any; keys
   );
 };
 
-export default ResizableTable;
+export default CustomTable;

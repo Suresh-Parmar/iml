@@ -14,10 +14,10 @@ let navigationData = [
     description: "My Schools",
   },
   {
-    href: `${consoleBaseURL}/enrollment`,
+    href: `${consoleBaseURL}/enrollments`,
     color: "blue",
-    label: "Enrollment",
-    description: "Enrollment",
+    label: "Enrollments",
+    description: "Enrollments",
   },
   {
     href: `${consoleBaseURL}/dispatches`,
