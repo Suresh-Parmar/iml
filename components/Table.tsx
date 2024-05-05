@@ -64,6 +64,9 @@ const CustomTable = ({ data, headers, keys }: { data: any; headers: any; keys: a
     return <div className="resize-handle" onMouseDown={(event) => onMouseDown(event, columnIndex)} />;
   };
 
+  if (!data.length) {
+    return <div className="fs-5 text-center my-5">No Records found</div>;
+  }
   return (
     <div className="resizable-table table-responsive">
       <table className="table table-striped">
