@@ -14,7 +14,7 @@ let navigationData = [
     description: "My Schools",
   },
   {
-    href: `${consoleBaseURL}/enrollment`,
+    href: `${consoleBaseURL}/enrollments`,
     color: "blue",
     label: "Enrollments",
     description: "Enrollments",
