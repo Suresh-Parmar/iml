@@ -76,6 +76,7 @@ function Enrollments() {
     {
       label: "Competition",
       type: "select",
+      style: { maxWidth: "35%", width: "30%" },
       data: competitionData,
       onchange: (e: any) => {
         handleDropDownChange(e, "competition_id", allData, setAllData);
@@ -85,6 +86,7 @@ function Enrollments() {
     {
       label: "State",
       type: "select",
+      style: { maxWidth: "35%", width: "30%" },
       data: stateApiData,
       onchange: (e: any) => {
         handleDropDownChange(e, "state_id", allData, setAllData, "city_id");
@@ -94,6 +96,7 @@ function Enrollments() {
     {
       label: "City",
       type: "select",
+      style: { maxWidth: "35%", width: "30%" },
       data: cityApiData,
       onchange: (e: any) => {
         handleDropDownChange(e, "city_id", allData, setAllData);
