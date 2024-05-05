@@ -45,6 +45,7 @@ export const RESULT = `${BASE_URL}/fetch_result`;
 export const SELFGETAPI = "/api/landingpages";
 export const RM_DASHBOARD = `${BASE_URL}/rm_dashboard?rm_id=100901256`;
 export const RM_MY_SCHOOLS = `${BASE_URL}/rm_my_schools`;
+export const ENROLLMENTS = `${BASE_URL}/rm_enrolments_schoolwise`;
 
 let userData: any = setGetData("userData", false, true);
 
@@ -374,6 +375,15 @@ const readDataFromNEXT = async (data: any) => {
 
 const rmDashboard = async () => {
   return await axios.get(RM_DASHBOARD);
+};
+
+const rmSchools = async () => {
+  let params = { country_id: getSelectedCountry(), rm_id: 100901256 };
+  return await axios.get(RM_MY_SCHOOLS, { params });
+};
+
+const rmEnrolments = async (params: any) => {
+  return await axios.get(ENROLLMENTS, { params });
 };
 
 const omrSheetDownload = async (data: any) => {
@@ -1271,4 +1281,6 @@ export {
   getDataLandingPage,
   getResult,
   rmDashboard,
+  rmSchools,
+  rmEnrolments,
 };

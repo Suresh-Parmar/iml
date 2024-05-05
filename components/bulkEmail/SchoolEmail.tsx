@@ -1,5 +1,4 @@
-import { Container, Select, TextInput } from "@mantine/core";
-import Matrix, { MatrixDataType } from "@/components/Matrix";
+import { Select, TextInput } from "@mantine/core";
 import { useEffect, useState } from "react";
 import {
   readCities,

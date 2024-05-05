@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const ResizableTable = ({ data, headers, keys }: { data: any; headers: any; keys: any[] }) => {
+const CustomTable = ({ data, headers, keys }: { data: any; headers: any; keys: any[] }) => {
   const [columnWidths, setColumnWidths] = useState<any>({});
   const [isResizing, setIsResizing] = useState<any>(false);
   const [resizingColumnIndex, setResizingColumnIndex] = useState<any>(null);
@@ -42,11 +42,20 @@ const ResizableTable = ({ data, headers, keys }: { data: any; headers: any; keys
   };
 
   const renderTableBody = () => {
+    if (!Array.isArray(data)) {
+      console.log("data is not an array ----------------");
+      console.log(data);
+      return <></>;
+    }
     return data.map((row: any, rowIndex: any) => (
       <tr key={rowIndex}>
-        {keys.map((key: any, columnIndex: any) => (
-          <td key={columnIndex}>{row[key]}</td>
-        ))}
+        {keys.map((key: any, columnIndex: any) => {
+          if (key == "index") {
+            return <td key={rowIndex}>{rowIndex + 1}</td>;
+          }
+
+          return <td key={columnIndex}>{row[key]}</td>;
+        })}
       </tr>
     ));
   };
@@ -55,6 +64,9 @@ const ResizableTable = ({ data, headers, keys }: { data: any; headers: any; keys
     return <div className="resize-handle" onMouseDown={(event) => onMouseDown(event, columnIndex)} />;
   };
 
+  if (!data.length) {
+    return <div className="fs-5 text-center my-5">No Records found</div>;
+  }
   return (
     <div className="resizable-table table-responsive">
       <table className="table table-striped">
@@ -74,4 +86,4 @@ const ResizableTable = ({ data, headers, keys }: { data: any; headers: any; keys
   );
 };
 
-export default ResizableTable;
+export default CustomTable;
