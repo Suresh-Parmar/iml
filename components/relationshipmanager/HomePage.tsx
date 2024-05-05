@@ -17,6 +17,7 @@ function RMHomePage() {
   let selectedCountry = reduxData?.selectedCountry?._id;
 
   const [counts, setCounts] = useState<any>({});
+  const [tableData, setTableData] = useState<any>([]);
   const [loader, setLoader] = useState<any>(false);
 
   useEffect(() => {
@@ -60,8 +61,8 @@ function RMHomePage() {
     op_name: "find_many",
     filter_var: {
       // country: selectedCountry,
-      // username: authentication?.user?._id,
-      username: 100901256,
+      username: String(authentication?.user?._id),
+      // username: "100901256",
     },
   };
 
@@ -71,59 +72,29 @@ function RMHomePage() {
     const dispatches: any = await readApiData(null, payload);
     setLoader(false);
 
-    console.log(dispatches);
-
-    //  setData(schools.data.response || []);
+    setTableData(dispatches || []);
   }
 
   useEffect(() => {
     readDispatches();
   }, [selectedCountry]);
 
-  const dataa = [
-    {
-      "Sr. No.": "Test",
-      "Dispatch Date": "Test",
-      "AWB No": "Test",
-      "Consignee Name": "Test",
-      "Description of goods":
-        "Lorem ipsum dolor sit amet consectetur Lorem ipsum dolor sit amet consectetur Lorem ipsum dolor sit amet consectetur",
-      "Weight (kg)": "Test",
-      Status: "Test",
-      Tracking: "Test",
-    },
-    {
-      "Sr. No.": "Test",
-      "Dispatch Date": "Test",
-      "AWB No": "Test",
-      "Consignee Name": "Test",
-      "Description of goods": "Test",
-      "Weight (kg)": "Test",
-      Status: "Test",
-      Tracking: "Test",
-    },
-  ];
-
   const headers = [
     "Sr. No.",
-    "Dispatch Date",
-    "AWB No",
-    "Consignee Name",
-    "Description of goods",
+    // "Dispatch Date",
+    // "AWB No",
+    // "Consignee Name",
+    // "Description of goods",
     "Weight (kg)",
     "Status",
-    "Tracking",
+    // "Tracking",
   ];
 
   const keys = [
-    "Sr. No.",
-    "Dispatch Date",
-    "AWB No",
-    "Consignee Name",
-    "Description of goods",
-    "Weight (kg)",
-    "Status",
-    "Tracking",
+    "index",
+    "approx_weight",
+    "status",
+    // "Tracking"
   ];
 
   return (
@@ -140,7 +111,7 @@ function RMHomePage() {
           </div>
         </div>
         <div className="my-3 fs-5">Dispatches</div>
-        <MyTable data={dataa} headers={headers} keys={keys} />
+        <MyTable data={tableData} headers={headers} keys={keys} />
       </div>
       <Loader show={loader} />
     </div>

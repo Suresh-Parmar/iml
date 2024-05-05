@@ -14,29 +14,29 @@ let navigationData = [
     description: "My Schools",
   },
   {
-    href: `${consoleBaseURL}/enrollments`,
+    href: `${consoleBaseURL}/enrollment`,
     color: "blue",
     label: "Enrollments",
     description: "Enrollments",
   },
-  {
-    href: `${consoleBaseURL}/dispatches`,
-    color: "blue",
-    label: "Dispatches",
-    description: "dispatches",
-  },
-  {
-    href: `${consoleBaseURL}/downloads`,
-    color: "blue",
-    label: "Downloads",
-    description: "Downloads",
-  },
-  {
-    href: `${consoleBaseURL}/resources`,
-    color: "blue",
-    label: "Resources",
-    description: "Resources",
-  },
+  // {
+  //   href: `${consoleBaseURL}/dispatches`,
+  //   color: "blue",
+  //   label: "Dispatches",
+  //   description: "dispatches",
+  // },
+  // {
+  //   href: `${consoleBaseURL}/downloads`,
+  //   color: "blue",
+  //   label: "Downloads",
+  //   description: "Downloads",
+  // },
+  // {
+  //   href: `${consoleBaseURL}/resources`,
+  //   color: "blue",
+  //   label: "Resources",
+  //   description: "Resources",
+  // },
 ];
 
 export default navigationData;
