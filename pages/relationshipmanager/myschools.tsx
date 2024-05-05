@@ -1,10 +1,25 @@
 import CustomTable from "@/components/Table";
-import React from "react";
+import { rmSchools } from "@/utilities/API";
+import React, { useEffect } from "react";
 
 function Myschools() {
   const renderTable = () => {
     const headers = ["Sr. No."];
     const keys = ["Sr. No."];
+
+    const getSchools = () => {
+      rmSchools()
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+
+    useEffect(() => {
+      getSchools();
+    }, []);
 
     return (
       <div>

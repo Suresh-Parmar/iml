@@ -42,11 +42,20 @@ const CustomTable = ({ data, headers, keys }: { data: any; headers: any; keys: a
   };
 
   const renderTableBody = () => {
+    if (!Array.isArray(data)) {
+      console.log("data is not an array ----------------");
+      console.log(data);
+      return <></>;
+    }
     return data.map((row: any, rowIndex: any) => (
       <tr key={rowIndex}>
-        {keys.map((key: any, columnIndex: any) => (
-          <td key={columnIndex}>{row[key]}</td>
-        ))}
+        {keys.map((key: any, columnIndex: any) => {
+          if (key == "index") {
+            return <td key={rowIndex}>{rowIndex + 1}</td>;
+          }
+
+          return <td key={columnIndex}>{row[key]}</td>;
+        })}
       </tr>
     ));
   };

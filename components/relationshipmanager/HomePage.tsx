@@ -59,25 +59,26 @@ function RMHomePage() {
     collection_name: "dispatches_data",
     op_name: "find_many",
     filter_var: {
-      country: selectedCountry,
-      user_id: authentication?.user?._id,
+      // country: selectedCountry,
+      // username: authentication?.user?._id,
+      username: 100901256,
     },
   };
 
-  // async function readDispatches() {
-  //   setLoader(true);
+  async function readDispatches() {
+    setLoader(true);
 
-  //   const dispatches: any = await readApiData(null, payload);
-  //   setLoader(false);
+    const dispatches: any = await readApiData(null, payload);
+    setLoader(false);
 
-  //   console.log(dispatches);
+    console.log(dispatches);
 
-  //   //  setData(schools.data.response || []);
-  // }
+    //  setData(schools.data.response || []);
+  }
 
-  // useEffect(() => {
-  //   readDispatches();
-  // }, [selectedCountry]);
+  useEffect(() => {
+    readDispatches();
+  }, [selectedCountry]);
 
   const dataa = [
     {
