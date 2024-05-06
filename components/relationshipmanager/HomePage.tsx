@@ -8,10 +8,7 @@ import { readApiData, rmDashboard } from "@/utilities/API";
 import Loader from "../common/Loader";
 
 function RMHomePage() {
-  const dispatch = useDispatch();
   let authentication: any = setGetData("userData", false, true);
-  let role = authentication?.user?.role;
-  const router: any = useRouter();
 
   const reduxData: any = useSelector((state: any) => state.data);
   let selectedCountry = reduxData?.selectedCountry?._id;
@@ -19,25 +16,6 @@ function RMHomePage() {
   const [counts, setCounts] = useState<any>({});
   const [tableData, setTableData] = useState<any>([]);
   const [loader, setLoader] = useState<any>(false);
-
-  useEffect(() => {
-    if (role == "student") {
-      router.replace("/");
-    }
-    if (authentication?.metadata?.status == "unauthenticated" || !authentication) {
-      router.replace("/authentication/signin");
-    } else {
-      dispatch(
-        ControlApplicationShellComponents({
-          showHeader: true,
-          showFooter: false,
-          showNavigationBar: role == "student",
-          hideNavigationBar: false,
-          showAsideBar: false,
-        })
-      );
-    }
-  }, [authentication?.metadata?.status, dispatch, router]);
 
   useEffect(() => {
     getRmDataCounts();

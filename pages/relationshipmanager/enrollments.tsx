@@ -3,11 +3,14 @@ import Loader from "@/components/common/Loader";
 import { handleDropDownChange } from "@/helpers/dateHelpers";
 import { filterData } from "@/helpers/filterData";
 import { genratePayload, handleApiData, iterateData } from "@/helpers/getData";
+import { setGetData } from "@/helpers/getLocalStorage";
 import { useTableDataMatrixQuery } from "@/redux/apiSlice";
+import { ControlApplicationShellComponents } from "@/redux/slice";
 import { rmEnrolments } from "@/utilities/API";
 import { MultiSelect, Select } from "@mantine/core";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 function Enrollments() {
   const reduxData: any = useSelector((state: any) => state.data);
@@ -17,7 +20,30 @@ function Enrollments() {
   const [allData, setAllData] = useState<any>([]);
   const [tableData, setTableData] = useState<any>([]);
 
-  console.log(allData);
+  const dispatch = useDispatch();
+  let authentication: any = setGetData("userData", false, true);
+  let role = authentication?.user?.role;
+  const router: any = useRouter();
+
+  useEffect(() => {
+    if (role == "student") {
+      router.replace("/");
+    }
+
+    if (authentication?.metadata?.status == "unauthenticated" || !authentication) {
+      router.replace("/authentication/signin");
+    } else {
+      dispatch(
+        ControlApplicationShellComponents({
+          showHeader: true,
+          showFooter: false,
+          showNavigationBar: role == "student",
+          hideNavigationBar: false,
+          showAsideBar: false,
+        })
+      );
+    }
+  }, [authentication?.metadata?.status, dispatch, router]);
 
   let competitionData = useTableDataMatrixQuery(genratePayload("competitions", undefined, undefined, selectedCountry));
   competitionData = iterateData(competitionData);
@@ -62,7 +88,7 @@ function Enrollments() {
   };
 
   const renderTable = () => {
-    const headers = ["Sr. No.", "School Name", "City", "total_students"];
+    const headers = ["Sr. No.", "School Name", "City", "Total"];
     const keys = ["index", "name", "city", "total_students"];
 
     return (
