@@ -102,7 +102,8 @@ function UserProfile(props: any) {
         <div className={`${styles.userText} text-center`}>
           <div className={styles.userName}>{userDataDetails?.name || "User Name"}</div>
           <div className="role capitalize">
-            {userDataDetails?.role?.replace("_", " ") || "Role"} {userDataDetails?.username || ""}
+            {userDataDetails?.role != "rm" && (userDataDetails?.role?.replace("_", " ") || "Role")}{" "}
+            {userDataDetails?.username || ""}
           </div>
         </div>
       </div>

@@ -1,26 +1,20 @@
-import { Container, Title } from "@mantine/core";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+import RMHomePage from "../../components/relationshipmanager/HomePage";
+import { useDispatch, useSelector } from "react-redux";
 import { setGetData } from "@/helpers/getLocalStorage";
+import { useRouter } from "next/router";
 import { ControlApplicationShellComponents } from "@/redux/slice";
 
-export default function Console() {
-  const router: any = useRouter();
-
+function RelationshipManager() {
   const dispatch = useDispatch();
   let authentication: any = setGetData("userData", false, true);
   let role = authentication?.user?.role;
+  const router: any = useRouter();
 
   useEffect(() => {
     if (role == "student") {
       router.replace("/");
     }
-
-    if (role == "rm") {
-      router.replace("/relationshipmanager");
-    }
-
     if (authentication?.metadata?.status == "unauthenticated" || !authentication) {
       router.replace("/authentication/signin");
     } else {
@@ -35,9 +29,12 @@ export default function Console() {
       );
     }
   }, [authentication?.metadata?.status, dispatch, router]);
+
   return (
-    <Container h={"100%"}>
-      <Title>Console</Title>
-    </Container>
+    <div>
+      <RMHomePage />
+    </div>
   );
 }
+
+export default RelationshipManager;

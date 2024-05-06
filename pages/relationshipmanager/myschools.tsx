@@ -1,11 +1,40 @@
 import CustomTable from "@/components/Table";
 import Loader from "@/components/common/Loader";
+import { setGetData } from "@/helpers/getLocalStorage";
+import { ControlApplicationShellComponents } from "@/redux/slice";
 import { rmSchools } from "@/utilities/API";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
 function Myschools() {
   const [schoolsData, setSchoolsData] = useState([]);
   const [loader, setLoader] = useState<any>(false);
+
+  const dispatch = useDispatch();
+  let authentication: any = setGetData("userData", false, true);
+  let role = authentication?.user?.role;
+  const router: any = useRouter();
+
+  useEffect(() => {
+    if (role == "student") {
+      router.replace("/");
+    }
+
+    if (authentication?.metadata?.status == "unauthenticated" || !authentication) {
+      router.replace("/authentication/signin");
+    } else {
+      dispatch(
+        ControlApplicationShellComponents({
+          showHeader: true,
+          showFooter: false,
+          showNavigationBar: role == "student",
+          hideNavigationBar: false,
+          showAsideBar: false,
+        })
+      );
+    }
+  }, [authentication?.metadata?.status, dispatch, router]);
 
   const getSchools = () => {
     setLoader(true);

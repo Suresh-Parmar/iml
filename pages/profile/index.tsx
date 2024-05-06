@@ -20,7 +20,8 @@ function Profile(props: any) {
   let userDataDetalAll = setGetData("userData", "", true);
   let userDataDetails = userDataDetalAll?.user;
 
-  let { username } = userDataDetails;
+  let { username, role } = userDataDetails;
+  const isDisabled = role == "rm";
 
   let reduxData = useSelector((state: any) => state.data);
   let selectedCountryLocal = setGetData("selectedCountry", "", true);
@@ -130,6 +131,7 @@ function Profile(props: any) {
 
   const dataJson = [
     {
+      disabled: isDisabled,
       label: "name",
       placeholder: "John Smith",
       value: fieldsDataJson.name || "",
@@ -145,6 +147,7 @@ function Profile(props: any) {
       type: "text",
     },
     {
+      disabled: isDisabled,
       label: "Mobile 1",
       placeholder: "0123456789",
       value: fieldsDataJson.mobile_1 || "",
@@ -152,6 +155,7 @@ function Profile(props: any) {
       type: "text",
     },
     {
+      disabled: isDisabled,
       label: "Mobile 2",
       placeholder: "0123456789",
       value: fieldsDataJson.mobile_2 || "",
@@ -159,6 +163,7 @@ function Profile(props: any) {
       type: "text",
     },
     {
+      disabled: isDisabled,
       label: "Email 1",
       placeholder: "John@gmail.com",
       value: fieldsDataJson.email_1 || "",
@@ -166,6 +171,7 @@ function Profile(props: any) {
       type: "email",
     },
     {
+      disabled: isDisabled,
       label: "Email 2",
       placeholder: "John@gmail.com",
       value: fieldsDataJson.email_2 || "",
@@ -173,6 +179,7 @@ function Profile(props: any) {
       type: "email",
     },
     {
+      disabled: isDisabled,
       label: "address",
       placeholder: "Address",
       value: fieldsDataJson.address || "",

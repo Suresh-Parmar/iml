@@ -2,12 +2,16 @@ import CustomTable from "@/components/Table";
 import Loader from "@/components/common/Loader";
 import { handleDropDownChange } from "@/helpers/dateHelpers";
 import { filterData } from "@/helpers/filterData";
+import { findFromJson } from "@/helpers/filterFromJson";
 import { genratePayload, handleApiData, iterateData } from "@/helpers/getData";
+import { setGetData } from "@/helpers/getLocalStorage";
 import { useTableDataMatrixQuery } from "@/redux/apiSlice";
-import { rmEnrolments } from "@/utilities/API";
+import { ControlApplicationShellComponents } from "@/redux/slice";
+import { classwiseRm, rmEnrolments } from "@/utilities/API";
 import { MultiSelect, Select } from "@mantine/core";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 function Enrollments() {
   const reduxData: any = useSelector((state: any) => state.data);
@@ -16,8 +20,33 @@ function Enrollments() {
   const [loader, setLoader] = useState<any>(false);
   const [allData, setAllData] = useState<any>([]);
   const [tableData, setTableData] = useState<any>([]);
+  const [singleSchoolData, setSingleSchoolData] = useState<any>([]);
+  const [singleSchool, setSingleSchool] = useState<any>({});
 
-  console.log(allData);
+  const dispatch = useDispatch();
+  let authentication: any = setGetData("userData", false, true);
+  let { role, _id: userId } = authentication?.user;
+  const router: any = useRouter();
+
+  useEffect(() => {
+    if (role == "student") {
+      router.replace("/");
+    }
+
+    if (authentication?.metadata?.status == "unauthenticated" || !authentication) {
+      router.replace("/authentication/signin");
+    } else {
+      dispatch(
+        ControlApplicationShellComponents({
+          showHeader: true,
+          showFooter: false,
+          showNavigationBar: role == "student",
+          hideNavigationBar: false,
+          showAsideBar: false,
+        })
+      );
+    }
+  }, [authentication?.metadata?.status, dispatch, router]);
 
   let competitionData = useTableDataMatrixQuery(genratePayload("competitions", undefined, undefined, selectedCountry));
   competitionData = iterateData(competitionData);
@@ -46,7 +75,7 @@ function Enrollments() {
     setLoader(true);
     rmEnrolments({
       country_id: selectedCountry,
-      rm_id: 100901256,
+      rm_id: String(userId),
       state_id: allData.state_id,
       city_id: allData.city_id,
       competition_id: allData.competition_id,
@@ -61,14 +90,61 @@ function Enrollments() {
       });
   };
 
-  const renderTable = () => {
-    const headers = ["Sr. No.", "School Name", "City", "total_students"];
-    const keys = ["index", "name", "city", "total_students"];
+  const getClasswiseRm = (key: any, val: any, school: any) => {
+    setSingleSchool(school || {});
+    setLoader(true);
+    classwiseRm({
+      country_id: selectedCountry,
+      rm_id: String(userId),
+      state_id: allData.state_id,
+      city_id: allData.city_id,
+      competition_id: allData.competition_id,
+      school_id: school.school_id,
+      class: key,
+    })
+      .then((res) => {
+        setLoader(false);
+        setSingleSchoolData(res?.data?.data);
+      })
+      .catch((err) => {
+        setLoader(false);
+        console.log(err);
+      });
+  };
+
+  const renderSingleTable = () => {
+    if (!singleSchoolData.length) return <></>;
+
+    const headers = ["Sr. No.", "Class", "Section", "Name"];
+    const keys = ["index", "class_code", "section", "name"];
+
+    let competition = findFromJson(competitionData, allData?.competition_id, "_id");
 
     return (
       <div>
-        <CustomTable headers={headers} data={tableData || []} keys={keys} />
+        <div className="m-3 d-flex align-items-center justify-content-between">
+          <div>School : {singleSchool?.name}</div>
+          <div>Competition : {competition?.name}</div>
+        </div>
+
+        <CustomTable headers={headers} data={singleSchoolData || []} keys={keys} />
       </div>
+    );
+  };
+
+  const renderTable = () => {
+    const headers = ["Sr. No.", "School Name", "City", "Total"];
+    const keys = ["index", "name", "city", "total_students"];
+
+    return (
+      <CustomTable
+        expose="class_counts"
+        getSingleColumn
+        onClickRow={(key: any, val: any, row: any) => getClasswiseRm(key, val, row)}
+        headers={headers}
+        data={tableData || []}
+        keys={keys}
+      />
     );
   };
 
@@ -159,6 +235,7 @@ function Enrollments() {
       <div className="fs-4">Enrollments</div>
       <div className="d-flex align-items-center justify-content-between mb-3">{renderFilters()}</div>
       {renderTable()}
+      <div className="my-3 mt-5">{renderSingleTable()}</div>
       <Loader show={loader} />
     </div>
   );

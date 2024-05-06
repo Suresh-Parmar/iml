@@ -46,6 +46,7 @@ export const SELFGETAPI = "/api/landingpages";
 export const RM_DASHBOARD = `${BASE_URL}/rm_dashboard?rm_id=100901256`;
 export const RM_MY_SCHOOLS = `${BASE_URL}/rm_my_schools`;
 export const ENROLLMENTS = `${BASE_URL}/rm_enrolments_schoolwise`;
+export const CLASSWISERM = `${BASE_URL}/rm_classwise`;
 
 let userData: any = setGetData("userData", false, true);
 
@@ -384,6 +385,10 @@ const rmSchools = async () => {
 
 const rmEnrolments = async (params: any) => {
   return await axios.get(ENROLLMENTS, { params });
+};
+
+const classwiseRm = async (params: any) => {
+  return await axios.get(CLASSWISERM, { params });
 };
 
 const omrSheetDownload = async (data: any) => {
@@ -1283,4 +1288,5 @@ export {
   rmDashboard,
   rmSchools,
   rmEnrolments,
+  classwiseRm,
 };
