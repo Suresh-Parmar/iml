@@ -22,7 +22,7 @@ function Enrollments() {
 
   const dispatch = useDispatch();
   let authentication: any = setGetData("userData", false, true);
-  let role = authentication?.user?.role;
+  let { role, _id: userId } = authentication?.user;
   const router: any = useRouter();
 
   useEffect(() => {
@@ -72,7 +72,7 @@ function Enrollments() {
     setLoader(true);
     rmEnrolments({
       country_id: selectedCountry,
-      rm_id: 100901256,
+      rm_id: String(userId),
       state_id: allData.state_id,
       city_id: allData.city_id,
       competition_id: allData.competition_id,
