@@ -71,6 +71,10 @@ function Enrollments() {
     }
   }, [allData?.city_id]);
 
+  useEffect(() => {
+    setAllData({});
+  }, [selectedCountry]);
+
   const getEnrolments = () => {
     setLoader(true);
     rmEnrolments({
