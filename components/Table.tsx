@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 const CustomTable = ({
   data,
@@ -19,6 +20,8 @@ const CustomTable = ({
   const [isResizing, setIsResizing] = useState<any>(false);
   const [resizingColumnIndex, setResizingColumnIndex] = useState<any>(null);
   const [initialX, setInitialX] = useState<any>(null);
+
+  let themeColor = useSelector((state: any) => state.data.colorScheme);
 
   let firstRow = data[0];
   let extraKeys: any = [];
@@ -107,7 +110,7 @@ const CustomTable = ({
   }
   return (
     <div className="resizable-table table-responsive">
-      <table className="table table-striped">
+      <table key={themeColor} className={`table table-striped table-${themeColor}`}>
         <thead>
           <tr>
             {[...headers, ...extraKeys].map((header: any, index: any) => (

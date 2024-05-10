@@ -17,6 +17,11 @@ function Enrollments() {
   const reduxData: any = useSelector((state: any) => state.data);
   let selectedCountry = reduxData?.selectedCountry?._id;
 
+  let themeColor = reduxData.colorScheme;
+
+  let bgColor = themeColor == "dark" ? "#141517" : "";
+  let color = themeColor == "dark" ? "#fff" : "";
+
   const [loader, setLoader] = useState<any>(false);
   const [allData, setAllData] = useState<any>([]);
   const [tableData, setTableData] = useState<any>([]);
@@ -235,7 +240,7 @@ function Enrollments() {
   };
 
   return (
-    <div className="p-3">
+    <div className="p-3" style={{ background: bgColor, color: color }}>
       <div className="fs-4">Enrollments</div>
       <div className="d-flex align-items-center justify-content-between mb-3">{renderFilters()}</div>
       {renderTable()}
