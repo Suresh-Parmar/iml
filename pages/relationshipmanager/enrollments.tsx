@@ -58,13 +58,14 @@ function Enrollments() {
   competitionData = handleApiData(competitionData);
   competitionData = filterData(competitionData, "label", "value", "_id");
 
-  let stateApiData = useTableDataMatrixQuery(genratePayload("states", undefined, undefined, selectedCountry));
-  stateApiData = iterateData(stateApiData);
-  stateApiData = handleApiData(stateApiData);
-  stateApiData = filterData(stateApiData, "label", "value", "_id");
+  // let stateApiData = useTableDataMatrixQuery(genratePayload("states", undefined, undefined, selectedCountry));
+  // stateApiData = iterateData(stateApiData);
+  // stateApiData = handleApiData(stateApiData);
+  // stateApiData = filterData(stateApiData, "label", "value", "_id");
 
   let cityApiData = useTableDataMatrixQuery(
-    genratePayload("cities", { state_id: allData.state_id }, "state_id", selectedCountry)
+    genratePayload("cities", undefined, undefined, selectedCountry)
+    // genratePayload("cities", { state_id: allData.state_id }, "state_id", selectedCountry)
   );
   cityApiData = iterateData(cityApiData);
   cityApiData = handleApiData(cityApiData);
@@ -85,7 +86,7 @@ function Enrollments() {
     rmEnrolments({
       country_id: selectedCountry,
       rm_id: String(userId),
-      state_id: allData.state_id,
+      // state_id: allData.state_id,
       city_id: allData.city_id,
       competition_id: allData.competition_id,
     })
@@ -105,7 +106,7 @@ function Enrollments() {
     classwiseRm({
       country_id: selectedCountry,
       rm_id: String(userId),
-      state_id: allData.state_id,
+      // state_id: allData.state_id,
       city_id: allData.city_id,
       competition_id: allData.competition_id,
       school_id: school.school_id,
@@ -148,6 +149,7 @@ function Enrollments() {
     return (
       <CustomTable
         expose="class_counts"
+        clickable="class_counts"
         getSingleColumn
         onClickRow={(key: any, val: any, row: any) => getClasswiseRm(key, val, row)}
         headers={headers}
@@ -168,16 +170,16 @@ function Enrollments() {
       },
       value: allData.competition_id || "",
     },
-    {
-      label: "State",
-      type: "select",
-      style: { maxWidth: "35%", width: "30%" },
-      data: stateApiData,
-      onchange: (e: any) => {
-        handleDropDownChange(e, "state_id", allData, setAllData, "city_id");
-      },
-      value: allData.state_id || "",
-    },
+    // {
+    //   label: "State",
+    //   type: "select",
+    //   style: { maxWidth: "35%", width: "30%" },
+    //   data: stateApiData,
+    //   onchange: (e: any) => {
+    //     handleDropDownChange(e, "state_id", allData, setAllData, "city_id");
+    //   },
+    //   value: allData.state_id || "",
+    // },
     {
       label: "City",
       type: "select",
@@ -242,7 +244,8 @@ function Enrollments() {
   return (
     <div className="p-3" style={{ background: bgColor, color: color }}>
       <div className="fs-4">Enrollments</div>
-      <div className="d-flex align-items-center justify-content-between mb-3">{renderFilters()}</div>
+      <div className="d-flex align-items-center gap-3 mb-3">{renderFilters()}</div>
+      {/* <div className="d-flex align-items-center justify-content-between mb-3">{renderFilters()}</div> */}
       {renderTable()}
       <div className="my-3 mt-5">{renderSingleTable()}</div>
       <Loader show={loader} />

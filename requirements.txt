@@ -1,0 +1,6 @@
+// rm screens
+
+// add pagination in all pages
+// add actions in enrolments
+
+// product sku and country
