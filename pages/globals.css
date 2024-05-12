@@ -243,3 +243,7 @@ a {
   border: 1px solid #ddd;
   padding: 8px;
 }
+
+.underline {
+  text-decoration: underline;
+}

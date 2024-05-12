@@ -5,11 +5,17 @@ import { ControlApplicationShellComponents } from "@/redux/slice";
 import { rmSchools } from "@/utilities/API";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 function Myschools() {
   const [schoolsData, setSchoolsData] = useState([]);
   const [loader, setLoader] = useState<any>(false);
+
+  const reduxData: any = useSelector((state: any) => state.data);
+  let themeColor = reduxData.colorScheme;
+
+  let bgColor = themeColor == "dark" ? "#141517" : "";
+  let color = themeColor == "dark" ? "#fff" : "";
 
   const dispatch = useDispatch();
   let authentication: any = setGetData("userData", false, true);
@@ -60,6 +66,9 @@ function Myschools() {
       "Total Students",
       "Email",
       "Mobile Number",
+      "Teacher Incharge",
+      "Teacher Incharge Mobile Number",
+      "Teacher Incharge Email",
       "Exam Date",
       "State",
       "City",
@@ -70,6 +79,9 @@ function Myschools() {
       "number_of_students",
       "contact_email",
       "contact_number",
+      "teacher_name",
+      "teacher_mobile",
+      "teacher_email",
       "exam_date",
       "state",
       "city",
@@ -83,7 +95,7 @@ function Myschools() {
   };
 
   return (
-    <div className="p-3">
+    <div className="p-3" style={{ background: bgColor, color: color }}>
       <div className="fs-4">My Schools</div>
       {/* <div className="d-flex align-items-center justify-content-between mb-1">
         <div />

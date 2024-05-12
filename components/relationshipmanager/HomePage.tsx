@@ -1,8 +1,6 @@
 import { setGetData } from "@/helpers/getLocalStorage";
-import { ControlApplicationShellComponents } from "@/redux/slice";
-import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import MyTable from "../Table";
 import { readApiData, rmDashboard } from "@/utilities/API";
 import Loader from "../common/Loader";
@@ -16,6 +14,11 @@ function RMHomePage() {
   const [counts, setCounts] = useState<any>({});
   const [tableData, setTableData] = useState<any>([]);
   const [loader, setLoader] = useState<any>(false);
+
+  let themeColor = reduxData.colorScheme;
+
+  let bgColor = themeColor == "dark" ? "#141517" : "";
+  let color = themeColor == "dark" ? "#fff" : "";
 
   useEffect(() => {
     getRmDataCounts();
@@ -76,7 +79,10 @@ function RMHomePage() {
   ];
 
   return (
-    <div className="d-flex justify-content-around align-items-center p-3" style={{ overflow: "auto", height: "100%" }}>
+    <div
+      className="d-flex justify-content-around align-items-center p-3"
+      style={{ overflow: "auto", height: "100%", background: bgColor, color: color }}
+    >
       <div className="w-100 py-5">
         <div className="d-flex justify-content-around align-items-center py-3 flex-wrap">
           <div className="circleDiv">

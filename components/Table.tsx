@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 const CustomTable = ({
   data,
@@ -7,6 +8,7 @@ const CustomTable = ({
   onClickRow,
   expose,
   getSingleColumn,
+  clickable,
 }: {
   data: any;
   headers: any;
@@ -14,18 +16,27 @@ const CustomTable = ({
   onClickRow?: any;
   expose?: any;
   getSingleColumn?: Boolean;
+  clickable?: any;
 }) => {
   const [columnWidths, setColumnWidths] = useState<any>({});
   const [isResizing, setIsResizing] = useState<any>(false);
   const [resizingColumnIndex, setResizingColumnIndex] = useState<any>(null);
   const [initialX, setInitialX] = useState<any>(null);
 
+  let themeColor = useSelector((state: any) => state.data.colorScheme);
+
   let firstRow = data[0];
   let extraKeys: any = [];
+  let clickAbleKeys: any = [];
 
   if (firstRow && expose) {
     extraKeys = firstRow[expose] || {};
     extraKeys = Object.keys(extraKeys);
+  }
+
+  if (firstRow && clickable) {
+    clickAbleKeys = firstRow[clickable] || {};
+    clickAbleKeys = Object.keys(clickAbleKeys);
   }
 
   useEffect(() => {
@@ -80,14 +91,19 @@ const CustomTable = ({
               return <td key={rowIndex}>{rowIndex + 1}</td>;
             }
 
+            let isClickble = clickAbleKeys && clickAbleKeys.includes(key);
+
             return (
               <td
                 onClick={() => {
-                  if (getSingleColumn && onClickRow) {
-                    onClickRow(key, row[key], row);
+                  if (isClickble) {
+                    if (getSingleColumn && onClickRow) {
+                      onClickRow(key, row[key], row);
+                    }
                   }
                 }}
                 key={columnIndex}
+                className={isClickble ? "underline text-success pointer" : ""}
               >
                 {row[key]}
               </td>
@@ -107,7 +123,7 @@ const CustomTable = ({
   }
   return (
     <div className="resizable-table table-responsive">
-      <table className="table table-striped">
+      <table key={themeColor} className={`table table-striped table-${themeColor}`}>
         <thead>
           <tr>
             {[...headers, ...extraKeys].map((header: any, index: any) => (
