@@ -45,6 +45,7 @@ function Studentsform({
   setFormTitle,
   formType,
   isExtra,
+  apiCall,
 }: {
   isExtra?: any;
   open: () => void;
@@ -55,6 +56,7 @@ function Studentsform({
   setFormTitle: Dispatch<SetStateAction<string>>;
   readonly?: boolean;
   formType: FormType;
+  apiCall?: any;
 }) {
   const [citiesData, setCitiesData] = useState<MatrixDataType>([]);
   const [statesData, setStatesData] = useState<MatrixDataType>([]);
@@ -225,8 +227,10 @@ function Studentsform({
           setOLoader(false);
           // setshowRoles(rowData?.username);
           if (res.data.response.toUpperCase() === "DOCUMENT UPDATED") {
-            const users = await formTypeToFetcherMapper(formType)();
-            setData(users);
+            if (!apiCall) {
+              const users = await formTypeToFetcherMapper(formType)();
+              setData(users);
+            }
           }
           setRowData(undefined);
           notifications.show({
@@ -250,8 +254,10 @@ function Studentsform({
           // setshowRoles(res.data.registration_number);
           if (res.data.response.toUpperCase() == "DOCUMENT CREATED") {
             setOLoader(false);
-            const users = await formTypeToFetcherMapper(formType)();
-            setData(users);
+            if (!apiCall) {
+              const users = await formTypeToFetcherMapper(formType)();
+              setData(users);
+            }
             notifications.show({
               title: `User created!`,
               message: `${res.data.registration_number || ""} has been created.`,
