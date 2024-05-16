@@ -1,3 +1,4 @@
+import { Studentsform } from "@/components/Forms/Studentsform";
 import CustomTable from "@/components/Table";
 import Loader from "@/components/common/Loader";
 import { handleDropDownChange } from "@/helpers/dateHelpers";
@@ -7,8 +8,17 @@ import { genratePayload, handleApiData, iterateData } from "@/helpers/getData";
 import { setGetData } from "@/helpers/getLocalStorage";
 import { useTableDataMatrixQuery } from "@/redux/apiSlice";
 import { ControlApplicationShellComponents } from "@/redux/slice";
-import { classwiseRm, rmEnrolments } from "@/utilities/API";
-import { MultiSelect, Select } from "@mantine/core";
+import {
+  admitCardCountData,
+  certificateDownload,
+  classwiseRm,
+  downloadMarksSheet,
+  omrSheetDownloadStudent,
+  readStudents,
+  rmEnrolments,
+} from "@/utilities/API";
+import { ActionIcon, Modal, MultiSelect, Select, Tooltip } from "@mantine/core";
+import { IconEdit, IconEye } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,6 +37,9 @@ function Enrollments() {
   const [tableData, setTableData] = useState<any>([]);
   const [singleSchoolData, setSingleSchoolData] = useState<any>([]);
   const [singleSchool, setSingleSchool] = useState<any>({});
+  const [userData, setuserData] = useState<any>(false);
+  const [viewOnly, setviewOnly] = useState<any>(false);
+  const [payloadData, setpayloadData] = useState<any>({});
 
   const dispatch = useDispatch();
   let authentication: any = setGetData("userData", false, true);
@@ -101,6 +114,7 @@ function Enrollments() {
   };
 
   const getClasswiseRm = (key: any, val: any, school: any) => {
+    setpayloadData({ key, school });
     setSingleSchool(school || {});
     setLoader(true);
     classwiseRm({
@@ -122,11 +136,141 @@ function Enrollments() {
       });
   };
 
+  const getstudentData = (userId: any) => {
+    let payload = {
+      collection_name: "users",
+      op_name: "find_many",
+      filter_var: {
+        role: "student",
+        _id: userId,
+      },
+    };
+
+    readStudents(payload)
+      .then((student) => {
+        if (student && student[0]) {
+          setuserData(student[0]);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const renderActions = (item: any) => {
+    return (
+      <div className="d-flex gap-2">
+        <Tooltip label="Preview">
+          <ActionIcon
+            onClick={(event) => {
+              setviewOnly(true);
+              getstudentData(item?._id);
+            }}
+          >
+            <IconEye size={"1.5rem"} />
+          </ActionIcon>
+        </Tooltip>
+        <Tooltip label="Edit">
+          <ActionIcon
+            onClick={(event) => {
+              setviewOnly(false);
+              getstudentData(item?._id);
+            }}
+          >
+            <IconEdit size={"1.5rem"} />
+          </ActionIcon>
+        </Tooltip>
+      </div>
+    );
+  };
+
+  const downloadItems: any = {
+    admitCard: {
+      label: "Download Admit Card",
+      type: "downloads",
+      key: "admitCard",
+      apiKey: "admit_card_url",
+    },
+    certificate: {
+      label: "Download Certificate",
+      key: "certificate",
+      type: "downloads",
+      apiKey: "certificate_url",
+    },
+    marksheet: {
+      label: "Download Marksheet",
+      key: "marksheet",
+      type: "downloads",
+      apiKey: "marksheets_url",
+    },
+  };
+
+  const callAPi = (item: any, username: any) => {
+    let apis: any = {
+      admitCard: admitCardCountData,
+      certificate: certificateDownload,
+      omr: omrSheetDownloadStudent,
+      marksheet: downloadMarksSheet,
+    };
+    let payload = {
+      username: [username],
+      competition: allData.competition,
+      whitbackground: true,
+      country_id: selectedCountry,
+    };
+
+    setLoader(true);
+    let callApi = apis[item.key](payload);
+    callApi
+      .then((res: any) => {
+        setLoader(false);
+        let dataObj = res.data;
+
+        if (Array.isArray(dataObj)) {
+          dataObj = dataObj[0];
+        }
+
+        if (dataObj[item.apiKey]) {
+          var link = document.createElement("a");
+          link.href = dataObj[item.apiKey];
+
+          link.setAttribute("target", "_blank");
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+      })
+      .catch((errors: any) => {
+        console.log(errors);
+        setLoader(false);
+      });
+  };
+
+  const downloadDocs = (item: any, type: any) => {
+    return (
+      <div className="text-center">
+        <span className="material-symbols-outlined pointer" onClick={() => callAPi(downloadItems[type], item._id)}>
+          download
+        </span>
+      </div>
+    );
+  };
+
   const renderSingleTable = () => {
     if (!singleSchoolData.length) return <></>;
 
-    const headers = ["Sr. No.", "Class", "Section", "Name"];
-    const keys = ["index", "class_code", "section", "name"];
+    const headers = ["Sr. No.", "Class", "Section", "Name", "Admit card", "MarksSheet", "Certificate", "Actions"];
+    const keys = [
+      "index",
+      "class_code",
+      "section",
+      "name",
+      { html: (item: any) => downloadDocs(item, "admitCard") },
+      { html: (item: any) => downloadDocs(item, "marksheet") },
+      { html: (item: any) => downloadDocs(item, "certificate") },
+
+      { html: renderActions },
+    ];
 
     let competition = findFromJson(competitionData, allData?.competition_id, "_id");
 
@@ -241,6 +385,54 @@ function Enrollments() {
     });
   };
 
+  const renderModal = () => {
+    console.log(userData);
+
+    return (
+      <div>
+        <Modal
+          opened={userData}
+          onClose={() => {
+            setuserData(null);
+          }}
+          closeOnClickOutside={false}
+          title={`${userData?.name}`}
+          centered
+          size={"75%"}
+          overlayProps={{
+            color: color,
+            opacity: 0.55,
+            blur: 3,
+          }}
+          transitionProps={{
+            transition: "slide-up",
+            duration: 200,
+            timingFunction: "linear",
+          }}
+        >
+          {userData ? (
+            <Studentsform
+              apiCall={true}
+              readonly={viewOnly}
+              setFormTitle={() => {}}
+              open={userData}
+              close={() => {
+                getClasswiseRm(payloadData.key, false, payloadData.school);
+                setuserData(false);
+              }}
+              setData={() => {}}
+              setRowData={() => {}}
+              rowData={userData}
+              formType={"Students"}
+            />
+          ) : (
+            <></>
+          )}
+        </Modal>
+      </div>
+    );
+  };
+
   return (
     <div className="p-3" style={{ background: bgColor, color: color }}>
       <div className="fs-4">Enrollments</div>
@@ -249,6 +441,7 @@ function Enrollments() {
       {renderTable()}
       <div className="my-3 mt-5">{renderSingleTable()}</div>
       <Loader show={loader} />
+      {renderModal()}
     </div>
   );
 }
