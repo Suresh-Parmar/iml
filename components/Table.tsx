@@ -94,7 +94,7 @@ const CustomTable = ({
             let isClickble = clickAbleKeys && clickAbleKeys.includes(key);
 
             if (!!key?.html) {
-              return <td> {key.html(row)} </td>;
+              return <td key={rowIndex}> {key.html(row)} </td>;
             }
 
             return (
