@@ -78,9 +78,9 @@ function DownLoadProduct() {
         }
 
         setUrl({ ...url, [item.apiKey]: dataObj[item.apiKey] });
-        if (res.data[item.apiKey]) {
+        if (dataObj[item.apiKey]) {
           var link = document.createElement("a");
-          link.href = res.data[item.apiKey];
+          link.href = dataObj[item.apiKey];
           link.setAttribute("target", "_blank");
           document.body.appendChild(link);
           link.click();

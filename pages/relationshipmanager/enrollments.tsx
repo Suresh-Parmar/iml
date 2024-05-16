@@ -8,7 +8,15 @@ import { genratePayload, handleApiData, iterateData } from "@/helpers/getData";
 import { setGetData } from "@/helpers/getLocalStorage";
 import { useTableDataMatrixQuery } from "@/redux/apiSlice";
 import { ControlApplicationShellComponents } from "@/redux/slice";
-import { classwiseRm, readStudents, rmEnrolments } from "@/utilities/API";
+import {
+  admitCardCountData,
+  certificateDownload,
+  classwiseRm,
+  downloadMarksSheet,
+  omrSheetDownloadStudent,
+  readStudents,
+  rmEnrolments,
+} from "@/utilities/API";
 import { ActionIcon, Modal, MultiSelect, Select, Tooltip } from "@mantine/core";
 import { IconEdit, IconEye } from "@tabler/icons-react";
 import { useRouter } from "next/router";
@@ -176,11 +184,93 @@ function Enrollments() {
     );
   };
 
+  const downloadItems: any = {
+    admitCard: {
+      label: "Download Admit Card",
+      type: "downloads",
+      key: "admitCard",
+      apiKey: "admit_card_url",
+    },
+    certificate: {
+      label: "Download Certificate",
+      key: "certificate",
+      type: "downloads",
+      apiKey: "certificate_url",
+    },
+    marksheet: {
+      label: "Download Marksheet",
+      key: "marksheet",
+      type: "downloads",
+      apiKey: "marksheets_url",
+    },
+  };
+
+  const callAPi = (item: any, username: any) => {
+    let apis: any = {
+      admitCard: admitCardCountData,
+      certificate: certificateDownload,
+      omr: omrSheetDownloadStudent,
+      marksheet: downloadMarksSheet,
+    };
+    let payload = {
+      username: [username],
+      competition: allData.competition,
+      whitbackground: true,
+      country_id: selectedCountry,
+    };
+
+    setLoader(true);
+    let callApi = apis[item.key](payload);
+    callApi
+      .then((res: any) => {
+        setLoader(false);
+        let dataObj = res.data;
+
+        if (Array.isArray(dataObj)) {
+          dataObj = dataObj[0];
+        }
+
+        if (dataObj[item.apiKey]) {
+          var link = document.createElement("a");
+          link.href = dataObj[item.apiKey];
+
+          link.setAttribute("target", "_blank");
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+      })
+      .catch((errors: any) => {
+        console.log(errors);
+        setLoader(false);
+      });
+  };
+
+  const downloadDocs = (item: any, type: any) => {
+    return (
+      <div className="text-center">
+        <span className="material-symbols-outlined pointer" onClick={() => callAPi(downloadItems[type], item._id)}>
+          download
+        </span>
+      </div>
+    );
+  };
+
   const renderSingleTable = () => {
     if (!singleSchoolData.length) return <></>;
 
-    const headers = ["Sr. No.", "Class", "Section", "Name", "Actions"];
-    const keys = ["index", "class_code", "section", "name", { html: renderActions }];
+    const headers = ["Sr. No.", "Class", "Section", "Name", "Admit card", "MarksSheet", "Certificate", "Actions"];
+    const keys = [
+      "index",
+      "class_code",
+      "section",
+      "name",
+      { html: (item: any) => downloadDocs(item, "admitCard") },
+      { html: (item: any) => downloadDocs(item, "marksheet") },
+      { html: (item: any) => downloadDocs(item, "certificate") },
+
+      { html: renderActions },
+    ];
 
     let competition = findFromJson(competitionData, allData?.competition_id, "_id");
 
