@@ -259,7 +259,7 @@ function Enrollments() {
   const renderSingleTable = () => {
     if (!singleSchoolData.length) return <></>;
 
-    const headers = ["Sr. No.", "Class", "Section", "Name", "Admit card", "MarksSheet", "Certificate", "Actions"];
+    const headers = ["Sr. No.", "Class", "Section", "Name", "Admit card", "MarkSheet", "Certificate", "Actions"];
     const keys = [
       "index",
       "class_code",
