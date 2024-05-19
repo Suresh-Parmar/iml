@@ -2,8 +2,10 @@ import { setGetData } from "@/helpers/getLocalStorage";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import MyTable from "../Table";
-import { readApiData, rmDashboard } from "@/utilities/API";
+import { readApiData, rmDashboard, trackShipment } from "@/utilities/API";
 import Loader from "../common/Loader";
+import { Tooltip } from "@mantine/core";
+import { DispatchModalData } from "../dispatch";
 
 function RMHomePage() {
   let authentication: any = setGetData("userData", false, true);
@@ -14,6 +16,7 @@ function RMHomePage() {
   const [counts, setCounts] = useState<any>({});
   const [tableData, setTableData] = useState<any>([]);
   const [loader, setLoader] = useState<any>(false);
+  const [shipmentDetails, setShipmentDetails] = useState("");
 
   let themeColor = reduxData.colorScheme;
 
@@ -41,10 +44,26 @@ function RMHomePage() {
     collection_name: "dispatches_data",
     op_name: "find_many",
     filter_var: {
-      // country: selectedCountry,
-      username: String(authentication?.user?._id),
+      country: selectedCountry,
+      // username: String(authentication?.user?._id),
       // username: "100901256",
     },
+  };
+
+  const trackShipmentDetails = (item: any) => {
+    let data = {
+      shipment_id: item.awb_number,
+    };
+    setLoader(true);
+    trackShipment(data)
+      .then((res: any) => {
+        setLoader(false);
+        setShipmentDetails(res.data);
+      })
+      .catch((err) => {
+        setLoader(false);
+        console.log(err);
+      });
   };
 
   async function readDispatches() {
@@ -60,6 +79,17 @@ function RMHomePage() {
     readDispatches();
   }, [selectedCountry]);
 
+  const dispatchHtml = (item: any, show: any) => {
+    if (!item.awb_number) return <></>;
+    return (
+      <Tooltip label="Track Shipment">
+        <span className="material-symbols-outlined pointer gray" onClick={() => trackShipmentDetails(item)}>
+          distance
+        </span>
+      </Tooltip>
+    );
+  };
+
   const headers = [
     "Sr. No.",
     // "Dispatch Date",
@@ -68,15 +98,10 @@ function RMHomePage() {
     // "Description of goods",
     "Weight (kg)",
     "Status",
-    // "Tracking",
+    "Tracking",
   ];
 
-  const keys = [
-    "index",
-    "approx_weight",
-    "status",
-    // "Tracking"
-  ];
+  const keys = ["index", "approx_weight", "status", { html: dispatchHtml }];
 
   return (
     <div
@@ -97,6 +122,8 @@ function RMHomePage() {
         <div className="my-3 fs-5">Dispatches</div>
         <MyTable data={tableData} headers={headers} keys={keys} />
       </div>
+      <DispatchModalData data={shipmentDetails} />
+
       <Loader show={loader} />
     </div>
   );
