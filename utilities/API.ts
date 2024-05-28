@@ -47,6 +47,8 @@ export const RM_DASHBOARD = `${BASE_URL}/rm_dashboard?rm_id=100901256`;
 export const RM_MY_SCHOOLS = `${BASE_URL}/rm_my_schools`;
 export const ENROLLMENTS = `${BASE_URL}/rm_enrolments_schoolwise`;
 export const CLASSWISERM = `${BASE_URL}/rm_classwise`;
+export const TELR_PAYMENT = `${BASE_URL}/telr_payment`;
+export const RMDISPATCH = `${BASE_URL}/rm_dispatch`;
 
 let userData: any = setGetData("userData", false, true);
 
@@ -393,6 +395,14 @@ const classwiseRm = async (params: any) => {
 
 const omrSheetDownload = async (data: any) => {
   return await axios.post(OMRSTUDENT, data, { headers: getAPIHeaders() });
+};
+
+const telrpayment = async (data: any) => {
+  return await axios.post(TELR_PAYMENT, data, { headers: getAPIHeaders() });
+};
+
+const rmdispatchAPI = async () => {
+  return await axios.get(RMDISPATCH, { headers: getAPIHeaders() });
 };
 
 const attendenceSheetDownload = async (data: any) => {
@@ -1288,5 +1298,7 @@ export {
   rmDashboard,
   rmSchools,
   rmEnrolments,
+  telrpayment,
   classwiseRm,
+  rmdispatchAPI,
 };

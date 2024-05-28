@@ -131,7 +131,7 @@ const CustomTable = ({
         <thead>
           <tr>
             {[...headers, ...extraKeys].map((header: any, index: any) => (
-              <th key={index} style={{ width: columnWidths[index] || "auto", whiteSpace: "nowrap" }}>
+              <th key={index} style={{ width: columnWidths[index] || "auto" }}>
                 {header}
                 <ResizeHandle columnIndex={index} onMouseDown={handleMouseDown} />
               </th>

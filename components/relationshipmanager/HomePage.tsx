@@ -2,8 +2,10 @@ import { setGetData } from "@/helpers/getLocalStorage";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import MyTable from "../Table";
-import { readApiData, rmDashboard } from "@/utilities/API";
+import { readApiData, rmDashboard, rmdispatchAPI, trackShipment } from "@/utilities/API";
 import Loader from "../common/Loader";
+import { Tooltip } from "@mantine/core";
+import { DispatchModalData } from "../dispatch";
 
 function RMHomePage() {
   let authentication: any = setGetData("userData", false, true);
@@ -14,11 +16,14 @@ function RMHomePage() {
   const [counts, setCounts] = useState<any>({});
   const [tableData, setTableData] = useState<any>([]);
   const [loader, setLoader] = useState<any>(false);
+  const [shipmentDetails, setShipmentDetails] = useState("");
 
   let themeColor = reduxData.colorScheme;
 
   let bgColor = themeColor == "dark" ? "#141517" : "";
   let color = themeColor == "dark" ? "#fff" : "";
+
+  console.log(tableData, "tableData");
 
   useEffect(() => {
     getRmDataCounts();
@@ -41,41 +46,71 @@ function RMHomePage() {
     collection_name: "dispatches_data",
     op_name: "find_many",
     filter_var: {
-      // country: selectedCountry,
-      username: String(authentication?.user?._id),
+      country: selectedCountry,
+      // username: String(authentication?.user?._id),
       // username: "100901256",
     },
+  };
+
+  const trackShipmentDetails = (item: any) => {
+    let data = {
+      shipment_id: item["AWB No"],
+    };
+    setLoader(true);
+    trackShipment(data)
+      .then((res: any) => {
+        setLoader(false);
+        setShipmentDetails(res.data);
+      })
+      .catch((err) => {
+        setLoader(false);
+        console.log(err);
+      });
   };
 
   async function readDispatches() {
     setLoader(true);
 
-    const dispatches: any = await readApiData(null, payload);
+    const dispatches: any = await rmdispatchAPI();
     setLoader(false);
 
-    setTableData(dispatches || []);
+    setTableData(dispatches?.data?.rm_dispatch_data || []);
   }
 
   useEffect(() => {
     readDispatches();
   }, [selectedCountry]);
 
+  const dispatchHtml = (item: any, show: any) => {
+    if (!item["AWB No"]) return <></>;
+    return (
+      <Tooltip label="Track Shipment">
+        <span className="material-symbols-outlined pointer gray" onClick={() => trackShipmentDetails(item)}>
+          distance
+        </span>
+      </Tooltip>
+    );
+  };
+
   const headers = [
     "Sr. No.",
-    // "Dispatch Date",
-    // "AWB No",
-    // "Consignee Name",
+    "AWB No",
+    "Dispatch Date",
+    "Consignee Name",
     // "Description of goods",
     "Weight (kg)",
     "Status",
-    // "Tracking",
+    "Tracking",
   ];
 
   const keys = [
     "index",
+    "AWB No",
+    "Dispatch Date",
+    "Consignee Name",
     "approx_weight",
     "status",
-    // "Tracking"
+    { html: dispatchHtml },
   ];
 
   return (
@@ -97,6 +132,8 @@ function RMHomePage() {
         <div className="my-3 fs-5">Dispatches</div>
         <MyTable data={tableData} headers={headers} keys={keys} />
       </div>
+      <DispatchModalData data={shipmentDetails} />
+
       <Loader show={loader} />
     </div>
   );
