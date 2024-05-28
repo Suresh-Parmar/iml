@@ -2,7 +2,7 @@ import { setGetData } from "@/helpers/getLocalStorage";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import MyTable from "../Table";
-import { readApiData, rmDashboard, trackShipment } from "@/utilities/API";
+import { readApiData, rmDashboard, rmdispatchAPI, trackShipment } from "@/utilities/API";
 import Loader from "../common/Loader";
 import { Tooltip } from "@mantine/core";
 import { DispatchModalData } from "../dispatch";
@@ -22,6 +22,8 @@ function RMHomePage() {
 
   let bgColor = themeColor == "dark" ? "#141517" : "";
   let color = themeColor == "dark" ? "#fff" : "";
+
+  console.log(tableData, "tableData");
 
   useEffect(() => {
     getRmDataCounts();
@@ -52,7 +54,7 @@ function RMHomePage() {
 
   const trackShipmentDetails = (item: any) => {
     let data = {
-      shipment_id: item.awb_number,
+      shipment_id: item["AWB No"],
     };
     setLoader(true);
     trackShipment(data)
@@ -69,10 +71,10 @@ function RMHomePage() {
   async function readDispatches() {
     setLoader(true);
 
-    const dispatches: any = await readApiData(null, payload);
+    const dispatches: any = await rmdispatchAPI();
     setLoader(false);
 
-    setTableData(dispatches || []);
+    setTableData(dispatches?.data?.rm_dispatch_data || []);
   }
 
   useEffect(() => {
@@ -80,7 +82,7 @@ function RMHomePage() {
   }, [selectedCountry]);
 
   const dispatchHtml = (item: any, show: any) => {
-    if (!item.awb_number) return <></>;
+    if (!item["AWB No"]) return <></>;
     return (
       <Tooltip label="Track Shipment">
         <span className="material-symbols-outlined pointer gray" onClick={() => trackShipmentDetails(item)}>
@@ -92,16 +94,24 @@ function RMHomePage() {
 
   const headers = [
     "Sr. No.",
-    // "Dispatch Date",
-    // "AWB No",
-    // "Consignee Name",
+    "AWB No",
+    "Dispatch Date",
+    "Consignee Name",
     // "Description of goods",
     "Weight (kg)",
     "Status",
     "Tracking",
   ];
 
-  const keys = ["index", "approx_weight", "status", { html: dispatchHtml }];
+  const keys = [
+    "index",
+    "AWB No",
+    "Dispatch Date",
+    "Consignee Name",
+    "approx_weight",
+    "status",
+    { html: dispatchHtml },
+  ];
 
   return (
     <div
