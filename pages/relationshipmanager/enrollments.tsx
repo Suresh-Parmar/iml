@@ -275,7 +275,26 @@ function Enrollments() {
     let competition = findFromJson(competitionData, allData?.competition_id, "_id");
 
     return (
-      <div>
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: bgColor || "#fff",
+          padding: "10px",
+        }}
+      >
+        <div className="d-flex">
+          <div
+            onClick={() => setSingleSchoolData([])}
+            className="pointer p-2 text-danger border text-center rounded ms-auto"
+            style={{ width: "40px" }}
+          >
+            X
+          </div>
+        </div>
         <div className="m-3 d-flex align-items-center justify-content-between">
           <div>School : {singleSchool?.name}</div>
           <div>Competition : {competition?.name}</div>
@@ -386,8 +405,6 @@ function Enrollments() {
   };
 
   const renderModal = () => {
-    console.log(userData);
-
     return (
       <div>
         <Modal
@@ -434,7 +451,7 @@ function Enrollments() {
   };
 
   return (
-    <div className="p-3" style={{ background: bgColor, color: color }}>
+    <div className="p-3" style={{ background: bgColor, color: color, position: "relative" }}>
       <div className="fs-4">Enrollments</div>
       <div className="d-flex align-items-center gap-3 mb-3">{renderFilters()}</div>
       {/* <div className="d-flex align-items-center justify-content-between mb-3">{renderFilters()}</div> */}

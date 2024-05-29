@@ -20,6 +20,8 @@ function UserProfile(props: any) {
   const userDataDetails: any = useSelector((state: any) => state?.data?.userData?.user);
   let inputRef: any = useRef(null);
 
+  let isRMuser = userDataDetails?.role != "rm";
+
   const handleFile = (e: any) => {
     let confirm = window.confirm("Are you sure you want to change profile Image?");
     if (confirm) {
@@ -42,7 +44,7 @@ function UserProfile(props: any) {
       ControlApplicationShellComponents({
         showHeader: true,
         showFooter: false,
-        showNavigationBar: true,
+        showNavigationBar: isRMuser,
         hideNavigationBar: true,
         showAsideBar: false,
       })
