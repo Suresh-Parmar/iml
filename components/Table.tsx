@@ -94,7 +94,11 @@ const CustomTable = ({
             let isClickble = clickAbleKeys && clickAbleKeys.includes(key);
 
             if (!!key?.html) {
-              return <td key={rowIndex}> {key.html(row)} </td>;
+              return (
+                <td key={rowIndex} className="text-center mx-auto">
+                  {key.html(row)}
+                </td>
+              );
             }
 
             return (
@@ -128,7 +132,7 @@ const CustomTable = ({
   return (
     <div className="resizable-table table-responsive">
       <table key={themeColor} className={`table table-striped table-${themeColor}`}>
-        <thead>
+        <thead className="text-center">
           <tr>
             {[...headers, ...extraKeys].map((header: any, index: any) => (
               <th key={index} style={{ width: columnWidths[index] || "auto" }}>
@@ -138,7 +142,7 @@ const CustomTable = ({
             ))}
           </tr>
         </thead>
-        <tbody>{renderTableBody()}</tbody>
+        <tbody className="text-center">{renderTableBody()}</tbody>
       </table>
     </div>
   );
