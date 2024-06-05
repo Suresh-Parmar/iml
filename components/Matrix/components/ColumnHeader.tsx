@@ -1,17 +1,8 @@
 import { Flex, Paper, Title, rem, useMantineTheme, ActionIcon } from "@mantine/core";
 import { Dispatch, FC, SetStateAction } from "react";
-import { flexRender, Header, Table, Column, ColumnResizeMode } from "@tanstack/react-table";
+import { flexRender, Header, Column, ColumnResizeMode } from "@tanstack/react-table";
 import { useDrag, useDrop } from "react-dnd";
-import {
-  IconArrowsSort,
-  IconEye,
-  IconEyeOff,
-  IconFilter,
-  IconFilterOff,
-  IconGripVertical,
-  IconSortAscending,
-  IconSortDescending,
-} from "@tabler/icons-react";
+import { IconEye, IconEyeOff, IconFilter, IconFilterOff, IconGripVertical } from "@tabler/icons-react";
 import { MatrixRowType } from "..";
 import { reOrderColumn } from "../utilities";
 import { Filter } from "./Filter";
@@ -24,7 +15,7 @@ const ColumnHeader: FC<{
   setShowFilter?: Dispatch<SetStateAction<boolean>>;
   hideFilterIcon?: boolean;
   hideVisibleIcon?: boolean;
-}> = ({ header, table, columnResizeMode, showFilter, setShowFilter, hideFilterIcon, hideVisibleIcon }) => {
+}> = ({ header, table, showFilter, setShowFilter, hideFilterIcon, hideVisibleIcon }) => {
   const theme = useMantineTheme();
   const { getState, setColumnOrder } = table;
   const { columnOrder } = getState();

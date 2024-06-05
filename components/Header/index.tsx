@@ -296,6 +296,10 @@ function Header() {
   };
   let height = isloggedIn ? 65 : 96;
 
+  let userRole = authentication?.metadata?.role;
+  let isAdmin = userRole == "super_admin";
+  let isRMuser = userRole == "rm";
+
   return (
     <>
       <MantineHeader height={height}>
@@ -425,14 +429,20 @@ function Header() {
                         }}
                         icon={<IconDatabaseCog size="0.9rem" stroke={1.5} />}
                       >
-                        <Link href={authentication?.metadata?.role === "super_admin" ? "/console" : "/"}>
-                          {authentication?.metadata?.role == "super_admin" ? "Admin Dashboard" : "Learning Portal"}
-                        </Link>
+                        <Link href={isAdmin ? "/console" : "/"}>{isAdmin ? "Admin Dashboard" : "Learning Portal"}</Link>
                       </Menu.Item>
                     ) : (
                       <Menu.Item
                         onClick={() => {
-                          router.replace("/");
+                          let route = "/";
+                          if (isRMuser) {
+                            route = "/relationshipmanager";
+                          } else if (isAdmin) {
+                            route = "/console";
+                          } else {
+                            route = "/";
+                          }
+                          router.replace(route);
                         }}
                         icon={<IconHome size="0.9rem" stroke={1.5} />}
                       >

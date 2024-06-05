@@ -159,7 +159,7 @@ function Enrollments() {
 
   const renderActions = (item: any) => {
     return (
-      <div className="d-flex gap-2">
+      <div className="d-flex align-items-center justify-content-center">
         <Tooltip label="Preview">
           <ActionIcon
             onClick={(event) => {
@@ -170,7 +170,7 @@ function Enrollments() {
             <IconEye size={"1.5rem"} />
           </ActionIcon>
         </Tooltip>
-        <Tooltip label="Edit">
+        {/* <Tooltip label="Edit">
           <ActionIcon
             onClick={(event) => {
               setviewOnly(false);
@@ -179,7 +179,7 @@ function Enrollments() {
           >
             <IconEdit size={"1.5rem"} />
           </ActionIcon>
-        </Tooltip>
+        </Tooltip> */}
       </div>
     );
   };
