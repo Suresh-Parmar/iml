@@ -23,7 +23,8 @@ export type FormType =
   | "Payments"
   | "testimonials"
   | "announcements"
-  | "ProductCategory";
+  | "ProductCategory"
+  | "QrCode";
 
 export const formTypeToTableMapper = (formType: FormType) => {
   const mapper: any = {

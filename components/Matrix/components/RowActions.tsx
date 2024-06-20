@@ -231,7 +231,7 @@ const RowActions = ({
           </Tooltip>
         </div>
       ) : null}
-      {((permissionsData?.permissions?.update && showEdit) || defaultShow) && showCreateForm ? (
+      {((permissionsData?.permissions?.update && showEdit) || defaultShow) && showCreateForm  &&  (formType !== "QrCode") ? (
         <Tooltip label="Edit">
           <ActionIcon
             onClick={(event) => {

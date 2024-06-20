@@ -79,7 +79,8 @@ export type FormType =
   | "Payments"
   | "testimonials"
   | "announcements"
-  | "ProductCategory";
+  | "ProductCategory"
+  | "QrCode";
 
 export type UsersType = "Students" | "Teachers" | "Relationship Managers" | "Super Admins" | "Admins";
 
