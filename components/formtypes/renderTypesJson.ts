@@ -1724,6 +1724,13 @@ export const allTypes: any = {
   ],
   QrCode: [
     {
+      id: "Qr Id",
+      key: "_id",
+      defaultShow: true,
+      filterFn: "equals",
+      sortingFn: fuzzySort,
+    },
+    {
       id: "Amount",
       key: "amount",
       defaultShow: true,
