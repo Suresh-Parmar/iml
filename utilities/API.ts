@@ -1,7 +1,12 @@
 import { MatrixDataType, MatrixRowType } from "@/components/Matrix";
 import axios from "axios";
 
-import { GeographicalInformationType, RequestBodyType, PaymentResponseType, ContactUSType } from "./api-types";
+import {
+  GeographicalInformationType,
+  RequestBodyType,
+  PaymentResponseType,
+  ContactUSType,
+} from "./api-types";
 import { getReduxState } from "@/redux/hooks";
 import { clearLocalData, setGetData } from "@/helpers/getLocalStorage";
 import store from "@/redux/store";
@@ -99,7 +104,11 @@ let selectedCountryLocal = setGetData("selectedCountry", "", true);
 const getSelectedCountry = () => {
   const state = store.getState();
 
-  return state?.data?.selectedCountry?._id || selectedCountryLocal?._id || userData?.user?.country_id;
+  return (
+    state?.data?.selectedCountry?._id ||
+    selectedCountryLocal?._id ||
+    userData?.user?.country_id
+  );
 };
 
 async function getGeographicalInformation() {
@@ -261,10 +270,12 @@ const updateDataRes = async (
   if (updateBody) {
     if (op_name == "update") {
       requestBody.update_var = updateBody;
-      if (!requestBody.update_var.country) requestBody.update_var.country = getSelectedCountry();
+      if (!requestBody.update_var.country)
+        requestBody.update_var.country = getSelectedCountry();
     } else {
       requestBody.new_var = updateBody || {};
-      if (!requestBody.new_var.country_id) requestBody.new_var.country_id = getSelectedCountry();
+      if (!requestBody.new_var.country_id)
+        requestBody.new_var.country_id = getSelectedCountry();
     }
   }
 
@@ -326,7 +337,15 @@ export const readLandingData = async (
 export const LandingForms = async (
   tableName: string,
   values: RequestBodyType,
-  filterBy?: "name" | "country_id" | "state" | "city" | "status" | "role" | "country" | "class",
+  filterBy?:
+    | "name"
+    | "country_id"
+    | "state"
+    | "city"
+    | "status"
+    | "role"
+    | "country"
+    | "class",
   filterQuery?: string | number | boolean
 ) => {
   if (!values?.country_id) {
@@ -426,7 +445,9 @@ const genericReports = async (data: any) => {
 };
 
 const maddleWinnerexcelReport = async (data: any) => {
-  return await axios.post(maddleWinnerexcel, data, { headers: getAPIHeaders() });
+  return await axios.post(maddleWinnerexcel, data, {
+    headers: getAPIHeaders(),
+  });
 };
 
 const downloadMarksSheet = async (data: any) => {
@@ -446,7 +467,9 @@ const uploadMedia = async (data: any) => {
 };
 
 const studentAvailableproducts = async (data: any) => {
-  return await axios.post(STUDENTAVAILABLEPRODUCTS, data, { headers: getAPIHeaders() });
+  return await axios.post(STUDENTAVAILABLEPRODUCTS, data, {
+    headers: getAPIHeaders(),
+  });
 };
 
 const studentDetails = async (data: any) => {
@@ -458,7 +481,9 @@ const dispatchRequest = async (data: any) => {
 };
 
 const dispatchIDGenration = async (data: any) => {
-  return await axios.post(SHIPMENT_CREATION, data, { headers: getAPIHeaders() });
+  return await axios.post(SHIPMENT_CREATION, data, {
+    headers: getAPIHeaders(),
+  });
 };
 
 const trackShipment = async (data: any) => {
@@ -469,14 +494,25 @@ const getDataLandingPage = async (data: any) => {
   return await axios.post(LANDING_API, data);
 };
 
-const createData = async (tableName: string, operationType: "create", payload: MatrixRowType) => {
+const createData = async (
+  tableName: string,
+  operationType: "create",
+  payload: MatrixRowType
+) => {
   const filterCountry = tableName !== "countries";
-  let newPayload = { ...payload };
+  let newPayload: any = { ...payload };
 
   if (filterCountry) {
     newPayload = {
       ...payload,
       country_id: getSelectedCountry(),
+    };
+  }
+
+  if (filterCountry && tableName !== "qr_codes") {
+    newPayload = {
+      ...payload,
+      country_id: { $oid: `${getSelectedCountry()}` },
     };
   }
 
@@ -509,7 +545,10 @@ const createRegisteration = async (values: RequestBodyType) => {
   return register;
 };
 
-const readCountries = async (filterBy?: "name" | "status", filterQuery?: string | number | boolean) => {
+const readCountries = async (
+  filterBy?: "name" | "status",
+  filterQuery?: string | number | boolean
+) => {
   let countries: MatrixDataType;
   if (filterBy && filterQuery) {
     countries = await readData("countries", "find_many", filterBy, filterQuery);
@@ -519,10 +558,18 @@ const readCountries = async (filterBy?: "name" | "status", filterQuery?: string 
   return countries;
 };
 
-const readCountriesOnLandingPage = async (filterBy?: "name" | "status", filterQuery?: string | number | boolean) => {
+const readCountriesOnLandingPage = async (
+  filterBy?: "name" | "status",
+  filterQuery?: string | number | boolean
+) => {
   let countries: MatrixDataType;
   if (filterBy && filterQuery) {
-    countries = await readLandingData("countries", "find_many", filterBy, filterQuery);
+    countries = await readLandingData(
+      "countries",
+      "find_many",
+      filterBy,
+      filterQuery
+    );
   } else {
     countries = await readLandingData("countries", "find_many");
   }
@@ -553,7 +600,10 @@ const readCountriesLandingWithFlags = async () => {
   return countriesWithFlags;
 };
 
-const readStates = async (filterBy?: "country", filterQuery?: string | number) => {
+const readStates = async (
+  filterBy?: "country",
+  filterQuery?: string | number
+) => {
   let states: MatrixDataType;
   if (filterBy && filterQuery) {
     states = await readData("states", "find_many", filterBy, filterQuery);
@@ -563,7 +613,10 @@ const readStates = async (filterBy?: "country", filterQuery?: string | number) =
   return states;
 };
 
-const readCities = async (filterBy?: "name" | "state" | "state_id", filterQuery?: string | number) => {
+const readCities = async (
+  filterBy?: "name" | "state" | "state_id",
+  filterQuery?: string | number
+) => {
   let cities: MatrixDataType;
   if (filterBy && filterQuery) {
     cities = await readData("cities", "find_many", filterBy, filterQuery);
@@ -573,7 +626,10 @@ const readCities = async (filterBy?: "name" | "state" | "state_id", filterQuery?
   return cities;
 };
 
-const readBoards = async (filterBy?: "name" | "state", filterQuery?: string | number) => {
+const readBoards = async (
+  filterBy?: "name" | "state",
+  filterQuery?: string | number
+) => {
   const boards = await readData("boards", "find_many");
   return boards;
 };
@@ -586,22 +642,47 @@ const readSchools = async (
 ) => {
   let schools: MatrixDataType;
   if (filterBy && filterQuery) {
-    schools = await readData("schools", "find_many", filterBy, filterQuery, customFIlters, getfullRes);
+    schools = await readData(
+      "schools",
+      "find_many",
+      filterBy,
+      filterQuery,
+      customFIlters,
+      getfullRes
+    );
   } else {
-    schools = await readData("schools", "find_many", undefined, undefined, customFIlters, getfullRes);
+    schools = await readData(
+      "schools",
+      "find_many",
+      undefined,
+      undefined,
+      customFIlters,
+      getfullRes
+    );
   }
   return schools;
 };
 
-const readClasses = async (filterBy?: "name" | "state", filterQuery?: string | number) => {
+const readClasses = async (
+  filterBy?: "name" | "state",
+  filterQuery?: string | number
+) => {
   const classes = await readData("classes", "find_many");
   return classes;
 };
 
-const readCompetitions = async (filterBy?: "subject_id" | "status", filterQuery?: string | boolean) => {
+const readCompetitions = async (
+  filterBy?: "subject_id" | "status",
+  filterQuery?: string | boolean
+) => {
   let competitions: MatrixDataType;
   if (filterBy && filterQuery) {
-    competitions = await readData("competitions", "find_many", filterBy, filterQuery);
+    competitions = await readData(
+      "competitions",
+      "find_many",
+      filterBy,
+      filterQuery
+    );
   } else {
     competitions = await readData("competitions", "find_many");
   }
@@ -609,7 +690,10 @@ const readCompetitions = async (filterBy?: "subject_id" | "status", filterQuery?
   return competitions;
 };
 
-const readAnnoucementsAdmin = async (filterBy?: "name" | "state", filterQuery?: string | number) => {
+const readAnnoucementsAdmin = async (
+  filterBy?: "name" | "state",
+  filterQuery?: string | number
+) => {
   const annoucements = await readData("annoucements", "find_many");
   return annoucements;
 };
@@ -619,7 +703,13 @@ const readExamCenters = async (
   filterQuery?: string | number,
   customData: any = ""
 ) => {
-  const examCenters = await readData("exam_centers", "find_many", filterBy, filterQuery, customData);
+  const examCenters = await readData(
+    "exam_centers",
+    "find_many",
+    filterBy,
+    filterQuery,
+    customData
+  );
   return examCenters;
 };
 
@@ -640,8 +730,18 @@ const readExamCentersMapping = async (
   return examCentersMapping;
 };
 
-const readStudents = async (customData: any = false, getfullRes: any = false) => {
-  const students = await readData("users", "find_many", "role", "student", customData, getfullRes);
+const readStudents = async (
+  customData: any = false,
+  getfullRes: any = false
+) => {
+  const students = await readData(
+    "users",
+    "find_many",
+    "role",
+    "student",
+    customData,
+    getfullRes
+  );
   return students;
 };
 
@@ -661,7 +761,13 @@ const readRelationshipManagers = async () => {
 };
 
 const readTeachers = async (data?: any) => {
-  const students = await readData("users", "find_many", "role", "teacher", data);
+  const students = await readData(
+    "users",
+    "find_many",
+    "role",
+    "teacher",
+    data
+  );
   return students;
 };
 
@@ -685,8 +791,19 @@ const readAnnoucements = async () => {
   return annoucement;
 };
 
-const readApiData = async (collection: any, customData: any = "", fullres: any = false) => {
-  let apiData = await readData(collection, "find_many", undefined, undefined, customData, fullres);
+const readApiData = async (
+  collection: any,
+  customData: any = "",
+  fullres: any = false
+) => {
+  let apiData = await readData(
+    collection,
+    "find_many",
+    undefined,
+    undefined,
+    customData,
+    fullres
+  );
   return apiData;
 };
 
@@ -699,7 +816,11 @@ export const readClassesLanding = async () => {
   return await readLandingData("classes", "find_many");
 };
 
-export const readProductsLanding = async (className: string, boardName: string, customData: any = "") => {
+export const readProductsLanding = async (
+  className: string,
+  boardName: string,
+  customData: any = ""
+) => {
   let requestBody: RequestBodyType = {
     collection_name: "products",
     op_name: "find_many",
@@ -751,36 +872,63 @@ export const readBoardsLanding = async () => {
   return await readLandingData("boards", "find_many");
 };
 
-export const readSMTPConfigs = async (filterBy?: "country_id", filterQuery?: string | number) => {
+export const readSMTPConfigs = async (
+  filterBy?: "country_id",
+  filterQuery?: string | number
+) => {
   let smtpConfigs: MatrixDataType;
   if (filterBy && filterQuery) {
-    smtpConfigs = await readData("smtp_configs", "find_many", filterBy, filterQuery);
+    smtpConfigs = await readData(
+      "smtp_configs",
+      "find_many",
+      filterBy,
+      filterQuery
+    );
   } else {
     smtpConfigs = await readData("smtp_configs", "find_many");
   }
   return smtpConfigs;
 };
 
-export const readSiteConfigs = async (filterBy?: "country_id", filterQuery?: string | number) => {
+export const readSiteConfigs = async (
+  filterBy?: "country_id",
+  filterQuery?: string | number
+) => {
   let smtpConfigs: MatrixDataType;
   if (filterBy && filterQuery) {
-    smtpConfigs = await readData("site_configs", "find_many", filterBy, filterQuery);
+    smtpConfigs = await readData(
+      "site_configs",
+      "find_many",
+      filterBy,
+      filterQuery
+    );
   } else {
     smtpConfigs = await readData("site_configs", "find_many");
   }
   return smtpConfigs;
 };
-export const readOrderConfigs = async (filterBy?: "country_id", filterQuery?: string | number) => {
+export const readOrderConfigs = async (
+  filterBy?: "country_id",
+  filterQuery?: string | number
+) => {
   let smtpConfigs: MatrixDataType;
   if (filterBy && filterQuery) {
-    smtpConfigs = await readData("order_configs", "find_many", filterBy, filterQuery);
+    smtpConfigs = await readData(
+      "order_configs",
+      "find_many",
+      filterBy,
+      filterQuery
+    );
   } else {
     smtpConfigs = await readData("order_configs", "find_many");
   }
   return smtpConfigs;
 };
 
-export const readTempates = async (filterBy?: any, filterQuery?: string | number) => {
+export const readTempates = async (
+  filterBy?: any,
+  filterQuery?: string | number
+) => {
   let templates: MatrixDataType;
   if (filterBy && filterQuery) {
     templates = await readData("templates", "find_many", filterBy, filterQuery);
@@ -790,27 +938,54 @@ export const readTempates = async (filterBy?: any, filterQuery?: string | number
   return templates;
 };
 
-export const readPayments = async (filterBy?: "country_id", filterQuery?: string | number, customData: any = "") => {
+export const readPayments = async (
+  filterBy?: "country_id",
+  filterQuery?: string | number,
+  customData: any = ""
+) => {
   let payments: MatrixDataType;
   if (filterBy && filterQuery) {
-    payments = await readData("payments", "find_many", filterBy, filterQuery, customData);
+    payments = await readData(
+      "payments",
+      "find_many",
+      filterBy,
+      filterQuery,
+      customData
+    );
   } else {
-    payments = await readData("payments", "find_many", undefined, "", customData);
+    payments = await readData(
+      "payments",
+      "find_many",
+      undefined,
+      "",
+      customData
+    );
   }
   return payments;
 };
 
-export const readProductCategories = async (filterBy?: "country_id", filterQuery?: string | number) => {
+export const readProductCategories = async (
+  filterBy?: "country_id",
+  filterQuery?: string | number
+) => {
   let productCategories: MatrixDataType;
   if (filterBy && filterQuery) {
-    productCategories = await readData("product_types", "find_many", filterBy, filterQuery);
+    productCategories = await readData(
+      "product_types",
+      "find_many",
+      filterBy,
+      filterQuery
+    );
   } else {
     productCategories = await readData("product_types", "find_many");
   }
   return productCategories;
 };
 
-export const readProducts = async (filterBy?: "country_id" | "class", filterQuery?: string | number | any) => {
+export const readProducts = async (
+  filterBy?: "country_id" | "class",
+  filterQuery?: string | number | any
+) => {
   let products: MatrixDataType;
   if (filterBy && filterQuery) {
     products = await readData("products", "find_many", filterBy, filterQuery);
@@ -820,10 +995,18 @@ export const readProducts = async (filterBy?: "country_id" | "class", filterQuer
   return products;
 };
 
-export const readSMSConfigs = async (filterBy?: "country_id", filterQuery?: string | number) => {
+export const readSMSConfigs = async (
+  filterBy?: "country_id",
+  filterQuery?: string | number
+) => {
   let smtpConfigs: MatrixDataType;
   if (filterBy && filterQuery) {
-    smtpConfigs = await readData("sms_configs", "find_many", filterBy, filterQuery);
+    smtpConfigs = await readData(
+      "sms_configs",
+      "find_many",
+      filterBy,
+      filterQuery
+    );
   } else {
     smtpConfigs = await readData("sms_configs", "find_many");
   }
@@ -835,96 +1018,232 @@ const updateUser = async (primaryKey: string, updateBody: RequestBodyType) => {
   return updateStatus;
 };
 
-const dynamicDataUpdate = async (type: any, primaryKey: string, updateBody: RequestBodyType) => {
+const dynamicDataUpdate = async (
+  type: any,
+  primaryKey: string,
+  updateBody: RequestBodyType
+) => {
   const updateStatus = await updateData(type, updateBody, "_id", primaryKey);
   return updateStatus;
 };
 
 const updateBoard = async (primaryKey: string, updateBody: RequestBodyType) => {
-  const updateStatus = await updateData("boards", updateBody, "_id", primaryKey);
+  const updateStatus = await updateData(
+    "boards",
+    updateBody,
+    "_id",
+    primaryKey
+  );
   return updateStatus;
 };
 
 const updateClass = async (primaryKey: string, updateBody: RequestBodyType) => {
-  const updateStatus = await updateData("classes", updateBody, "_id", primaryKey);
+  const updateStatus = await updateData(
+    "classes",
+    updateBody,
+    "_id",
+    primaryKey
+  );
   return updateStatus;
 };
 
-const updateSubject = async (primaryKey: string, updateBody: RequestBodyType) => {
-  const updateStatus = await updateData("subjects", updateBody, "_id", primaryKey);
+const updateSubject = async (
+  primaryKey: string,
+  updateBody: RequestBodyType
+) => {
+  const updateStatus = await updateData(
+    "subjects",
+    updateBody,
+    "_id",
+    primaryKey
+  );
   return updateStatus;
 };
 
-export const updateSMTPConfig = async (primaryKey: string, updateBody: RequestBodyType) => {
-  const updateStatus = await updateData("smtp_configs", updateBody, "_id", primaryKey);
+export const updateSMTPConfig = async (
+  primaryKey: string,
+  updateBody: RequestBodyType
+) => {
+  const updateStatus = await updateData(
+    "smtp_configs",
+    updateBody,
+    "_id",
+    primaryKey
+  );
   return updateStatus;
 };
 
-export const updateOrderConfig = async (primaryKey: string, updateBody: RequestBodyType) => {
-  const updateStatus = await updateData("order_configs", updateBody, "_id", primaryKey);
+export const updateOrderConfig = async (
+  primaryKey: string,
+  updateBody: RequestBodyType
+) => {
+  const updateStatus = await updateData(
+    "order_configs",
+    updateBody,
+    "_id",
+    primaryKey
+  );
   return updateStatus;
 };
 
-export const updateTemplate = async (primaryKey: string, updateBody: RequestBodyType) => {
-  const updateStatus = await updateData("templates", updateBody, "_id", primaryKey);
+export const updateTemplate = async (
+  primaryKey: string,
+  updateBody: RequestBodyType
+) => {
+  const updateStatus = await updateData(
+    "templates",
+    updateBody,
+    "_id",
+    primaryKey
+  );
   return updateStatus;
 };
 
-export const updateSiteConfig = async (primaryKey: string, updateBody: RequestBodyType) => {
-  const updateStatus = await updateData("site_configs", updateBody, "_id", primaryKey);
+export const updateSiteConfig = async (
+  primaryKey: string,
+  updateBody: RequestBodyType
+) => {
+  const updateStatus = await updateData(
+    "site_configs",
+    updateBody,
+    "_id",
+    primaryKey
+  );
   return updateStatus;
 };
 
-export const updateSMSConfig = async (primaryKey: string, updateBody: RequestBodyType) => {
-  const updateStatus = await updateData("sms_configs", updateBody, "_id", primaryKey);
+export const updateSMSConfig = async (
+  primaryKey: string,
+  updateBody: RequestBodyType
+) => {
+  const updateStatus = await updateData(
+    "sms_configs",
+    updateBody,
+    "_id",
+    primaryKey
+  );
   return updateStatus;
 };
-export const updateProduct = async (primaryKey: string, updateBody: RequestBodyType) => {
-  const updateStatus = await updateData("products", updateBody, "_id", primaryKey);
+export const updateProduct = async (
+  primaryKey: string,
+  updateBody: RequestBodyType
+) => {
+  const updateStatus = await updateData(
+    "products",
+    updateBody,
+    "_id",
+    primaryKey
+  );
   return updateStatus;
 };
-export const updateProductType = async (primaryKey: string, updateBody: RequestBodyType) => {
-  const updateStatus = await updateData("product_types", updateBody, "_id", primaryKey);
+export const updateProductType = async (
+  primaryKey: string,
+  updateBody: RequestBodyType
+) => {
+  const updateStatus = await updateData(
+    "product_types",
+    updateBody,
+    "_id",
+    primaryKey
+  );
   return updateStatus;
 };
 
-const updateCompetition = async (primaryKey: string, updateBody: RequestBodyType) => {
-  const updateStatus = await updateData("competitions", updateBody, "_id", primaryKey);
+const updateCompetition = async (
+  primaryKey: string,
+  updateBody: RequestBodyType
+) => {
+  const updateStatus = await updateData(
+    "competitions",
+    updateBody,
+    "_id",
+    primaryKey
+  );
   return updateStatus;
 };
 
-const updateAnnoucements = async (primaryKey: string, updateBody: RequestBodyType) => {
-  const updateStatus = await updateData("annoucements", updateBody, "_id", primaryKey);
+const updateAnnoucements = async (
+  primaryKey: string,
+  updateBody: RequestBodyType
+) => {
+  const updateStatus = await updateData(
+    "annoucements",
+    updateBody,
+    "_id",
+    primaryKey
+  );
   return updateStatus;
 };
 
-const updateExamCenter = async (primaryKey: string, updateBody: RequestBodyType) => {
-  const updateStatus = await updateData("exam_centers", updateBody, "_id", primaryKey);
+const updateExamCenter = async (
+  primaryKey: string,
+  updateBody: RequestBodyType
+) => {
+  const updateStatus = await updateData(
+    "exam_centers",
+    updateBody,
+    "_id",
+    primaryKey
+  );
   return updateStatus;
 };
 
-const updateExamCenterMapping = async (primaryKey: string, updateBody: RequestBodyType) => {
-  const updateStatus = await updateData("exam_center_mapping", updateBody, "_id", primaryKey);
+const updateExamCenterMapping = async (
+  primaryKey: string,
+  updateBody: RequestBodyType
+) => {
+  const updateStatus = await updateData(
+    "exam_center_mapping",
+    updateBody,
+    "_id",
+    primaryKey
+  );
   return updateStatus;
 };
 
-const updateSchool = async (primaryKey: string, updateBody: RequestBodyType) => {
-  const updateStatus = await updateData("schools", updateBody, "_id", primaryKey);
+const updateSchool = async (
+  primaryKey: string,
+  updateBody: RequestBodyType
+) => {
+  const updateStatus = await updateData(
+    "schools",
+    updateBody,
+    "_id",
+    primaryKey
+  );
   return updateStatus;
 };
 
 const updateCity = async (primaryKey: string, updateBody: RequestBodyType) => {
-  const updateStatus = await updateData("cities", updateBody, "_id", primaryKey);
+  const updateStatus = await updateData(
+    "cities",
+    updateBody,
+    "_id",
+    primaryKey
+  );
   return updateStatus;
 };
 
 const updateState = async (primaryKey: string, updateBody: RequestBodyType) => {
-  const updateStatus = await updateData("states", updateBody, "_id", primaryKey);
+  const updateStatus = await updateData(
+    "states",
+    updateBody,
+    "_id",
+    primaryKey
+  );
   return updateStatus;
 };
 
-const updateCountry = async (primaryKey: string, updateBody: RequestBodyType) => {
-  const updateStatus = await updateData("countries", updateBody, "_id", primaryKey);
+const updateCountry = async (
+  primaryKey: string,
+  updateBody: RequestBodyType
+) => {
+  const updateStatus = await updateData(
+    "countries",
+    updateBody,
+    "_id",
+    primaryKey
+  );
   return updateStatus;
 };
 
@@ -1048,12 +1367,20 @@ export const createProductType = async (payload: MatrixRowType) => {
 };
 
 const createExamCenter = async (payload: MatrixRowType) => {
-  const schoolCreationStatus = await createData("exam_centers", "create", payload);
+  const schoolCreationStatus = await createData(
+    "exam_centers",
+    "create",
+    payload
+  );
   return schoolCreationStatus;
 };
 
 const createExamCenterMapping = async (payload: MatrixRowType) => {
-  const schoolCreationStatus = await createData("exam_centers", "create", payload);
+  const schoolCreationStatus = await createData(
+    "exam_centers",
+    "create",
+    payload
+  );
   return schoolCreationStatus;
 };
 
@@ -1095,7 +1422,11 @@ const unDeleteRow = async (table: string, id: string) => {
   return responseJSON;
 };
 
-const uploadSpreadsheet = async (spreadsheetFile: File, tableName: string, meta_data: any) => {
+const uploadSpreadsheet = async (
+  spreadsheetFile: File,
+  tableName: string,
+  meta_data: any
+) => {
   let formData = new FormData();
   formData.append("file", spreadsheetFile);
   formData.append("meta_data", meta_data);
@@ -1119,20 +1450,32 @@ const downloadSample = async (collection: object) => {
   return responseJSON;
 };
 
-const uploadSpreadsheetStudent = async (spreadsheetFile: File, tableName: string, meta_data: any) => {
+const uploadSpreadsheetStudent = async (
+  spreadsheetFile: File,
+  tableName: string,
+  meta_data: any
+) => {
   let formData = new FormData();
   formData.append("file", spreadsheetFile);
   formData.append("meta_data", meta_data);
 
-  const response = await axios.post(`${SPREADSHEET_UPLOAD_API_STUDENT}`, formData, {
-    headers: getAPIHeaders(),
-  });
+  const response = await axios.post(
+    `${SPREADSHEET_UPLOAD_API_STUDENT}`,
+    formData,
+    {
+      headers: getAPIHeaders(),
+    }
+  );
 
   const responseJSON = await response.data;
   return responseJSON;
 };
 
-const updateSpreadsheet = async (spreadsheetFile: File, tableName: string, metadata: any) => {
+const updateSpreadsheet = async (
+  spreadsheetFile: File,
+  tableName: string,
+  metadata: any
+) => {
   let formData = new FormData();
   formData.append("file", spreadsheetFile);
   formData.append("meta_data", metadata);
@@ -1143,7 +1486,11 @@ const updateSpreadsheet = async (spreadsheetFile: File, tableName: string, metad
   return responseJSON;
 };
 
-const buldUserCreate = async (spreadsheetFile: File, tableName: string, metadata: any) => {
+const buldUserCreate = async (
+  spreadsheetFile: File,
+  tableName: string,
+  metadata: any
+) => {
   let formData = new FormData();
   formData.append("file", spreadsheetFile);
   formData.append("meta_data", metadata);
@@ -1154,13 +1501,21 @@ const buldUserCreate = async (spreadsheetFile: File, tableName: string, metadata
   return responseJSON;
 };
 
-const updateSpreadsheetStudent = async (spreadsheetFile: File, tableName: string, meta_data: any) => {
+const updateSpreadsheetStudent = async (
+  spreadsheetFile: File,
+  tableName: string,
+  meta_data: any
+) => {
   let formData = new FormData();
   formData.append("file", spreadsheetFile);
   formData.append("meta_data", meta_data);
-  const response = await axios.post(`${SPREADSHEET_UPDATE_API_STUDENT}`, formData, {
-    headers: getAPIHeaders(),
-  });
+  const response = await axios.post(
+    `${SPREADSHEET_UPDATE_API_STUDENT}`,
+    formData,
+    {
+      headers: getAPIHeaders(),
+    }
+  );
   const responseJSON = await response.data;
   return responseJSON;
 };
@@ -1203,9 +1558,30 @@ export type VerifyPaymentData = {
 };
 
 export const verifyPaymantData = async (body: VerifyPaymentData) => {
-  const response = await axios.post(`${PAYMENT_VERIFY_API}`, JSON.stringify(body));
+  const response = await axios.post(
+    `${PAYMENT_VERIFY_API}`,
+    JSON.stringify(body)
+  );
   const responseJSON: PaymentResponseType = await response.data;
   return responseJSON;
+};
+
+const createQrCode = async (data: any) => {
+  const qrCodeCreationStatus = await createData("qr_codes", "create", data);
+  return qrCodeCreationStatus;
+};
+
+const readQrCode = async (
+  filterBy?: "name" | "state" | "state_id" | "country_id",
+  filterQuery?: string | number
+) => {
+  let qrCodeData: MatrixDataType;
+  if (filterBy && filterQuery) {
+    qrCodeData = await readData("qr_codes", "find_many", filterBy, filterQuery);
+  } else {
+    qrCodeData = await readData("qr_codes", "find_many");
+  }
+  return qrCodeData;
 };
 
 export {
@@ -1301,4 +1677,6 @@ export {
   telrpayment,
   classwiseRm,
   rmdispatchAPI,
+  readQrCode,
+  createQrCode,
 };

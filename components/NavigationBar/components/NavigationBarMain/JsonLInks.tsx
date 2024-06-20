@@ -8,6 +8,7 @@ import {
   IconBuilding,
   IconAffiliate,
   IconDownload,
+  IconQrcode,
 } from "@tabler/icons-react";
 
 const NavigationLinks = (props: any) => {
@@ -366,6 +367,13 @@ const NavigationLinks = (props: any) => {
           description: "All users of the system",
         },
       ],
+    },
+    {
+      href: `${consoleBaseURL}/qrcode`,
+      icon: <IconQrcode size="2rem" />,
+      color: "gray",
+      label: "QR Code",
+      description: "All users of the system",
     },
   ];
 

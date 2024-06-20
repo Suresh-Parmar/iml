@@ -23,7 +23,14 @@ export const dateInputHandler = (value: any) => {
   return valueSet;
 };
 
-export const handleDropDownChange = (e: any, key: any, allData: any, setAllData: any, clear?: any, val: any = "") => {
+export const handleDropDownChange = (
+  e: any,
+  key: any,
+  allData: any,
+  setAllData: any,
+  clear?: any,
+  val: any = ""
+) => {
   if (clear) {
     if (clear == "all") {
       setAllData({ [key]: e });
@@ -33,4 +40,38 @@ export const handleDropDownChange = (e: any, key: any, allData: any, setAllData:
   } else {
     setAllData({ ...allData, [key]: e });
   }
+};
+
+export const formatDateString = (inputDateStr: any) => {
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  // Parse the input date string into a Date object
+  const date = new Date(inputDateStr);
+
+  // Extract year, month, and day from the Date object
+  const year = date.getFullYear() - 1; // Subtract 1 year
+  const month = date.getMonth() + 1; // Months are zero-indexed, so add 1
+  const day = date.getDate();
+
+  // Format month and day to ensure they have two digits
+  const formattedMonth = month.toString().padStart(2, "0");
+  const formattedDay = day.toString().padStart(2, "0");
+
+  // Construct the output date string in 'YYYY-MM-DD' format
+  const formattedDate = `${year}-${formattedMonth}-${formattedDay}`;
+
+  return formattedDate;
 };
