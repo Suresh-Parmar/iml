@@ -30,7 +30,8 @@ function QrCode() {
   const [loader, setLoader] = useState<any>(false);
 
   const state: any = useSelector((state: any) => state.data);
-  const countryId = state?.selectedCountry?._id;
+  // const countryId = state?.selectedCountry?._id;
+  const countryId = state?.userData?.user?.country_id;
 
   // ====== matrix code
   const [data, setData] = useState<MatrixDataType>([]);

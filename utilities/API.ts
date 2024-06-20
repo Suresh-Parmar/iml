@@ -500,19 +500,12 @@ const createData = async (
   payload: MatrixRowType
 ) => {
   const filterCountry = tableName !== "countries";
-  let newPayload: any = { ...payload };
-
-  if (filterCountry) {
-    newPayload = {
-      ...payload,
-      country_id: getSelectedCountry(),
-    };
-  }
+  let newPayload = { ...payload };
 
   if (filterCountry && tableName !== "qr_codes") {
     newPayload = {
       ...payload,
-      country_id: { $oid: `${getSelectedCountry()}` },
+      country_id: getSelectedCountry(),
     };
   }
 
