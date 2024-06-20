@@ -11,18 +11,60 @@ type ThirdFormProps = {
   setRecaptcha: (value: string) => void;
   setOtherValues?: any;
   otherValues?: any;
+  state?: any;
+  city?: any;
+  school?: any;
 };
 
-export default function ThirdForm({ form, setRecaptcha, setOtherValues, otherValues }: ThirdFormProps) {
+export default function ThirdForm({ form, setRecaptcha, setOtherValues, otherValues ,  state,
+  city,
+  school}: ThirdFormProps) {
   const [schoolsData, setSchoolsData] = useState<MatrixDataType>([]);
   const [citiesData, setCitiesData] = useState<MatrixDataType>([]);
   const [statesData, setStatesData] = useState<MatrixDataType>([]);
 
   let { address } = form.values;
 
+  // async function readStatesData() {
+  //   const states = await readLandingData("states", "find_many");
+  //   setStatesData(states);
+  // }
+
   async function readStatesData() {
     const states = await readLandingData("states", "find_many");
     setStatesData(states);
+
+    console.log("state", state);
+    if (state !== "") {
+      form.setFieldValue("state_id", state);
+      form.setFieldValue("city_id", city);
+      form.setFieldValue("school_id", school);
+
+      const states = await readLandingData("states", "find_many");
+
+      let stateValue = findFromJson(states, state, "_id");
+      otherValues.state = stateValue.name;
+
+      const cities = await readLandingData(
+        "cities",
+        "find_many",
+        "state_id",
+        stateValue._id
+      );
+
+      let cityValue = findFromJson(cities, city, "_id");
+      otherValues.city = cityValue.name;
+
+      const schools = await readLandingData(
+        "schools",
+        "find_many",
+        "city_id",
+        cityValue._id
+      );
+
+      let schoolData = findFromJson(schools, school, "_id");
+      otherValues.school_name = schoolData.name;
+    }
   }
 
   async function readCitiesData(stateName: string) {

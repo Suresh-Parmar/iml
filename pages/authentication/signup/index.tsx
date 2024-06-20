@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
+
 import { useForm } from "@mantine/form";
 import {
   Paper,
@@ -24,6 +26,7 @@ import {
   createOrder,
   createStudentSignUp,
   loadPaymentScript,
+  signupWithToken,
   verifyPaymantData,
 } from "@/utilities/API";
 
@@ -70,8 +73,55 @@ const useStyles = createStyles((theme, colorScheme: any) => ({
 
 export default function SignUp() {
   const router = useRouter();
+  const { query } = router;
+
   const dispatch = useDispatch();
   const [invoiceBreakdown, setInvoiceBreakdown] = useState<any>({});
+  const [state, setState] = useState<any>("65b5e4fe80a1df2b944b8b9d");
+  const [city, setCity] = useState<any>("");
+  const [school, setSchool] = useState<any>("");
+  const [payamount, setPayAmount] = useState<any>(0);
+  let reduxData:any = useSelector((state: any) => state.data);
+
+  useEffect(() => {
+    const fetchQid = async () => {
+      if (query?.id) {
+        let data = {
+          collection_name: "qr_codes",
+          op_name: "find",
+          filter_var: {
+            _id: query?.id,
+            country_id: reduxData?.selectedCountry?._id,
+          },
+        };
+        signupWithToken(data)
+          .then((res) => {
+            console.log("res", res);
+            if (res?.status === 200) {
+              let data = res?.data?.response?.[0];
+              // setState(data?.)
+              setCity(data?.city_id);
+              setSchool(data?.school_id);
+              setPayAmount(data?.amount);
+              notifications.show({
+                title: "Success !",
+                message: "",
+              });
+            }
+          })
+          .catch((err) => {
+            notifications.show({
+              title: "Something went wrong!",
+              message: "",
+              color: "red",
+            });
+            console.log(err);
+          });
+      }
+    };
+
+    fetchQid(); // this is call andd check, query params has value or not and based on that call the function
+  }, [query]);
 
   useEffect(() => {
     dispatch(
@@ -85,7 +135,6 @@ export default function SignUp() {
     );
   }, [dispatch]);
 
-  let reduxData = useSelector((state: any) => state.data);
   let selectedCountryLocal = setGetData("selectedCountry", "", true);
 
   const getSelectedCountry = () => {
@@ -336,11 +385,20 @@ export default function SignUp() {
                   <SecondForm form={form} />
                 </Stepper.Step>
                 <Stepper.Step label="Address" description="" allowStepSelect={false}>
-                  <ThirdForm
+                  {/* <ThirdForm
                     form={form}
                     setOtherValues={setOtherValues}
                     otherValues={otherValues}
                     setRecaptcha={setRecaptcha}
+                  /> */}
+                   <ThirdForm
+                    form={form}
+                    setOtherValues={setOtherValues}
+                    otherValues={otherValues}
+                    setRecaptcha={setRecaptcha}
+                    state={state}
+                    city={city}
+                    school={school}
                   />
                 </Stepper.Step>
                 <Stepper.Step label="Summary" description="" allowStepSelect={false}>
