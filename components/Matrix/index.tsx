@@ -486,6 +486,9 @@ function Matrix({
       .then(async (res: any) => {
         notifications.show({ title: "Records deleted successfully", message: "" });
         try {
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
           
        
         const dataNew = await formTypeToFetcherMapper(formType)();

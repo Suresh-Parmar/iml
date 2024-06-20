@@ -291,6 +291,9 @@ function QrCode() {
           setStartDate(null);
           setEndDate(null);
           setPrice(0);
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
         } else {
           notifications.show({
             title: `Qr Code Faild`,
