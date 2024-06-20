@@ -67,6 +67,10 @@ const RowActions = ({
 
   let formRowData: any = row?.original;
 
+  if(formType === "QrCode"){
+    defaultShow = true;
+  }
+
   const resetPassWord = () => {
     let windowConfirm = window.confirm("Are you sure you want to reset Password?");
     if (!windowConfirm) {
@@ -217,7 +221,7 @@ const RowActions = ({
         ) : (
           ""
         )
-      ) : (permissionsData?.permissions?.delete && showStatus) || defaultShow ? (
+      ) :  (permissionsData?.permissions?.delete && showStatus) || (defaultShow && formType !== "QrCode") ? (
         <div style={{ position: "relative" }}>
           <Tooltip label={status ? "Disable" : "Enable"}>
             <div>
