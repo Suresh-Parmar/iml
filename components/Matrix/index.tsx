@@ -91,6 +91,8 @@ import { WarehouseForm } from "../Forms/WarehouseForm";
 import { formTypeToFetcherMapper } from "@/helpers/dataFetcher";
 import { notifications } from "@mantine/notifications";
 import { Search } from "../grid";
+import { QrCodeForm } from "../Forms/QrCodeForm";
+
 declare module "@tanstack/table-core" {
   interface FilterFns {
     fuzzy: FilterFn<unknown>;
@@ -420,6 +422,8 @@ function Matrix({
     cohorts: CohortsForm,
     warehouses: WarehouseForm,
     marks: MarksSheetForm,
+    QrCode: QrCodeForm,
+
   };
 
   const Component = components[formType];

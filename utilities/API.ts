@@ -54,6 +54,8 @@ export const ENROLLMENTS = `${BASE_URL}/rm_enrolments_schoolwise`;
 export const CLASSWISERM = `${BASE_URL}/rm_classwise`;
 export const TELR_PAYMENT = `${BASE_URL}/telr_payment`;
 export const RMDISPATCH = `${BASE_URL}/rm_dispatch`;
+export const SIGNUP_WITHOUTTOKEN = `${BASE_URL}/landing_page_data`;
+export const FETCH_QRCODE = `${BASE_URL}/generate_qr_code`;
 
 let userData: any = setGetData("userData", false, true);
 
@@ -1577,6 +1579,14 @@ const readQrCode = async (
   return qrCodeData;
 };
 
+const signupWithToken = async (data: any, useToken: any = false) => {
+  return await axios.post(SIGNUP_WITHOUTTOKEN, data);
+};
+
+const FetchQRCODE = async (data: any, useToken: any = false) => {
+  return await axios.post(FETCH_QRCODE, data, { headers: getAPIHeaders() });
+};
+
 export {
   createOrder,
   loadPaymentScript,
@@ -1672,4 +1682,6 @@ export {
   rmdispatchAPI,
   readQrCode,
   createQrCode,
+  signupWithToken,
+  FetchQRCODE,
 };

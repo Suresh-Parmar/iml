@@ -10,7 +10,12 @@ export const findFromJson = (jsonArr: any[], key: any, josnKey: any) => {
   return {};
 };
 
-export const filterDrodownData = (data: any[], key: string, labelKey: string, setKey?: any) => {
+export const filterDrodownData = (
+  data: any[],
+  key: string,
+  labelKey: string,
+  setKey?: any
+) => {
   let newDataData: any = [];
   data.map((item) => {
     if (item.status) {
@@ -44,6 +49,7 @@ export const collectionNameGenrate = (collection: string) => {
     city: "cities",
     "exam center mappings": "exam_center_mapping",
     dispatch: "payments",
+    qrcode: "qr_codes",
   };
 
   let collectionName = collection.toLowerCase();
