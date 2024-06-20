@@ -485,9 +485,15 @@ function Matrix({
     readApiData("", dataPayload)
       .then(async (res: any) => {
         notifications.show({ title: "Records deleted successfully", message: "" });
+        try {
+          
+       
         const dataNew = await formTypeToFetcherMapper(formType)();
         setData([...dataNew]);
         setCheckboxData([]);
+      } catch (error) {
+          
+      }
       })
       .catch((err: any) => {
         notifications.show({ title: "Failed To delete", message: "" });
@@ -700,7 +706,7 @@ function Matrix({
             {showCreateForm &&
               formType &&
               !clientState.showAsideBar &&
-              (permissionsData?.permissions?.create || defaultShow) && (
+              (permissionsData?.permissions?.create || defaultShow) && formType !== "QrCode" &&(
                 <Button
                   ml={"xs"}
                   variant={"filled"}

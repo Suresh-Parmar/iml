@@ -43,7 +43,6 @@ function QrCode() {
     setLoader(true);
     async function readData() {
       const qrCodeData = await readQrCode("country_id", selectedCountry);
-      console.log("🚀 ~ readData ~ qrCodeData:", qrCodeData)
       setData(qrCodeData);
       setLoader(false);
     }
